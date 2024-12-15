@@ -3,11 +3,11 @@
 Functional building blocks for the design of (non-classical) logical connectives and systems.
 
 
-![License Badge](https://img.shields.io/github/license/username/projectname?style=flat-square)
-![Build Status](https://img.shields.io/github/actions/workflow/status/username/projectname/ci.yml?style=flat-square)
-![GitHub issues](https://img.shields.io/github/issues/username/projectname?style=flat-square)
-![GitHub stars](https://img.shields.io/github/stars/username/projectname?style=flat-square)
-![GitHub forks](https://img.shields.io/github/forks/username/projectname?style=flat-square)
+![License Badge](https://img.shields.io/github/license/davfuenmayor/logic-bricks?style=flat-square)
+![Build Status](https://img.shields.io/github/actions/workflow/status/davfuenmayor/logic-bricks/ci.yml?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/davfuenmayor/logic-bricks?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/davfuenmayor/logic-bricks?style=flat-square)
+![GitHub forks](https://img.shields.io/github/forks/davfuenmayor/logic-bricks?style=flat-square)
 
 ---
 
