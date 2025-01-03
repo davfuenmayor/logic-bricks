@@ -4,21 +4,30 @@ begin
 
 subsection \<open>Set operations from endorelations\<close>
 
+(*When talking about endorelations (and orderings in particular) it is customary to employ the 
+ expressions 'up' and 'down' instead of 'right' and 'left' respectively. Similarly, we use expressions
+ like 'maximal'/'greatest' and 'minimal'/'least' to mean 'rightmost' and 'leftmost' respectively.*)
+
+(*We conveniently introduce the following alternative names for left resp. right bounds*)
+notation leftBound ("lowerBound") and leftBound ("_-lowerBound")
+notation rightBound ("upperBound") and rightBound ("_-upperBound")
+
+
 subsubsection \<open>Least and greatest elements\<close>
 
-(*The set of least resp. greatest elements of a set A wrt. a relation R*)
+(*The set of least (leftmost) resp. greatest (rightmost) elements of a set wrt. an endorelation*)
 definition least::"ERel('a) \<Rightarrow> SetEOp('a)" ("_-least")
-  where \<open>least \<equiv> (\<^bold>S(\<inter>)) \<circ> lowerBounds\<close>
+  where \<open>least \<equiv> (\<^bold>S (\<inter>)) \<circ> lowerBound\<close>
 definition greatest::"ERel('a) \<Rightarrow> SetEOp('a)" ("_-greatest")
-  where \<open>greatest \<equiv> (\<^bold>S(\<inter>)) \<circ> upperBounds\<close>
+  where \<open>greatest \<equiv> (\<^bold>S (\<inter>)) \<circ> upperBound\<close>
 
 lemma "R-least A = (\<lambda>m. A m \<and> (\<forall>x. A x \<longrightarrow> R m x))" unfolding least_def rel_defs set_defs comb_defs ..
 lemma "R-greatest A = (\<lambda>m. A m \<and> (\<forall>x. A x \<longrightarrow> R x m))" unfolding greatest_def rel_defs set_defs comb_defs ..
 
 declare least_def[endorel_defs] greatest_def[endorel_defs]
 
-lemma greatest_defT: \<open>R-greatest = R\<^sup>t-least\<close> unfolding endorel_defs rel_defs comb_defs ..
-lemma least_defT: \<open>R-least = R\<^sup>t-greatest\<close> unfolding endorel_defs rel_defs comb_defs ..
+lemma greatest_defT: \<open>R-greatest = R\<Zcat>-least\<close> unfolding endorel_defs rel_defs comb_defs ..
+lemma least_defT: \<open>R-least = R\<Zcat>-greatest\<close> unfolding endorel_defs rel_defs comb_defs ..
 
 
 subsubsection \<open>Maximal and minimal elements\<close>
@@ -37,8 +46,8 @@ lemma \<open>R-max = (\<lambda>A. \<lambda>m. A m \<and> (\<forall>x. A x \<long
 
 declare min_def[endorel_defs] max_def[endorel_defs]
 
-lemma max_defT: \<open>R-max = R\<^sup>t-min\<close> unfolding endorel_defs rel_defs set_defs comb_defs ..
-lemma min_defT: \<open>R-min = R\<^sup>t-max\<close> unfolding endorel_defs rel_defs set_defs comb_defs ..
+lemma max_defT: \<open>R-max = R\<Zcat>-min\<close> unfolding endorel_defs rel_defs set_defs comb_defs ..
+lemma min_defT: \<open>R-min = R\<Zcat>-max\<close> unfolding endorel_defs rel_defs set_defs comb_defs ..
 
 (*Minimal and maximal elements generalize least and greatest elements respectively*)
 lemma "R-least A \<subseteq> R-min A"
@@ -47,28 +56,28 @@ lemma "R-greatest A \<subseteq> R-max A"
   unfolding endorel_defs rel_defs set_defs comb_defs by simp
 
 
-subsubsection \<open>Least-upper and greatest-lower bounds\<close>
+subsubsection \<open>Least upper- and greatest lower-bounds\<close>
 
 (*The (set of) least upper-bound(s) and greatest lower-bound(s) for a given set*)
 definition lub::"ERel('a) \<Rightarrow> SetEOp('a)" ("_-lub")
-  where "lub \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<circ>) least upperBounds"
+  where "lub \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<circ>) least upperBound"
 definition glb::"ERel('a) \<Rightarrow> SetEOp('a)" ("_-glb")
-  where "glb \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<circ>) greatest lowerBounds"
+  where "glb \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<circ>) greatest lowerBound"
 
-lemma "R-lub S  = R-least(R-upperBounds S)" unfolding lub_def endorel_defs comb_defs ..
-lemma "R-glb S  = R-greatest(R-lowerBounds S)" unfolding glb_def endorel_defs comb_defs ..
+lemma "R-lub S  = R-least(R-upperBound S)" unfolding lub_def endorel_defs comb_defs ..
+lemma "R-glb S  = R-greatest(R-lowerBound S)" unfolding glb_def endorel_defs comb_defs ..
 
 declare lub_def[endorel_defs] glb_def[endorel_defs]
 
-lemma lub_defT: "R-lub = R\<^sup>t-glb" 
+lemma lub_defT: "R-lub = R\<Zcat>-glb" 
   unfolding endorel_defs rel_defs set_defs comb_defs ..
-lemma glb_defT: "R-glb = (R)\<^sup>t-lub" 
+lemma glb_defT: "R-glb = (R)\<Zcat>-lub" 
   unfolding endorel_defs rel_defs set_defs comb_defs ..
 
 (*Moreover, when it comes to upper/lower bounds, least/greatest and glb/lub elements coincide*)
-lemma lub_def3: "R-lub S = R-glb (R-upperBounds S)"
+lemma lub_def3: "R-lub S = R-glb (R-upperBound S)"
   unfolding endorel_defs rel_defs set_defs comb_defs by auto
-lemma glb_def3: "R-glb S = R-lub (R-lowerBounds S)"
+lemma glb_def3: "R-glb S = R-lub (R-lowerBound S)"
   unfolding endorel_defs rel_defs set_defs comb_defs by auto
 
 (*Join/meet are partial & nondeterministic binary operations, arising as a special case of lub/glb applied
@@ -80,6 +89,9 @@ abbreviation(input) meet::"ERel('a) \<Rightarrow> Op\<^sub>2('a,Set('a))" ("_-me
 
 
 subsection \<open>Existence and uniqueness\<close>
+
+abbreviation unique::"Set(Set('a))" ("\<exists>\<^sub>\<le>\<^sub>1") (*\<exists>\<^sub>\<le>\<^sub>1 contains the sets with at most one element (and which may be empty)*)
+  where \<open>\<exists>\<^sub>\<le>\<^sub>1A \<equiv> \<forall>x y. A x \<and> A y \<rightarrow> x = y\<close> 
 
 (*There can be at most one least/greatest element in a set*)
 lemma antisymm_least_unique: "antisymmetric R \<Longrightarrow> \<exists>\<^sub>\<le>\<^sub>1(R-least S)" 

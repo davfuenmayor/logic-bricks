@@ -15,10 +15,10 @@ notation(input) inter (infixr "\<^bold>\<and>" 54)
 notation(input) union (infixr "\<^bold>\<or>" 53) 
 notation(input) impl  (infixr "\<^bold>\<rightarrow>" 51)
 (*Modal operators*)
-notation(input) downImage ("\<^sup>_\<^bold>\<diamond>")
-notation(input) downImageDual ("\<^sup>_\<^bold>\<box>")
-notation(input) upImage ("\<^sup>_\<^bold>\<diamond>''")
-notation(input) upImageDual ("\<^sup>_\<^bold>\<box>''")
+notation(input) leftImage ("\<^sup>_\<^bold>\<diamond>")
+notation(input) leftDualImage ("\<^sup>_\<^bold>\<box>")
+notation(input) rightImage ("\<^sup>_\<^bold>\<diamond>''")
+notation(input) rightDualImage ("\<^sup>_\<^bold>\<box>''")
 
 (*Definition of modal validity: truth in all worlds*)
 definition valid ("\<lfloor>_\<rfloor>")
@@ -42,64 +42,62 @@ lemma residuation2: "RESIDr \<^sup>R\<^bold>\<diamond> \<^sup>R\<^bold>\<box>'"
   unfolding comb_defs
   by auto
 
-
 (*Let us now prove automatically several well-known modal correspondences. 
  Observe how ATPs (via sledgehammer) manage to find the right definitions in the background theory,
- by cleverly exploiting the lemma 'ADT' and the 'XY_reldef' family of (definitional) lemmata.*)
+ by cleverly exploiting the lemma 'ADT' and the algebraic properties of the relational set-operations.*)
 
 lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<lfloor>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P\<rfloor>)" (*sledgehammer*)
   apply(subst ADT)
   apply(subst reflexive_def)
-  apply(subst downImage_embedding)
-  apply(subst downImage_hom_id)
-  apply(subst subrel_def)
-  apply(unfold comb_defs) 
+  apply(subst leftImage_embedding)
+  apply(subst leftImage_hom_id)
+  apply(subst subrel_setdef)
+  apply(unfold comb_defs)
   ..
   
-lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P\<rfloor>)" (*sledgehammer*)
-  by (metis ADT C21_comb_def K11_comb_def downImageDual_embedding downImageDual_hom_id reflexive_def subrel_setdef)
+lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P\<rfloor>)"
+  by (metis ADT K11_comb_def leftDualImage_embedding leftDualImage_hom_id reflexive_def subrel_setdef)
 
 lemma symmetric_corresp: "symmetric R \<longleftrightarrow> (\<forall>P. \<lfloor>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
   apply(subst ADT)
   apply(subst symmetric_reldef)
   apply(fold residuation1)
-  apply(subst downImage_defT)
-  apply(subst upImage_embedding)
+  apply(subst leftImage_defT)
+  apply(subst rightImage_embedding)
   apply(subst subrel_setdef)
   ..
 
-lemma symmetric_corresp': "symmetric R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> P\<rfloor>)" 
+lemma symmetric_corresp': "symmetric R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> P\<rfloor>)"
   apply(subst ADT)
   apply(subst symmetric_reldef)
   apply(unfold residuation2)
-  apply(subst upImageDual_defT)
-  apply(subst downImageDual_embedding)
-  apply(unfold C21_comb_def)
+  apply(subst rightDualImage_embedding)
+  apply(subst leftDualImage_defT)
   apply(subst subrel_setdef)
-  oops (*TODO finish*)
+  ..
 
 lemma transitive_corresp:  "transitive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P\<rfloor>)" (*sledgehammer*)
   apply(subst ADT)
   apply(subst transitive_def)
   apply(unfold comb_defs)
-  apply(subst downImage_embedding)
-  apply(subst downImage_hom_comp)
-  apply(subst subrel_def)
+  apply(subst leftImage_embedding)
+  apply(subst leftImage_hom_comp)
+  apply(subst subrel_setdef)
   apply(unfold comb_defs)
   ..
 
 lemma transitive_corresp': "transitive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P)\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B11_comb_def C21_comb_def downImageDual_embedding downImageDual_hom_comp subrel_setdef transitive_reldef)
+  by (metis ADT B11_comb_def leftDualImage_embedding leftDualImage_hom_comp subrel_setdef transitive_reldef)
 
 lemma dense_corresp: "dense R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B11_comb_def C21_comb_def dense_reldef downImageDual_embedding downImageDual_hom_comp subrel_setdef)
+  by (metis ADT B11_comb_def dense_reldef leftDualImage_embedding leftDualImage_hom_comp subrel_setdef)
 lemma dense_corresp': "dense R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B11_comb_def dense_reldef downImage_embedding downImage_hom_comp subrel_setdef)
+  by (metis ADT B11_comb_def dense_reldef leftImage_embedding leftImage_hom_comp subrel_setdef)
 
 lemma euclidean_corresp: "euclidean R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
-  by (metis (no_types, lifting) ADT B11_comb_def downImage_embedding downImage_hom_comp euclidean_reldef residuation1 subrel_setdef upImage_defT)
+  by (metis (no_types, lifting) ADT B11_comb_def euclidean_reldef leftImage_embedding leftImage_hom_comp residuation1 rightImage_defT subrel_setdef)
 lemma euclidean_corresp': "euclidean R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P\<rfloor>)" (*sledgehammer*)
-  by (metis (no_types, opaque_lifting) ADT B11_comb_def C21_comb_def downImageDual_embedding downImageDual_hom_comp euclidean_reldef residuation2 subrel_setdef upImageDual_defT)
+  by (metis (no_types, lifting) ADT B11_comb_def euclidean_reldef leftDualImage_embedding leftDualImage_hom_comp residuation2 rightDualImage_defT subrel_setdef)
 
 
 end

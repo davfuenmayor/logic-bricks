@@ -20,17 +20,17 @@ lemma "f ; g ; h = (\<lambda>x. h( g (f x)))" unfolding comb_defs ..
 
 (*Composition and identity satisfy the monoid conditions.*)
 lemma "(f \<circ> g) \<circ> h = f \<circ> (g \<circ> h)" unfolding comb_defs ..    (* associativity *)
-lemma "\<^bold>I \<circ> f = f" unfolding comb_defs ..                   (* left identity *)
-lemma "f \<circ> \<^bold>I = f" unfolding comb_defs ..                   (* right identity *)
+lemma "\<^bold>I \<circ> f = f" unfolding comb_defs ..                   (* identity 1 *)
+lemma "f \<circ> \<^bold>I = f" unfolding comb_defs ..                   (* identity 2 *)
 
+
+subsection \<open>Transformations\<close>
 
 subsubsection \<open>Transposition\<close>
 
 (*Transposition of a (curried) binary function corresponds to the \<^bold>C combinator. It flips/swaps arguments.*)
-lemma "f\<^sup>t\<^sup>t = f" unfolding comb_defs .. (* recall that transposition is an involution.*)
+lemma "f\<Zcat>\<Zcat> = f" unfolding comb_defs .. (* recall that transposition is an involution.*)
 
-
-subsection \<open>Transformations\<close>
 
 subsubsection \<open>Inverse and kernel of a function\<close>
 
@@ -44,7 +44,7 @@ lemma "inverse f b = (\<lambda>a. f a = b)" unfolding inverse_def comb_defs ..
 declare inverse_def[func_defs]
 
 (*An alternative combinator-based definition (by commutativity of \<Q>)*)
-lemma inverse_def2: "inverse = (\<^bold>D \<Q>)\<^sup>t" unfolding func_defs comb_defs by auto
+lemma inverse_def2: "inverse = (\<^bold>D \<Q>)\<Zcat>" unfolding func_defs comb_defs by auto
 
 (*We introduce some convenient superscript notation*)
 notation(input) inverse ("_\<inverse>")  notation(output) inverse ("'(_')\<inverse>")
@@ -65,22 +65,7 @@ declare kernel_def[func_defs]
 notation(input) kernel ("_\<^sup>=")  notation(output) kernel ("'(_')\<^sup>=")
 
 
-subsubsection \<open>Equalizer and coequalizer of a pair of functions\<close>
-
-definition equalizer :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> Set('a)"
-  where "equalizer \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 \<Q>"
-
-lemma "equalizer f g = (\<lambda>x. f x = g x)" unfolding equalizer_def comb_defs ..
-
-definition coequalizer :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
-  where "coequalizer \<equiv> \<^bold>W \<circ>\<^sub>2 (\<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<sqinter>)) inverse)"
-
-lemma "coequalizer f g = (\<lambda>x. (f\<inverse>) x \<sqinter> (g\<inverse>) x)" unfolding coequalizer_def comb_defs ..
-
-declare equalizer_def[func_defs] coequalizer_def[func_defs]
-
-
-subsubsection \<open>Pullback and pushout of a pair of functions\<close>
+subsubsection \<open>Pullback and equalizer of a pair of functions\<close>
 
 (*The pullback (aka. fiber product) of two functions 'f' and 'g' (sharing the same codomain), 
  relates those pairs of elements that get assigned the same value by 'f' and 'g' respectively*)
@@ -91,31 +76,54 @@ lemma "pullback f g = (\<lambda>x y. f x = g y)" unfolding pullback_def comb_def
 
 declare pullback_def[func_defs]
 
-(*We can swap the roles of 'points' and 'functions' in the above definition using a permutator *)
-lemma "\<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2 pullback x y = (\<lambda>f g. f x = g y)" unfolding func_defs comb_defs ..
-
 (*Inverse and kernel of a function can be easily stated in terms of pullback*)
 lemma "inverse = pullback \<^bold>I" unfolding func_defs comb_defs by auto
 lemma "kernel = \<^bold>W pullback" unfolding func_defs comb_defs ..
 
-(*Similarly, the equalizer of two functions can be stated in terms of pullback*)
+(*The equalizer of two functions 'f' and 'g' (sharing the same domain and codomain) is the set of 
+ elements in their (common) domain that get assigned the same value by both 'f' and 'g'. *)
+definition equalizer :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> Set('a)"
+  where "equalizer \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 \<Q>"
+
+lemma "equalizer f g = (\<lambda>x. f x = g x)" unfolding equalizer_def comb_defs ..
+
+declare equalizer_def[func_defs]
+
+(*In fact, the equalizer of two functions can be stated in terms of pullback*)
 lemma "equalizer = \<^bold>W \<circ>\<^sub>2 pullback" unfolding func_defs comb_defs ..
 
+(*We can swap the roles of 'points' and 'functions' in the above definitions using permutators *)
+lemma "\<^bold>R equalizer x = (\<lambda>f g. f x = g x)" unfolding func_defs comb_defs ..
+lemma "\<^bold>C\<^sub>2 pullback x y = (\<lambda>f g. f x = g y)" unfolding func_defs comb_defs ..
+
+
+subsubsection \<open>Pushout and coequalizer of a pair of functions\<close>
 
 (*The pushout (aka. fiber coproduct) of two functions 'f' and 'g' (sharing the same domain), relates
- those elements (in their codomains) that are images of the same element (i.e. whose preimages intersect)*)
+ pairs of elements (in their codomains) whose preimages under 'f' resp. 'g' intersect *)
 definition pushout :: "('c \<Rightarrow> 'a) \<Rightarrow> ('c \<Rightarrow> 'b) \<Rightarrow> Rel('a,'b)" 
-  where "pushout \<equiv>  \<^bold>C\<^sub>1\<^sub>3\<^sub>2\<^sub>4(\<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<sqinter>) inverse inverse)" (* 'inverse' appears twice with different types*)
+  where "pushout \<equiv> \<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<sqinter>) inverse inverse" (*beware polymorphism: 'inverse' appears twice with different types*)
 
 lemma "pushout f g = (\<lambda>x y. f\<inverse> x \<sqinter> g\<inverse> y)" unfolding pushout_def comb_defs ..
 
 declare pushout_def[func_defs]
 
-(*The following point-free definition would unduly restrict types (since 'inverse' appears only once)*)
+(*The equations below don't work as definitions since they unduly restrict types ('inverse' appears only once)*)
+lemma "pushout = \<^bold>W (\<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
 lemma "pushout = \<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
 
+(*The coequalizer of two functions 'f' and 'g' (sharing the same domain and codomain) is the set of 
+ elements in their (common) codomain whose preimage under 'f' resp. 'g' intersect*)
+definition coequalizer :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
+  where "coequalizer \<equiv> \<^bold>W \<circ>\<^sub>2 (\<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<sqinter>)) inverse)" 
+
+lemma "coequalizer f g = \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<sqinter>) (f\<inverse>) (g\<inverse>)" unfolding coequalizer_def comb_defs ..
+lemma "coequalizer f g = (\<lambda>x. (f\<inverse>) x \<sqinter> (g\<inverse>) x)" unfolding coequalizer_def comb_defs ..
+
+declare coequalizer_def[func_defs]
+
 (*The coequalizer of two functions can be stated in terms of pushout*)
-lemma "coequalizer =  \<^bold>W \<circ>\<^sub>2 pushout" unfolding func_defs comb_defs ..
+lemma "coequalizer = \<^bold>W \<circ>\<^sub>2 pushout" unfolding func_defs comb_defs ..
 
 
 subsubsection \<open>Range, image & preimage of functions\<close>
@@ -131,7 +139,7 @@ lemma "range f b = (\<exists>a. f a = b)" unfolding range_def func_defs comb_def
 (*We can 'lift' functions to act on sets via the image operator. The term "image f" denotes a
  set-operation that takes a set 'A' and returns the set of elements whose f-preimage intersects 'A'.*)
 definition image::"('a \<Rightarrow> 'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b)"
-  where "image \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<sqinter>) inverse)\<^sup>t"
+  where "image \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<sqinter>) inverse)\<Zcat>"
 
 lemma "image f A = (\<lambda>b. f\<inverse> b \<sqinter> A)" unfolding image_def comb_defs ..
 lemma "image f A b = (\<exists>x. f\<inverse> b x \<and> A x)" unfolding image_def set_defs comb_defs ..
@@ -139,8 +147,9 @@ lemma "image f A b = (\<exists>x. f\<inverse> b x \<and> A x)" unfolding image_d
 (*Analogously, the term "preimage f" denotes a set-operation that takes a set 'B' and returns the 
   set of those elements which 'f' maps to some element in 'B'.*)
 definition preimage::"('a \<Rightarrow> 'b) \<Rightarrow> Set('b) \<Rightarrow> Set('a)"
-  where "preimage \<equiv> \<^bold>B\<^sup>t"
+  where "preimage \<equiv> \<^bold>B\<Zcat>" (*i.e. (;) *)
 
+lemma "preimage f B = f ; B" unfolding preimage_def comb_defs ..
 lemma "preimage f B = (\<lambda>a. B (f a))" unfolding preimage_def comb_defs ..
 
 
@@ -154,16 +163,15 @@ term "\<lparr>f A\<rparr>" (*read "the image of A under f" *)
 term "\<lparr>f B\<rparr>\<inverse> = (\<lambda>a. B (f a))"  (* read "the image of A under f" *)
 
 (*Range can be defined in terms of image as expected*)
-lemma range_def2: "range = image\<^sup>t \<UU>"
+lemma range_def2: "range = image\<Zcat> \<UU>"
   unfolding comb_defs func_defs set_defs by simp
 
-
-term "preimage (f::'a\<Rightarrow>'b) \<circ> image f" (*TODO: make definitions out of these? *)
+term "preimage (f::'a\<Rightarrow>'b) \<circ> image f" 
 term "image (f::'a\<Rightarrow>'b) \<circ> preimage f"
 
-lemma "(preimage f \<circ> image f) = (\<lambda>A. \<lambda>a. f\<^sup>= a \<sqinter> A)"  
+lemma "preimage f \<circ> image f = (\<lambda>A. \<lambda>a. f\<^sup>= a \<sqinter> A)"  (* TODO: make definitions out of these? *)
   unfolding func_defs set_defs comb_defs by metis
-lemma "(image f \<circ> preimage f) = (\<lambda>B. \<lambda>b. f\<inverse> b \<sqinter> preimage f B)" 
+lemma "image f \<circ> preimage f = (\<lambda>B. \<lambda>b. f\<inverse> b \<sqinter> preimage f B)" 
   unfolding func_defs set_defs comb_defs by metis
 
 
@@ -182,18 +190,18 @@ declare fixedpoint_def[func_defs] cofixedpoint_def[func_defs]
 
 subsection \<open>Structure-preservation under image and preimage\<close>
 
-lemma image_morph1: "image (f \<circ> g) = (image f) \<circ> (image g)"
+lemma image_morph1: "image (f \<circ> g) = image f \<circ> image g"
   unfolding func_defs set_defs comb_defs by auto
 lemma image_morph2: "image \<^bold>I = \<^bold>I" 
   unfolding func_defs set_defs comb_defs by simp
-lemma preimage_morph1: "preimage (f \<circ> g) = (preimage g) \<circ> (preimage f)" 
+lemma preimage_morph1: "preimage (f \<circ> g) = preimage g \<circ> preimage f" 
   unfolding func_defs comb_defs ..
 lemma preimage_morph2: "preimage \<^bold>I = \<^bold>I" 
   unfolding func_defs comb_defs ..
 
 
 (*Random simplification(?) rule (TODO: interpret)*)
-lemma image_simp1: "(image ((G \<circ> R) a)) \<circ> (image (\<^bold>T a)) = (image (\<^bold>T a)) \<circ> (image (\<^bold>S (G \<circ> R)))"
+lemma image_simp1: "image ((G \<circ> R) a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S (G \<circ> R))"
   apply(rule ext) unfolding comb_defs set_defs func_defs by fastforce
 
 end

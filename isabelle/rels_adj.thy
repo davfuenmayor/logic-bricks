@@ -14,9 +14,9 @@ abbreviation(input) setopDual2::"EOp(SetOp\<^sub>2('a,'b))" ("_\<^sup>d")
 
 (* Two set-operators (having the same type) can be said to be dual (wrt. set-complement).*)
 abbreviation(input) Dual::"ERel(SetOp('a,'b))" ("DUAL")
-  where "DUAL f g \<equiv> \<midarrow> \<circ> f  = g \<circ> \<midarrow>" (*beware polymorphism: (\<midarrow>) gets instantiated twice with different types*)
+  where "DUAL f g \<equiv> (\<midarrow> \<circ> f)  = (g \<circ> \<midarrow>)" (*beware polymorphism: (\<midarrow>) gets instantiated twice with different types*)
 abbreviation(input) Dual2::"ERel(SetOp\<^sub>2('a,'b))" ("DUAL\<^sub>2")
-  where "DUAL\<^sub>2 f g \<equiv> \<midarrow> \<circ>\<^sub>2 f  = \<^bold>\<Psi>\<^sub>2 g \<midarrow>" 
+  where "DUAL\<^sub>2 f g \<equiv> (\<midarrow> \<circ>\<^sub>2 f)  = (\<^bold>\<Psi>\<^sub>2 g \<midarrow>)" 
 
 (*Of course*)
 lemma "DUAL f f\<^sup>d"
@@ -33,8 +33,10 @@ abbreviation(input) Residuation ::"Rel(SetOp('a,'b),SetOp('b,'a))" ("RESID")
 abbreviation(input) Coresiduation ::"Rel(SetOp('a,'b),SetOp('b,'a))" ("CORESID")
   where "CORESID f g \<equiv> \<forall>A B. B \<squnion> f A \<longleftrightarrow> g B \<bottom> A"
 
+(* lemma "RESID f g = \<^bold>\<Phi>\<^sub>2\<^sub>2 \<Q> (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 (\<subseteq>) f) (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 (\<supseteq>) g)" *)
+
 (*Residuation and co-residuation are related via complement*)
-lemma "RESID f g \<longleftrightarrow> CORESID (f\<^sup>-) (g\<^sup>-)"
+lemma "RESID f g \<longleftrightarrow> CORESID (f\<^sup>\<midarrow>) (g\<^sup>\<midarrow>)"
   unfolding rel_defs set_defs comb_defs by metis
 
 (*The relation of being (co-)residuated is not symmetric.*)
@@ -101,7 +103,7 @@ lemma "CONJ f g \<longleftrightarrow> CONJ g f" unfolding set_defs comb_defs by 
 lemma "DCONJ f g \<longleftrightarrow> DCONJ g f" unfolding set_defs comb_defs by auto
 
 (*Galois-connection and conjugation are related via complement *)
-lemma "CONJ f g \<longleftrightarrow> GALOIS f\<^sup>- g\<^sup>-"
+lemma "CONJ f g \<longleftrightarrow> GALOIS (f\<^sup>\<midarrow>) (g\<^sup>\<midarrow>)"
   unfolding set_defs comb_defs rel_defs by auto
 
 (*Conveniently extend definitions to binary operations *)

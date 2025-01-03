@@ -15,6 +15,8 @@ section \<open>Base\<close>
 
 subsection \<open>Boolean connectives\<close>
 
+subsubsection \<open>Boolean operations\<close>
+
 notation HOL.implies (infixr "\<rightarrow>" 25) (* convenient alternative notation*)
 notation HOL.iff (infixr "\<leftrightarrow>" 25) (* convenient alternative notation*)
 
@@ -38,8 +40,13 @@ lemma conj_excl: "(A \<and> B) = ((A \<rightharpoonup> B) \<rightharpoonup> B)" 
 lemma xor_excl: "(A \<rightleftharpoons> B) = (A \<leftharpoondown> B) \<or> (A \<rightharpoonup> B)" by auto
 
 (*Reintroduces notation for negation to allow for conveniently referring to it as '\<not>' *)
-notation(input) HOL.Not ("\<not>" 99)
-notation(output) HOL.Not ("\<not>_")
+notation(input) HOL.Not ("\<not>" 40)
+notation(output) HOL.Not ("\<not>_" [40] 40)
+
+
+subsubsection \<open>Boolean ordering\<close>
+
+notation(input) HOL.implies (infixr "\<le>" 50) (* convenient alternative notation*)
 
 
 subsection \<open>Description(-like) operators\<close>
@@ -51,9 +58,10 @@ notation HOL.The ("\<iota>") and HOL.The (binder "\<iota>" 10)
 notation Hilbert_Choice.Eps ("\<epsilon>") and Hilbert_Choice.Eps (binder "\<epsilon>" 10)
 
 (*Introduce a convenient 'dual' to Hilbert's epsilon operator (adds variable-binding notation)*)
-abbreviation Delta ("\<delta>") 
-  where "\<delta> \<equiv> \<lambda>A. \<epsilon>(\<lambda>x. \<not>A x)"
-notation Delta (binder "\<delta>" 10)
+abbreviation Delta ("\<delta>")
+  where "\<delta> \<equiv> \<lambda>A. \<epsilon> (\<lambda>x. \<not>A x)"
+
+notation Delta (binder "\<delta>" 10) 
 
 (*Sanity checks*)
 lemma "(\<iota> x. A x) = (THE x. A x)" ..
@@ -71,20 +79,17 @@ abbreviation NotEx ("\<nexists>") (*for convenience*)
   where "\<nexists>A \<equiv> \<not>\<exists>A"
 
 (*Quantifiers are in fact definable from \<epsilon> and \<delta> using the \<^bold>O combinator (Smullyan's 'owl')*)
-lemma Ex_def_eps: "\<exists> = \<^bold>O \<epsilon>" unfolding comb_defs by (metis (full_types))
-lemma All_def_eps: "\<forall> = \<^bold>O \<delta>" unfolding comb_defs by (meson someI_ex)
+lemma Ex_def2: "\<exists> = \<^bold>O \<epsilon>" unfolding comb_defs by (metis (full_types))
+lemma All_def2: "\<forall> = \<^bold>O \<delta>" unfolding comb_defs by (meson someI_ex)
 
-lemma "\<exists>\<phi> = \<phi>(\<epsilon> x. \<phi> x)" unfolding Ex_def_eps comb_defs ..
-lemma "\<forall>\<phi> = \<phi>(\<epsilon> x. \<not>\<phi> x)" unfolding All_def_eps comb_defs ..
+lemma "\<exists>\<phi> = \<phi>(\<epsilon> x. \<phi> x)" unfolding Ex_def2 comb_defs ..
+lemma "\<forall>\<phi> = \<phi>(\<epsilon> x. \<not>\<phi> x)" unfolding All_def2 comb_defs ..
 
 
 subsection \<open>Equality and disequality\<close>
 
 (*Convenient combinator-like symbols \<Q> resp. \<D> to be used instead of (=) resp. (\<noteq>)*)
 notation HOL.eq ("\<Q>") and HOL.not_equal ("\<D>")
-
-(*Convenient symbols for singleton resp. co-singleton sets*)
-notation HOL.eq ("{_}") and HOL.not_equal ("\<lbrace>_\<rbrace>")
 
 (*Removes the (=) resp. (\<noteq>) symbols from output (we want to see \<Q>/{_} resp. \<D>/\<lbrace>_\<rbrace> instead) *)
 no_notation(output)
@@ -142,9 +147,9 @@ subsection \<open>Notation tests\<close>
 term "\<epsilon>"
 term "\<delta>"
 term "\<iota>"
-term "\<lambda>A. \<epsilon> A"
-term "\<lambda>A. \<delta> A"
-term "\<lambda>A. \<iota> A"
+term "\<epsilon> A"
+term "\<delta> A" (*TODO: fix output notation for \<delta>*)
+term "\<iota> A"
 term "\<epsilon> x. A x"
 term "\<delta> x. A x"
 term "\<iota> x. A x"
@@ -152,15 +157,16 @@ term "\<lambda>x. \<not>x"
 term "\<not>a"
 term "\<not>a \<or> b"
 term "\<not>f a \<or> \<not>\<not>f a"
+term "\<not>(f a \<or> h)"
 term "\<not>"
+term "(\<not>) \<circ> A"
+term "A \<circ> (\<not>)"
 term "\<Q>"
 term "\<D>"
 term "\<Q> a"
 term "\<D> a"
 term "(=)"
 term "(\<noteq>)"
-term "{a}"
-term "\<lbrace>a\<rbrace>"
 term "a = b"
 term "a \<noteq> b"
 term "(=)a"

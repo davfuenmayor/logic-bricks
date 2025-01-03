@@ -15,12 +15,12 @@ subsection \<open>Sets and Relations\<close>
 (*Notation aliasing for type bool*)
 type_notation bool ("o") 
 
-(*Sets and pairs as unary type constructors*)
+(*Sets and endopairs as unary type constructors*)
 type_synonym ('a)Set = "o-Val('a)" ("Set'(_')")  (*a set is encoded as a 2-valuation (boolean classifier)*)
-type_synonym ('a)Pair = "o-Env('a)" ("Pair'(_')")  (*a pair is encoded as a 2-index *)
+type_synonym ('a)EPair = "o-Env('a)" ("EPair'(_')")  (*an endopair is encoded as a 2-index *)
 
 term "(S :: Set('a)) :: 'a \<Rightarrow> o"
-term "(P :: Pair('a)) :: o \<Rightarrow> 'a"
+term "(P :: EPair('a)) :: o \<Rightarrow> 'a"
 
 (*(Endo)relations between objects (of the same type) as binary type constructors *)
 type_synonym ('a,'b)Rel = "Set('b)-Val('a)" ("Rel'(_,_')") (*relations encoded as set-valued functions*)

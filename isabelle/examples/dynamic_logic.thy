@@ -9,20 +9,19 @@ type_synonym \<sigma> = "Set(w)" (*type of propositions or predicates*)
 type_synonym \<pi> = "ERel(w)" (*type of actions or programs*)
 
 (*We now introduce our program-indexed family of modalities via the following definitions:*)
-notation(input) downImageDual ("[_]_")
-notation(input) downImage ("<_>_")
+notation(input) leftImage ("<_>_")
+notation(input) leftDualImage ("[_]_")
 
-(*P holds in *at least one* state reachable (from the currest state) by executing program/action 'a'*)
-lemma "<a>P = (\<lambda>w. \<exists>v. a w v \<and> P v)" unfolding downImage_def set_defs comb_defs ..
-(*P holds in *every* state reachable (from the currest state) by executing program/action 'a'*)
-lemma "[a]P = (\<lambda>w. \<forall>v. a w v \<rightarrow> P v)" unfolding downImageDual_def set_defs comb_defs ..
+(*P holds in *at least one* state reachable (from the current state) by executing program/action 'a'*)
+lemma "<a>P = (\<lambda>w. \<exists>v. a w v \<and> P v)" unfolding leftImage_def set_defs comb_defs ..
+(*P holds in *every* state reachable (from the current state) by executing program/action 'a'*)
+lemma "[a]P = (\<lambda>w. \<forall>v. a w v \<rightarrow> P v)" unfolding leftDualImage_def set_defs comb_defs ..
 
 (*Diamond (resp. Box) is monotonic (resp. antimonotonic) wrt. relation ordering*)
-lemma "a \<subseteq>\<^sup>r b \<longrightarrow> <a>P \<subseteq> <b>P"
-  by (metis downImage_embedding subrel_setdef)
+lemma "a \<subseteq>\<^sup>r b \<longrightarrow> <a>P \<subseteq> <b>P" 
+  by (metis leftImage_embedding subrel_setdef)
 lemma "a \<subseteq>\<^sup>r b \<longrightarrow> [b]P \<subseteq> [a]P"
-  apply(subst downImageDual_embedding)
-  apply(unfold C21_comb_def)
+  apply(subst leftDualImage_embedding)
   apply(unfold subrel_setdef)
   by simp
 
@@ -37,9 +36,9 @@ abbreviation(input) seq_composition::"\<pi> \<Rightarrow> \<pi> \<Rightarrow> \<
   where "a \<^bold>; b \<equiv> b \<circ>\<^sup>r a"
 
 lemma "[a\<^bold>;b]P = [a][b]P" (*sledgehammer*)
-  by (simp add: B11_comb_def downImageDual_hom_comp)
+  by (simp add: B11_comb_def leftDualImage_hom_comp)
 lemma "<a\<^bold>;b>P = <a><b>P"
-  by (simp add: B11_comb_def downImage_hom_comp)
+  by (simp add: B11_comb_def leftImage_hom_comp)
 
 (*Choice: execute a or b (non-deterministically)*)
 abbreviation(input) choice::"\<pi> \<Rightarrow> \<pi> \<Rightarrow> \<pi>" (infixr "+" 75)
@@ -48,12 +47,12 @@ abbreviation(input) choice::"\<pi> \<Rightarrow> \<pi> \<Rightarrow> \<pi>" (inf
 (*P holds in every state reachable via execution of the action/program 'a+b' if and only if P holds 
  in every state reachable via execution of 'a' *and* also in every state reachable via execution of 'b'*)
 lemma "[a+b]P = ([a]P) \<^bold>\<and> ([b]P)"
-  by (simp add: \<Phi>21_comb_def downImageDual_hom_join interR_def)
+  by (simp add: \<Phi>21_comb_def leftDualImage_hom_join interR_def)
 
 (*P holds in at least one state reachable via execution of the action/program 'a+b' if and only if P holds
  in at least one state reachable via execution of 'a' *or*  in at least one state reachable via execution of 'b'*)
 lemma "<a+b>P = (<a>P) \<^bold>\<or> (<b>P)"
-  by (metis \<Phi>21_comb_def downImage_hom_join unionR_def)
+  by (metis \<Phi>21_comb_def leftImage_hom_join unionR_def)
 
 (*Non-deterministic choice for arbitrary sets: execute any action/program among those in S*)
 abbreviation(input) gen_choice::"Set(\<pi>) \<Rightarrow> \<pi>" ("\<Sigma>")
@@ -89,7 +88,7 @@ lemma "transitive a \<longrightarrow> P \<^bold>\<and> [a]P \<subseteq> [a\<^sup
 
 
 lemma tran_closure_refl: "reflexive R \<longrightarrow> reflexive (R\<^sup>+)"
-  unfolding reflexive_def2 tran_closure_def biginterR_def2 comb_defs by (simp add: B12_comb_def \<Phi>21_comb_def impl_def subrel_def subset_def)
+  unfolding reflexive_def2 tran_closure_def biginterR_def2 comb_defs by (simp add: B12_comb_def \<Phi>21_comb_def impl_def subrel_setdef subset_def)
 
 lemma tran_closure_symm: "symmetric R \<longrightarrow> symmetric (R\<^sup>+)"
   unfolding symmetric_def tran_closure_def transitive_reldef rel_defs set_defs func_defs comb_defs 
