@@ -26,13 +26,11 @@ lemma "f \<circ> \<^bold>I = f" unfolding comb_defs ..                   (* iden
 
 subsection \<open>Transformations\<close>
 
-subsubsection \<open>Transposition\<close>
-
 (*Transposition of a (curried) binary function corresponds to the \<^bold>C combinator. It flips/swaps arguments.*)
 lemma "f\<Zcat>\<Zcat> = f" unfolding comb_defs .. (* recall that transposition is an involution.*)
 
 
-subsubsection \<open>Inverse and kernel of a function\<close>
+subsubsection \<open>Inverse of a function\<close>
 
 (*The "inverse" of a function 'f' is the relation that assigns to each object 'b' in its codomain 
  the set of elements in its domain mapped to 'b' (i.e. the preimage of 'b' under 'f') *)
@@ -52,6 +50,8 @@ notation(input) inverse ("_\<inverse>")  notation(output) inverse ("'(_')\<inver
 (*The related notion of 'inverse function' of a (bijective) function can be written as:*)
 term "(\<iota> \<circ> f\<inverse>) ::('a \<Rightarrow> 'b) \<Rightarrow> ('b \<Rightarrow> 'a)" (*Beware: well-behaved for bijective functions only!*)
 
+
+subsubsection \<open>Kernel of a function\<close>
 
 (*The "kernel" of a function relates those elements in its domain that get assigned the same value*)
 definition kernel::"('a \<Rightarrow> 'b) \<Rightarrow> ERel('a)"
@@ -92,7 +92,7 @@ declare equalizer_def[func_defs]
 (*In fact, the equalizer of two functions can be stated in terms of pullback*)
 lemma "equalizer = \<^bold>W \<circ>\<^sub>2 pullback" unfolding func_defs comb_defs ..
 
-(*We can swap the roles of 'points' and 'functions' in the above definitions using permutators *)
+(*Note that we can swap the roles of 'points' and 'functions' in the above definitions using permutators *)
 lemma "\<^bold>R equalizer x = (\<lambda>f g. f x = g x)" unfolding func_defs comb_defs ..
 lemma "\<^bold>C\<^sub>2 pullback x y = (\<lambda>f g. f x = g y)" unfolding func_defs comb_defs ..
 
@@ -126,15 +126,33 @@ declare coequalizer_def[func_defs]
 lemma "coequalizer = \<^bold>W \<circ>\<^sub>2 pushout" unfolding func_defs comb_defs ..
 
 
-subsubsection \<open>Range, image & preimage of functions\<close>
+subsubsection \<open>Fixed-points of endofunctions\<close>
+
+definition fixedpoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("fp")
+  where "fp \<equiv> \<^bold>S \<Q>"
+definition cofixedpoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("cfp")
+  where "cfp \<equiv> \<^bold>S \<D>"
+
+lemma "fp f x = (x = f x)" unfolding fixedpoint_def comb_defs ..
+lemma "cfp f x = (x \<noteq> f x)" unfolding cofixedpoint_def comb_defs ..
+
+declare fixedpoint_def[func_defs] cofixedpoint_def[func_defs]
+
+
+subsubsection \<open>Range of functions\<close>
 
 (*Given a function f we can obtain its range as the set of those objects 'b' in the codomain that 
  are the image of some object 'a' (i.e. have a non-empty preimage) under the function f.*)
 definition range::"('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
   where "range \<equiv> \<exists> \<circ>\<^sub>2 inverse"
 
-lemma "range f = \<exists> \<circ> f\<inverse>" unfolding range_def comb_defs ..
-lemma "range f b = (\<exists>a. f a = b)" unfolding range_def func_defs comb_defs ..
+declare range_def[func_defs]
+
+lemma "range f = \<exists> \<circ> f\<inverse>" unfolding func_defs comb_defs ..
+lemma "range f b = (\<exists>a. f a = b)" unfolding func_defs comb_defs ..
+
+
+subsection \<open>Set-operations defined from functions\<close>
 
 (*We can 'lift' functions to act on sets via the image operator. The term "image f" denotes a
  set-operation that takes a set 'A' and returns the set of elements whose f-preimage intersects 'A'.*)
@@ -153,7 +171,7 @@ lemma "preimage f B = f ; B" unfolding preimage_def comb_defs ..
 lemma "preimage f B = (\<lambda>a. B (f a))" unfolding preimage_def comb_defs ..
 
 
-declare range_def[func_defs] image_def[func_defs] preimage_def[func_defs]
+declare image_def[func_defs] preimage_def[func_defs]
 
 (*Introduce convenient notation*)
 notation(input) image ("\<lparr>_ _\<rparr>") and preimage ("\<lparr>_ _\<rparr>\<inverse>")
@@ -175,21 +193,7 @@ lemma "image f \<circ> preimage f = (\<lambda>B. \<lambda>b. f\<inverse> b \<sqi
   unfolding func_defs set_defs comb_defs by metis
 
 
-subsubsection \<open>Fixed-points of endofunctions\<close>
-
-definition fixedpoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("fp")
-  where "fp \<equiv> \<^bold>S \<Q>"
-definition cofixedpoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("cfp")
-  where "cfp \<equiv> \<^bold>S \<D>"
-
-lemma "fp f x = (x = f x)" unfolding fixedpoint_def comb_defs ..
-lemma "cfp f x = (x \<noteq> f x)" unfolding cofixedpoint_def comb_defs ..
-
-declare fixedpoint_def[func_defs] cofixedpoint_def[func_defs]
- 
-
-subsection \<open>Structure-preservation under image and preimage\<close>
-
+(*Structure-preservation under set-operations*)
 lemma image_morph1: "image (f \<circ> g) = image f \<circ> image g"
   unfolding func_defs set_defs comb_defs by auto
 lemma image_morph2: "image \<^bold>I = \<^bold>I" 
@@ -200,8 +204,16 @@ lemma preimage_morph2: "preimage \<^bold>I = \<^bold>I"
   unfolding func_defs comb_defs ..
 
 
+subsection \<open>Miscellaneous\<close>
+
 (*Random simplification(?) rule (TODO: interpret)*)
 lemma image_simp1: "image ((G \<circ> R) a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S (G \<circ> R))"
   apply(rule ext) unfolding comb_defs set_defs func_defs by fastforce
+
+(*Function 'update' or 'override' at a point*)
+definition update :: "('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'a \<Rightarrow> 'b" ("_[_\<mapsto>_]")
+  where "f[a \<mapsto> b] \<equiv> \<lambda>x. if x = a then b else f x"
+
+declare update_def[func_defs]
 
 end

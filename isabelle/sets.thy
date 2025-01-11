@@ -72,6 +72,10 @@ declare subset_def[set_defs]
 lemma "A \<subseteq> B = \<forall>(A \<Rightarrow> B)" unfolding set_defs comb_defs ..
 lemma "A \<subseteq> B = (\<forall>x. A x \<rightarrow> B x)" unfolding set_defs comb_defs ..
 
+(*Subset is antisymmetric, as expected*)
+lemma subset_antisymm: "R \<subseteq> T \<Longrightarrow> T \<subseteq> R \<Longrightarrow> R = T" unfolding set_defs comb_defs by auto
+
+
 (*Let us add the following convenient abbreviations for the reversed versions of (proper) subset*)
 abbreviation(input) superset::"ERel(Set('a))" (infixr "\<supseteq>" 51)
   where "A \<supseteq> B \<equiv> B \<subseteq> A" 
@@ -141,6 +145,8 @@ lemma "A \<sqinter> B = (\<not>(A \<subseteq> \<midarrow>B))" unfolding set_defs
 
 subsection \<open>Constructing sets\<close>
 
+subsubsection \<open>Singletons, cosingletons and finitely-generated sets\<close>
+
 abbreviation(input) insert :: "'a \<Rightarrow> Set('a) \<Rightarrow> Set('a)"
   where "insert a S \<equiv> \<Q> a \<union> S"
 abbreviation(input) remove :: "'a \<Rightarrow> Set('a) \<Rightarrow> Set('a)"
@@ -170,12 +176,49 @@ lemma "\<lbrace>a,b,c\<rbrace> = \<lbrace>a\<rbrace> \<inter> \<lbrace>b,c\<rbra
 lemma "\<lbrace>a,b,c\<rbrace> = \<lbrace>a\<rbrace> \<inter> \<lbrace>b\<rbrace> \<inter> \<lbrace>c\<rbrace>" ..
 lemma "\<lbrace>{a,b,c}, {d,e}\<rbrace> = \<lbrace>{a} \<union> {b} \<union> {c}\<rbrace> \<inter> \<lbrace>{d} \<union> {e}\<rbrace>" ..
 
-(*Finite sets and cosets are related via set-complement as expected*)
+(*Sets and cosets are related via set-complement as expected*)
 lemma "\<lbrace>a\<rbrace> = \<midarrow>{a}" 
   unfolding set_defs comb_defs ..
 lemma "\<lbrace>a,b\<rbrace> = \<midarrow>{a,b}" 
   unfolding set_defs comb_defs by simp
 lemma "\<lbrace>a,b,c\<rbrace> = \<midarrow>{a,b,c}" 
   unfolding set_defs comb_defs by simp
+
+
+subsubsection \<open>Basic spaces\<close>
+
+(*We refer to sets of sets as "spaces". In fact, quantifiers are particular kinds of spaces.*)
+
+term "\<forall>::Set(Set('a))" (* \<forall>A means that the set A contains all alements*)
+term "\<exists>::Set(Set('a))" (* \<exists>A means that A contains at least one element, i.e. A is nonempty*)
+term "\<nexists>::Set(Set('a))" (* \<nexists>A means that A does not contain any element, i.e. A is empty*)
+
+(*Thus we introduce the following convenient lemmas (useful as simplification rules)*)
+lemma All_simp2:"{\<UU>} = \<forall>" (* \<forall> is the space that contains only the universe*)
+  unfolding set_defs comb_defs by auto
+lemma Ex_simp2: "\<lbrace>\<emptyset>\<rbrace> = \<exists>" (* \<exists> is the space that contains all but the empty set*)
+  unfolding Ex_def set_defs comb_defs by auto 
+lemma Ex_simp3: "{\<emptyset>} = \<nexists>" (* \<nexists> is the space that contains only the empty set*)
+  unfolding Ex_def set_defs comb_defs by auto 
+
+declare All_simp2[set_simps] Ex_simp2[set_simps]
+
+(*Further convenient instances of spaces (their combinator-based definitions are postponed)*)
+definition unique::"Set(Set('a))" ("\<exists>\<^sub>\<le>\<^sub>1") (*\<exists>\<^sub>\<le>\<^sub>1 contains the sets with at most one element (and which may be empty)*)
+  where \<open>\<exists>\<^sub>\<le>\<^sub>1A \<equiv> \<forall>x y. A x \<and> A y \<rightarrow> x = y\<close> 
+definition singleton::"Set(Set('a))" ("\<exists>\<^sub>1")  (*\<exists>\<^sub>1 contains the singletons (sets with one single element)*)
+  where \<open>\<exists>\<^sub>1A \<equiv> \<exists>x. A x \<and> (\<forall>y. A y \<rightarrow> x = y)\<close>
+definition doubleton::"Set(Set('a))" ("\<exists>\<^sub>2") (*\<exists>\<^sub>2 contains the doubletons (sets with two (different) elements)*)
+  where \<open>\<exists>\<^sub>2A \<equiv> \<exists>x y. x \<noteq> y \<and> A x \<and> A y \<and> (\<forall>z. A z \<rightarrow> (z = x \<or> z = y))\<close>
+definition upair::"Set(Set('a))" ("\<exists>\<^sub>\<le>\<^sub>2") (*\<exists>\<^sub>\<le>\<^sub>2 contains the unordered pairs (sets with at most 2 elements)*)
+  where \<open>\<exists>\<^sub>\<le>\<^sub>2A \<equiv> \<exists>x y. A x \<and> A y \<and> (\<forall>z. A z \<rightarrow> (z = x \<or> z = y))\<close>
+
+declare unique_def[set_defs] singleton_def[set_defs] 
+        doubleton_def[set_defs] upair_def[set_defs] 
+
+lemma unique_def2: "\<exists>\<^sub>\<le>\<^sub>1 = \<nexists> \<union> \<exists>\<^sub>1" unfolding set_defs comb_defs by auto
+lemma singleton_def2: "\<exists>\<^sub>1 = \<exists> \<inter> \<exists>\<^sub>\<le>\<^sub>1" unfolding set_defs comb_defs by metis
+lemma doubleton_def2: "\<exists>\<^sub>2 = \<exists>\<^sub>\<le>\<^sub>2 \<setminus> \<exists>\<^sub>1" unfolding set_defs comb_defs by blast
+lemma upair_def2: "\<exists>\<^sub>\<le>\<^sub>2 = \<exists>\<^sub>1 \<union> \<exists>\<^sub>2" unfolding set_defs comb_defs by blast
 
 end

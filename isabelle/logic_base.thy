@@ -116,7 +116,8 @@ hide_const(open) Set.subset Set.subset_eq Set.supset Set.supset_eq
                  Fields.inverse_class.inverse_divide
                  Transitive_Closure.trancl Transitive_Closure.rtrancl
                  Lattices.sup_class.sup Lattices.inf_class.inf
-                 Fun.comp
+                 (* Fun.comp Fun.fun_upd *)
+
 no_notation (*so we can use those symbols for our own purposes*)
   Set.subset  ("'(\<subset>')") and Set.subset  ("(_/ \<subset> _)" [51, 51] 50) and
   Set.subset_eq  ("'(\<subseteq>')") and Set.subset_eq  ("(_/ \<subseteq> _)" [51, 51] 50) and
@@ -139,8 +140,7 @@ no_notation (*so we can use those symbols for our own purposes*)
   Lattices.sup_class.sup (infixl "\<squnion>" 65) and Lattices.inf_class.inf (infixl "\<sqinter>" 70) and
   Fun.comp (infixl "\<circ>" 55) and Fun.comp (infixl "o" 55)
 no_syntax
-  "_Finset" :: "args \<Rightarrow> 'a set"    ("{(_)}")
-
+  "_Finset" :: "args \<Rightarrow> 'a set" ("{(_)}")
 
 subsection \<open>Notation tests\<close>
 

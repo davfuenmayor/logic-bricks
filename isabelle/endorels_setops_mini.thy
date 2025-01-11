@@ -90,9 +90,6 @@ abbreviation(input) meet::"ERel('a) \<Rightarrow> Op\<^sub>2('a,Set('a))" ("_-me
 
 subsection \<open>Existence and uniqueness\<close>
 
-abbreviation unique::"Set(Set('a))" ("\<exists>\<^sub>\<le>\<^sub>1") (*\<exists>\<^sub>\<le>\<^sub>1 contains the sets with at most one element (and which may be empty)*)
-  where \<open>\<exists>\<^sub>\<le>\<^sub>1A \<equiv> \<forall>x y. A x \<and> A y \<rightarrow> x = y\<close> 
-
 (*There can be at most one least/greatest element in a set*)
 lemma antisymm_least_unique: "antisymmetric R \<Longrightarrow> \<exists>\<^sub>\<le>\<^sub>1(R-least S)" 
   unfolding endorel_defs rel_defs set_defs comb_defs by simp
