@@ -10,6 +10,43 @@ named_theorems rel_defs  (*container for related definitions*)
 named_theorems rel_simps (*container for related simplification rules*)
 
 
+subsection \<open>Constructing relations\<close>
+
+
+subsubsection \<open>Product and Sum\<close>
+(*Relations can also be constructed out of pairs of sets, via (cartesian) product and (disjoint) sum*)
+
+definition product::"Set('a) \<Rightarrow> Set('b) \<Rightarrow> Rel('a,'b)" (infixl "\<times>" 90)
+  where "(\<times>) \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<and>)"
+definition sum::"Set('a) \<Rightarrow> Set('b) \<Rightarrow> Rel('a,'b)" (infixl "\<uplus>" 90)
+  where "(\<uplus>) \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<or>)"
+
+declare product_def[rel_defs] sum_def[rel_defs]
+
+lemma "A \<times> B = (\<lambda>x y. A x \<and> B y)" unfolding rel_defs comb_defs ..
+lemma "A \<uplus> B = (\<lambda>x y. A x \<or> B y)" unfolding rel_defs comb_defs ..
+
+
+subsubsection \<open>Pairs and Copairs\<close>
+(*A (co)atomic-like relation can be constructed out of two elements*)
+
+definition pair::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<langle>_,_\<rangle>")
+  where \<open>pair \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<times>) \<Q> \<Q>\<close> (*relational counterpart of 'singleton'*)
+definition copair::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<lblot>_,_\<rblot>")
+  where \<open>copair \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<uplus>) \<D> \<D>\<close> (*relational counterpart of 'cosingleton'*)
+
+declare pair_def[rel_defs] copair_def[rel_defs]
+
+lemma "\<langle>a,b\<rangle> = {a} \<times> {b}" unfolding rel_defs comb_defs ..
+lemma "\<langle>a,b\<rangle> = (\<lambda>x y. a = x \<and> b = y)" unfolding pair_def unfolding rel_defs comb_defs ..
+lemma "\<lblot>a,b\<rblot> = \<lbrace>a\<rbrace> \<uplus> \<lbrace>b\<rbrace>" unfolding rel_defs comb_defs ..
+lemma "\<lblot>a,b\<rblot> = (\<lambda>x y. a \<noteq> x \<or> b \<noteq> y)" unfolding rel_defs comb_defs ..
+
+(*Pair and copair can be defined in terms of and and or directly*)
+lemma "pair = \<^bold>B\<^sub>2\<^sub>2 (\<and>) \<Q> \<Q>" unfolding rel_defs comb_defs ..
+lemma "copair = \<^bold>B\<^sub>2\<^sub>2 (\<or>) \<D> \<D>" unfolding rel_defs comb_defs ..
+
+
 subsection \<open>Set-like structure\<close>
 
 (*Analogously to sets, we define that a given relation holds of all, resp. at least one, pair or elements.*)
@@ -64,6 +101,21 @@ lemma "R \<Rightarrow>\<^sup>r T = (\<lambda>x. R x \<Rightarrow> T x)" unfoldin
 lemma "R \<Leftrightarrow>\<^sup>r T = (\<lambda>x. R x \<Leftrightarrow> T x)" unfolding rel_defs comb_defs ..
 lemma "R \<triangle>\<^sup>r T = (\<lambda>x. R x \<triangle> T x)" unfolding rel_defs comb_defs ..
 
+(*Product and sum satisfy the corresponding deMorgan dualities*)
+lemma prodSum_simp1: "\<midarrow>\<^sup>r(A \<times> B) = \<midarrow>A \<uplus> \<midarrow>B" unfolding rel_defs set_defs comb_defs by simp
+lemma "(\<lambda>x y. \<not>(A x \<and> B y)) = (\<lambda>x\<^sub>1 x\<^sub>2. \<not>A x\<^sub>1 \<or> \<not>B x\<^sub>2)" apply (rule ext)+ by simp
+lemma prodSum_simp2: "\<midarrow>\<^sup>r(A \<uplus> B) = \<midarrow>A \<times> \<midarrow>B" unfolding rel_defs set_defs comb_defs by simp
+lemma "(\<lambda>x xa. \<not>(A x \<or> B xa)) = (\<lambda>x\<^sub>1 x\<^sub>2. \<not>A x\<^sub>1 \<and> \<not>B x\<^sub>2)" apply (rule ext)+ by simp
+lemma prodSum_simp1': "\<midarrow>\<^sup>r((\<midarrow>A) \<times> (\<midarrow>B)) = A \<uplus> B" unfolding rel_defs set_defs comb_defs by simp
+lemma "(\<lambda>x xa. \<not>(\<not>A x \<and> \<not>B xa)) = (\<lambda>x\<^sub>1 x\<^sub>2. A x\<^sub>1 \<or> B x\<^sub>2)" apply (rule ext)+ by simp
+lemma prodSum_simp2': "\<midarrow>\<^sup>r((\<midarrow>A) \<uplus> (\<midarrow>B)) = A \<times> B" unfolding rel_defs set_defs comb_defs by simp
+lemma "(\<lambda>x xa. \<not>(\<not>A x \<or> \<not>B xa)) = (\<lambda>x\<^sub>1 x\<^sub>2. A x\<^sub>1 \<and> B x\<^sub>2)" apply (rule ext)+ by simp
+
+(*Pairs and copairs are related via relation-complement as expected*)
+lemma copair_simp: "\<midarrow>\<^sup>r\<lblot>a,b\<rblot> = \<langle>a,b\<rangle>" unfolding rel_defs set_defs comb_defs by simp
+
+declare prodSum_simp1 [rel_simps] prodSum_simp2 [rel_simps] prodSum_simp1' [rel_simps] prodSum_simp2' [rel_simps]
+
 (*Point-based definitions*)
 lemma "\<UU>\<^sup>r = (\<lambda>x y. True)" unfolding rel_defs set_defs comb_defs ..
 lemma "\<emptyset>\<^sup>r = (\<lambda>x y. False)" unfolding rel_defs set_defs comb_defs ..
@@ -77,9 +129,9 @@ lemma "R \<triangle>\<^sup>r T = (\<lambda>x y. R x y \<rightleftharpoons> T x y
 
 (*We can also generalize union and intersection to the infinitary case*)
 definition biginterR::"EOp\<^sub>G(Rel('a,'b))" ("\<Inter>\<^sup>r") 
-  where "\<Inter>\<^sup>r \<equiv> \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 image \<^bold>T)"
+  where "\<Inter>\<^sup>r \<equiv> \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 image \<^bold>T)"
 definition bigunionR::"EOp\<^sub>G(Rel('a,'b))" ("\<Union>\<^sup>r")
-  where "\<Union>\<^sup>r \<equiv> \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 image \<^bold>T)"
+  where "\<Union>\<^sup>r \<equiv> \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 image \<^bold>T)"
 
 declare biginterR_def[rel_defs] bigunionR_def[rel_defs]
 
@@ -178,24 +230,6 @@ lemma "\<Sqinter>\<^sup>rS = \<exists>\<^sup>r(\<Inter>\<^sup>rS)" unfolding com
 lemma "\<Squnion>\<^sup>rS = \<forall>\<^sup>r(\<Union>\<^sup>rS)" unfolding comb_defs ..
 
 
-subsection \<open>Constructing relations\<close>
-
-subsubsection \<open>Pairs and Copairs\<close>
-(*A (co)atomic-like relation can be constructed out of two elements*)
-
-definition pair::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<langle>_,_\<rangle>")
-  where \<open>pair \<equiv> \<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<and>) \<Q> \<Q>\<close> (*relational counterpart of 'singleton'*)
-definition copair::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<lblot>_,_\<rblot>")
-  where \<open>copair \<equiv> \<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<or>) \<D> \<D>\<close> (*relational counterpart of 'cosingleton'*)
-
-declare pair_def[rel_defs] copair_def[rel_defs]
-
-lemma "\<langle>a,b\<rangle> = (\<lambda>x y. a = x \<and> b = y)" unfolding rel_defs comb_defs ..
-lemma "\<lblot>a,b\<rblot> = (\<lambda>x y. a \<noteq> x \<or> b \<noteq> y)" unfolding rel_defs comb_defs ..
-
-(*Pairs and copairs are related via relation-complement as expected*)
-lemma "\<midarrow>\<^sup>r\<lblot>a,b\<rblot> = \<langle>a,b\<rangle>" unfolding rel_defs set_defs comb_defs by simp
-
 (*We conveniently extrapolate the definitions of unique/singleton from sets to relations*)
 definition uniqueR::"Set(Rel('a,'b))" ("\<exists>\<^sup>r\<^sub>\<le>\<^sub>1") (* R holds of at most one pair of elements (R may hold of none)*)
   where \<open>\<exists>\<^sup>r\<^sub>\<le>\<^sub>1 R \<equiv> \<forall>a b x y. (R a b \<and> R x y) \<rightarrow> (a = x \<and> b = y)\<close>
@@ -216,26 +250,6 @@ lemma singletonR_gen: "R = \<Union>\<^sup>r(singletonR \<inter> (\<supseteq>\<^s
   unfolding bigunionR_def2 singletonR_def3 unfolding rel_defs set_defs comb_defs apply (rule ext) by auto
 
 
-subsubsection \<open>Product and Sum\<close>
-(*Relations can also be constructed out of pairs of sets, via (cartesian) product and (disjoint) sum*)
-
-definition product::"Set('a) \<Rightarrow> Set('b) \<Rightarrow> Rel('a,'b)" (infixl "\<times>" 90)
-  where "(\<times>) \<equiv> \<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<and>)"
-definition sum::"Set('a) \<Rightarrow> Set('b) \<Rightarrow> Rel('a,'b)" (infixl "\<uplus>" 90)
-  where "(\<uplus>) \<equiv> \<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<or>)"
-
-declare product_def[rel_defs] sum_def[rel_defs]
-
-lemma "A \<times> B = (\<lambda>x y. A x \<and> B y)" unfolding rel_defs comb_defs ..
-lemma "A \<uplus> B = (\<lambda>x y. A x \<or> B y)" unfolding rel_defs comb_defs ..
-
-(*Product and sum satisfy the corresponding deMorgan duality*)
-lemma "\<midarrow>\<^sup>r(A \<times> B) = \<midarrow>A \<uplus> \<midarrow>B" unfolding rel_defs set_defs comb_defs by simp
-lemma "\<midarrow>\<^sup>r(A \<uplus> B) = \<midarrow>A \<times> \<midarrow>B" unfolding rel_defs set_defs comb_defs by simp
-
-(*Pair and copair can be defined in terms of product and sum respectively*)
-lemma "\<langle>a,b\<rangle> = {a} \<times> {b}" unfolding rel_defs comb_defs ..
-lemma "\<lblot>a,b\<rblot> = \<lbrace>a\<rbrace> \<uplus> \<lbrace>b\<rbrace>" unfolding rel_defs comb_defs ..
 
 
 subsection \<open>Function-like properties\<close>
@@ -413,7 +427,7 @@ declare intoFunSet_def[rel_defs]
 lemma "intoFunSet R = (\<lambda>f. asRel f \<subseteq>\<^sup>r R)" unfolding rel_defs comb_defs ..
 lemma "intoFunSet R = (\<lambda>f. \<forall>a b. f a = b \<rightarrow> R a b)" unfolding rel_defs set_defs comb_defs ..
 (*Another perspective:*)
-lemma intoFunSet_def2: "intoFunSet = \<^bold>B\<^sub>2\<^sub>1\<^sub>1 \<wp>\<^sup>r \<^bold>I asRel" unfolding rel_defs set_defs comb_defs ..
+lemma intoFunSet_def2: "intoFunSet = \<^bold>B\<^sub>1\<^sub>1 \<wp>\<^sup>r \<^bold>I asRel" unfolding rel_defs set_defs comb_defs ..
 
 
 subsubsection \<open>Back and forth translation conditions\<close> (*TODO: make simplification rules out of this*)
@@ -463,7 +477,7 @@ subsubsection \<open>Monoidal structure (relation-composition and its dual)\<clo
 
 (*Analogously to functions, relations can also be composed. We introduce 'relation-composition' below*)
 definition relComp::"Rel('a,'b) \<Rightarrow> Rel('b,'c) \<Rightarrow>  Rel('a,'c)" (infixr ";\<^sup>r" 55)
- where "(;\<^sup>r) = \<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<sqinter>) \<^bold>I \<^bold>C"
+ where "(;\<^sup>r) = \<^bold>B\<^sub>2\<^sub>2 (\<sqinter>) \<^bold>I \<^bold>C"
 
 lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<lambda>a b. R\<^sub>1 a \<sqinter> R\<^sub>2\<Zcat> b)" 
   unfolding relComp_def set_defs comb_defs ..
@@ -472,7 +486,7 @@ lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<lambda>a b. \<exists>c. R\<^sub>1 a c 
 
 (*For relations, we can in fact define an operator that acts as a 'dual' to relation-composition*)
 definition relDualComp::"Rel('c,'a) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('c,'b)" (infixr ":\<^sup>r" 55)
-  where "(:\<^sup>r) \<equiv> \<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<squnion>) \<^bold>I \<^bold>C"
+  where "(:\<^sup>r) \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<squnion>) \<^bold>I \<^bold>C"
 
 lemma "(R\<^sub>1 :\<^sup>r R\<^sub>2) = (\<lambda>a b. R\<^sub>1 a \<squnion> R\<^sub>2\<Zcat> b)" 
   unfolding relDualComp_def set_defs comb_defs ..
@@ -553,13 +567,12 @@ lemma "relKernel R = (\<lambda>x y. R x \<sqinter> R y)" unfolding relKernel_def
 lemma "relKernel (asRel f) = kernel f" unfolding rel_defs func_defs set_defs comb_defs by metis
 lemma "totalFunction R \<Longrightarrow> kernel (asFun R) = relKernel R" unfolding rel_defs func_defs set_defs comb_defs by (metis (mono_tags))
 
-
 subsubsection \<open>Pullback and equalizer of a pair of relations\<close>
 
 (*The pullback (aka. fiber product) of two relations 'R' and 'T' (sharing the same codomain), 
  relates those pairs of elements that get assigned some same value by 'R' and 'T' respectively*)
 definition relPullback :: "Rel('a,'c) \<Rightarrow> Rel('b,'c) \<Rightarrow> Rel('a,'b)"
-  where "relPullback \<equiv> \<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<sqinter>)"
+  where "relPullback \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)"
 
 declare relPullback_def[rel_defs]
 
@@ -655,13 +668,13 @@ subsection \<open>Set-operations defined from relations\<close>
 (*We can extend the definitions of the (pre)image set-operator from functions to relations
  together with their 'dual' counterparts*)
 definition rightImage::"Rel('a,'b) \<Rightarrow> SetOp('a,'b)" ("_-rightImage")
-  where "rightImage \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<sqinter>) \<^bold>C)\<Zcat>"
+  where "rightImage \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<sqinter>) \<^bold>C)\<Zcat>"
 definition leftImage::"Rel('a,'b) \<Rightarrow> SetOp('b,'a)" ("_-leftImage")
-  where "leftImage \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<sqinter>) \<^bold>A)\<Zcat>"
+  where "leftImage \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<sqinter>) \<^bold>A)\<Zcat>"
 definition rightDualImage::"Rel('a,'b) \<Rightarrow> SetOp('a,'b)" ("_-rightDualImage")
-  where "rightDualImage \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<subseteq>) \<^bold>C)\<Zcat>"
+  where "rightDualImage \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<subseteq>) \<^bold>C)\<Zcat>"
 definition leftDualImage::"Rel('a,'b) \<Rightarrow> SetOp('b,'a)" ("_-leftDualImage")
-  where "leftDualImage \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<subseteq>) \<^bold>A)\<Zcat>"
+  where "leftDualImage \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<subseteq>) \<^bold>A)\<Zcat>"
 
 declare rightImage_def[rel_defs] leftImage_def[rel_defs]
         rightDualImage_def[rel_defs] leftDualImage_def[rel_defs] 
@@ -679,13 +692,13 @@ lemma "R-leftDualImage B a = (\<forall>b. R a b \<rightarrow> B b)" unfolding re
 (*Following operators (aka. "polarities") are inspired by (and generalize) the notion of upper/lower 
  bounds of a set wrt. an ordering. They are defined for relations in general.*)
 definition rightBound::"Rel('a,'b) \<Rightarrow> SetOp('a,'b)" ("_-rightBound")
-  where "rightBound \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<supseteq>) \<^bold>C)\<Zcat>"                                 (*cf. rightDualImage (using \<supseteq>)*)
+  where "rightBound \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<supseteq>) \<^bold>C)\<Zcat>"                                 (*cf. rightDualImage (using \<supseteq>)*)
 definition leftBound::"Rel('a,'b) \<Rightarrow> SetOp('b,'a)" ("_-leftBound")
-  where "leftBound \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<supseteq>) \<^bold>A)\<Zcat>"                                   (*cf. leftDualImage (using \<supseteq>)*)
+  where "leftBound \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<supseteq>) \<^bold>A)\<Zcat>"                                   (*cf. leftDualImage (using \<supseteq>)*)
 definition rightDualBound::"Rel('a,'b) \<Rightarrow> SetOp('a,'b)" ("_-rightDualBound")
-  where  "rightDualBound \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<^bold>\<Psi>\<^sub>2 (\<sqinter>) \<midarrow>) \<^bold>C)\<Zcat>"              (*cf. rightImage (preprocessed with \<midarrow>)*)
+  where  "rightDualBound \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<^bold>\<Psi>\<^sub>2 (\<sqinter>) \<midarrow>) \<^bold>C)\<Zcat>"              (*cf. rightImage (preprocessed with \<midarrow>)*)
 definition leftDualBound::"Rel('a,'b) \<Rightarrow> SetOp('b,'a)" ("_-leftDualBound")
-  where  "leftDualBound \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<^bold>\<Psi>\<^sub>2 (\<sqinter>) \<midarrow>) \<^bold>A)\<Zcat>"                (*cf. leftImage (preprocessed with \<midarrow>)*)
+  where  "leftDualBound \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<^bold>\<Psi>\<^sub>2 (\<sqinter>) \<midarrow>) \<^bold>A)\<Zcat>"                (*cf. leftImage (preprocessed with \<midarrow>)*)
 
 declare rightBound_def[rel_defs] leftBound_def[rel_defs]
         rightDualBound_def[rel_defs] leftDualBound_def[rel_defs]
@@ -701,8 +714,8 @@ lemma "R-rightDualBound A = (\<lambda>b. \<exists>a. \<not>R a b \<and> \<not>A 
 lemma "R-leftDualBound B = (\<lambda>a. \<exists>b. \<not>R a b \<and> \<not>B b)" unfolding rel_defs set_defs comb_defs ..
 
 (*Alternative (more insightful?) definitions for dual-bounds*)
-lemma rightDualBound_def': "rightDualBound = \<midarrow>\<^sup>r \<circ> ((\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<squnion>) \<^bold>C)\<Zcat>)" unfolding rel_defs set_defs comb_defs by simp
-lemma leftDualBound_def':   "leftDualBound = \<midarrow>\<^sup>r \<circ> ((\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<squnion>) \<^bold>A)\<Zcat>)" unfolding rel_defs set_defs comb_defs by simp
+lemma rightDualBound_def': "rightDualBound = \<midarrow>\<^sup>r \<circ> ((\<^bold>B\<^sub>2\<^sub>0 (\<squnion>) \<^bold>C)\<Zcat>)" unfolding rel_defs set_defs comb_defs by simp
+lemma leftDualBound_def':   "leftDualBound = \<midarrow>\<^sup>r \<circ> ((\<^bold>B\<^sub>2\<^sub>0 (\<squnion>) \<^bold>A)\<Zcat>)" unfolding rel_defs set_defs comb_defs by simp
 
 lemma "R-rightDualBound A = \<midarrow>(\<lambda>b. R\<Zcat> b \<squnion> A)" unfolding rightDualBound_def' rel_defs set_defs comb_defs ..
 lemma  "R-leftDualBound B = \<midarrow>(\<lambda>a. R a \<squnion> B)" unfolding leftDualBound_def' rel_defs set_defs comb_defs ..
@@ -713,9 +726,9 @@ lemma rightImage_def2: "rightImage = \<Union> \<circ>\<^sub>2 image"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
 lemma leftImage_def2: "leftImage = \<Union> \<circ>\<^sub>2 (image \<circ> \<^bold>C)"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
-lemma rightDualImage_def2: "rightDualImage = \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>)"
+lemma rightDualImage_def2: "rightDualImage = \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>)"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
-lemma leftDualImage_def2: "leftDualImage = \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 image \<sim>\<^sup>r \<midarrow>)"
+lemma leftDualImage_def2: "leftDualImage = \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<sim>\<^sup>r \<midarrow>)"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
 
 lemma "R-rightImage A = \<Union>\<lparr>R A\<rparr>" unfolding rightImage_def2 comb_defs ..
@@ -727,9 +740,9 @@ lemma rightBound_def2: "rightBound = \<Inter> \<circ>\<^sub>2 image"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
 lemma leftBound_def2: "leftBound = \<Inter> \<circ>\<^sub>2 (image \<circ> \<^bold>C)"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
-lemma rightDualBound_def2: "rightDualBound = \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>)"
+lemma rightDualBound_def2: "rightDualBound = \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>)"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
-lemma leftDualBound_def2: "leftDualBound = \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 image \<sim>\<^sup>r \<midarrow>)"
+lemma leftDualBound_def2: "leftDualBound = \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<sim>\<^sup>r \<midarrow>)"
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
 
 lemma "R-rightBound A = \<Inter>\<lparr>R A\<rparr>" unfolding rightBound_def2 comb_defs ..

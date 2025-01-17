@@ -131,9 +131,9 @@ subsection \<open>Well-foundedness & co.\<close>
 
 (*Well-foundedness of a set wrt. a given relation (as in "N is well-founded wrt. < ")*)
 definition wellfounded::"ERel('a) \<Rightarrow> Set('a) \<Rightarrow> o" ("_-wellfounded")
-  where "wellfounded \<equiv> \<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<supseteq>) (\<exists> \<circ>\<^sub>2 min) (((\<inter>) \<exists>) \<circ> (\<supseteq>))" (*TODO: simplify?*)
+  where "wellfounded \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<supseteq>) (\<exists> \<circ>\<^sub>2 min) (((\<inter>) \<exists>) \<circ> (\<supseteq>))" (*TODO: simplify?*)
 definition wellordered::"ERel('a) \<Rightarrow> Set('a) \<Rightarrow> o" ("_-wellordered")
-  where "wellordered \<equiv> \<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<supseteq>) (\<exists> \<circ>\<^sub>2 least) (((\<inter>) \<exists>) \<circ> (\<supseteq>))" (*TODO: simplify?*) 
+  where "wellordered \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<supseteq>) (\<exists> \<circ>\<^sub>2 least) (((\<inter>) \<exists>) \<circ> (\<supseteq>))" (*TODO: simplify?*) 
 
 declare wellfounded_def[endorel_defs] wellordered_def[endorel_defs]
 

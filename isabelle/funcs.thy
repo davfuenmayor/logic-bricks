@@ -35,7 +35,7 @@ subsubsection \<open>Inverse of a function\<close>
 (*The "inverse" of a function 'f' is the relation that assigns to each object 'b' in its codomain 
  the set of elements in its domain mapped to 'b' (i.e. the preimage of 'b' under 'f') *)
 definition inverse::"('a \<Rightarrow> 'b) \<Rightarrow> Rel('b,'a)"
-  where "inverse \<equiv> \<^bold>B\<^sub>2\<^sub>1\<^sub>0 \<Q>"
+  where "inverse \<equiv> \<^bold>B\<^sub>1\<^sub>0 \<Q>"
 
 lemma "inverse f b = (\<lambda>a. f a = b)" unfolding inverse_def comb_defs ..
 
@@ -70,7 +70,7 @@ subsubsection \<open>Pullback and equalizer of a pair of functions\<close>
 (*The pullback (aka. fiber product) of two functions 'f' and 'g' (sharing the same codomain), 
  relates those pairs of elements that get assigned the same value by 'f' and 'g' respectively*)
 definition pullback :: "('a \<Rightarrow> 'c) \<Rightarrow> ('b \<Rightarrow> 'c) \<Rightarrow> Rel('a,'b)"
-  where "pullback \<equiv> \<^bold>B\<^sub>2\<^sub>1\<^sub>1 \<Q>"
+  where "pullback \<equiv> \<^bold>B\<^sub>1\<^sub>1 \<Q>"
 
 lemma "pullback f g = (\<lambda>x y. f x = g y)" unfolding pullback_def comb_defs ..
 
@@ -102,20 +102,20 @@ subsubsection \<open>Pushout and coequalizer of a pair of functions\<close>
 (*The pushout (aka. fiber coproduct) of two functions 'f' and 'g' (sharing the same domain), relates
  pairs of elements (in their codomains) whose preimages under 'f' resp. 'g' intersect *)
 definition pushout :: "('c \<Rightarrow> 'a) \<Rightarrow> ('c \<Rightarrow> 'b) \<Rightarrow> Rel('a,'b)" 
-  where "pushout \<equiv> \<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<sqinter>) inverse inverse" (*beware polymorphism: 'inverse' appears twice with different types*)
+  where "pushout \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<sqinter>) inverse inverse" (*beware polymorphism: 'inverse' appears twice with different types*)
 
 lemma "pushout f g = (\<lambda>x y. f\<inverse> x \<sqinter> g\<inverse> y)" unfolding pushout_def comb_defs ..
 
 declare pushout_def[func_defs]
 
 (*The equations below don't work as definitions since they unduly restrict types ('inverse' appears only once)*)
-lemma "pushout = \<^bold>W (\<^bold>B\<^sub>2\<^sub>2\<^sub>2 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
-lemma "pushout = \<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
+lemma "pushout = \<^bold>W (\<^bold>B\<^sub>2\<^sub>2 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
+lemma "pushout = \<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
 
 (*The coequalizer of two functions 'f' and 'g' (sharing the same domain and codomain) is the set of 
  elements in their (common) codomain whose preimage under 'f' resp. 'g' intersect*)
 definition coequalizer :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
-  where "coequalizer \<equiv> \<^bold>W \<circ>\<^sub>2 (\<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<sqinter>)) inverse)" 
+  where "coequalizer \<equiv> \<^bold>W \<circ>\<^sub>2 (\<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse)" 
 
 lemma "coequalizer f g = \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<sqinter>) (f\<inverse>) (g\<inverse>)" unfolding coequalizer_def comb_defs ..
 lemma "coequalizer f g = (\<lambda>x. (f\<inverse>) x \<sqinter> (g\<inverse>) x)" unfolding coequalizer_def comb_defs ..
@@ -157,7 +157,7 @@ subsection \<open>Set-operations defined from functions\<close>
 (*We can 'lift' functions to act on sets via the image operator. The term "image f" denotes a
  set-operation that takes a set 'A' and returns the set of elements whose f-preimage intersects 'A'.*)
 definition image::"('a \<Rightarrow> 'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b)"
-  where "image \<equiv> (\<^bold>B\<^sub>2\<^sub>2\<^sub>0 (\<sqinter>) inverse)\<Zcat>"
+  where "image \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<sqinter>) inverse)\<Zcat>"
 
 lemma "image f A = (\<lambda>b. f\<inverse> b \<sqinter> A)" unfolding image_def comb_defs ..
 lemma "image f A b = (\<exists>x. f\<inverse> b x \<and> A x)" unfolding image_def set_defs comb_defs ..

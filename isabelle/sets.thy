@@ -51,9 +51,9 @@ lemma "A \<triangle> B = (\<lambda>x. A x \<rightleftharpoons> B x)" unfolding s
 
 (*Union and intersection can be generalized to operate on arbitrary sets of sets (aka. 'infinitary' operations)*)
 definition biginter::"EOp\<^sub>G(Set('a))" ("\<Inter>")
-  where "\<Inter> \<equiv> \<forall> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<Rightarrow>) \<^bold>I \<^bold>T)"
+  where "\<Inter> \<equiv> \<forall> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<Rightarrow>) \<^bold>I \<^bold>T)"
 definition bigunion::"EOp\<^sub>G(Set('a))" ("\<Union>")
-  where "\<Union> \<equiv> \<exists> \<circ>\<^sub>2 (\<^bold>B\<^sub>2\<^sub>1\<^sub>1 (\<inter>) \<^bold>I \<^bold>T)"
+  where "\<Union> \<equiv> \<exists> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I \<^bold>T)"
 
 lemma "\<Inter>S x = (\<forall>A. S A \<rightarrow> A x)" unfolding biginter_def set_defs comb_defs ..
 lemma "\<Union>S x = (\<exists>A. S A \<and> A x)" unfolding bigunion_def set_defs comb_defs ..
@@ -153,8 +153,8 @@ abbreviation(input) remove :: "'a \<Rightarrow> Set('a) \<Rightarrow> Set('a)"
   where "remove a S \<equiv> \<D> a \<inter> S"
 
 (*The previous functions in terms of combinators*)
-lemma "insert = (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 (\<union>) \<Q>)\<Zcat>" unfolding comb_defs ..
-lemma "remove = (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 (\<inter>) \<D>)\<Zcat>" unfolding comb_defs ..
+lemma "insert = (\<^bold>B\<^sub>1\<^sub>0 (\<union>) \<Q>)\<Zcat>" unfolding comb_defs ..
+lemma "remove = (\<^bold>B\<^sub>1\<^sub>0 (\<inter>) \<D>)\<Zcat>" unfolding comb_defs ..
 
 syntax
   "_finiteSet" :: "args \<Rightarrow> Set('a)"   ("{(_)}")
@@ -183,7 +183,6 @@ lemma "\<lbrace>a,b\<rbrace> = \<midarrow>{a,b}"
   unfolding set_defs comb_defs by simp
 lemma "\<lbrace>a,b,c\<rbrace> = \<midarrow>{a,b,c}" 
   unfolding set_defs comb_defs by simp
-
 
 subsubsection \<open>Basic spaces\<close>
 

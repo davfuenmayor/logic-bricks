@@ -36,9 +36,9 @@ abbreviation(input) seq_composition::"\<pi> \<Rightarrow> \<pi> \<Rightarrow> \<
   where "a \<^bold>; b \<equiv> b \<circ>\<^sup>r a"
 
 lemma "[a\<^bold>;b]P = [a][b]P" (*sledgehammer*)
-  by (simp add: B11_comb_def leftDualImage_hom_comp)
+  by (simp add: B1_comb_def leftDualImage_hom_comp)
 lemma "<a\<^bold>;b>P = <a><b>P"
-  by (simp add: B11_comb_def leftImage_hom_comp)
+  by (simp add: B1_comb_def leftImage_hom_comp)
 
 (*Choice: execute a or b (non-deterministically)*)
 abbreviation(input) choice::"\<pi> \<Rightarrow> \<pi> \<Rightarrow> \<pi>" (infixr "+" 75)
@@ -88,7 +88,7 @@ lemma "transitive a \<longrightarrow> P \<^bold>\<and> [a]P \<subseteq> [a\<^sup
 
 
 lemma tran_closure_refl: "reflexive R \<longrightarrow> reflexive (R\<^sup>+)"
-  unfolding reflexive_def2 tran_closure_def biginterR_def2 comb_defs by (simp add: B12_comb_def \<Phi>21_comb_def impl_def subrel_setdef subset_def)
+  unfolding reflexive_def2 tran_closure_def biginterR_def2 comb_defs by (simp add: B2_comb_def \<Phi>21_comb_def impl_def subrel_setdef subset_def)
 
 lemma tran_closure_symm: "symmetric R \<longrightarrow> symmetric (R\<^sup>+)"
   unfolding symmetric_def tran_closure_def transitive_reldef rel_defs set_defs func_defs comb_defs 

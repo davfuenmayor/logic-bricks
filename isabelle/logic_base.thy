@@ -58,7 +58,7 @@ notation HOL.The ("\<iota>") and HOL.The (binder "\<iota>" 10)
 notation Hilbert_Choice.Eps ("\<epsilon>") and Hilbert_Choice.Eps (binder "\<epsilon>" 10)
 
 (*Introduce a convenient 'dual' to Hilbert's epsilon operator (adds variable-binding notation)*)
-abbreviation Delta ("\<delta>")
+definition Delta ("\<delta>")
   where "\<delta> \<equiv> \<lambda>A. \<epsilon> (\<lambda>x. \<not>A x)"
 
 notation Delta (binder "\<delta>" 10) 
@@ -66,7 +66,7 @@ notation Delta (binder "\<delta>" 10)
 (*Sanity checks*)
 lemma "(\<iota> x. A x) = (THE x. A x)" ..
 lemma "(\<epsilon> x. A x) = (SOME x. A x)" ..
-lemma "(\<delta> x. A x) = (SOME x. \<not>A x)" ..
+lemma "(\<delta> x. A x) = (SOME x. \<not>A x)" unfolding Delta_def ..
 
 
 subsection \<open>Quantifiers\<close>
@@ -80,10 +80,10 @@ abbreviation NotEx ("\<nexists>") (*for convenience*)
 
 (*Quantifiers are in fact definable from \<epsilon> and \<delta> using the \<^bold>O combinator (Smullyan's 'owl')*)
 lemma Ex_def2: "\<exists> = \<^bold>O \<epsilon>" unfolding comb_defs by (metis (full_types))
-lemma All_def2: "\<forall> = \<^bold>O \<delta>" unfolding comb_defs by (meson someI_ex)
+lemma All_def2: "\<forall> = \<^bold>O \<delta>"  unfolding Delta_def comb_defs by (meson someI_ex)
 
 lemma "\<exists>\<phi> = \<phi>(\<epsilon> x. \<phi> x)" unfolding Ex_def2 comb_defs ..
-lemma "\<forall>\<phi> = \<phi>(\<epsilon> x. \<not>\<phi> x)" unfolding All_def2 comb_defs ..
+lemma "\<forall>\<phi> = \<phi>(\<epsilon> x. \<not>\<phi> x)" unfolding Delta_def All_def2 comb_defs ..
 
 
 subsection \<open>Equality and disequality\<close>
@@ -148,7 +148,7 @@ term "\<epsilon>"
 term "\<delta>"
 term "\<iota>"
 term "\<epsilon> A"
-term "\<delta> A" (*TODO: fix output notation for \<delta>*)
+term "\<delta> A"
 term "\<iota> A"
 term "\<epsilon> x. A x"
 term "\<delta> x. A x"

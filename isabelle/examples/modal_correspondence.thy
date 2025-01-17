@@ -56,7 +56,7 @@ lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<lflo
   ..
   
 lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P\<rfloor>)"
-  by (metis ADT K11_comb_def leftDualImage_embedding leftDualImage_hom_id reflexive_def subrel_setdef)
+  by (metis ADT I_comb_def leftDualImage_embedding leftDualImage_hom_id reflexive_def subrel_setdef)
 
 lemma symmetric_corresp: "symmetric R \<longleftrightarrow> (\<forall>P. \<lfloor>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
   apply(subst ADT)
@@ -87,17 +87,17 @@ lemma transitive_corresp:  "transitive R \<longleftrightarrow> (\<forall>P. \<lf
   ..
 
 lemma transitive_corresp': "transitive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P)\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B11_comb_def leftDualImage_embedding leftDualImage_hom_comp subrel_setdef transitive_reldef)
+  by (metis ADT B1_comb_def leftDualImage_embedding leftDualImage_hom_comp subrel_setdef transitive_reldef)
 
 lemma dense_corresp: "dense R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B11_comb_def dense_reldef leftDualImage_embedding leftDualImage_hom_comp subrel_setdef)
+  by (metis ADT B1_comb_def dense_reldef leftDualImage_embedding leftDualImage_hom_comp subrel_setdef)
 lemma dense_corresp': "dense R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B11_comb_def dense_reldef leftImage_embedding leftImage_hom_comp subrel_setdef)
+  by (metis ADT B1_comb_def dense_reldef leftImage_embedding leftImage_hom_comp subrel_setdef)
 
 lemma euclidean_corresp: "euclidean R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
-  by (metis (no_types, lifting) ADT B11_comb_def euclidean_reldef leftImage_embedding leftImage_hom_comp residuation1 rightImage_defT subrel_setdef)
+  by (metis (no_types, lifting) ADT B1_comb_def euclidean_reldef leftImage_embedding leftImage_hom_comp residuation1 rightImage_defT subrel_setdef)
 lemma euclidean_corresp': "euclidean R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P\<rfloor>)" (*sledgehammer*)
-  by (metis (no_types, lifting) ADT B11_comb_def euclidean_reldef leftDualImage_embedding leftDualImage_hom_comp residuation2 rightDualImage_defT subrel_setdef)
+  by (metis (no_types, lifting) ADT B1_comb_def euclidean_reldef leftDualImage_embedding leftDualImage_hom_comp residuation2 rightDualImage_defT subrel_setdef)
 
 
 end
