@@ -26,10 +26,6 @@ lemma "f \<circ> \<^bold>I = f" unfolding comb_defs ..                   (* iden
 
 subsection \<open>Transformations\<close>
 
-(*Transposition of a (curried) binary function corresponds to the \<^bold>C combinator. It flips/swaps arguments.*)
-lemma "f\<Zcat>\<Zcat> = f" unfolding comb_defs .. (* recall that transposition is an involution.*)
-
-
 subsubsection \<open>Inverse of a function\<close>
 
 (*The "inverse" of a function 'f' is the relation that assigns to each object 'b' in its codomain 
@@ -42,7 +38,7 @@ lemma "inverse f b = (\<lambda>a. f a = b)" unfolding inverse_def comb_defs ..
 declare inverse_def[func_defs]
 
 (*An alternative combinator-based definition (by commutativity of \<Q>)*)
-lemma inverse_def2: "inverse = (\<^bold>D \<Q>)\<Zcat>" unfolding func_defs comb_defs by auto
+lemma inverse_def2: "inverse = \<^bold>C (\<^bold>D \<Q>)" unfolding func_defs comb_defs by auto
 
 (*We introduce some convenient superscript notation*)
 notation(input) inverse ("_\<inverse>")  notation(output) inverse ("'(_')\<inverse>")
@@ -126,17 +122,22 @@ declare coequalizer_def[func_defs]
 lemma "coequalizer = \<^bold>W \<circ>\<^sub>2 pushout" unfolding func_defs comb_defs ..
 
 
-subsubsection \<open>Fixed-points of endofunctions\<close>
+subsubsection \<open>Fixed-Points\<close>
+(*We encode the notion of fixed-points and non-fixed-points of an endofunction.*)
 
-definition fixedpoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("fp")
-  where "fp \<equiv> \<^bold>S \<Q>"
-definition cofixedpoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("cfp")
-  where "cfp \<equiv> \<^bold>S \<D>"
+definition fixedPoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("FP")
+  where "FP \<equiv> \<^bold>S \<Q>"
+definition nonFixedPoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("nFP")
+  where "nFP \<equiv> \<^bold>S \<D>"
 
-lemma "fp f x = (x = f x)" unfolding fixedpoint_def comb_defs ..
-lemma "cfp f x = (x \<noteq> f x)" unfolding cofixedpoint_def comb_defs ..
+lemma "FP f x = (x = f x)" unfolding fixedPoint_def comb_defs ..
+lemma "nFP f x = (x \<noteq> f x)" unfolding nonFixedPoint_def comb_defs ..
 
-declare fixedpoint_def[func_defs] cofixedpoint_def[func_defs]
+declare fixedPoint_def[func_defs] nonFixedPoint_def[func_defs]
+
+(*It holds in general:*)
+lemma "nFP = \<midarrow> \<circ> FP" unfolding func_defs set_defs comb_defs ..
+lemma "nFP f = \<midarrow>(FP f)" unfolding func_defs set_defs comb_defs ..
 
 
 subsubsection \<open>Range of functions\<close>
@@ -157,7 +158,7 @@ subsection \<open>Set-operations defined from functions\<close>
 (*We can 'lift' functions to act on sets via the image operator. The term "image f" denotes a
  set-operation that takes a set 'A' and returns the set of elements whose f-preimage intersects 'A'.*)
 definition image::"('a \<Rightarrow> 'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b)"
-  where "image \<equiv> (\<^bold>B\<^sub>2\<^sub>0 (\<sqinter>) inverse)\<Zcat>"
+  where "image \<equiv> \<^bold>C (\<^bold>B\<^sub>2\<^sub>0 (\<sqinter>) inverse)"
 
 lemma "image f A = (\<lambda>b. f\<inverse> b \<sqinter> A)" unfolding image_def comb_defs ..
 lemma "image f A b = (\<exists>x. f\<inverse> b x \<and> A x)" unfolding image_def set_defs comb_defs ..
@@ -165,7 +166,7 @@ lemma "image f A b = (\<exists>x. f\<inverse> b x \<and> A x)" unfolding image_d
 (*Analogously, the term "preimage f" denotes a set-operation that takes a set 'B' and returns the 
   set of those elements which 'f' maps to some element in 'B'.*)
 definition preimage::"('a \<Rightarrow> 'b) \<Rightarrow> Set('b) \<Rightarrow> Set('a)"
-  where "preimage \<equiv> \<^bold>B\<Zcat>" (*i.e. (;) *)
+  where "preimage \<equiv> \<^bold>C \<^bold>B" (*i.e. (;) *)
 
 lemma "preimage f B = f ; B" unfolding preimage_def comb_defs ..
 lemma "preimage f B = (\<lambda>a. B (f a))" unfolding preimage_def comb_defs ..
@@ -181,7 +182,7 @@ term "\<lparr>f A\<rparr>" (*read "the image of A under f" *)
 term "\<lparr>f B\<rparr>\<inverse> = (\<lambda>a. B (f a))"  (* read "the image of A under f" *)
 
 (*Range can be defined in terms of image as expected*)
-lemma range_def2: "range = image\<Zcat> \<UU>"
+lemma range_def2: "range = \<^bold>C image \<UU>"
   unfolding comb_defs func_defs set_defs by simp
 
 term "preimage (f::'a\<Rightarrow>'b) \<circ> image f" 

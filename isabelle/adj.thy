@@ -1,5 +1,5 @@
-theory rels_adj
-imports rels
+theory adj
+imports endorels
 begin
 
 section \<open>Adjunctions & Dualities\<close>
@@ -32,8 +32,6 @@ abbreviation(input) Residuation ::"Rel(SetOp('a,'b),SetOp('b,'a))" ("RESID")
   where "RESID f g \<equiv> \<forall>A B. f A \<subseteq> B \<longleftrightarrow> A \<subseteq> g B"
 abbreviation(input) Coresiduation ::"Rel(SetOp('a,'b),SetOp('b,'a))" ("CORESID")
   where "CORESID f g \<equiv> \<forall>A B. B \<squnion> f A \<longleftrightarrow> g B \<bottom> A"
-
-(* lemma "RESID f g = \<^bold>\<Phi>\<^sub>2\<^sub>2 \<Q> (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 (\<subseteq>) f) (\<^bold>B\<^sub>2\<^sub>1\<^sub>0 (\<supseteq>) g)" *)
 
 (*Residuation and co-residuation are related via complement*)
 lemma "RESID f g \<longleftrightarrow> CORESID (f\<^sup>\<midarrow>) (g\<^sup>\<midarrow>)"
@@ -96,15 +94,14 @@ abbreviation(input) DualConjugation::"Rel(SetOp('a,'b),SetOp('b,'a))" ("DCONJ")
 
 (*Conjugation and dual-conjugation are related via dual*)
 lemma "CONJ f g \<longleftrightarrow> DCONJ (f\<^sup>d) (g\<^sup>d)"
-  unfolding set_defs comb_defs apply auto sorry (*external provers can prove this (but internal ones don't)*)
+  unfolding set_defs comb_defs apply (rule iffI) apply (smt (verit, best)) sorry (*external provers can prove this (but internal reconstruction fails)*)
 
 (*The (dual-)conjugation relation is symmetric too.*)
 lemma "CONJ f g \<longleftrightarrow> CONJ g f" unfolding set_defs comb_defs by fast
 lemma "DCONJ f g \<longleftrightarrow> DCONJ g f" unfolding set_defs comb_defs by auto
 
 (*Galois-connection and conjugation are related via complement *)
-lemma "CONJ f g \<longleftrightarrow> GALOIS (f\<^sup>\<midarrow>) (g\<^sup>\<midarrow>)"
-  unfolding set_defs comb_defs rel_defs by auto
+lemma "CONJ f g \<longleftrightarrow> GALOIS (f\<^sup>\<midarrow>) (g\<^sup>\<midarrow>)" unfolding set_defs comb_defs rel_defs by auto
 
 (*Conveniently extend definitions to binary operations *)
 abbreviation(input) Conjugation2 ("CONJ\<^sub>2")

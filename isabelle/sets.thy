@@ -1,23 +1,41 @@
 theory sets (*  A basic theory of sets  *)
-  imports logic_base
+  imports connectives
 begin
 
 section \<open>Sets\<close>
 
 named_theorems set_defs  (*container for set-related definitions*)
-named_theorems set_simps  (*container for set-related simplification rules*)
+
+subsection \<open>Properties of sets\<close>
+
+(*HOL quantifiers can be seen as properties (i.e. sets) of sets*)
+term "\<forall>::Set(Set('a))" (* \<forall>A means that the set A contains all alements*)
+term "\<exists>::Set(Set('a))" (* \<exists>A means that A contains at least one element, i.e. A is nonempty*)
+
+(*Moreover, we introduce some convenient notation for further properties of sets*)
+definition empty::"Set(Set('a))" ("\<nexists>") 
+  where "\<nexists>A \<equiv> \<not>\<exists>A"                           (*A is empty*)
+definition unique::"Set(Set('a))" ("!") 
+  where \<open>!A \<equiv> \<forall>x y. A x \<and> A y \<rightarrow> x = y\<close>      (*A contains at most one element (it may be empty)*)
+definition singleton::"Set(Set('a))" ("\<exists>!") 
+  where \<open>\<exists>!A \<equiv> \<exists>x. A x \<and> (\<forall>y. A y \<rightarrow> x = y)\<close> (*A contains exactly one element*)
+
+declare empty_def[set_defs] unique_def[set_defs] singleton_def[set_defs]
+
 
 subsection \<open>Algebraic structure\<close>
 
-(*We introduce below some operations on sets which endow them with a Boolean algebra structure.*)
-definition univ::"Set('a)" ("\<UU>")
-  where "\<UU> \<equiv> \<^bold>K True" (* the universal set *)
-definition empty::"Set('a)" ("\<emptyset>")
-  where "\<emptyset> \<equiv> \<^bold>K False" (* the empty set *)
+(*We introduce below some operations on sets which endow them with a Boolean algebra structure.
+ Note that they correspond to 'lifted' variants of the HOL boolean connectives. This 'lifting' can be
+ defined systematically using the family of \<^bold>\<Phi>\<^sub>m\<^sub>n combinators, which lift an m-ary function n-times.*)
+definition universe::"Set('a)" ("\<UU>")
+  where "\<UU> \<equiv> \<^bold>\<Phi>\<^sub>0\<^sub>1 \<T>" (* the universal set: the nullary connective/constant 'True' lifted once*)
+definition emptyset::"Set('a)" ("\<emptyset>")
+  where "\<emptyset> \<equiv> \<^bold>\<Phi>\<^sub>0\<^sub>1 \<F>" (* the empty set: the nullary connective/constant 'False' lifted once *)
 definition compl::"EOp(Set('a))" ("\<midarrow>")
-  where \<open>\<midarrow> \<equiv> \<^bold>B(\<not>)\<close> (* set complement *)
+  where \<open>\<midarrow> \<equiv> \<^bold>\<Phi>\<^sub>1\<^sub>1(\<not>)\<close> (* set complement: the unary '\<not>' connective lifted once*)
 definition inter::"EOp\<^sub>2(Set('a))" (infixr "\<inter>" 54) 
-  where "(\<inter>) \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1(\<and>)" (* set intersection *)
+  where "(\<inter>) \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1(\<and>)" (* set intersection: the binary '\<and>' connective lifted once *)
 definition union::"EOp\<^sub>2(Set('a))" (infixr "\<union>" 53) 
   where "(\<union>) \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1(\<or>)" (* set union *)
 definition diff::"EOp\<^sub>2(Set('a))" (infixl "\<setminus>" 51) 
@@ -32,14 +50,13 @@ definition sdiff::"EOp\<^sub>2(Set('a))" (infix "\<triangle>" 51)
 abbreviation(input) lpmi::"EOp\<^sub>2(Set('a))" (infixl "\<Leftarrow>" 51) (*for convenience*)
   where "A \<Leftarrow> B \<equiv> B \<Rightarrow> A"
 
-(*Let's put set-related definitions in the "set_defs" bag *)
-declare univ_def[set_defs] empty_def[set_defs] 
+declare universe_def[set_defs] emptyset_def[set_defs] 
         compl_def[set_defs] inter_def[set_defs] union_def[set_defs]
         impl_def[set_defs] dimpl_def[set_defs] diff_def[set_defs] sdiff_def[set_defs] 
 
-(*Point-based definitions*)
-lemma "\<UU> = (\<lambda>x. True)" unfolding set_defs comb_defs ..
-lemma "\<emptyset> = (\<lambda>x. False)" unfolding set_defs comb_defs ..
+(*Double-check point-based definitions*)
+lemma "\<UU> = (\<lambda>x. \<T>)" unfolding set_defs comb_defs ..
+lemma "\<emptyset> = (\<lambda>x. \<F>)" unfolding set_defs comb_defs ..
 lemma "\<midarrow>A = (\<lambda>x. \<not>A x)" unfolding set_defs comb_defs ..
 lemma "A \<inter> B = (\<lambda>x. A x \<and> B x)" unfolding set_defs comb_defs ..
 lemma "A \<union> B = (\<lambda>x. A x \<or> B x)" unfolding set_defs comb_defs ..
@@ -59,6 +76,8 @@ lemma "\<Inter>S x = (\<forall>A. S A \<rightarrow> A x)" unfolding biginter_def
 lemma "\<Union>S x = (\<exists>A. S A \<and> A x)" unfolding bigunion_def set_defs comb_defs ..
 
 declare biginter_def[set_defs] bigunion_def[set_defs]
+
+lemma complement_involutive: "\<midarrow>(\<midarrow>S) = S" unfolding set_defs comb_defs by simp
 
 
 subsubsection \<open>Ordering (subset/superset), overlapping and covering\<close>
@@ -121,14 +140,6 @@ abbreviation(input) bigcover::"Set(Set(Set('a)))" ("\<Squnion>")
 lemma "\<Sqinter>S = \<exists>(\<Inter>S)" unfolding set_defs comb_defs ..
 lemma "\<Squnion>S = \<forall>(\<Union>S)" unfolding set_defs comb_defs ..
 
-(*The following provide convenient simplification rules*)
-lemma All_simp1:"(\<subseteq>) \<UU> = \<forall>" 
-  unfolding set_defs unfolding comb_defs by simp
-lemma Ex_simp1: "(\<supseteq>) \<emptyset> = \<nexists>" 
-  unfolding set_defs unfolding comb_defs by simp
-
-declare All_simp1[set_simps] Ex_simp1[set_simps] 
-
 (*Subset, overlap and cover are interrelated as expected*)
 lemma "A \<subseteq> B = \<midarrow>A \<squnion> B" unfolding set_defs comb_defs by simp
 lemma "A \<subseteq> B = A \<bottom> \<midarrow>B" unfolding set_defs comb_defs by simp
@@ -145,16 +156,14 @@ lemma "A \<sqinter> B = (\<not>(A \<subseteq> \<midarrow>B))" unfolding set_defs
 
 subsection \<open>Constructing sets\<close>
 
-subsubsection \<open>Singletons, cosingletons and finitely-generated sets\<close>
-
 abbreviation(input) insert :: "'a \<Rightarrow> Set('a) \<Rightarrow> Set('a)"
   where "insert a S \<equiv> \<Q> a \<union> S"
 abbreviation(input) remove :: "'a \<Rightarrow> Set('a) \<Rightarrow> Set('a)"
   where "remove a S \<equiv> \<D> a \<inter> S"
 
 (*The previous functions in terms of combinators*)
-lemma "insert = (\<^bold>B\<^sub>1\<^sub>0 (\<union>) \<Q>)\<Zcat>" unfolding comb_defs ..
-lemma "remove = (\<^bold>B\<^sub>1\<^sub>0 (\<inter>) \<D>)\<Zcat>" unfolding comb_defs ..
+lemma "insert = \<^bold>C (\<^bold>B\<^sub>1\<^sub>0 (\<union>) \<Q>)" unfolding comb_defs ..
+lemma "remove = \<^bold>C (\<^bold>B\<^sub>1\<^sub>0 (\<inter>) \<D>)" unfolding comb_defs ..
 
 syntax
   "_finiteSet" :: "args \<Rightarrow> Set('a)"   ("{(_)}")
@@ -183,41 +192,5 @@ lemma "\<lbrace>a,b\<rbrace> = \<midarrow>{a,b}"
   unfolding set_defs comb_defs by simp
 lemma "\<lbrace>a,b,c\<rbrace> = \<midarrow>{a,b,c}" 
   unfolding set_defs comb_defs by simp
-
-subsubsection \<open>Basic spaces\<close>
-
-(*We refer to sets of sets as "spaces". In fact, quantifiers are particular kinds of spaces.*)
-
-term "\<forall>::Set(Set('a))" (* \<forall>A means that the set A contains all alements*)
-term "\<exists>::Set(Set('a))" (* \<exists>A means that A contains at least one element, i.e. A is nonempty*)
-term "\<nexists>::Set(Set('a))" (* \<nexists>A means that A does not contain any element, i.e. A is empty*)
-
-(*Thus we introduce the following convenient lemmas (useful as simplification rules)*)
-lemma All_simp2:"{\<UU>} = \<forall>" (* \<forall> is the space that contains only the universe*)
-  unfolding set_defs comb_defs by auto
-lemma Ex_simp2: "\<lbrace>\<emptyset>\<rbrace> = \<exists>" (* \<exists> is the space that contains all but the empty set*)
-  unfolding Ex_def set_defs comb_defs by auto 
-lemma Ex_simp3: "{\<emptyset>} = \<nexists>" (* \<nexists> is the space that contains only the empty set*)
-  unfolding Ex_def set_defs comb_defs by auto 
-
-declare All_simp2[set_simps] Ex_simp2[set_simps]
-
-(*Further convenient instances of spaces (their combinator-based definitions are postponed)*)
-definition unique::"Set(Set('a))" ("\<exists>\<^sub>\<le>\<^sub>1") (*\<exists>\<^sub>\<le>\<^sub>1 contains the sets with at most one element (and which may be empty)*)
-  where \<open>\<exists>\<^sub>\<le>\<^sub>1A \<equiv> \<forall>x y. A x \<and> A y \<rightarrow> x = y\<close> 
-definition singleton::"Set(Set('a))" ("\<exists>\<^sub>1")  (*\<exists>\<^sub>1 contains the singletons (sets with one single element)*)
-  where \<open>\<exists>\<^sub>1A \<equiv> \<exists>x. A x \<and> (\<forall>y. A y \<rightarrow> x = y)\<close>
-definition doubleton::"Set(Set('a))" ("\<exists>\<^sub>2") (*\<exists>\<^sub>2 contains the doubletons (sets with two (different) elements)*)
-  where \<open>\<exists>\<^sub>2A \<equiv> \<exists>x y. x \<noteq> y \<and> A x \<and> A y \<and> (\<forall>z. A z \<rightarrow> (z = x \<or> z = y))\<close>
-definition upair::"Set(Set('a))" ("\<exists>\<^sub>\<le>\<^sub>2") (*\<exists>\<^sub>\<le>\<^sub>2 contains the unordered pairs (sets with at most 2 elements)*)
-  where \<open>\<exists>\<^sub>\<le>\<^sub>2A \<equiv> \<exists>x y. A x \<and> A y \<and> (\<forall>z. A z \<rightarrow> (z = x \<or> z = y))\<close>
-
-declare unique_def[set_defs] singleton_def[set_defs] 
-        doubleton_def[set_defs] upair_def[set_defs] 
-
-lemma unique_def2: "\<exists>\<^sub>\<le>\<^sub>1 = \<nexists> \<union> \<exists>\<^sub>1" unfolding set_defs comb_defs by auto
-lemma singleton_def2: "\<exists>\<^sub>1 = \<exists> \<inter> \<exists>\<^sub>\<le>\<^sub>1" unfolding set_defs comb_defs by metis
-lemma doubleton_def2: "\<exists>\<^sub>2 = \<exists>\<^sub>\<le>\<^sub>2 \<setminus> \<exists>\<^sub>1" unfolding set_defs comb_defs by blast
-lemma upair_def2: "\<exists>\<^sub>\<le>\<^sub>2 = \<exists>\<^sub>1 \<union> \<exists>\<^sub>2" unfolding set_defs comb_defs by blast
 
 end

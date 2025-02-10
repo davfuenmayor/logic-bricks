@@ -2,7 +2,7 @@ theory dynamic_logic
   imports modal_correspondence
 begin
 
-section \<open>Shallow embedding\<close>
+section \<open>Shallow embedding of Propositional Dynamic Logic (PDL)\<close>
 
 typedecl w (*type of worlds or states*)
 type_synonym \<sigma> = "Set(w)" (*type of propositions or predicates*)
@@ -47,12 +47,12 @@ abbreviation(input) choice::"\<pi> \<Rightarrow> \<pi> \<Rightarrow> \<pi>" (inf
 (*P holds in every state reachable via execution of the action/program 'a+b' if and only if P holds 
  in every state reachable via execution of 'a' *and* also in every state reachable via execution of 'b'*)
 lemma "[a+b]P = ([a]P) \<^bold>\<and> ([b]P)"
-  by (simp add: \<Phi>21_comb_def leftDualImage_hom_join interR_def)
+  unfolding leftDualImage_hom_join interR_def inter_def comb_defs ..
 
 (*P holds in at least one state reachable via execution of the action/program 'a+b' if and only if P holds
  in at least one state reachable via execution of 'a' *or*  in at least one state reachable via execution of 'b'*)
 lemma "<a+b>P = (<a>P) \<^bold>\<or> (<b>P)"
-  by (metis \<Phi>21_comb_def leftImage_hom_join unionR_def)
+  unfolding leftImage_def leftImage_hom_join rel_defs set_defs comb_defs by auto
 
 (*Non-deterministic choice for arbitrary sets: execute any action/program among those in S*)
 abbreviation(input) gen_choice::"Set(\<pi>) \<Rightarrow> \<pi>" ("\<Sigma>")
@@ -63,39 +63,32 @@ lemma "[\<Sigma> S]P = \<Inter>\<lparr>(\<lambda>x. [x]P) S\<rparr>"
 lemma "<\<Sigma> S>P = \<Union>\<lparr>(\<lambda>x. <x>P) S\<rparr>" 
   unfolding rel_defs set_defs func_defs comb_defs by fastforce
 
-(*(Reflexive-)transitive closure: "repeat 'a' an undetermined number of times"*)
-definition tran_closure::"\<pi> \<Rightarrow> \<pi>" ("(_\<^sup>+)" 99) (*make point-free*)
-  where "a\<^sup>+ \<equiv>  \<Inter>\<^sup>r(\<lambda>R. transitive R \<and> a \<subseteq>\<^sup>r R)"
-abbreviation(input) refl_tran_closure::"\<pi> \<Rightarrow> \<pi>" ("(_\<^sup>* )" [1000] 999)
-  where "a\<^sup>* \<equiv> a\<^sup>+ + \<Q>"
-
-(*Obtaining a point-free representation of transitive-closure*)
-lemma "a\<^sup>+ =  \<Inter>\<^sup>r(\<lambda>R. transitive R \<and> a \<subseteq>\<^sup>r R)" unfolding tran_closure_def comb_defs by auto
-lemma "tran_closure a =  \<Inter>\<^sup>r (transitive \<inter> (\<subseteq>\<^sup>r) a)" unfolding tran_closure_def set_defs comb_defs by auto
-lemma "tran_closure a =  \<Inter>\<^sup>r ((\<inter>) transitive ((\<subseteq>\<^sup>r) a))" unfolding tran_closure_def set_defs comb_defs by auto
-lemma "tran_closure a =  \<Inter>\<^sup>r (\<^bold>D (\<inter>) transitive (\<subseteq>\<^sup>r) a)" unfolding tran_closure_def set_defs comb_defs by auto
-lemma "tran_closure a =  (\<Inter>\<^sup>r \<circ> (\<^bold>D (\<inter>) transitive (\<subseteq>\<^sup>r))) a" unfolding tran_closure_def set_defs comb_defs by auto
-lemma "tran_closure = \<Inter>\<^sup>r \<circ> (\<^bold>D (\<inter>) transitive (\<subseteq>\<^sup>r))" unfolding tran_closure_def set_defs comb_defs by auto
+(*Iterated execution ("Kleene star") corresponds to the (reflexive-)transitive closure of the 
+ denotation of the program/action. It models "repeat an undetermined number of times". *)
+abbreviation(input) iteration::"\<pi> \<Rightarrow> \<pi>" ("(_\<^sup>+)" 99)
+  where "a\<^sup>+ \<equiv> transitiveClosure a"
+abbreviation(input) iteration_star::"\<pi> \<Rightarrow> \<pi>" ("(_\<^sup>* )" [1000] 999)
+  where "a\<^sup>* \<equiv> reflexiveClosure (transitiveClosure a)"
 
 (*Some properties of the transitive and reflexive-transitive closure: *)
-lemma "a\<^sup>+ = (a\<^sup>* \<^bold>; a)"
-  unfolding tran_closure_def unfolding transitive_corresp valid_def oops (*TODO: prove*)
+lemma "a\<^sup>+ = (a\<^sup>* \<^bold>; a)" unfolding transitiveClosure_def oops (*TODO: prove*)
 
 lemma "transitive a \<longrightarrow> P \<^bold>\<and> [a]P \<subseteq> [a\<^sup>+]P"
-  unfolding tran_closure_def
+  unfolding transitiveClosure_def
   unfolding transitive_corresp valid_def
   unfolding rel_defs set_defs func_defs comb_defs by blast
 
 
 lemma tran_closure_refl: "reflexive R \<longrightarrow> reflexive (R\<^sup>+)"
-  unfolding reflexive_def2 tran_closure_def biginterR_def2 comb_defs by (simp add: B2_comb_def \<Phi>21_comb_def impl_def subrel_setdef subset_def)
+  unfolding reflexive_def2 transitiveClosure_def biginterR_def2 endorel_defs comb_defs
+  by (simp add: B2_comb_def \<Phi>21_comb_def \<Phi>22_comb_def implR_def inter_def subrel_def2)
 
 lemma tran_closure_symm: "symmetric R \<longrightarrow> symmetric (R\<^sup>+)"
-  unfolding symmetric_def tran_closure_def transitive_reldef rel_defs set_defs func_defs comb_defs 
+  unfolding symmetric_def transitiveClosure_def transitive_reldef rel_defs set_defs func_defs comb_defs 
   sorry (*kernel reconstruction fails*)
 
 lemma tran_closure_trans: "transitive (R\<^sup>+)"
-  by (smt (verit, del_insts) biginterR_def2 tran_closure_def transitive_def2)
+  by (smt (verit, ccfv_threshold) B01_comb_def B1_comb_def \<Phi>21_comb_def biginterR_def2 inter_def transitiveClosure_def transitive_def2)
 
 lemma tran_closure_equiv: "equivalence R \<longrightarrow> equivalence (R\<^sup>+)"
   by (simp add: equivalence_char tran_closure_refl tran_closure_symm tran_closure_trans)
@@ -134,18 +127,18 @@ axiomatization where
    A0: "children a \<and> children b \<and> children c" and
    A1: "\<forall>x. children x \<longrightarrow> equivalence x" and
    (*Common knowledge: at least one of the children is muddy*)
-   A2: "\<lfloor>\<^bold>K\<^sup>C{children} (muddy a \<^bold>\<or> muddy b \<^bold>\<or> muddy c)\<rfloor>" and
+   A2: "\<Turnstile> \<^bold>K\<^sup>C{children} (muddy a \<^bold>\<or> muddy b \<^bold>\<or> muddy c)" and
    (*Common knowledge: if x is (not) muddy then y can see this (and hence know this).*)
-   A3: "children x \<and> children y \<and> x \<noteq> y \<Longrightarrow> \<lfloor>\<^bold>K\<^sup>C{children} (muddy x \<^bold>\<rightarrow> \<^bold>K{y} (muddy x))\<rfloor>" and 
-   A4: "children x \<and> children y \<and> x \<noteq> y \<Longrightarrow> \<lfloor>\<^bold>K\<^sup>C{children} (\<^bold>\<not>(muddy x) \<^bold>\<rightarrow> \<^bold>K{y} \<^bold>\<not>(muddy x))\<rfloor>" and 
+   A3: "children x \<and> children y \<and> x \<noteq> y \<Longrightarrow> \<Turnstile> \<^bold>K\<^sup>C{children} (muddy x \<^bold>\<rightarrow> \<^bold>K{y} (muddy x))" and 
+   A4: "children x \<and> children y \<and> x \<noteq> y \<Longrightarrow> \<Turnstile> \<^bold>K\<^sup>C{children} (\<^bold>\<not>(muddy x) \<^bold>\<rightarrow> \<^bold>K{y} \<^bold>\<not>(muddy x))" and 
    (*Common knowledge: neither 'a' nor 'b' knows whether he is muddy.*)
-   A5: "\<lfloor>\<^bold>K\<^sup>C{children} (\<^bold>\<not>(\<^bold>K{a} (muddy a)) \<^bold>\<and> \<^bold>\<not>(\<^bold>K{b} (muddy b)))\<rfloor>"
+   A5: "\<Turnstile> \<^bold>K\<^sup>C{children} (\<^bold>\<not>(\<^bold>K{a} (muddy a)) \<^bold>\<and> \<^bold>\<not>(\<^bold>K{b} (muddy b)))"
 
 (* "Cut-lemma" required as stepping stone for automated provers*)
 lemma commonAccessRelChildren_refl: "reflexive (\<Sigma>\<^sup>+ children)"
   using A0 A1 commonAccessRel_equiv equivalence_char by blast
 
-theorem "\<lfloor>\<^bold>K{c} (muddy c)\<rfloor>" (*c knows he is muddy.*)
+theorem "\<Turnstile> \<^bold>K{c} (muddy c)" (*c knows he is muddy.*)
   using A0 A1 A2 A3 A4 A5
   using commonAccessRelChildren_refl reflexive_def
   unfolding valid_def Cknows_def

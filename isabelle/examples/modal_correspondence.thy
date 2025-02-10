@@ -1,53 +1,32 @@
 theory modal_correspondence
-imports "../endorels_mini"
+imports "../entailment"
 begin
 
 section \<open>Automating modal correspondences\<close>
 
-(*We can say of two unary operators \<phi> and \<psi> that they form a 'residuated' pair.
- We then say that \<phi> (\<psi>) is the left (right) 'residual' of \<psi> (\<phi>).*)
-abbreviation(input) residuation_rule ("RESIDr _ _")
-  where "RESIDr \<phi> \<psi> \<equiv> (\<And>A B. (\<phi> A \<subseteq> B) = (A \<subseteq> \<psi> B))"
+(*Syntactic sugar for object-logical Boolean connectives*)
+notation(input) compl ("\<^bold>\<not>") and inter (infixr "\<^bold>\<and>" 54) and union (infixr "\<^bold>\<or>" 53) and impl  (infixr "\<^bold>\<rightarrow>" 51)
 
-(*Boolean logical connectives*)
-notation(input) compl ("\<^bold>\<not>")
-notation(input) inter (infixr "\<^bold>\<and>" 54) 
-notation(input) union (infixr "\<^bold>\<or>" 53) 
-notation(input) impl  (infixr "\<^bold>\<rightarrow>" 51)
-(*Modal operators*)
-notation(input) leftImage ("\<^sup>_\<^bold>\<diamond>")
-notation(input) leftDualImage ("\<^sup>_\<^bold>\<box>")
-notation(input) rightImage ("\<^sup>_\<^bold>\<diamond>''")
-notation(input) rightDualImage ("\<^sup>_\<^bold>\<box>''")
+(*Technicality: we need to paraphrase residuation as a metalogical equation (using Isabelle/Pure quantifiers)*)
+abbreviation(input) residuation_meta ("RESIDm _ _")
+  where "RESIDm \<phi> \<psi> \<equiv> (\<And>A B. (\<phi> A \<subseteq> B) = (A \<subseteq> \<psi> B))" (* \<phi> (\<psi>) is the left (right) 'residual' of \<psi> (\<phi>)*)
 
-(*Definition of modal validity: truth in all worlds*)
-definition valid ("\<lfloor>_\<rfloor>")
-  where "\<lfloor>F\<rfloor> \<equiv> \<forall>w. F w"
 
-(*The following lemma is an algebraic-variant of the Deduction Theorem for modal logics.*)
-lemma ADT: "\<lfloor>A \<^bold>\<rightarrow> B\<rfloor> = (A \<subseteq> B)"
-  unfolding valid_def set_defs comb_defs ..
+subsection \<open>Traditional operators (\<box> & \<diamond>)\<close>
 
-(*Two well-known residuation conditions on unary set-operations*)
-lemma residuation1: "RESIDr \<^sup>R\<^bold>\<diamond>' \<^sup>R\<^bold>\<box>"
-  unfolding rel_defs
-  unfolding comb_defs
-  unfolding set_defs
-  unfolding comb_defs
-  by auto
-lemma residuation2: "RESIDr \<^sup>R\<^bold>\<diamond> \<^sup>R\<^bold>\<box>'"
-  unfolding rel_defs
-  unfolding comb_defs
-  unfolding set_defs
-  unfolding comb_defs
-  by auto
+notation(input) leftImage ("\<^sup>_\<^bold>\<diamond>") and leftDualImage ("\<^sup>_\<^bold>\<box>") and 
+                rightImage ("\<^sup>_\<^bold>\<diamond>''") and rightDualImage ("\<^sup>_\<^bold>\<box>''")
 
-(*Let us now prove automatically several well-known modal correspondences. 
- Observe how ATPs (via sledgehammer) manage to find the right definitions in the background theory,
- by cleverly exploiting the lemma 'ADT' and the algebraic properties of the relational set-operations.*)
+(*Two well-known residuation conditions on modal operators (qua endorelation-based set-operations)*)
+lemma residuation1: "RESIDm \<^sup>R\<^bold>\<diamond>' \<^sup>R\<^bold>\<box>" by (simp add: rightImage_resid)
+lemma residuation2: "RESIDm \<^sup>R\<^bold>\<diamond> \<^sup>R\<^bold>\<box>'" by (simp add: leftImage_resid)
 
-lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<lfloor>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P\<rfloor>)" (*sledgehammer*)
-  apply(subst ADT)
+(*Let's now prove several well-known modal correspondences. Observe how ATPs, via sledgehammer, 
+ manage to find the right definitions in the background theory, by cleverly exploiting the deduction
+ meta-theorem (DMT) as well as the algebraic properties of the relation-based set-operations.*)
+
+lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P)" (*sledgehammer*)
+  apply(subst DMT)
   apply(subst reflexive_def)
   apply(subst leftImage_embedding)
   apply(subst leftImage_hom_id)
@@ -55,11 +34,11 @@ lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<lflo
   apply(unfold comb_defs)
   ..
   
-lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P\<rfloor>)"
-  by (metis ADT I_comb_def leftDualImage_embedding leftDualImage_hom_id reflexive_def subrel_setdef)
+lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P)" (*sledgehammer*)
+  by (metis DMT I_comb_def leftDualImage_embedding leftDualImage_hom_id reflexive_def subrel_setdef)
 
-lemma symmetric_corresp: "symmetric R \<longleftrightarrow> (\<forall>P. \<lfloor>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
-  apply(subst ADT)
+lemma symmetric_corresp: "symmetric R \<longleftrightarrow> (\<forall>P. \<Turnstile> P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P))" (*sledgehammer*)
+  apply(subst DMT)
   apply(subst symmetric_reldef)
   apply(fold residuation1)
   apply(subst leftImage_defT)
@@ -67,8 +46,8 @@ lemma symmetric_corresp: "symmetric R \<longleftrightarrow> (\<forall>P. \<lfloo
   apply(subst subrel_setdef)
   ..
 
-lemma symmetric_corresp': "symmetric R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> P\<rfloor>)"
-  apply(subst ADT)
+lemma symmetric_corresp': "symmetric R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> P)" (*sledgehammer*)
+  apply(subst DMT)
   apply(subst symmetric_reldef)
   apply(unfold residuation2)
   apply(subst rightDualImage_embedding)
@@ -76,8 +55,8 @@ lemma symmetric_corresp': "symmetric R \<longleftrightarrow> (\<forall>P. \<lflo
   apply(subst subrel_setdef)
   ..
 
-lemma transitive_corresp:  "transitive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P\<rfloor>)" (*sledgehammer*)
-  apply(subst ADT)
+lemma transitive_corresp:  "transitive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P)" (*sledgehammer*)
+  apply(subst DMT)
   apply(subst transitive_def)
   apply(unfold comb_defs)
   apply(subst leftImage_embedding)
@@ -86,18 +65,44 @@ lemma transitive_corresp:  "transitive R \<longleftrightarrow> (\<forall>P. \<lf
   apply(unfold comb_defs)
   ..
 
-lemma transitive_corresp': "transitive R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P)\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B1_comb_def leftDualImage_embedding leftDualImage_hom_comp subrel_setdef transitive_reldef)
+lemma transitive_corresp': "transitive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P))" (*sledgehammer*)
+  by (metis DMT B1_comb_def leftDualImage_embedding leftDualImage_hom_comp subrel_setdef transitive_reldef)
 
-lemma dense_corresp: "dense R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B1_comb_def dense_reldef leftDualImage_embedding leftDualImage_hom_comp subrel_setdef)
-lemma dense_corresp': "dense R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
-  by (metis ADT B1_comb_def dense_reldef leftImage_embedding leftImage_hom_comp subrel_setdef)
+lemma dense_corresp: "dense R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P)" (*sledgehammer*)
+  by (metis DMT B1_comb_def dense_reldef leftDualImage_embedding leftDualImage_hom_comp subrel_setdef)
+lemma dense_corresp': "dense R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P))" (*sledgehammer*)
+  by (metis DMT B1_comb_def dense_reldef leftImage_embedding leftImage_hom_comp subrel_setdef)
 
-lemma euclidean_corresp: "euclidean R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P)\<rfloor>)" (*sledgehammer*)
-  by (metis (no_types, lifting) ADT B1_comb_def euclidean_reldef leftImage_embedding leftImage_hom_comp residuation1 rightImage_defT subrel_setdef)
-lemma euclidean_corresp': "euclidean R \<longleftrightarrow> (\<forall>P. \<lfloor>\<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P\<rfloor>)" (*sledgehammer*)
-  by (metis (no_types, lifting) ADT B1_comb_def euclidean_reldef leftDualImage_embedding leftDualImage_hom_comp residuation2 rightDualImage_defT subrel_setdef)
+lemma euclidean_corresp: "rightEuclidean R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<diamond>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P))" (*sledgehammer*)
+  by (metis (no_types, lifting) DMT B1_comb_def rightEuclidean_reldef leftImage_embedding leftImage_hom_comp residuation1 rightImage_defT subrel_setdef)
+lemma euclidean_corresp': "rightEuclidean R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>P)" (*sledgehammer*)
+  by (metis (no_types, lifting) DMT B1_comb_def rightEuclidean_reldef leftDualImage_embedding leftDualImage_hom_comp residuation2 rightDualImage_defT subrel_setdef)
 
+(*...and so on*)
+
+
+subsection \<open>Further operators\<close>
+
+notation(input) leftBound ("\<^sup>_\<^bold>\<Zdres>") and leftDualBound ("\<^sup>_\<^bold>\<Zndres>") and
+                rightBound ("\<^sup>_\<^bold>\<Zrres>") and rightDualBound ("\<^sup>_\<^bold>\<Znrres>")
+
+lemma irreflexive_corresp:  "irreflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<Zdres>P \<^bold>\<rightarrow> \<^bold>\<not>P)" (*sledgehammer*)
+  apply(subst DMT)
+  apply(subst irreflexive_def)
+  apply(subst leftBound_embedding)
+  apply(subst leftBound_hom_id)
+  apply(subst subrel_setdef)  
+  ..
+
+lemma transitive_compl_corresp:  "transitive (R\<^sup>\<midarrow>) \<longleftrightarrow> (\<forall>P. \<Turnstile> (\<^sup>R\<^bold>\<Zdres>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<Zdres>(\<^bold>\<not>(\<^sup>R\<^bold>\<Zdres>P))))"
+  unfolding transitive_compl_reldef (*sledgehammer*)
+  apply(subst DMT)
+  apply(subst leftBound_embedding)
+  apply(subst leftBound_hom_comp)
+  apply(subst subrel_setdef)
+  apply(subst setopCompDual_def)
+  ..
+
+(*...and so on*)
 
 end
