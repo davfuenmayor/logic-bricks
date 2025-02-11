@@ -205,16 +205,84 @@ lemma preimage_morph2: "preimage \<^bold>I = \<^bold>I"
   unfolding func_defs comb_defs ..
 
 
-subsection \<open>Miscellaneous\<close>
+subsection \<open>Monads\<close>
 
-(*Random simplification(?) rule (TODO: interpret)*)
-lemma image_simp1: "image ((G \<circ> R) a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S (G \<circ> R))"
-  apply(rule ext) unfolding comb_defs set_defs func_defs by fastforce
+subsubsection \<open>Environment (aka. reader) monad\<close>
+
+(*We can conceive of functional types of the form 'a \<Rightarrow> 'b as arising via an 'environmentalization', 
+ or 'indexation' of the type 'b by the type 'a, i.e. as 'a-Env('b) using our type notation. 
+ This type constructor comes with a monad structure (and is thus an applicative and a functor too).*)
+
+abbreviation(input) unit_env::"'a \<Rightarrow> 'e-Env('a)"
+  where "unit_env  \<equiv> \<^bold>K"
+abbreviation(input) fmap_env::"('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('a) \<Rightarrow> 'e-Env('b)"
+  where "fmap_env  \<equiv> \<^bold>B"
+abbreviation(input) join_env::"'e-Env('e-Env('a)) \<Rightarrow> 'e-Env('a)"
+  where "join_env  \<equiv> \<^bold>W"
+abbreviation(input) ap_env::"'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('a) \<Rightarrow> 'e-Env('b)"
+  where "ap_env    \<equiv> \<^bold>S"
+abbreviation(input) rbind_env::"('a \<Rightarrow> 'e-Env('b)) \<Rightarrow> 'e-Env('a) \<Rightarrow> 'e-Env('b)"
+  where "rbind_env \<equiv> \<^bold>\<Sigma>" (*reversed bind*)
+
+(*We define the customary bind operation as 'flipped' rbind (which seems more intuitive)*)
+abbreviation(input) bind_env::"'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'e-Env('b)) \<Rightarrow> 'e-Env('b)"
+  where "bind_env \<equiv> \<^bold>C rbind_env"
+(*but we could have also given it a direct alternative definition*)
+lemma "bind_env = \<^bold>W \<circ>\<^sub>2 (\<^bold>C \<^bold>B)" unfolding comb_defs ..
+
+(*Some properties of monads in general*)
+lemma "rbind_env = join_env \<circ>\<^sub>2 fmap_env" unfolding comb_defs ..
+lemma "join_env = rbind_env \<^bold>I" unfolding comb_defs ..
+(*...*)
+
+(*Some properties of this particular monad*)
+lemma "ap_env = rbind_env \<circ> \<^bold>C" unfolding comb_defs ..
+(*...*)
+
+(*The so-called "monad laws". They guarantee that monad-related term operations compose reliably.*)
+abbreviation(input) "LawBind1 unit bind \<equiv> \<forall>f a. (bind (unit a) f) = (f a)" (*left identity*)
+abbreviation(input) "LawBind2 unit bind \<equiv> \<forall>A. (bind A unit) = A" (*right identity*)
+abbreviation(input) "LawBind3  bind \<equiv> \<forall>A f g. (bind A (\<lambda>a. bind (f a) g)) = bind (bind A f) g" (*associativity*)
+
+(*Verifies compliance with the monad laws*)
+lemma "LawBind1 unit_env bind_env" unfolding comb_defs by simp
+lemma "LawBind2 unit_env bind_env" unfolding comb_defs by simp
+lemma "LawBind3 bind_env" unfolding comb_defs by simp
+
+
+subsubsection \<open>Identity monad\<close>
+
+(*This is the degenerate (trivial?) case of the monad notion above for an identity type constructor*)
+
+abbreviation(input) unit_id::"'a \<Rightarrow> 'a"
+  where "unit_id \<equiv> \<^bold>I"
+abbreviation(input) fmap_id::"('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b"
+  where "fmap_id \<equiv> \<^bold>A"
+abbreviation(input) join_id::"'a \<Rightarrow> 'a"
+  where "join_id \<equiv> \<^bold>I"
+abbreviation(input) ap_id::"('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b"
+  where "ap_id \<equiv> \<^bold>A"
+abbreviation(input) rbind_id::"('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b"
+  where "rbind_id \<equiv> \<^bold>A"
+abbreviation(input) bind_id::"'a \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b"
+  where "bind_id \<equiv> \<^bold>T"
+
+lemma "LawBind1 unit_id bind_id" unfolding comb_defs by simp
+lemma "LawBind2 unit_id bind_id" unfolding comb_defs by simp
+lemma "LawBind3 bind_id" unfolding comb_defs by simp
+
+
+subsection \<open>Miscellaneous\<close>
 
 (*Function 'update' or 'override' at a point*)
 definition update :: "('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'a \<Rightarrow> 'b" ("_[_\<mapsto>_]")
   where "f[a \<mapsto> b] \<equiv> \<lambda>x. if x = a then b else f x"
 
 declare update_def[func_defs]
+
+
+(*Random-looking simplification(?) rule that becomes useful later on (TODO: interpret)*)
+lemma image_simp1: "image ((G \<circ> R) a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S (G \<circ> R))"
+  apply(rule ext) unfolding comb_defs set_defs func_defs by fastforce
 
 end

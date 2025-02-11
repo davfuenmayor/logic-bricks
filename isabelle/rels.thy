@@ -837,4 +837,81 @@ declare leftRange_simp[rel_simps] rightRange_simp[rel_simps]
         leftDualRange_simp[rel_simps] rightDualRange_simp[rel_simps]
 
 
+subsection \<open>Monads\<close>
+
+subsubsection \<open>Set monad\<close>
+
+(*We can conceive of types of form Set('a), i.e. 'a \<Rightarrow> o, as arising via an 'environmentalization'
+ (or 'indexation') of the boolean type (o) by the type 'a (i.e. as an instance of the environment 
+ monad discussed previously). Furthermore, we can adopt an alternative perspective and consider a 
+ constructor that returns the type of boolean 'valuations' (or 'classifiers') for objects of type 'a.
+ This type constructor comes with a monad structure too (and is also an applicative and a functor).*)
+
+abbreviation(input) unit_set::"'a \<Rightarrow> Set('a)"
+  where "unit_set \<equiv> \<Q>"
+abbreviation(input) fmap_set::"('a \<Rightarrow> 'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b)"
+  where "fmap_set \<equiv> image"
+abbreviation(input) join_set::"Set(Set('a)) \<Rightarrow> Set('a)"
+  where "join_set \<equiv> \<Union>"
+abbreviation(input) ap_set::"Set('a \<Rightarrow> 'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b)"
+  where "ap_set \<equiv> rightImage \<circ> intoRel"
+abbreviation(input) rbind_set::"('a \<Rightarrow> Set('b)) \<Rightarrow> Set('a) \<Rightarrow> Set('b)"
+  where "rbind_set \<equiv> rightImage" (*reversed bind*)
+
+(*We define the customary bind operation as 'flipped' rbind (which seems more intuitive)*)
+abbreviation bind_set::"Set('a) \<Rightarrow> ('a \<Rightarrow> Set('b)) \<Rightarrow> Set('b)"
+  where "bind_set \<equiv> \<^bold>C rbind_set"
+
+(*Some properties of monads in general*)
+lemma "rbind_set = join_set \<circ>\<^sub>2 fmap_set" unfolding rel_defs set_defs func_defs comb_defs by metis
+lemma "join_set = rbind_set \<^bold>I" unfolding rel_defs set_defs comb_defs by metis
+(*...*)
+
+(*Some properties of this particular monad*)
+lemma "ap_set = \<Union>\<^sup>r \<circ> (image image)" unfolding rel_defs func_defs set_defs comb_defs by blast
+(*...*)
+
+(*Verifies compliance with the monad laws*)
+lemma "LawBind1 unit_set bind_set" unfolding rel_defs set_defs comb_defs by simp
+lemma "LawBind2 unit_set bind_set" unfolding rel_defs set_defs comb_defs by simp
+lemma "LawBind3 bind_set" unfolding rel_defs set_defs comb_defs by auto
+
+
+subsubsection \<open>Relation monad\<close>
+
+(*In fact, the Rel('a,'b) type constructor also comes with a monad structure, which can be seen as 
+ a kind of "monad composition" of the environment monad with the set monad.*)
+
+abbreviation(input) unit_rel::"'a \<Rightarrow> Rel('b,'a)"
+  where "unit_rel \<equiv> \<^bold>K \<circ> \<Q>"
+abbreviation(input) fmap_rel::"('a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
+  where "fmap_rel \<equiv> \<^bold>B \<circ> image"
+abbreviation(input) join_rel::"Rel('c,Rel('c,'a)) \<Rightarrow> Rel('c,'a)"
+  where "join_rel \<equiv> \<^bold>W \<circ> (\<^bold>B \<Union>\<^sup>r)"
+abbreviation(input) ap_rel::"Rel('c, 'a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
+  where "ap_rel \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (rightImage \<circ> intoRel)"
+abbreviation(input) rbind_rel::"('a \<Rightarrow> Rel('c,'b)) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
+  where "rbind_rel \<equiv> (\<^bold>\<Phi>\<^sub>2\<^sub>1 rightImage) \<circ> \<^bold>C" (*reversed bind*)
+
+(*Again, we define the bind operation as 'flipped' rbind*)
+abbreviation bind_rel::"Rel('c,'a) \<Rightarrow> ('a \<Rightarrow> Rel('c,'b)) \<Rightarrow> Rel('c,'b)"
+  where "bind_rel \<equiv> \<^bold>C rbind_rel"
+
+(*Some properties of monads in general*)
+lemma "rbind_rel = join_rel \<circ>\<^sub>2 fmap_rel" unfolding rel_defs set_defs func_defs comb_defs by metis
+lemma "join_rel = rbind_rel \<^bold>I" unfolding rel_defs set_defs func_defs comb_defs by metis
+(*...*)
+
+(*Note that for the relation monad we have*)
+lemma "unit_rel = \<^bold>B unit_env unit_set" ..
+lemma "fmap_rel = \<^bold>B fmap_env fmap_set" ..
+lemma "ap_rel = \<^bold>\<Phi>\<^sub>2\<^sub>1 ap_set" ..
+lemma "rbind_rel = \<^bold>B (\<^bold>C \<^bold>B \<^bold>C) \<^bold>\<Phi>\<^sub>2\<^sub>1 rbind_set" unfolding comb_defs ..
+(*...*)
+
+(*Finally, verify compliance with the monad laws*)
+lemma "LawBind1 unit_rel bind_rel" unfolding rel_defs set_defs comb_defs by simp
+lemma "LawBind2 unit_rel bind_rel" unfolding rel_defs set_defs comb_defs by simp
+lemma "LawBind3 bind_rel" unfolding rel_defs set_defs comb_defs by auto
+
 end

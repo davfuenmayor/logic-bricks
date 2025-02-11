@@ -513,6 +513,7 @@ lemma "\<^bold>W f = \<^bold>\<Sigma> f \<^bold>I" unfolding comb_defs ..
 lemma "\<^bold>T = \<^bold>C \<^bold>I" unfolding comb_defs ..
 lemma "\<^bold>T = \<^bold>C \<^bold>A" unfolding comb_defs ..
 lemma "\<^bold>\<Phi>\<^sub>2\<^sub>1 = \<^bold>B (\<^bold>B \<^bold>S) \<^bold>B" unfolding comb_defs ..
+lemma "\<^bold>S = \<^bold>\<Phi>\<^sub>2\<^sub>1 \<^bold>I" unfolding comb_defs ..
 
 lemma "\<^bold>A\<^sub>2 f = f" unfolding comb_defs ..
 lemma "\<^bold>R \<^bold>V f = f" unfolding comb_defs ..
