@@ -35,7 +35,7 @@ declare iff_defQ [eq_defs] xor_defQ [eq_defs]
         and_defQ [eq_defs] or_defQ [eq_defs] impl_defQ [eq_defs] excl_defQ [eq_defs]
 
 
-subsection \<open>Quantifiers\<close>
+subsection \<open>Quantifiers & co\<close>
 
 (*Quantifiers can also be defined using equality/disequality*)
 lemma ex_defQ:  "\<exists> = \<D> (\<^bold>K \<F>)" unfolding comb_defs by fastforce

@@ -36,22 +36,22 @@ lemma mkEndopair_equ_simp: "(<x\<^sub>1,x\<^sub>2> = <y\<^sub>1,y\<^sub>2>) = (x
 declare mkEndopair_equ_simp[endopair_simps]
 
 (*Now, observe that*)
-lemma "<x,y> True = x" 
+lemma "<x,y> \<T> = x" 
   unfolding endopair_defs comb_defs by simp
-lemma "<x,y> False = y" 
+lemma "<x,y> \<F> = y" 
   unfolding endopair_defs comb_defs by simp
 
 (*This motivates the introduction of the following projection/extraction functions*)
 definition proj1::"EPair('a) \<Rightarrow> 'a" ("\<pi>\<^sub>1")
-  where "\<pi>\<^sub>1 \<equiv> \<^bold>T True"
+  where "\<pi>\<^sub>1 \<equiv> \<^bold>T \<T>"
 definition proj2::"EPair('a) \<Rightarrow> 'a" ("\<pi>\<^sub>2")
-  where "\<pi>\<^sub>2 \<equiv> \<^bold>T False"
+  where "\<pi>\<^sub>2 \<equiv> \<^bold>T \<F>"
 
 declare proj1_def[endopair_defs] proj2_def[endopair_defs]
 
-lemma "\<pi>\<^sub>1 = (\<lambda>P. P True)"   (*sanity check*)
+lemma "\<pi>\<^sub>1 = (\<lambda>P. P \<T>)"   (*sanity check*)
   unfolding endopair_defs comb_defs ..
-lemma "\<pi>\<^sub>2 = (\<lambda>P. P False)"   (*sanity check*)
+lemma "\<pi>\<^sub>2 = (\<lambda>P. P \<F>)"   (*sanity check*)
   unfolding endopair_defs comb_defs ..
 
 (*The following lemmata (aka 'product laws') verify that the previous definitions work as intended*)
@@ -93,15 +93,15 @@ definition uncurry::"Op\<^sub>2('a,'b) \<Rightarrow> Op(EPair('a),'b)" ("\<lceil
 declare curry_def[endopair_defs] uncurry_def[endopair_defs]
 
 (*sanity checks*)
-lemma "curry Op = \<^bold>B\<^sub>2 Op mkEndopair" unfolding endopair_defs comb_defs ..
-lemma "curry Op = (\<lambda>x y. Op <x,y>)" unfolding endopair_defs comb_defs ..
-lemma "uncurry Op = \<^bold>\<Phi>\<^sub>2\<^sub>1 Op \<pi>\<^sub>1 \<pi>\<^sub>2" unfolding endopair_defs comb_defs ..
-lemma "uncurry Op = (\<lambda>P. Op (\<pi>\<^sub>1 P) (\<pi>\<^sub>2 P))" unfolding endopair_defs comb_defs ..
+lemma "curry f = \<^bold>B\<^sub>2 f mkEndopair" unfolding endopair_defs comb_defs ..
+lemma "curry f = (\<lambda>x y. f <x,y>)" unfolding endopair_defs comb_defs ..
+lemma "uncurry f = \<^bold>\<Phi>\<^sub>2\<^sub>1 f \<pi>\<^sub>1 \<pi>\<^sub>2" unfolding endopair_defs comb_defs ..
+lemma "uncurry f = (\<lambda>P. f (\<pi>\<^sub>1 P) (\<pi>\<^sub>2 P))" unfolding endopair_defs comb_defs ..
 
 (*Both morphisms constitute an isomorphism (we tag them as simplification rules too)*)
-lemma curry_simp1: "\<lfloor>\<lceil>Op\<rceil>\<rfloor> = Op" 
+lemma curry_simp1: "\<lfloor>\<lceil>f\<rceil>\<rfloor> = f" 
   unfolding curry_def uncurry_def comb_defs unfolding endopair_simps ..
-lemma curry_simp2: "\<lceil>\<lfloor>Op\<rfloor>\<rceil> = Op"
+lemma curry_simp2: "\<lceil>\<lfloor>f\<rfloor>\<rceil> = f"
   unfolding curry_def uncurry_def comb_defs unfolding endopair_simps ..
 
 declare curry_simp1[endopair_simps] curry_simp2[endopair_simps]

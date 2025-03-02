@@ -14,7 +14,6 @@ sledgehammer_params[max_facts=100,isar_proof=false,abduce=0,falsify=false, prove
 (* sledgehammer_params[max_facts=100] *)
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, max_potential=0,max_genuine=1, format=3] (*default Nitpick settings*)
 
-
 subsection \<open>Custom type notation\<close>
 
 (*The creation of a functional type (starting with a type 'a) can be seen from two complementary 
@@ -61,7 +60,6 @@ type_synonym ('a)EOpG = "Op\<^sub>G('a,'a)" ("EOp\<^sub>G'(_')") (* same as: Set
 (*Convenient type aliases for (endo)operations on sets*)
 type_synonym ('a,'b)SetOp = "Op(Set('a),Set('b))" ("SetOp'(_,_')")
 type_synonym ('a)SetEOp = "SetOp('a,'a)" ("SetEOp'(_')") (* same as: Set('a) \<Rightarrow> Set('a) *)
-
 (*Binary case: (endo)bi-operations correspond to curried (endo)bi-functions*)
 type_synonym ('a,'b)SetOp2 = "Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("SetOp\<^sub>2'(_,_')")
 type_synonym ('a)SetEOp2 = "SetOp\<^sub>2('a,'a)" ("SetEOp\<^sub>2'(_')") (*same as: Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('a) *)
@@ -108,6 +106,8 @@ lemma "(\<iota> x. A x) = (THE x. A x)" ..
 (*We introduce (pedagogically convenient) notation for HOL logical constants*)
 notation HOL.All ("\<forall>") 
 notation HOL.Ex  ("\<exists>")
+abbreviation Empty ("\<nexists>")
+  where "\<nexists>A \<equiv> \<not>\<exists>A"                           
 
 notation HOL.implies (infixr "\<rightarrow>" 25) (* convenient alternative notation*)
 notation HOL.iff (infixr "\<leftrightarrow>" 25) (* convenient alternative notation*)
@@ -135,8 +135,6 @@ lemma xor_excl: "(A \<rightleftharpoons> B) = (A \<leftharpoondown> B) \<or> (A 
 notation(input) HOL.Not ("\<not>" 40)
 notation(output) HOL.Not ("\<not>_" [40] 40)
 
-notation(input) HOL.implies (infixr "\<le>" 50) (* convenient alternative notation*)
-
 
 subsection \<open>Hiding symbols and notation from the Isabelle library\<close>
 
@@ -149,12 +147,9 @@ hide_const(open) Set.subset Set.subset_eq Set.supset Set.supset_eq
                  Complete_Lattices.Inter Complete_Lattices.Union 
                  Hilbert_Choice.bijection Transitive_Closure.reflcl
                  Orderings.top_class.top Orderings.bot_class.bot
-                 Orderings.ord_class.less_eq Orderings.ord_class.less
-                 Orderings.ord_class.greater_eq Orderings.ord_class.greater
                  Orderings.ord_class.min Orderings.ord_class.max
                  BNF_Def.convol 
                  Product_Type.prod Product_Type.Pair Product_Type.Pair_Rep Product_Type.Times
-                 Fields.inverse_class.inverse_divide
                  Transitive_Closure.trancl Transitive_Closure.rtrancl
                  Lattices.sup_class.sup Lattices.inf_class.inf
                  (* Fun.comp Fun.fun_upd *)
@@ -171,12 +166,8 @@ no_notation (*so we can use those symbols for our own purposes*)
   Transitive_Closure.reflcl ("(_\<^sup>=)" [1000] 999) and
   Orderings.top_class.top ("\<top>") and
   Orderings.bot_class.bot ("\<bottom>") and
-  Orderings.less_eq ("'(\<le>')") and Orderings.less  ("'(<')") and
-  Orderings.less_eq ("(_/ \<le> _)" [51, 51] 50) and Orderings.less ("(_/ < _)" [51, 51] 50) and
-  Orderings.greater_eq  (infix "\<ge>" 50) and Orderings.greater (infix ">" 50) and  
   BNF_Def.convol ("\<langle>(_,/ _)\<rangle>") and
   Product_Type.Pair ("(_,/ _)" [21, 20] 20) and Product_Type.Times (infixr "\<times>" 80) and
-  Fields.inverse_class.inverse_divide (infixl "'/" 70) and
   Transitive_Closure.trancl ("(_\<^sup>+)" [1000] 999) and Transitive_Closure.rtrancl ("(_\<^sup>*)" [1000] 999) and
   Lattices.sup_class.sup (infixl "\<squnion>" 65) and Lattices.inf_class.inf (infixl "\<sqinter>" 70) and
   Fun.comp (infixl "\<circ>" 55) and Fun.comp (infixl "o" 55)
@@ -194,6 +185,7 @@ term "\<iota> A"
 term "\<epsilon> x. A x"
 term "\<delta> x. A x"
 term "\<iota> x. A x"
+term "\<nexists> x. A x"
 term "\<lambda>x. \<not>x"
 term "\<not>a"
 term "\<not>a \<or> b"

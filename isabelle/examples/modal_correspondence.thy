@@ -1,5 +1,5 @@
 theory modal_correspondence
-imports "../entailment"
+imports "../operators" "../entailment"
 begin
 
 section \<open>Automating modal correspondences\<close>
@@ -7,9 +7,12 @@ section \<open>Automating modal correspondences\<close>
 (*Syntactic sugar for object-logical Boolean connectives*)
 notation(input) compl ("\<^bold>\<not>") and inter (infixr "\<^bold>\<and>" 54) and union (infixr "\<^bold>\<or>" 53) and impl  (infixr "\<^bold>\<rightarrow>" 51)
 
-(*Technicality: we need to paraphrase residuation as a metalogical equation (using Isabelle/Pure quantifiers)*)
-abbreviation(input) residuation_meta ("RESIDm _ _")
-  where "RESIDm \<phi> \<psi> \<equiv> (\<And>A B. (\<phi> A \<subseteq> B) = (A \<subseteq> \<psi> B))" (* \<phi> (\<psi>) is the left (right) 'residual' of \<psi> (\<phi>)*)
+(*Beware technicalities: we need to paraphrase residuation and embedding as metalogical equations 
+ (using Isabelle/Pure quantifiers) in order for rewriting to work as expected (TODO: fix) *)
+abbreviation(input) residuation ("RESID _ _")
+  where "RESID \<phi> \<psi> \<equiv> (\<And>A B. (\<phi> A \<subseteq> B) = (A \<subseteq> \<psi> B))" (* \<phi> (\<psi>) is the left (right) 'residual' of \<psi> (\<phi>)*)
+abbreviation(input) relEmbedding ("_,_-embedding_")
+  where "R,T-embedding \<phi> \<equiv> (\<And>X Y. R X Y = T (\<phi> X) (\<phi> Y))"
 
 
 subsection \<open>Traditional operators (\<box> & \<diamond>)\<close>
@@ -18,8 +21,10 @@ notation(input) leftImage ("\<^sup>_\<^bold>\<diamond>") and leftDualImage ("\<^
                 rightImage ("\<^sup>_\<^bold>\<diamond>''") and rightDualImage ("\<^sup>_\<^bold>\<box>''")
 
 (*Two well-known residuation conditions on modal operators (qua endorelation-based set-operations)*)
-lemma residuation1: "RESIDm \<^sup>R\<^bold>\<diamond>' \<^sup>R\<^bold>\<box>" by (simp add: rightImage_resid)
-lemma residuation2: "RESIDm \<^sup>R\<^bold>\<diamond> \<^sup>R\<^bold>\<box>'" by (simp add: leftImage_resid)
+lemma residuation1: "RESID \<^sup>R\<^bold>\<diamond>' \<^sup>R\<^bold>\<box>"
+  by (metis adjunction_def2 rightImage_residuation)
+lemma residuation2: "RESID \<^sup>R\<^bold>\<diamond> \<^sup>R\<^bold>\<box>'"
+  by (simp add: leftImage_defT residuation1 rightDualImage_defT)
 
 (*Let's now prove several well-known modal correspondences. Observe how ATPs, via sledgehammer, 
  manage to find the right definitions in the background theory, by cleverly exploiting the deduction
@@ -27,24 +32,27 @@ lemma residuation2: "RESIDm \<^sup>R\<^bold>\<diamond> \<^sup>R\<^bold>\<box>'" 
 
 lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P)" (*sledgehammer*)
   apply(subst DMT)
-  apply(subst reflexive_def)
+  apply(subst reflexive_def2)
   apply(subst leftImage_embedding)
   apply(subst leftImage_hom_id)
   apply(subst subrel_setdef)
-  apply(unfold comb_defs)
-  ..
+  apply(subst I_comb_def) ..
   
-lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P)" (*sledgehammer*)
-  by (metis DMT I_comb_def leftDualImage_embedding leftDualImage_hom_id reflexive_def subrel_setdef)
+lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P)"  (*sledgehammer*)
+  apply(subst DMT)
+  apply(subst reflexive_def2)
+  apply(subst leftDualImage_embedding)
+  apply(subst leftDualImage_hom_id)
+  apply(subst subrel_setdef)
+  apply(subst I_comb_def) ..
 
-lemma symmetric_corresp: "symmetric R \<longleftrightarrow> (\<forall>P. \<Turnstile> P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P))" (*sledgehammer*)
+lemma symmetric_corresp: "symmetric R \<longleftrightarrow> (\<forall>P. \<Turnstile> P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<diamond>P))"  (*sledgehammer*)
   apply(subst DMT)
   apply(subst symmetric_reldef)
   apply(fold residuation1)
   apply(subst leftImage_defT)
   apply(subst rightImage_embedding)
-  apply(subst subrel_setdef)
-  ..
+  apply(subst subrel_setdef) ..
 
 lemma symmetric_corresp': "symmetric R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<box>P) \<^bold>\<rightarrow> P)" (*sledgehammer*)
   apply(subst DMT)
@@ -52,18 +60,15 @@ lemma symmetric_corresp': "symmetric R \<longleftrightarrow> (\<forall>P. \<Turn
   apply(unfold residuation2)
   apply(subst rightDualImage_embedding)
   apply(subst leftDualImage_defT)
-  apply(subst subrel_setdef)
-  ..
+  apply(subst subrel_setdef) ..
 
 lemma transitive_corresp:  "transitive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<diamond>(\<^sup>R\<^bold>\<diamond>P) \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P)" (*sledgehammer*)
   apply(subst DMT)
-  apply(subst transitive_def)
-  apply(unfold comb_defs)
+  apply(subst transitive_reldef)
   apply(subst leftImage_embedding)
   apply(subst leftImage_hom_comp)
   apply(subst subrel_setdef)
-  apply(unfold comb_defs)
-  ..
+  apply(subst B1_comb_def) ..
 
 lemma transitive_corresp': "transitive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<box>(\<^sup>R\<^bold>\<box>P))" (*sledgehammer*)
   by (metis DMT B1_comb_def leftDualImage_embedding leftDualImage_hom_comp subrel_setdef transitive_reldef)
@@ -88,11 +93,10 @@ notation(input) leftBound ("\<^sup>_\<^bold>\<Zdres>") and leftDualBound ("\<^su
 
 lemma irreflexive_corresp:  "irreflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<Zdres>P \<^bold>\<rightarrow> \<^bold>\<not>P)" (*sledgehammer*)
   apply(subst DMT)
-  apply(subst irreflexive_def)
+  apply(subst irreflexive_def2)
   apply(subst leftBound_embedding)
   apply(subst leftBound_hom_id)
-  apply(subst subrel_setdef)  
-  ..
+  apply(subst subrel_setdef) ..
 
 lemma transitive_compl_corresp:  "transitive (R\<^sup>\<midarrow>) \<longleftrightarrow> (\<forall>P. \<Turnstile> (\<^sup>R\<^bold>\<Zdres>P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<Zdres>(\<^bold>\<not>(\<^sup>R\<^bold>\<Zdres>P))))"
   unfolding transitive_compl_reldef (*sledgehammer*)
@@ -100,8 +104,7 @@ lemma transitive_compl_corresp:  "transitive (R\<^sup>\<midarrow>) \<longleftrig
   apply(subst leftBound_embedding)
   apply(subst leftBound_hom_comp)
   apply(subst subrel_setdef)
-  apply(subst setopCompDual_def)
-  ..
+  apply(subst compDual_def) ..
 
 (*...and so on*)
 

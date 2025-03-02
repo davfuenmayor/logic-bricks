@@ -13,9 +13,9 @@ notation(input) leftImage ("<_>_")
 notation(input) leftDualImage ("[_]_")
 
 (*P holds in *at least one* state reachable (from the current state) by executing program/action 'a'*)
-lemma "<a>P = (\<lambda>w. \<exists>v. a w v \<and> P v)" unfolding leftImage_def set_defs comb_defs ..
+lemma "<a>P = (\<lambda>w. \<exists>v. a w v \<and> P v)" unfolding leftImage_def func_defs comb_defs ..
 (*P holds in *every* state reachable (from the current state) by executing program/action 'a'*)
-lemma "[a]P = (\<lambda>w. \<forall>v. a w v \<rightarrow> P v)" unfolding leftDualImage_def set_defs comb_defs ..
+lemma "[a]P = (\<lambda>w. \<forall>v. a w v \<rightarrow> P v)" unfolding leftDualImage_def func_defs comb_defs ..
 
 (*Diamond (resp. Box) is monotonic (resp. antimonotonic) wrt. relation ordering*)
 lemma "a \<subseteq>\<^sup>r b \<longrightarrow> <a>P \<subseteq> <b>P" 
@@ -52,58 +52,48 @@ lemma "[a+b]P = ([a]P) \<^bold>\<and> ([b]P)"
 (*P holds in at least one state reachable via execution of the action/program 'a+b' if and only if P holds
  in at least one state reachable via execution of 'a' *or*  in at least one state reachable via execution of 'b'*)
 lemma "<a+b>P = (<a>P) \<^bold>\<or> (<b>P)"
-  unfolding leftImage_def leftImage_hom_join rel_defs set_defs comb_defs by auto
+  unfolding leftImage_def leftImage_hom_join rel_defs func_defs comb_defs by auto
 
 (*Non-deterministic choice for arbitrary sets: execute any action/program among those in S*)
 abbreviation(input) gen_choice::"Set(\<pi>) \<Rightarrow> \<pi>" ("\<Sigma>")
   where "\<Sigma> S \<equiv> \<Union>\<^sup>rS" 
 
 lemma "[\<Sigma> S]P = \<Inter>\<lparr>(\<lambda>x. [x]P) S\<rparr>"
-  unfolding rel_defs set_defs func_defs comb_defs by fastforce
+  unfolding rel_defs func_defs comb_defs by fastforce
 lemma "<\<Sigma> S>P = \<Union>\<lparr>(\<lambda>x. <x>P) S\<rparr>" 
-  unfolding rel_defs set_defs func_defs comb_defs by fastforce
+  unfolding rel_defs func_defs comb_defs by fastforce
 
 (*Iterated execution ("Kleene star") corresponds to the (reflexive-)transitive closure of the 
  denotation of the program/action. It models "repeat an undetermined number of times". *)
-abbreviation(input) iteration::"\<pi> \<Rightarrow> \<pi>" ("(_\<^sup>+)" 99)
-  where "a\<^sup>+ \<equiv> transitiveClosure a"
-abbreviation(input) iteration_star::"\<pi> \<Rightarrow> \<pi>" ("(_\<^sup>* )" [1000] 999)
-  where "a\<^sup>* \<equiv> reflexiveClosure (transitiveClosure a)"
-
-(*Some properties of the transitive and reflexive-transitive closure: *)
-lemma "a\<^sup>+ = (a\<^sup>* \<^bold>; a)" unfolding transitiveClosure_def oops (*TODO: prove*)
-
-lemma "transitive a \<longrightarrow> P \<^bold>\<and> [a]P \<subseteq> [a\<^sup>+]P"
-  unfolding transitiveClosure_def
-  unfolding transitive_corresp valid_def
-  unfolding rel_defs set_defs func_defs comb_defs by blast
-
+term "(\<lambda>a. a\<^sup>+) :: \<pi> \<Rightarrow> \<pi>"
+term "(\<lambda>a. a\<^sup>*) :: \<pi> \<Rightarrow> \<pi>"
 
 lemma tran_closure_refl: "reflexive R \<longrightarrow> reflexive (R\<^sup>+)"
-  unfolding reflexive_def2 transitiveClosure_def biginterR_def2 endorel_defs comb_defs
-  by (simp add: B2_comb_def \<Phi>21_comb_def \<Phi>22_comb_def implR_def inter_def subrel_def2)
+  unfolding reflexive_def2  biginterR_def2 endorel_defs func_defs comb_defs rel_defs by blast
 
 lemma tran_closure_symm: "symmetric R \<longrightarrow> symmetric (R\<^sup>+)"
-  unfolding symmetric_def transitiveClosure_def transitive_reldef rel_defs set_defs func_defs comb_defs 
-  sorry (*kernel reconstruction fails*)
+  unfolding symmetric_def transitiveClosure_char transitive_reldef
+  unfolding endorel_defs rel_defs func_defs comb_defs sorry (*kernel reconstruction fails*)
 
 lemma tran_closure_trans: "transitive (R\<^sup>+)"
-  by (smt (verit, ccfv_threshold) B01_comb_def B1_comb_def \<Phi>21_comb_def biginterR_def2 inter_def transitiveClosure_def transitive_def2)
+  by (smt (verit, del_insts) biginterR_def2 transitiveClosure_char transitive_def2)
 
 lemma tran_closure_equiv: "equivalence R \<longrightarrow> equivalence (R\<^sup>+)"
   by (simp add: equivalence_char tran_closure_refl tran_closure_symm tran_closure_trans)
 
 lemma bigunionR_symm: "G \<subseteq> symmetric \<longrightarrow> symmetric (\<Union>\<^sup>rG)"
-  unfolding symmetric_reldef bigunionR_def2 unfolding rel_defs set_defs comb_defs by metis
+  unfolding symmetric_reldef bigunionR_def2 unfolding rel_defs func_defs comb_defs by metis
 lemma bigunionR_refl: "\<exists>G \<longrightarrow> G \<subseteq> reflexive \<longrightarrow> reflexive (\<Union>\<^sup>rG)"
-  unfolding reflexive_def2 bigunionR_def2 set_defs comb_defs by auto
+  unfolding reflexive_def2 bigunionR_def2 func_defs rel_defs comb_defs by auto
 
 (* \<Sigma>\<^sup>+ G is the accessibility relation corresponding to the common knowledge of a group G of agents*)
 definition commonAccessRel::"Set(\<pi>) \<Rightarrow> \<pi>" ("\<Sigma>\<^sup>+")
   where "\<Sigma>\<^sup>+ G \<equiv> (\<Union>\<^sup>rG)\<^sup>+"
 
 lemma commonAccessRel_equiv: "\<exists>G \<Longrightarrow> (\<forall>r. G r \<longrightarrow> equivalence r) \<Longrightarrow> equivalence (\<Sigma>\<^sup>+ G)"
-  by (simp add: comb_defs bigunionR_refl bigunionR_symm commonAccessRel_def equivalence_char impl_def subset_def tran_closure_refl tran_closure_symm tran_closure_trans)
+  unfolding equivalence_char commonAccessRel_def
+  using tran_closure_refl tran_closure_symm tran_closure_trans bigunionR_refl bigunionR_symm
+  unfolding func_defs comb_defs by metis
 
 (*We can translate the previous to talk of agents and knowledge:*)
 (*\<^bold>K(A) P stands for "Individual A knows that P"*)
@@ -140,9 +130,9 @@ lemma commonAccessRelChildren_refl: "reflexive (\<Sigma>\<^sup>+ children)"
 
 theorem "\<Turnstile> \<^bold>K{c} (muddy c)" (*c knows he is muddy.*)
   using A0 A1 A2 A3 A4 A5
-  using commonAccessRelChildren_refl reflexive_def
+  using commonAccessRelChildren_refl reflexive_def2
   unfolding valid_def Cknows_def
-  unfolding rel_defs set_defs
+  unfolding rel_defs func_defs
   unfolding comb_defs
   by metis
 
