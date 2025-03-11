@@ -455,6 +455,32 @@ lemma "range f = \<exists> \<circ> f\<inverse>" unfolding func_defs comb_defs ..
 lemma "range f b = (\<exists>a. f a = b)" unfolding func_defs comb_defs ..
 
 
+(*More generally, the inverse of an n-ary function f is the n+1-ary relation that relates to each 
+ object c in f's codomain those ('curried' tuples of) elements in the domain are become mapped to c
+ under f (i.e. the 'preimage' of c under f). We use this to define the range of an n-ary function too*)
+definition inverse2 :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow>  Rel\<^sub>3('c,'a,'b)" ("inverse\<^sub>2")
+  where "inverse\<^sub>2 \<equiv> \<^bold>B\<^sub>2\<^sub>0 \<Q>"
+definition inverse3 :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow>  Rel\<^sub>4('d,'a,'b,'c)" ("inverse\<^sub>3")
+  where "inverse\<^sub>3 \<equiv> \<^bold>B\<^sub>3\<^sub>0 \<Q>"
+  (*...  inverse\<^sub>n \<equiv> \<^bold>B\<^sub>n\<^sub>0 \<Q> *)
+
+definition range2::"('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> Set('c)" ("range\<^sub>2")
+  where "range\<^sub>2 \<equiv> \<exists>\<^sup>2 \<circ>\<^sub>2 inverse\<^sub>2"
+definition range3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> Set('d)" ("range\<^sub>3")
+  where "range\<^sub>3 \<equiv> \<exists>\<^sup>3 \<circ>\<^sub>2 inverse\<^sub>3"
+  (*...  range\<^sub>n \<equiv> \<exists>\<^sup>n \<circ>\<^sub>2 inverse\<^sub>n*)
+
+declare inverse2_def[func_defs] inverse3_def[func_defs] range2_def[func_defs] range3_def[func_defs]
+
+lemma "inverse\<^sub>2 f c = (\<lambda>a b. f a b = c)" unfolding func_defs comb_defs ..
+lemma "inverse\<^sub>3 f d = (\<lambda>a b c. f a b c = d)" unfolding func_defs comb_defs ..
+    (* inverse\<^sub>n f x = (\<lambda>a\<^sub>1 ...a\<^sub>n. f a\<^sub>1 ... a\<^sub>n = x) *)
+
+lemma "range\<^sub>2 f c = (\<exists>a b. f a b = c)" unfolding func_defs comb_defs ..
+lemma "range\<^sub>3 f d = (\<exists>a b c. f a b c = d)" unfolding func_defs comb_defs ..
+    (* range\<^sub>n f x = (\<exists>a\<^sub>1 ...a\<^sub>n. f a\<^sub>1 ... a\<^sub>n = x) *)
+
+
 subsubsection \<open>Kernel of a function\<close>
 
 (*The "kernel" of a function relates those elements in its domain that get assigned the same value*)

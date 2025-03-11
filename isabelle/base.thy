@@ -16,29 +16,49 @@ nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, max_poten
 
 subsection \<open>Custom type notation\<close>
 
-(*The creation of a functional type (starting with a type 'a) can be seen from two complementary 
- perspectives: Valuation (classification) and environmentalization (contextualization/indexation)*)
-type_synonym ('v,'a)Val = "'a \<Rightarrow> 'v" ("_-Val'(_')" [1000])
+(*Classical HOL systems come with a built-in boolean type, for which we introduce convenient notation alias*)
+type_notation bool ("o")
+
+(*The creation of a functional type (starting with a type 'a) can be seen from two complementary perspectives:
+ Environmentalization (aka. indexation or contextualization) and valuation (e.g. classification, coloring, etc.) *)
 type_synonym ('e,'a)Env = "'e \<Rightarrow> 'a" ("_-Env'(_')" [1000])
+type_synonym ('v,'a)Val = "'a \<Rightarrow> 'v" ("_-Val'(_')" [1000])
 
-(*Notation aliasing for type bool*)
-type_notation bool ("o") 
+(*Starting with the boolean type, we immediately obtain endopairs resp. sets via indexation resp. valuation*)
+type_synonym ('a)EPair = "o-Env('a)" ("EPair'(_')")  (*an endopair is encoded as a boolean-index *)
+type_synonym ('a)Set = "o-Val('a)" ("Set'(_')")  (*a set is encoded as a boolean-valuation (boolean classifier)*)
 
-(*Sets and endopairs as unary type constructors*)
-type_synonym ('a)Set = "o-Val('a)" ("Set'(_')")  (*a set is encoded as a 2-valuation (boolean classifier)*)
-type_synonym ('a)EPair = "o-Env('a)" ("EPair'(_')")  (*an endopair is encoded as a 2-index *)
+term "((S :: Set('a)):: 'a-Env(o)) :: 'a \<Rightarrow> o"
+term "((P :: EPair('a)):: 'a-Val(o)) :: o \<Rightarrow> 'a"
 
-term "(S :: Set('a)) :: 'a \<Rightarrow> o"
-term "(P :: EPair('a)) :: o \<Rightarrow> 'a"
+(*Valuations can be made binary (useful e.g. for classifying pairs of objects or encoding their 'distance')*)
+type_synonym ('v,'a,'b)Val2 = "'a \<Rightarrow> 'b \<Rightarrow> 'v" ("_-Val\<^sub>2'(_,_')" [1000])
 
-(*(Endo)relations between objects (of the same type) as binary type constructors *)
-type_synonym ('a,'b)Rel = "Set('b)-Val('a)" ("Rel'(_,_')") (*relations encoded as set-valued functions*)
-type_synonym ('a)ERel = "Rel('a,'a)" ("ERel'(_')") (*endorelations are a special case*)
+(*Binary valuations can also be seen as indexed (unary) valuations*)
+term "((G :: 'v-Val\<^sub>2('a,'b)) :: 'a-Env('v-Val('b))) :: 'a \<Rightarrow> 'b \<Rightarrow> 'v"
 
-term "(R :: Rel('a,'b)) :: 'a-Env(Set('b))" (*relations can also be seen as indexed families of sets*)
+(*In fact (heterogeneous) relations correspond to o-valued binary functions/valuations*)
+type_synonym ('a,'b)Rel = "o-Val\<^sub>2('a,'b)" ("Rel'(_,_')")
+(*They can also be seen as set-valued functions/valuations or as indexed (families of) sets*)
+term "(((R :: Rel('a,'b)) :: Set('b)-Val('a)) :: 'a-Env(Set('b))) :: 'a \<Rightarrow> 'b \<Rightarrow> o"
 
-term "(R :: Rel('a,'b)) :: 'a \<Rightarrow> 'b \<Rightarrow> o"
+(*Ternary relations are seen as set-valued binary valuations (partial & non-deterministic binary functions)*)
+type_synonym ('a,'b,'c)Rel3 = "Set('c)-Val\<^sub>2('a,'b)" ("Rel\<^sub>3'(_,_,_')")
+(*They can also be seen as indexed binary relations (e.g. an indexed family of programs or (a group of) agents)*)
+term "((R::Rel\<^sub>3('a,'b,'c)) :: 'a-Env(Rel('b,'c))) :: 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> o"
+
+(*In general, we can encode n+1-ary relations as indexed n-ary relations*)
+type_synonym ('a,'b,'c,'d)Rel4 = "'a-Env(Rel\<^sub>3('b,'c,'d))" ("Rel\<^sub>4'(_,_,_,_')")
+
+(*Convenient notation for the particular case where the relata have all the same type*)
+type_synonym ('a)ERel = "Rel('a,'a)" ("ERel'(_')") (* (binary) endorelations*)
+type_synonym ('a)ERel\<^sub>3 = "Rel\<^sub>3('a,'a,'a)" ("ERel\<^sub>3'(_')") (*ternary endorelations*)
+type_synonym ('a)ERel\<^sub>4 = "Rel\<^sub>4('a,'a,'a,'a)" ("ERel\<^sub>4'(_')") (*quaternary endorelations*)
+
 term "(R :: ERel('a)) :: 'a \<Rightarrow> 'a \<Rightarrow> o"
+term "(R :: ERel\<^sub>3('a)) :: 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> o"
+term "(R :: ERel\<^sub>4('a)) :: 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> o"
+
 
 (*As a convenient mathematical abstraction, we introduce the notion of "operation".
 In mathematical phraseology, operations are said to "operate" on (one or more) "operands".

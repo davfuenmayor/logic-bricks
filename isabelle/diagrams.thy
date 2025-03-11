@@ -220,23 +220,70 @@ lemma involutive_relFun: "totalFunction R \<Longrightarrow> relInvolutive R = in
   unfolding rel_defs func_defs comb_defs apply auto apply (rule ext) apply (metis (full_types)) apply (rule ext)+ by (metis someI)
 
 
-subsection \<open>Duality diagrams\<close>
+subsection \<open>Duality\<close>
 (*We encode (relational) duality as a relation between functions (relations). It arises by fixing 
  two of the arguments of a (relational) square as parameters (which we refer to as n\<^sub>1 & n\<^sub>2).*)
 
+subsubsection \<open>For functions\<close>
+
 (*Two functions f and g are said to be dual wrt. to a pair of functions n\<^sub>1 & n\<^sub>2 (as parameters) *)
-definition dual::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> ('a\<^sub>1 \<Rightarrow> 'b\<^sub>1) \<Rightarrow> ('a\<^sub>2 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> o" ("_,_-DUAL")
+definition dual::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> Rel('a\<^sub>1 \<Rightarrow> 'b\<^sub>1, 'a\<^sub>2 \<Rightarrow> 'b\<^sub>2)" ("_,_-DUAL")
   where "n\<^sub>1,n\<^sub>2-DUAL f g \<equiv>   \<sqdot> \<midarrow>f\<rightarrow> \<sqdot> 
                           n\<^sub>1\<down>      \<down>n\<^sub>2
                             \<sqdot> \<midarrow>g\<rightarrow> \<sqdot>  "
 
+(*We can also lift the previous notion of duality to apply to n-ary functions*)
+definition dual2::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> Rel('e \<Rightarrow> 'a\<^sub>1 \<Rightarrow> 'b\<^sub>1, 'e \<Rightarrow> 'a\<^sub>2 \<Rightarrow> 'b\<^sub>2)" ("_,_-DUAL\<^sub>2")
+  where "n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 \<equiv> \<^bold>\<Phi>\<^sub>\<forall> (n\<^sub>1,n\<^sub>2-DUAL)"
+definition dual3::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> Rel('e\<^sub>1 \<Rightarrow> 'e\<^sub>2 \<Rightarrow> 'a\<^sub>1 \<Rightarrow> 'b\<^sub>1, 'e\<^sub>1 \<Rightarrow> 'e\<^sub>2 \<Rightarrow> 'a\<^sub>2 \<Rightarrow> 'b\<^sub>2)" ("_,_-DUAL\<^sub>3")
+  where "n\<^sub>1,n\<^sub>2-DUAL\<^sub>3 \<equiv> \<^bold>\<Phi>\<^sub>\<forall> (n\<^sub>1,n\<^sub>2-DUAL\<^sub>2)"
+(*  ...  n\<^sub>1,n\<^sub>2-DUAL\<^sub>n \<equiv> \<^bold>\<Phi>\<^sub>\<forall> n\<^sub>1,n\<^sub>2-DUAL\<^sub>n\<^sub>-\<^sub>1 *)
+
+declare dual_def[func_defs] dual2_def[func_defs] dual3_def[func_defs]
+
+lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g = (\<forall>x y. g x (n\<^sub>1 y) = n\<^sub>2 (f x y))" unfolding func_defs comb_defs by metis
+lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sub>3 f g = (\<forall>x y z. g x y (n\<^sub>1 z) = n\<^sub>2 (f x y z))" unfolding func_defs comb_defs by metis
+
+(*Note that if both n\<^sub>1 & n\<^sub>2 are involutive, then the dual relation is symmetric*)
+lemma dual_symm: "involutive n\<^sub>1 \<Longrightarrow> involutive n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL f g = n\<^sub>1,n\<^sub>2-DUAL f g" unfolding func_defs comb_defs by simp
+lemma dual2_symm: "involutive n\<^sub>1 \<Longrightarrow> involutive n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g = n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g" unfolding func_defs comb_defs by simp
+
+(*This notion does NOT correspond with the so-called "De Morgan duality" (although they are not unrelated)*)
+lemma "\<not>,\<not>-DUAL\<^sub>2 (\<and>) (\<or>)" nitpick oops (*countermodel*)
+
+(*We add a (convenient?) diagram for duality of binary functions (for unary functions it is just the square)*)
+abbreviation(input) dual2Diagram (" \<sqdot> \<Midarrow>_\<rightarrow> \<sqdot> // _\<down> \<down>_ // \<sqdot> \<Midarrow>_\<rightarrow> \<sqdot>") 
+  where "  \<sqdot> \<Midarrow> f \<rightarrow> \<sqdot> 
+         n\<^sub>1\<down>        \<down>n\<^sub>2
+           \<sqdot> \<Midarrow> g \<rightarrow> \<sqdot>   \<equiv> n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g"
+
+(*Some examples of dual pairs of binary operations (recall that negation and complement are involutive)*)
+lemma " \<sqdot> \<Midarrow> (\<and>) \<rightarrow> \<sqdot> 
+      \<not>\<down>           \<down>\<not>
+        \<sqdot> \<Midarrow> (\<rightarrow>) \<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by simp
+
+lemma " \<sqdot> \<Midarrow> (\<or>) \<rightarrow> \<sqdot> 
+      \<not>\<down>           \<down>\<not>
+        \<sqdot> \<Midarrow> (\<rightharpoonup>) \<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by auto
+
+lemma " \<sqdot> \<Midarrow> (\<Rightarrow>) \<rightarrow> \<sqdot> 
+      \<midarrow>\<down>           \<down>\<midarrow>
+        \<sqdot> \<Midarrow> (\<inter>) \<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by simp
+
+lemma " \<sqdot> \<Midarrow>  (\<setminus>)  \<rightarrow>  \<sqdot> 
+      \<midarrow>\<down>             \<down>\<midarrow>
+        \<sqdot> \<Midarrow>(\<midarrow>\<circ>\<^sub>2(\<inter>))\<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by simp
+
+
+subsubsection \<open>For relations\<close>
+
 (*Two relations R and T are said to be dual wrt. to a pair of relations n\<^sub>1 & n\<^sub>2 (as parameters) *)
-definition relDual::"Rel('a\<^sub>1,'a\<^sub>2) \<Rightarrow> Rel('b\<^sub>1,'b\<^sub>2) \<Rightarrow> Rel('a\<^sub>1,'b\<^sub>1) \<Rightarrow> Rel('a\<^sub>2,'b\<^sub>2) \<Rightarrow> o" ("_,_-DUAL\<^sup>r")
+definition relDual::"Rel('a\<^sub>1,'a\<^sub>2) \<Rightarrow> Rel('b\<^sub>1,'b\<^sub>2) \<Rightarrow> Rel(Rel('a\<^sub>1,'b\<^sub>1), Rel('a\<^sub>2,'b\<^sub>2))" ("_,_-DUAL\<^sup>r")
   where "n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T \<equiv>   \<sqdot> \<midarrow>R\<rightarrow> \<sqdot> 
                            n\<^sub>1\<down>      \<down>n\<^sub>2
                              \<sqdot> \<midarrow>T\<rightarrow> \<sqdot>   "
 
-declare dual_def[func_defs] relDual_def[rel_defs]
+declare  relDual_def[rel_defs]
 
 lemma "n\<^sub>1,n\<^sub>2-DUAL  f g = (n\<^sub>1 ; g = f ; n\<^sub>2)" unfolding func_defs comb_defs ..
 lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T = (n\<^sub>1 ;\<^sup>r T = R ;\<^sup>r n\<^sub>2)" unfolding rel_defs func_defs comb_defs ..
@@ -260,10 +307,8 @@ lemma "\<exists>m. relSplitting m n\<^sub>1 \<Longrightarrow> !(n\<^sub>1,n\<^su
 lemma "\<exists>m. relSplitting n\<^sub>2 m \<Longrightarrow> !((n\<^sub>1,n\<^sub>2-DUAL\<^sup>r)\<^sup>\<smile> T)"
   unfolding rel_defs func_defs comb_defs apply auto apply (rule ext)+ by (smt (verit, best))
 
-
 (*Moreover, if both n\<^sub>1 & n\<^sub>2 are involutive, then the dual relation is symmetric.*)
-lemma relDual_symm: "relInvolutive n\<^sub>1 \<and> relInvolutive n\<^sub>2
-          \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T = n\<^sub>1,n\<^sub>2-DUAL\<^sup>r T R" 
-unfolding rel_defs func_defs comb_defs apply auto apply (rule ext)+ apply (smt (z3)) apply (rule ext)+ by (smt (z3))
+lemma relDual_symm: "relInvolutive n\<^sub>1 \<Longrightarrow> relInvolutive n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T = n\<^sub>1,n\<^sub>2-DUAL\<^sup>r T R" 
+  unfolding rel_defs func_defs comb_defs apply auto apply (rule ext)+ apply (smt (z3)) apply (rule ext)+ by (smt (z3))
 
 end

@@ -106,6 +106,9 @@ definition B21_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d
 definition B22_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'a) \<Rightarrow> ('f \<Rightarrow> 'g \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'f \<Rightarrow> 'e \<Rightarrow> 'g \<Rightarrow> 'c" ("\<^bold>B\<^sub>2\<^sub>2")
   where "\<^bold>B\<^sub>2\<^sub>2 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>1 x\<^sub>2 y\<^sub>1 y\<^sub>2. f (g\<^sub>1 x\<^sub>1 y\<^sub>1) (g\<^sub>2 x\<^sub>2 y\<^sub>2)"
 (*... and so on*)
+definition B30_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'a) \<Rightarrow> 'b \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'c" ("\<^bold>B\<^sub>3\<^sub>0")
+  where "\<^bold>B\<^sub>3\<^sub>0 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>1 y\<^sub>1 z\<^sub>1. f (g\<^sub>1 x\<^sub>1 y\<^sub>1 z\<^sub>1) g\<^sub>2"
+(*... and so on*)
 abbreviation(input) B000_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd"("\<^bold>B\<^sub>0\<^sub>0\<^sub>0")  
   where "\<^bold>B\<^sub>0\<^sub>0\<^sub>0 \<equiv> \<^bold>A\<^sub>3"  (* composing with three nullary functions corresponds to ternary function application*)
 (*... and so on*)
@@ -162,7 +165,7 @@ notation B02_comb ("\<^bold>E") (* aliasing \<^bold>B\<^sub>0\<^sub>2 as \<^bold
 declare B1_comb_def[comb_defs] B2_comb_def[comb_defs] B3_comb_def[comb_defs] B4_comb_def[comb_defs]        
         B01_comb_def[comb_defs] B02_comb_def[comb_defs] B03_comb_def[comb_defs]
         B10_comb_def[comb_defs] B11_comb_def[comb_defs] B12_comb_def[comb_defs] B13_comb_def[comb_defs] 
-        B20_comb_def[comb_defs] B21_comb_def[comb_defs] B22_comb_def[comb_defs]
+        B20_comb_def[comb_defs] B21_comb_def[comb_defs] B22_comb_def[comb_defs] B30_comb_def[comb_defs]
         B111_comb_def[comb_defs] B112_comb_def[comb_defs] 
         B222_comb_def[comb_defs] B223_comb_def[comb_defs] B333_comb_def[comb_defs] B1111_comb_def[comb_defs]
 
@@ -244,6 +247,7 @@ notation C21_comb ("\<^bold>C") (*the traditional flip/transposition (\<^bold>C)
 notation C3412_comb ("\<^bold>C\<^sub>2") (*pairwise flip/transposition of the arguments of a quaternary function*)
 notation C231_comb ("\<^bold>R") (*Right (counterclockwise) rotation of a ternary function*)
 notation C312_comb ("\<^bold>L") (*Left (counterclockwise) rotation of a ternary function*)
+notation C321_comb ("\<^bold>C''") (*Full reversal of the arguments of a ternary function*)
 
 declare C21_comb_def[comb_defs] 
       C132_comb_def[comb_defs]  C231_comb_def[comb_defs] C312_comb_def[comb_defs]  C321_comb_def[comb_defs] 
