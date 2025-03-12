@@ -507,17 +507,19 @@ lemma bound321_dual: "\<midarrow>,\<midarrow>-DUAL\<^sub>2 (R-\<ominus>\<^sub>3\
 
 subsection \<open>Transformations\<close>
 
-(*We can always make a unary image operator out of its binary counterpart as follows*)
+(*We can always make a unary image/bound operator out of its binary counterpart as follows*)
 lemma "R-\<diamond>\<^sub>\<rightarrow> A = (\<^bold>K R)-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
-lemma "R-\<diamond>\<^sub>\<leftarrow> A = (\<lambda>x y z. R z x)-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
-lemma "R-\<diamond>\<^sub>\<leftarrow> A = (\<lambda>x y z. R x y)-\<diamond>\<^sub>3\<^sub>2\<^sub>1 A A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<ominus>\<^sub>\<rightarrow> A = (\<^bold>K R)-\<ominus>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<diamond>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<ominus>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<ominus>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
 
-(*As for the dual variants*)
+(*And the same holds for the dual variants*)
 lemma "R-\<box>\<^sub>\<rightarrow> A = (\<^bold>K R)-\<box>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) A" unfolding rel_defs comb_defs func_defs by metis
-lemma "R-\<box>\<^sub>\<leftarrow> A = (\<lambda>x y z. R z x)-\<box>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) A" unfolding rel_defs comb_defs func_defs by metis
-lemma "R-\<box>\<^sub>\<leftarrow> A = (\<lambda>x y z. R x y)-\<box>\<^sub>3\<^sub>2\<^sub>1 (\<midarrow>A) A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<oslash>\<^sub>\<rightarrow> A = (\<^bold>K R)-\<oslash>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<box>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<box>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<oslash>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<oslash>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) A" unfolding rel_defs comb_defs func_defs by metis
 
-(*The converse conversion is in general not possible*)
+(*The converse conversion is not possible in general: *)
 lemma "\<forall>T. \<exists>R. \<forall>A. (T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = (R-\<diamond>\<^sub>\<rightarrow> A)" nitpick oops (*countermodel*)
 (*In particular, this does not hold (for arbitrary T) *) (*TODO: how to restrict T so that it holds?*)
 lemma "(T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = ((\<lambda>a b. T a a b)-\<diamond>\<^sub>\<rightarrow> A)" nitpick oops (*countermodel *)
