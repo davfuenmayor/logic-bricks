@@ -174,25 +174,53 @@ hide_const(open) Set.subset Set.subset_eq Set.supset Set.supset_eq
                  Lattices.sup_class.sup Lattices.inf_class.inf
                  (* Fun.comp Fun.fun_upd *)
 
-no_notation (*so we can use those symbols for our own purposes*)
-  Set.subset  ("'(\<subset>')") and Set.subset  ("(_/ \<subset> _)" [51, 51] 50) and
-  Set.subset_eq  ("'(\<subseteq>')") and Set.subset_eq  ("(_/ \<subseteq> _)" [51, 51] 50) and
-  Set.supset  ("'(\<supset>')") and Set.supset  ("(_/ \<supset> _)" [51, 51] 50) and
-  Set.supset_eq  ("'(\<supseteq>')") and Set.supset_eq  ("(_/ \<supseteq> _)" [51, 51] 50) and
+unbundle no set_enumeration_syntax
+(* no_syntax "_Finset" :: "args \<Rightarrow> 'a set" ("{(_)}") *)
+
+unbundle no member_ASCII_syntax
+(*no_notation Set.member  ("'(:')") and Set.member  ("(_/ : _)" [51, 51] 50) and *)
+
+no_notation
+  Set.subset  (\<open>'(\<subset>')\<close>) and
+  Set.subset  (\<open>(\<open>notation=\<open>infix \<subset>\<close>\<close>_/ \<subset> _)\<close> [51, 51] 50) and
+  Set.subset_eq  (\<open>'(\<subseteq>')\<close>) and
+  Set.subset_eq  (\<open>(\<open>notation=\<open>infix \<subseteq>\<close>\<close>_/ \<subseteq> _)\<close> [51, 51] 50)
+(*no_notation Set.subset  ("'(\<subset>')") and Set.subset  ("(_/ \<subset> _)" [51, 51] 50) and *)
+  (* Set.subset_eq  ("'(\<subseteq>')") and Set.subset_eq  ("(_/ \<subseteq> _)" [51, 51] 50) *)
+
+no_notation
+  Set.supset  (\<open>'(\<supset>')\<close>) and
+  Set.supset  (\<open>(\<open>notation=\<open>infix \<supset>\<close>\<close>_/ \<supset> _)\<close> [51, 51] 50) and
+  Set.supset_eq  (\<open>'(\<supseteq>')\<close>) and
+  Set.supset_eq  (\<open>(\<open>notation=\<open>infix \<supseteq>\<close>\<close>_/ \<supseteq> _)\<close> [51, 51] 50)
+
+no_notation
   Set.union (infixl "\<union>" 65) and Set.inter (infixl "\<inter>" 70) and
-  Set.member  ("'(:')") and Set.member  ("(_/ : _)" [51, 51] 50) and
-  Complete_Lattices.Inter ("\<Inter>") and Complete_Lattices.Union ("\<Union>") and
-  Relation.converse ("(_\<inverse>)" [1000] 999) and
-  Transitive_Closure.reflcl ("(_\<^sup>=)" [1000] 999) and
+  Complete_Lattices.Inter ("\<Inter>") and Complete_Lattices.Union ("\<Union>")
+
+unbundle no converse_syntax
+(* no_notation  Relation.converse ("(_\<inverse>)" [1000] 999) and *)
+unbundle no rtrancl_syntax
+(* no_notation Transitive_Closure.rtrancl ("(_\<^sup>* )" [1000] 999) *)
+unbundle no trancl_syntax
+(* no_notation Transitive_Closure.trancl ("(_\<^sup>+)" [1000] 999) *)
+unbundle no reflcl_syntax
+(* no_notation Transitive_Closure.reflcl ("(_\<^sup>=)" [1000] 999) *)
+
+no_notation BNF_Def.convol (\<open>(\<open>indent=1 notation=\<open>mixfix convol\<close>\<close>\<langle>_,/ _\<rangle>)\<close>)
+(* no_notation BNF_Def.convol ("\<langle>(_,/ _)\<rangle>") *)
+
+no_notation
   Orderings.top_class.top ("\<top>") and
   Orderings.bot_class.bot ("\<bottom>") and
-  BNF_Def.convol ("\<langle>(_,/ _)\<rangle>") and
-  Product_Type.Pair ("(_,/ _)" [21, 20] 20) and Product_Type.Times (infixr "\<times>" 80) and
-  Transitive_Closure.trancl ("(_\<^sup>+)" [1000] 999) and Transitive_Closure.rtrancl ("(_\<^sup>*)" [1000] 999) and
-  Lattices.sup_class.sup (infixl "\<squnion>" 65) and Lattices.inf_class.inf (infixl "\<sqinter>" 70) and
-  Fun.comp (infixl "\<circ>" 55) and Fun.comp (infixl "o" 55)
-no_syntax
-  "_Finset" :: "args \<Rightarrow> 'a set" ("{(_)}")
+  Lattices.sup_class.sup (infixl "\<squnion>" 65) and Lattices.inf_class.inf (infixl "\<sqinter>" 70) 
+
+no_notation Product_Type.Pair (\<open>(\<open>notation=\<open>infix \<times>\<close>\<close>_ \<times>/ _)\<close> [21, 20] 20) 
+(*no_notation Product_Type.Pair ("(_,/ _)" [21, 20] 20)  *)
+
+no_notation Product_Type.Times (infixr "\<times>" 80)
+no_notation Fun.comp (infixl "\<circ>" 55) and Fun.comp (infixl "o" 55)
+
 
 subsection \<open>Notation tests\<close>
 
