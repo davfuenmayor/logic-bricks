@@ -233,7 +233,7 @@ subsection \<open>Function-like properties\<close>
  different from its codomain when seen as a (set-valued) function (corresponding to the type 'b \<Rightarrow> o). *)
 
 
-subsubsection \<open>Ranges and deterministic elements\<close>
+subsubsection \<open>Range and cylindrification\<close>
 (*We define the left- (right-) range of a relation as the set of those objects in the source (target)
  domain that reach to (are reached by) some element in the target (source) domain*)
 
@@ -267,8 +267,40 @@ lemma "leftDualRange R = \<midarrow>(leftRange R\<^sup>\<midarrow>)" unfolding r
 lemma leftRange_def2: "leftRange = \<^bold>B \<exists>" unfolding rel_defs comb_defs ..
 lemma leftDualRange_def2: "leftDualRange = \<^bold>B \<forall>" unfolding rel_defs comb_defs ..
 
+(*The operations below perform what is known as 'cylindrification' in the literature on relation algebra*)
+definition leftCylinder::"Set('b) \<Rightarrow> Rel('a,'b)"
+  where "leftCylinder A \<equiv> \<UU> \<times> A"
+definition rightCylinder::"Set('a) \<Rightarrow> Rel('a,'b)"
+  where "rightCylinder A \<equiv> A \<times> \<UU>"
 
-(*Similarly, by composition with !, we obtain the set of deterministic (or 'univalent') elements.
+declare leftCylinder_def[rel_defs] rightCylinder_def[rel_defs]
+
+(*They act inverse to (right & left) range by transforming sets into (left & right-ideal) relations*)
+lemma "rightRange (leftCylinder A) = A"  unfolding rel_defs func_defs comb_defs by auto 
+lemma "leftRange (rightCylinder A) = A"  unfolding rel_defs func_defs comb_defs by auto 
+(*Note that*)
+lemma "R \<subseteq>\<^sup>r rightCylinder (leftRange R)" unfolding rel_defs func_defs comb_defs by simp
+lemma "R \<subseteq>\<^sup>r leftCylinder (rightRange R)" unfolding rel_defs func_defs comb_defs by auto
+lemma "rightCylinder (leftRange R) \<subseteq>\<^sup>r R"  nitpick oops (*countermodel*)
+lemma "leftCylinder (rightRange R) \<subseteq>\<^sup>r R"  nitpick oops (*countermodel*)
+
+(*Source and target restrictions (as relation-operations) can be encoded in terms of cylindrification*)
+definition sourceRestriction::"Set('a) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('a,'b)" ("_\<downharpoonleft>_")
+  where "sourceRestriction \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<inter>\<^sup>r) rightCylinder \<^bold>I"
+definition targetRestriction::"Set('b) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('a,'b)" ("_\<downharpoonright>_")
+  where "targetRestriction \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<inter>\<^sup>r) leftCylinder \<^bold>I"
+
+declare sourceRestriction_def[rel_defs] targetRestriction_def[rel_defs]
+
+lemma "A\<downharpoonleft>R = rightCylinder A \<inter>\<^sup>r R" unfolding rel_defs comb_defs ..
+lemma "B\<downharpoonright>R = leftCylinder  B \<inter>\<^sup>r R" unfolding rel_defs comb_defs ..
+lemma "A\<downharpoonleft>R = (\<lambda>a b. A a \<and> R a b)" unfolding rel_defs comb_defs func_defs by simp
+lemma "B\<downharpoonright>R = (\<lambda>a b. B b \<and> R a b)" unfolding rel_defs comb_defs func_defs by simp
+
+
+subsubsection \<open>Uniqueness and determinism\<close>
+
+(*By composition with !, we obtain the set of deterministic (or 'univalent') elements.
  They get assigned at most one value under the relation (which then behaves deterministically on them)*)
 definition deterministic::"Rel('a,'b) \<Rightarrow> Set('a)"
   where "deterministic \<equiv> \<^bold>B !"
@@ -283,8 +315,6 @@ declare deterministic_def[rel_defs] totalDeterministic_def[rel_defs]
 lemma totalDeterministic_def2: "totalDeterministic R = deterministic R \<inter> leftRange R" 
   unfolding rel_defs func_defs comb_defs by (metis (mono_tags, opaque_lifting))
 
-
-subsubsection \<open>Uniqueness properties\<close>
 
 definition rightUnique::"Set(Rel('a,'b))" (*aka. univalent, (partial-)functional *)
   where "rightUnique \<equiv> \<forall> \<circ> deterministic"
@@ -600,6 +630,29 @@ lemma relCompDual_antihom: "(R \<bullet>\<^sup>r T)\<^sup>\<smile> = ((T\<^sup>\
 (*In a similar spirit, we have*)
 lemma "(R \<circ>\<^sup>r T)\<^sup>\<frown> = ((T\<^sup>\<frown>) \<bullet>\<^sup>r (R\<^sup>\<frown>))" unfolding rel_defs func_defs comb_defs by auto
 lemma "(R \<bullet>\<^sup>r T)\<^sup>\<frown> = ((T\<^sup>\<frown>) \<circ>\<^sup>r (R\<^sup>\<frown>))" unfolding rel_defs func_defs comb_defs by auto
+
+
+subsubsection \<open>Ideals\<close>
+
+(*A related property of relations is that of (generating a) left- resp. right ideal*)
+definition leftIdeal::"Set(Rel('a,'b))"
+  where "leftIdeal \<equiv> FP ((;\<^sup>r) \<UU>\<^sup>r)"
+definition rightIdeal::"Set(Rel('a,'b))"
+  where "rightIdeal \<equiv> FP ((\<circ>\<^sup>r) \<UU>\<^sup>r)"
+
+declare leftIdeal_def[rel_defs] rightIdeal_def[rel_defs]
+
+lemma "leftIdeal  R = (R = \<UU>\<^sup>r ;\<^sup>r R)" unfolding rel_defs func_defs comb_defs ..
+lemma "rightIdeal R = (R = R  ;\<^sup>r \<UU>\<^sup>r)" unfolding rel_defs func_defs comb_defs ..
+
+(*An alternative, equivalent definition also common in the literature (e.g. on semirings)*)
+lemma leftIdeal_def2:  "leftIdeal  R = (\<forall>T. R \<circ>\<^sup>r T \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
+lemma rightIdeal_def2: "rightIdeal R = (\<forall>T. R ;\<^sup>r T \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
+
+(*In fact, the left/right-cylindrification operations discussed previously return left/right-ideal 
+ (generating) relations. Moreover, all left/right-ideal relations can be generated this way. *)
+lemma "rightIdeal = range rightCylinder" unfolding rel_defs func_defs comb_defs apply (rule ext) by metis
+lemma "leftIdeal  = range leftCylinder" unfolding rel_defs func_defs comb_defs apply (rule ext) by metis
 
 
 subsubsection \<open>Kernel of a relation\<close>

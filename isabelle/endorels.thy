@@ -139,6 +139,18 @@ lemma coirreflexive_def3: "coirreflexive = range coirreflexiveClosure"
 lemma "coreflexiveInterior  R = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> coreflexive T)" oops (*TODO: reconstruct proof*)
 lemma "coirreflexiveClosure R = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> coirreflexive T)" oops  (*TODO: reconstruct proof*)
 
+(*A convenient way of disguising sets as endorelations (cf. dynamic logics and program algebras).*)
+definition test::"Set('a) \<Rightarrow> ERel('a)" ("_?")
+  where "test \<equiv> coreflexiveInterior \<circ> (\<^bold>W (\<times>))"
+
+declare test_def[endorel_defs]
+
+lemma "A? = \<Q> \<inter>\<^sup>r (A \<times> A)" unfolding endorel_defs comb_defs ..  (* equality (\<Q>) restricted to A*)
+lemma test_def2: "A? = (\<lambda>x y. A x \<and> x = y)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+
+(*In fact, all coreflexive relations arise via the test operator (when applied to some set)*)
+lemma "coreflexive = range test" unfolding coreflexive_def3 endorel_defs rel_defs func_defs comb_defs by fastforce
+
 
 subsection \<open>Seriality and quasireflexivity\<close>
 

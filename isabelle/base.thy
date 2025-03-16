@@ -9,9 +9,7 @@ subsection \<open>Tool configuration\<close>
 declare[[smt_timeout=30]]
 (* declare[[show_types]] *)
 declare[[syntax_ambiguity_warning=false]]
-sledgehammer_params[max_facts=100,isar_proof=false,abduce=0,falsify=false, provers=cvc4 cvc5 verit z3 e spass vampire zipperposition]
-(* sledgehammer_params[max_facts=100,isar_proof=false,abduce=0,falsify=false] *)
-(* sledgehammer_params[max_facts=100] *)
+sledgehammer_params[max_facts=100,isar_proof=false]
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, max_potential=0,max_genuine=1, format=3] (*default Nitpick settings*)
 
 subsection \<open>Custom type notation\<close>
