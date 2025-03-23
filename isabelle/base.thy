@@ -29,11 +29,15 @@ type_synonym ('a)Set = "o-Val('a)" ("Set'(_')")  (*a set is encoded as a boolean
 term "((S :: Set('a)):: 'a-Env(o)) :: 'a \<Rightarrow> o"
 term "((P :: EPair('a)):: 'a-Val(o)) :: o \<Rightarrow> 'a"
 
+(*Sets of endopairs correspond to (directed) graphs (which are isomorphic to relations via currying)*)
+type_synonym ('a)Graph = "Set(EPair('a))" ("Graph'(_')")
+term "(G :: Graph('a)) :: (o \<Rightarrow> 'a) \<Rightarrow> o"
+
 (*Valuations can be made binary (useful e.g. for classifying pairs of objects or encoding their 'distance')*)
 type_synonym ('v,'a,'b)Val2 = "'a \<Rightarrow> 'b \<Rightarrow> 'v" ("_-Val\<^sub>2'(_,_')" [1000])
 
 (*Binary valuations can also be seen as indexed (unary) valuations*)
-term "((G :: 'v-Val\<^sub>2('a,'b)) :: 'a-Env('v-Val('b))) :: 'a \<Rightarrow> 'b \<Rightarrow> 'v"
+term "((F :: 'v-Val\<^sub>2('a,'b)) :: 'a-Env('v-Val('b))) :: 'a \<Rightarrow> 'b \<Rightarrow> 'v"
 
 (*In fact (heterogeneous) relations correspond to o-valued binary functions/valuations*)
 type_synonym ('a,'b)Rel = "o-Val\<^sub>2('a,'b)" ("Rel'(_,_')")
@@ -75,12 +79,47 @@ type_synonym ('a,'b)OpG = "Op(Set('a),'b)" ("Op\<^sub>G'(_,_')")
 type_synonym ('a)EOpG = "Op\<^sub>G('a,'a)" ("EOp\<^sub>G'(_')") (* same as: Set('a) \<Rightarrow> 'a *)
 
 (*** Operations on sets ***)
+
 (*Convenient type aliases for (endo)operations on sets*)
 type_synonym ('a,'b)SetOp = "Op(Set('a),Set('b))" ("SetOp'(_,_')")
 type_synonym ('a)SetEOp = "SetOp('a,'a)" ("SetEOp'(_')") (* same as: Set('a) \<Rightarrow> Set('a) *)
 (*Binary case: (endo)bi-operations correspond to curried (endo)bi-functions*)
 type_synonym ('a,'b)SetOp2 = "Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("SetOp\<^sub>2'(_,_')")
 type_synonym ('a)SetEOp2 = "SetOp\<^sub>2('a,'a)" ("SetEOp\<^sub>2'(_')") (*same as: Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('a) *)
+
+
+(*** Products of boolean types ***)
+
+(*Now consider the following equivalent type notations*)
+term "((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o"
+term "((R :: ERel(o)) :: EOp\<^sub>2(o)) :: o \<Rightarrow> (o \<Rightarrow> o)"
+term "(((S :: Set(Set(o))) :: Graph(o)) :: EOp\<^sub>G(o)) :: (o \<Rightarrow> o) \<Rightarrow> o"
+
+(*We can make good sense of them by considering a new type having four inhabitants*)
+type_synonym four = "o \<Rightarrow> o" ("oo")
+term "((P :: oo) :: EPair(o)) :: Set(o)"
+
+(*Using the new type we can seamlessly define types for (endo)quadruples and 4-valued sets*)
+type_synonym ('a)EQuad = "oo \<Rightarrow> 'a" ("EQuad'(_')")
+type_synonym ('a)Set4 = "'a \<Rightarrow> oo" ("Set4'(_')")
+
+(*The following two types have each 16 elements (we show a bijection between their elements later on)*)
+type_synonym sixteen  = "o \<Rightarrow> oo" ("ooo")   (*4^2 = (2^2)^2 *)
+type_synonym sixteen' = "oo \<Rightarrow> o" ("ooo''") (*2^4 = 2^(2^2) *)
+
+(*So we can have that the following type notations are in fact identical (not just isomorphic)*)
+term "(((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o) :: oo"
+term "(((((R :: ERel(o)) :: EOp\<^sub>2(o)) :: EPair(oo)) :: Set4(o)) :: o \<Rightarrow> o \<Rightarrow> o) :: ooo"
+term "((((((S :: Set(Set(o))) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: EQuad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
+
+(*...we can continue producing types (we stop giving them special notation after the magic number 64)*)
+type_synonym sixtyfour = "oo \<Rightarrow> oo" ("oooo") (*4^4 = (2^2)^(2^2) = 64*)
+type_synonym n256   = "o \<Rightarrow> ooo" (*16^2 = 256*)
+type_synonym n65536 = "oo \<Rightarrow> ooo" (*16^4 = 65536*)
+type_synonym n65536' = "ooo \<Rightarrow> o" (*2^16 = 65536*)
+type_synonym n4294967296 = "ooo \<Rightarrow> oo" (*4^16 = 4294967296*)
+(*and so on...*)
+
 
 (*** Continuations (with result type 'r) take inputs of type 'a ***)
 (* Unary case:  *)

@@ -90,7 +90,7 @@ lemma relGalois_prop: "skeletal R\<^sub>1 \<Longrightarrow> \<exists>(R\<^sub>1,
   apply (rule ext)+ apply auto apply (metis (no_types, opaque_lifting)) by (smt (verit, best)) 
 
 (*The related question of uniqueness of Galois adjoints (when they exist) is simpler*)
-lemma relGalois_rightUnique: "skeletal R\<^sub>1 \<Longrightarrow> !((R\<^sub>1,R\<^sub>2-GAL\<^sup>r F) \<inter> rightUnique)" 
+lemma relGalois_rightUnique: "skeletal R\<^sub>1 \<Longrightarrow> unique((R\<^sub>1,R\<^sub>2-GAL\<^sup>r F) \<inter> rightUnique)" 
   oops (*TODO: fix reconstruction*)
 
 

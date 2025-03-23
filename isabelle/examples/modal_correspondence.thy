@@ -32,7 +32,7 @@ lemma residuation2: "RESID \<^sup>R\<^bold>\<diamond> \<^sup>R\<^bold>\<box>'"
 
 lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> P \<^bold>\<rightarrow> \<^sup>R\<^bold>\<diamond>P)" (*sledgehammer*)
   apply(subst DMT)
-  apply(subst reflexive_def2)
+  apply(subst reflexive_def)
   apply(subst leftImage_embedding)
   apply(subst leftImage_hom_id)
   apply(subst subrel_setdef)
@@ -40,7 +40,7 @@ lemma reflexive_corresp:  "reflexive R \<longleftrightarrow> (\<forall>P. \<Turn
   
 lemma reflexive_corresp': "reflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<box>P \<^bold>\<rightarrow> P)"  (*sledgehammer*)
   apply(subst DMT)
-  apply(subst reflexive_def2)
+  apply(subst reflexive_def)
   apply(subst leftDualImage_embedding)
   apply(subst leftDualImage_hom_id)
   apply(subst subrel_setdef)
@@ -93,7 +93,7 @@ notation(input) leftBound ("\<^sup>_\<^bold>\<Zdres>") and leftDualBound ("\<^su
 
 lemma irreflexive_corresp:  "irreflexive R \<longleftrightarrow> (\<forall>P. \<Turnstile> \<^sup>R\<^bold>\<Zdres>P \<^bold>\<rightarrow> \<^bold>\<not>P)" (*sledgehammer*)
   apply(subst DMT)
-  apply(subst irreflexive_def2)
+  apply(subst irreflexive_def)
   apply(subst leftBound_embedding)
   apply(subst leftBound_hom_id)
   apply(subst subrel_setdef) ..

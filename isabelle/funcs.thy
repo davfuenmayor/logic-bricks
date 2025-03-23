@@ -389,10 +389,10 @@ term "\<exists>::Set(Set('a))" (* \<exists>A means that A contains at least one 
 term "\<nexists>::Set(Set('a))" (* \<exists>A means that A is empty*)
 
 (*We conveniently add a couple more*)
-definition unique::"Set(Set('a))" ("!") 
-  where \<open>!A \<equiv> \<forall>x y. A x \<and> A y \<rightarrow> x = y\<close>      (*A contains at most one element (it may be empty)*)
+definition unique::"Set(Set('a))" 
+  where \<open>unique A \<equiv> \<forall>x y. A x \<and> A y \<rightarrow> x = y\<close> (*A contains at most one element (it may be empty)*)
 definition singleton::"Set(Set('a))" ("\<exists>!") 
-  where \<open>\<exists>!A \<equiv> \<exists>x. A x \<and> (\<forall>y. A y \<rightarrow> x = y)\<close> (*A contains exactly one element*)
+  where \<open>\<exists>!A \<equiv> \<exists>x. A x \<and> (\<forall>y. A y \<rightarrow> x = y)\<close>  (*A contains exactly one element*)
 
 declare unique_def[func_defs] singleton_def[func_defs]
 

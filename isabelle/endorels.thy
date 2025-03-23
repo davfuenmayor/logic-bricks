@@ -6,56 +6,32 @@ section \<open>Endorelations\<close>
  
 named_theorems endorel_defs
 
-subsection \<open>Intervals\<close>
 
-(*We now conveniently encode a notion of 'interval' (wrt given relation R) as the set of elements 
-  that lie between or 'interpolate' a given pair of points (seen as 'boundaries').*)
-definition interval::"ERel('a) \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> Set('a)" ("_-interval")
-  where "interval \<equiv> \<^bold>W interpolants"
-(*..and also introduce a convenient dual notion*)
-definition dualInterval::"ERel('a) \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> Set('a)" ("_-dualInterval")
-  where "dualInterval \<equiv> \<^bold>W dualInterpolants"
+subsection \<open>Reflexivity and irreflexivity\<close>
 
-declare interval_def[endorel_defs] dualInterval_def[endorel_defs]
+(*Relations are called reflexive (aka. diagonal) resp. irreflexive (aka. antidiagonal) when they are
+ larger than identity/equality resp. smaller than difference/disequality*)
+definition reflexive::"Set(ERel('a))"
+  where \<open>reflexive   \<equiv> (\<subseteq>\<^sup>r) \<Q>\<close>
+definition irreflexive::"Set(ERel('a))"
+  where \<open>irreflexive \<equiv> (\<supseteq>\<^sup>r) \<D>\<close>
 
-lemma "R-interval a b     = (\<lambda>c. R a c \<and> R c b)" unfolding endorel_defs rel_defs func_defs comb_defs ..
-lemma "R-dualInterval a b = (\<lambda>c. R a c \<or> R c b)" unfolding endorel_defs rel_defs func_defs comb_defs ..
+declare reflexive_def[endorel_defs] irreflexive_def[endorel_defs]
 
+lemma \<open>reflexive R   = \<Q> \<subseteq>\<^sup>r R\<close> unfolding endorel_defs ..
+lemma \<open>irreflexive R = R \<subseteq>\<^sup>r \<D>\<close> unfolding endorel_defs ..
 
-subsection \<open>Powers\<close>
+(*Both properties are 'complementary' in the expected ways*)
+lemma reflexive_compl:     "reflexive R\<^sup>\<midarrow> = irreflexive R" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma irreflexive_compl: "irreflexive R\<^sup>\<midarrow> = reflexive R" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
-(*The set of all powers (via iterated composition) for a given endorelation can be defined in two 
- ways, depending whether we want to include the 'zero-power' (i.e. R\<^sup>0 = \<Q>) or not.*)
-definition relPower::"ERel(ERel('a))"
-  where "relPower \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 indSet\<^sub>1 \<Q> (\<circ>\<^sup>r)"
-definition relPower0::"ERel(ERel('a))"
-  where "relPower0 \<equiv> \<^bold>B (indSet\<^sub>1 (\<Q> \<Q>)) (\<circ>\<^sup>r)"
+(*An alternative pair of definitions*)
+lemma reflexive_def2:     "reflexive = \<forall> \<circ> \<Delta>" unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma irreflexive_def2: "irreflexive = \<nexists> \<circ> \<Delta>" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma "reflexive   R = (\<forall>a. R a a)" unfolding reflexive_def2 comb_defs ..
+lemma "irreflexive R = (\<forall>a. \<not>R a a)" unfolding irreflexive_def2 comb_defs by simp
 
-declare relPower_def[endorel_defs] relPower0_def[endorel_defs]
-
-lemma "relPower R = indSet\<^sub>1 {R} ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
-lemma relPower_def2: "relPower R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S R \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
-
-lemma "relPower0 R = indSet\<^sub>1 {\<Q>} ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
-lemma relPower0_def2: "relPower0 R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S \<Q> \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
-
-(*Definitions work as intended*)
-lemma "relPower R \<Q>" nitpick oops (*counterexample*)
-lemma "relPower R R" unfolding relPower_def2 by simp
-lemma "relPower R (R \<circ>\<^sup>r R)" unfolding relPower_def2 by simp
-lemma "relPower R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower_def2 by (simp add: relComp_assoc)
-lemma "relPower0 R \<Q>" unfolding relPower0_def2 by simp
-lemma "relPower0 R R" unfolding relPower0_def2 by (metis relComp_id2)
-lemma "relPower0 R (R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis relComp_id2)
-lemma "relPower0 R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis (no_types, lifting) relComp_assoc relComp_id2)
-
-lemma relPower_ind:  "relPower  R T \<Longrightarrow> relPower  R (R \<circ>\<^sup>r T)" by (metis relPower_def2)
-lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R \<circ>\<^sup>r T)" using relPower0_def2 by blast
-
-
-subsection \<open>Reflexive, irreflexive & co.\<close>
-
-(*We can obtain a (anti)diagonal or (ir)reflexive relation via the following operators*)
+(*We can naturally obtain a reflexive resp. irreflexive relations via the following operators*)
 definition reflexiveClosure::"ERel('a) \<Rightarrow> ERel('a)"
   where "reflexiveClosure    \<equiv> (\<union>\<^sup>r) \<Q>"
 definition irreflexiveInterior::"ERel('a) \<Rightarrow> ERel('a)"
@@ -66,90 +42,118 @@ declare reflexiveClosure_def[endorel_defs] irreflexiveInterior_def[endorel_defs]
 lemma "reflexiveClosure    R = (R \<union>\<^sup>r \<Q>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 lemma "irreflexiveInterior R = (R \<inter>\<^sup>r \<D>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
-(*The notions of reflexive closure and irreflexive interior are duals wrt. relation-complement*)
+(*The operators reflexive closure and irreflexive interior are duals wrt. relation-complement*)
 lemma "irreflexiveInterior (R\<^sup>\<midarrow>) = (reflexiveClosure R)\<^sup>\<midarrow>" unfolding endorel_defs rel_defs func_defs comb_defs by simp
 lemma "reflexiveClosure (R\<^sup>\<midarrow>) = (irreflexiveInterior R)\<^sup>\<midarrow>" unfolding endorel_defs rel_defs func_defs comb_defs by simp
 
-(*We will check later that these unary relation-operations are indeed closure resp. interior operators.
- In the meanwhile, let us officially introduce ir/reflexivity relations as their fixed-points.*)
-definition reflexive::"Set(ERel('a))"
-  where \<open>reflexive   \<equiv> FP reflexiveClosure\<close>
-definition irreflexive::"Set(ERel('a))"
-  where \<open>irreflexive \<equiv> FP irreflexiveInterior\<close>
-
-declare reflexive_def[endorel_defs] irreflexive_def[endorel_defs]
-
-(*Alternative pair of definitions*)
-lemma reflexive_def2:     \<open>reflexive = (\<subseteq>\<^sup>r) \<Q>\<close> unfolding endorel_defs subrel_defFP unfolding comb_defs ..
-lemma irreflexive_def2: \<open>irreflexive = (\<supseteq>\<^sup>r) \<D>\<close> unfolding endorel_defs by (metis B1_comb_def superrel_defFP)
-lemma \<open>reflexive R = \<Q> \<subseteq>\<^sup>r R\<close> unfolding reflexive_def2 ..
-lemma \<open>irreflexive R = R \<subseteq>\<^sup>r \<D>\<close> unfolding irreflexive_def2 rel_defs func_defs comb_defs ..
-
 (*All reflexive resp. irreflexive relations arise via their corresponding closure resp. interior operator*)
-lemma reflexive_def3: "reflexive = range reflexiveClosure" 
-  unfolding reflexive_def2 endorel_defs rel_defs func_defs comb_defs by blast
-lemma irreflexive_def3: "irreflexive = range irreflexiveInterior"
-  unfolding irreflexive_def2 endorel_defs rel_defs func_defs comb_defs by blast
+lemma reflexive_def3: "reflexive = range reflexiveClosure" unfolding endorel_defs rel_defs func_defs comb_defs by blast
+lemma irreflexive_def3: "irreflexive = range irreflexiveInterior" unfolding endorel_defs rel_defs func_defs comb_defs by blast
 
-(*Yet another alternative pair of definitions*)
-lemma reflexive_def4:     "reflexive = \<forall> \<circ> \<Delta>" unfolding reflexive_def2 rel_defs func_defs comb_defs by simp
-lemma irreflexive_def4: "irreflexive = \<nexists> \<circ> \<Delta>" unfolding irreflexive_def2 rel_defs func_defs comb_defs by auto
-lemma "reflexive   R = (\<forall>a. R a a)" unfolding reflexive_def4 comb_defs ..
-lemma "irreflexive R = (\<forall>a. \<not>R a a)" unfolding irreflexive_def4 func_defs comb_defs by simp
+(*We now check that these unary relation-operators are indeed closure resp. interior operators*)
+lemma \<open>(\<subseteq>\<^sup>r)-CLOSURE reflexiveClosure\<close> unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma \<open>(\<subseteq>\<^sup>r)-INTERIOR irreflexiveInterior\<close> unfolding endorel_defs rel_defs func_defs comb_defs by simp
+
+(*Thus, reflexive resp. irreflexive relations are the fixed points of the corresponding operators*)
+lemma reflexive_def4:     \<open>reflexive = FP reflexiveClosure\<close> unfolding subrel_defFP endorel_defs comb_defs ..
+lemma irreflexive_def4: \<open>irreflexive = FP irreflexiveInterior\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
 (*The smallest reflexive super-relation resp. largest irreflexive subrelation *)
 lemma "reflexiveClosure R = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> reflexive T)" oops  (*TODO: reconstruct proof*)
 lemma "irreflexiveInterior R = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> irreflexive T)" oops (*TODO: reconstruct proof*)
 
 
-(*We can obtain a (anti)diagonal or (ir)reflexive relation via the following operators*)
-definition coirreflexiveClosure::"ERel('a) \<Rightarrow> ERel('a)"
-  where "coirreflexiveClosure \<equiv> (\<union>\<^sup>r) \<D>"
-definition coreflexiveInterior::"ERel('a) \<Rightarrow> ERel('a)"
-  where "coreflexiveInterior  \<equiv> (\<inter>\<^sup>r) \<Q>"
+subsection \<open>Strong-identity, weak-difference, and tests\<close>
 
-declare coirreflexiveClosure_def[endorel_defs] coreflexiveInterior_def[endorel_defs]
+(*We call relations strong-identities (aka. coreflexive, 'tests') resp. weak-differences when they are 
+ smaller than identity/equality resp. larger than difference/disequality *)
+definition strongIdentity::"Set(ERel('a))" 
+  where "strongIdentity \<equiv> (\<supseteq>\<^sup>r) \<Q>"
+definition weakDifference::"Set(ERel('a))"
+  where "weakDifference \<equiv> (\<subseteq>\<^sup>r) \<D>"
 
-(*The notions of coirreflexive closure and coreflexive interior are duals wrt. relation-complement*)
-lemma "coirreflexiveClosure (R\<^sup>\<midarrow>) = (coreflexiveInterior R)\<^sup>\<midarrow>" unfolding endorel_defs rel_defs func_defs comb_defs by simp
-lemma "coreflexiveInterior (R\<^sup>\<midarrow>) = (coirreflexiveClosure R)\<^sup>\<midarrow>" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+declare strongIdentity_def[endorel_defs] weakDifference_def[endorel_defs]
+
+lemma \<open>strongIdentity   R = R \<subseteq>\<^sup>r \<Q>\<close> unfolding endorel_defs ..
+lemma \<open>weakDifference R = \<D> \<subseteq>\<^sup>r R\<close> unfolding endorel_defs ..
+
+(*Elements in strong-identities are only related to themselves (may be related to none)*)
+lemma strongIdentity_def2: "strongIdentity R = (\<forall>a. R a \<subseteq> {a})" unfolding endorel_defs rel_defs func_defs comb_defs ..
+(*Elements in weak-differences are related to (at least) everyone else (may be also related to themselves)*)
+lemma weakDifference_def2: "weakDifference R = (\<forall>a. \<lbrace>a\<rbrace> \<subseteq> R a)" unfolding endorel_defs rel_defs func_defs comb_defs ..
+
+(*They are 'weaker' than identity resp. difference since they may feature anti-diagonal resp. diagonal elements*)
+lemma "strongIdentity R \<and> \<not>R a a" nitpick[satisfy] oops (*satisfying model*)
+lemma "weakDifference R \<and> R a a" nitpick[satisfy] oops (*satisfying model*)
 
 
-(*Another pair of related properties that appears in the literature*)
-definition coreflexive::"Set(ERel('a))" 
-  where "coreflexive   \<equiv> FP coreflexiveInterior"
-definition coirreflexive::"Set(ERel('a))"
-  where "coirreflexive \<equiv> FP coirreflexiveClosure"
+(*We can naturally obtain strong-identities resp. weak-differences via the following operators*)
+definition strongIdentityInterior::"ERel('a) \<Rightarrow> ERel('a)" ("(_)\<^sup>!")
+  where "strongIdentityInterior \<equiv> (\<inter>\<^sup>r) \<Q>"
+definition weakDifferenceClosure::"ERel('a) \<Rightarrow> ERel('a)" ("(_)\<^sup>?")
+  where "weakDifferenceClosure  \<equiv> (\<union>\<^sup>r) \<D>"
 
-declare coreflexive_def[endorel_defs] coirreflexive_def[endorel_defs]
+declare weakDifferenceClosure_def[endorel_defs] strongIdentityInterior_def[endorel_defs]
 
-(*Alternative pair of definitions*)
-lemma coreflexive_def2:   "coreflexive   = (\<supseteq>\<^sup>r) \<Q>" unfolding endorel_defs by (metis B1_comb_def superrel_defFP)
-lemma coirreflexive_def2: "coirreflexive = (\<subseteq>\<^sup>r) \<D>" unfolding endorel_defs subrel_defFP comb_defs ..
-lemma \<open>coreflexive R   = R \<subseteq>\<^sup>r \<Q>\<close> unfolding coreflexive_def2 rel_defs func_defs comb_defs ..
-lemma \<open>coirreflexive R = \<D> \<subseteq>\<^sup>r R\<close> unfolding coirreflexive_def2 ..
+lemma "strongIdentityInterior R = (R \<inter>\<^sup>r \<Q>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma "weakDifferenceClosure  R = (R \<union>\<^sup>r \<D>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
-(*All coreflexive resp. coirreflexive relations arise via their corresponding interior resp. closure operator*)
-lemma coreflexive_def3:    "coreflexive  = range coreflexiveInterior" 
-  unfolding coreflexive_def2 endorel_defs rel_defs func_defs comb_defs by blast
-lemma coirreflexive_def3: "coirreflexive = range coirreflexiveClosure" 
-  unfolding coirreflexive_def2 endorel_defs rel_defs func_defs comb_defs by blast
+(*The notions of strong-identity-interior and weak-difference-closure are duals wrt. relation-complement*)
+lemma "R\<^sup>\<midarrow>\<^sup>? = R\<^sup>!\<^sup>\<midarrow>" unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma "R\<^sup>\<midarrow>\<^sup>! = R\<^sup>?\<^sup>\<midarrow>" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
-(*The largest coreflexive sub-relation resp. smallest coirreflexive super-relation *)
-lemma "coreflexiveInterior  R = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> coreflexive T)" oops (*TODO: reconstruct proof*)
-lemma "coirreflexiveClosure R = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> coirreflexive T)" oops  (*TODO: reconstruct proof*)
+(*All strong-identity resp. weak-difference relations arise via their corresponding interior resp. closure operator*)
+lemma strongIdentity_def3: "strongIdentity = range strongIdentityInterior" unfolding endorel_defs rel_defs func_defs comb_defs by blast
+lemma weakDifference_def3: "weakDifference = range weakDifferenceClosure" unfolding endorel_defs rel_defs func_defs comb_defs by blast
+
+(*We now check that these unary relation-operators are indeed closure resp. interior operators*)
+lemma \<open>(\<subseteq>\<^sup>r)-INTERIOR strongIdentityInterior\<close> unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma \<open>(\<subseteq>\<^sup>r)-CLOSURE weakDifferenceClosure\<close> unfolding endorel_defs rel_defs func_defs comb_defs by simp
+
+(*Thus, strong-identity resp. weak-difference relations are the fixed points of the corresponding operators*)
+lemma strongIdentity_def4:     \<open>strongIdentity = FP strongIdentityInterior\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
+lemma weakDifference_def4: \<open>weakDifference = FP weakDifferenceClosure\<close> unfolding subrel_defFP endorel_defs comb_defs ..
+
+(*The largest strong-identity sub-relation resp. smallest weak-difference super-relation *)
+lemma "R\<^sup>! = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> strongIdentity T)" oops (*TODO: reconstruct proof*)
+lemma "R\<^sup>? = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> weakDifference T)" oops  (*TODO: reconstruct proof*)
+
 
 (*A convenient way of disguising sets as endorelations (cf. dynamic logics and program algebras).*)
-definition test::"Set('a) \<Rightarrow> ERel('a)" ("_?")
-  where "test \<equiv> coreflexiveInterior \<circ> (\<^bold>W (\<times>))"
+definition test::"Set('a) \<Rightarrow> ERel('a)" (*the customary question mark (?) notation omitted to avoid confusions*)
+  where "test \<equiv> strongIdentityInterior \<circ> \<^bold>K"
+definition dualtest::"Set('a) \<Rightarrow> ERel('a)"
+  where "dualtest \<equiv> weakDifferenceClosure \<circ> \<^bold>K"
 
-declare test_def[endorel_defs]
+declare test_def[endorel_defs] dualtest_def[endorel_defs]
 
-lemma "A? = \<Q> \<inter>\<^sup>r (A \<times> A)" unfolding endorel_defs comb_defs ..  (* equality (\<Q>) restricted to A*)
-lemma test_def2: "A? = (\<lambda>x y. A x \<and> x = y)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma test_def2: "test = strongIdentityInterior \<circ> (\<^bold>W (\<times>))" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma "test A = (A \<times> A)\<^sup>!" unfolding test_def2 comb_defs ..
+lemma "test A = \<Q> \<inter>\<^sup>r (A \<times> A)" unfolding test_def2 endorel_defs comb_defs ..  (* equality (\<Q>) restricted to A*)
 
-(*In fact, all coreflexive relations arise via the test operator (when applied to some set)*)
-lemma "coreflexive = range test" unfolding coreflexive_def3 endorel_defs rel_defs func_defs comb_defs by fastforce
+lemma dualtest_def2: "dualtest = weakDifferenceClosure \<circ> (\<^bold>W (\<times>))" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma "dualtest A = (A \<times> A)\<^sup>?" unfolding dualtest_def2 comb_defs ..
+lemma "dualtest A = \<D> \<union>\<^sup>r (A \<times> A)" unfolding dualtest_def2 endorel_defs comb_defs ..
+
+lemma test_def3: "test = strongIdentityInterior \<circ> leftCylinder" unfolding leftCylinder_def test_def ..
+lemma dualtest_def3: "dualtest = weakDifferenceClosure \<circ> leftCylinder" unfolding leftCylinder_def dualtest_def ..
+
+lemma test_def4: "test = strongIdentityInterior \<circ> rightCylinder" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma dualtest_def4: "dualtest = weakDifferenceClosure \<circ> rightCylinder" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+
+(*Both are duals wrt relation/set complement, as expected*)
+lemma test_dual1: "(test A)\<^sup>\<midarrow> = dualtest (\<midarrow>A)" unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma test_dual2: "(dualtest A)\<^sup>\<midarrow> = test (\<midarrow>A)" unfolding endorel_defs rel_defs func_defs comb_defs by simp
+
+(*Both test resp. dual-test act as (full) inverses of diagonal (assuming strong-identity resp. weak-difference)*)
+lemma "\<Delta> (test A) = A" unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma "\<Delta> (dualtest A) = A" unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma "strongIdentity A \<Longrightarrow> test (\<Delta> A) = A" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma "weakDifference A \<Longrightarrow> dualtest (\<Delta> A) = A" unfolding endorel_defs rel_defs func_defs comb_defs by force
+
+(*In fact, all strong-identities resp. weak-differences arise via the test resp- dual-test operators (applied to some set)*)
+lemma strongIdentity_def5: "strongIdentity = range test" unfolding strongIdentity_def3 endorel_defs rel_defs func_defs comb_defs by fastforce
+lemma weakDifference_def5: "weakDifference = range dualtest" unfolding weakDifference_def3 endorel_defs rel_defs func_defs comb_defs by fastforce
 
 
 subsection \<open>Seriality and quasireflexivity\<close>
@@ -188,6 +192,22 @@ lemma "quasireflexive (quasireflexiveClosure R)"
   unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
 
+subsection \<open>Intervals\<close>
+
+(*We now conveniently encode a notion of 'interval' (wrt given relation R) as the set of elements 
+  that lie between or 'interpolate' a given pair of points (seen as 'boundaries').*)
+definition interval::"ERel('a) \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> Set('a)" ("_-interval")
+  where "interval \<equiv> \<^bold>W interpolants"
+(*..and also introduce a convenient dual notion*)
+definition dualInterval::"ERel('a) \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> Set('a)" ("_-dualInterval")
+  where "dualInterval \<equiv> \<^bold>W dualInterpolants"
+
+declare interval_def[endorel_defs] dualInterval_def[endorel_defs]
+
+lemma "R-interval a b     = (\<lambda>c. R a c \<and> R c b)" unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma "R-dualInterval a b = (\<lambda>c. R a c \<or> R c b)" unfolding endorel_defs rel_defs func_defs comb_defs ..
+
+
 subsection \<open>Symmetry, connectedness & co.\<close>
 
 (*We introduce two ways of 'symmetrizing' a given relation R: The symmetric interior and closure operations.
@@ -218,8 +238,8 @@ lemma "symmetricClosure (R\<^sup>\<midarrow>) = (symmetricInterior R)\<^sup>\<mi
 
 (*The properties of (ir)reflexivity and co(ir)reflexivity are preserved by symmetric interior and closure*)
 lemma reflexive_si: \<open>reflexive R = reflexive (symmetricInterior R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
-lemma coirreflexive_si: \<open>coirreflexive R = coirreflexive (symmetricInterior R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
-lemma coreflexive_sc: \<open>coreflexive R = coreflexive (symmetricClosure R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
+lemma weakDifference_si: \<open>weakDifference R = weakDifference (symmetricInterior R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
+lemma strongIdentity_sc: \<open>strongIdentity R = strongIdentity (symmetricClosure R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
 lemma irreflexive_sc: \<open>irreflexive R = irreflexive (symmetricClosure R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
 (*A relation is symmetric when it is a fixed-point of the symmetric interior or closure *)
@@ -252,16 +272,16 @@ lemma symmetric_defT3: "symmetric = range symmetricClosure"
 (*The following operation takes a relation R and returns its 'strict' part, which is always an 
   asymmetric sub-relation (though not a maximal one in general).*)
 definition asymmetricContraction::"ERel('a) \<Rightarrow> ERel('a)" ("(_)\<^sup>#")
-  where "asymmetricContraction \<equiv> \<^bold>S (\<inter>\<^sup>r) \<frown>"
+  where "asymmetricContraction \<equiv> \<^bold>S (\<inter>\<^sup>r) \<sim>"
 (*Analogously, this extends a relation R towards a connected super-relation (not minimal in general)*)
 definition connectedExpansion::"ERel('a) \<Rightarrow> ERel('a)" ("(_)\<^sup>\<flat>")
-  where "connectedExpansion \<equiv> \<^bold>S (\<union>\<^sup>r) \<frown>"
+  where "connectedExpansion \<equiv> \<^bold>S (\<union>\<^sup>r) \<sim>"
 
 declare asymmetricContraction_def[endorel_defs] connectedExpansion_def[endorel_defs]
 
-lemma "R\<^sup># = R \<inter>\<^sup>r (R\<^sup>\<frown>)" unfolding endorel_defs rel_defs comb_defs ..
+lemma "R\<^sup># = R \<inter>\<^sup>r (R\<^sup>\<sim>)" unfolding endorel_defs rel_defs comb_defs ..
 lemma "R\<^sup># = (\<lambda>a b. R a b \<and> \<not>R b a)" unfolding endorel_defs rel_defs func_defs comb_defs ..
-lemma "R\<^sup>\<flat> = R \<union>\<^sup>r (R\<^sup>\<frown>)" unfolding endorel_defs rel_defs comb_defs ..
+lemma "R\<^sup>\<flat> = R \<union>\<^sup>r (R\<^sup>\<sim>)" unfolding endorel_defs rel_defs comb_defs ..
 lemma "R\<^sup>\<flat> = (\<lambda>a b. R a b \<or> \<not>R b a)" unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 
@@ -272,12 +292,12 @@ definition connected::"Set(ERel('a))"
 
 declare asymmetric_def[endorel_defs] connected_def[endorel_defs]
 
-lemma asymmetric_def2:   \<open>asymmetric = \<^bold>S (\<subseteq>\<^sup>r) \<frown>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
-lemma asymmetric_reldef: \<open>asymmetric R = R  \<subseteq>\<^sup>r R\<^sup>\<frown>\<close> unfolding asymmetric_def2 comb_defs ..
+lemma asymmetric_def2:   \<open>asymmetric = \<^bold>S (\<subseteq>\<^sup>r) \<sim>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
+lemma asymmetric_reldef: \<open>asymmetric R = R  \<subseteq>\<^sup>r R\<^sup>\<sim>\<close> unfolding asymmetric_def2 comb_defs ..
 lemma "asymmetric R = (\<forall>a b. R a b \<rightarrow> \<not>R b a)" unfolding asymmetric_def2 rel_defs func_defs comb_defs ..
 
-lemma connected_def2:   \<open>connected =  \<^bold>S (\<supseteq>\<^sup>r) \<frown>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
-lemma connected_reldef:   \<open>connected R = R\<^sup>\<frown> \<subseteq>\<^sup>r R\<close> unfolding connected_def2 comb_defs rel_defs func_defs ..
+lemma connected_def2:   \<open>connected =  \<^bold>S (\<supseteq>\<^sup>r) \<sim>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
+lemma connected_reldef:   \<open>connected R = R\<^sup>\<sim> \<subseteq>\<^sup>r R\<close> unfolding connected_def2 comb_defs rel_defs func_defs ..
 lemma \<open>connected R = (\<forall>a b. \<not>R b a \<rightarrow> R a b)\<close> unfolding connected_def2 rel_defs func_defs comb_defs ..
 
 lemma "connected R\<^sup>\<midarrow> = asymmetric R" unfolding connected_def2 asymmetric_def2 rel_defs func_defs comb_defs by auto
@@ -309,18 +329,18 @@ lemma "R\<^sup>#\<^sup>\<midarrow> = R\<^sup>\<midarrow>\<^sup>\<flat>" unfoldin
 subsection \<open>Antisymmetry, semiconnectedness, etc.\<close>
 
 definition antisymmetric::"Set(ERel('a))"
-  where "antisymmetric \<equiv> coreflexive \<circ> symmetricInterior"
+  where "antisymmetric \<equiv> strongIdentity \<circ> symmetricInterior"
 definition semiconnected::"Set(ERel('a))"
-  where "semiconnected \<equiv> coirreflexive \<circ> symmetricClosure"
+  where "semiconnected \<equiv> weakDifference \<circ> symmetricClosure"
 
 declare antisymmetric_def[endorel_defs] semiconnected_def[endorel_defs]
 
-lemma \<open>antisymmetric R = coreflexive (symmetricInterior R)\<close> unfolding endorel_defs rel_defs comb_defs by auto
+lemma \<open>antisymmetric R = strongIdentity (symmetricInterior R)\<close> unfolding endorel_defs rel_defs comb_defs by auto
 lemma \<open>antisymmetric R = symmetricInterior R \<subseteq>\<^sup>r \<Q>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
 lemma antisymmetric_reldef: \<open>antisymmetric R = R \<inter>\<^sup>r (R\<^sup>\<smile>) \<subseteq>\<^sup>r \<Q>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
 lemma \<open>antisymmetric R = (\<forall>a b. R a b \<and> R b a \<longrightarrow> a = b)\<close> unfolding antisymmetric_reldef rel_defs func_defs comb_defs ..
 
-lemma \<open>semiconnected R = coirreflexive (symmetricClosure R)\<close> unfolding endorel_defs rel_defs comb_defs by auto
+lemma \<open>semiconnected R = weakDifference (symmetricClosure R)\<close> unfolding endorel_defs rel_defs comb_defs by auto
 lemma \<open>semiconnected R = \<D> \<subseteq>\<^sup>r symmetricClosure R\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
 lemma semiconnected_reldef: "semiconnected R = \<D> \<subseteq>\<^sup>r R \<union>\<^sup>r (R\<^sup>\<smile>)" unfolding endorel_defs rel_defs func_defs comb_defs by metis
 lemma "semiconnected R = (\<forall>a b. a \<noteq> b \<rightarrow> R a b \<or> R b a)" unfolding semiconnected_reldef rel_defs func_defs comb_defs ..
@@ -347,9 +367,40 @@ lemma "skeletal R = coskeletal R\<^sup>\<midarrow>" unfolding endorel_defs rel_d
 lemma "coskeletal R = skeletal R\<^sup>\<midarrow>" unfolding endorel_defs rel_defs func_defs comb_defs by (rule iffI, (rule ext)+, metis, metis (mono_tags, lifting))
 
 lemma skeletal_def2:  "skeletal R = (antisymmetric R \<and> reflexive R)"
-  using reflexive_si by (smt (verit, del_insts) B1_comb_def W21_comb_def antisymmetric_def coreflexive_def2 reflexive_def2 reflexive_def4 skeletal_def subrel_antisym)
+  using reflexive_si by (smt (verit, del_insts) B1_comb_def W21_comb_def antisymmetric_def reflexive_def reflexive_def2 skeletal_def subrel_antisym strongIdentity_def)
 lemma coskeletal_def2:  "coskeletal R = (semiconnected R \<and> irreflexive R)" 
-  using irreflexive_sc subrel_antisym by (smt (verit, del_insts) B1_comb_def W21_comb_def coirreflexive_def2 coskeletal_def irreflexive_def2 irreflexive_def4 semiconnected_def)
+  using irreflexive_sc by (smt (verit, ccfv_threshold) B1_comb_def S11_comb_def W21_comb_def coskeletal_def irreflexive_def irreflexive_def2 semiconnected_reldef subrel_antisym symmetricClosure_def)
+
+
+subsection \<open>Powers\<close>
+
+(*The set of all powers (via iterated composition) for a given endorelation can be defined in two 
+ ways, depending whether we want to include the 'zero-power' (i.e. R\<^sup>0 = \<Q>) or not.*)
+definition relPower::"ERel(ERel('a))"
+  where "relPower \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 indSet\<^sub>1 \<Q> (\<circ>\<^sup>r)"
+definition relPower0::"ERel(ERel('a))"
+  where "relPower0 \<equiv> \<^bold>B (indSet\<^sub>1 (\<Q> \<Q>)) (\<circ>\<^sup>r)"
+
+declare relPower_def[endorel_defs] relPower0_def[endorel_defs]
+
+lemma "relPower R = indSet\<^sub>1 {R} ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
+lemma relPower_def2: "relPower R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S R \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
+
+lemma "relPower0 R = indSet\<^sub>1 {\<Q>} ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
+lemma relPower0_def2: "relPower0 R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S \<Q> \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
+
+(*Definitions work as intended*)
+lemma "relPower R \<Q>" nitpick oops (*counterexample*)
+lemma "relPower R R" unfolding relPower_def2 by simp
+lemma "relPower R (R \<circ>\<^sup>r R)" unfolding relPower_def2 by simp
+lemma "relPower R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower_def2 by (simp add: relComp_assoc)
+lemma "relPower0 R \<Q>" unfolding relPower0_def2 by simp
+lemma "relPower0 R R" unfolding relPower0_def2 by (metis relComp_id2)
+lemma "relPower0 R (R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis relComp_id2)
+lemma "relPower0 R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis (no_types, lifting) relComp_assoc relComp_id2)
+
+lemma relPower_ind:  "relPower  R T \<Longrightarrow> relPower  R (R \<circ>\<^sup>r T)" by (metis relPower_def2)
+lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R \<circ>\<^sup>r T)" using relPower0_def2 by blast
 
 
 subsection \<open>Transitivity, denseness, quasitransitivity, etc.\<close>
@@ -526,7 +577,7 @@ lemma eq_kernel_simp: "\<Q>\<^sup>= = \<Q>"
 
 (*The intersection of all reflexive relations*)
 lemma eq_refl_simp: "\<Inter>\<^sup>r reflexive = \<Q>\<^sup>=" 
-  unfolding biginterR_def2 reflexive_def4 func_defs comb_defs by (metis (mono_tags, opaque_lifting))
+  unfolding biginterR_def2 reflexive_def2 func_defs comb_defs by (metis (mono_tags, opaque_lifting))
 
 (*Leibniz principle of identity of indiscernibles*)
 lemma eq_leibniz_simp1: "(\<lambda>a b. \<forall>P. P a \<leftrightarrow> P b) = \<Q>\<^sup>=" (*symmetric version*)
@@ -558,13 +609,13 @@ definition "partial_order R \<equiv> preorder R \<and> antisymmetric R"
 declare preorder_def [endorel_defs] partial_order_def [endorel_defs]
 
 lemma preorder_def2: "preorder R = (\<forall>a b. R a b = (\<forall>x. R b x \<rightarrow> R a x))"
-  unfolding preorder_def reflexive_def4 transitive_def2 comb_defs by auto
+  unfolding preorder_def reflexive_def2 transitive_def2 comb_defs by auto
 
 lemma partial_order_def2: "partial_order R = (skeletal R \<and> transitive R)"
   using partial_order_def preorder_def skeletal_def2 by blast
 
 
-lemma reflexive_symm: "reflexive R\<^sup>\<smile> = reflexive R" unfolding reflexive_def4 rel_defs comb_defs ..
+lemma reflexive_symm: "reflexive R\<^sup>\<smile> = reflexive R" unfolding reflexive_def2 rel_defs comb_defs ..
 lemma transitive_symm: "transitive R\<^sup>\<smile> = transitive R" unfolding transitive_def2 rel_defs comb_defs by auto
 lemma antisymmetric_symm: "antisymmetric R\<^sup>\<smile> = antisymmetric R" unfolding endorel_defs rel_defs func_defs comb_defs by meson
 lemma skeletal_symm: "skeletal R\<^sup>\<smile> = skeletal R" unfolding skeletal_def2 by (simp add: antisymmetric_symm reflexive_symm)
@@ -586,11 +637,11 @@ lemma funPower_preorder: "preorder funPower"
 (*Relational-power is a preorder*)
 lemma relPower_preorder: "preorder relPower"
   unfolding partial_order_def preorder_def apply auto 
-   apply (simp add: B1_comb_def W21_comb_def reflexive_def4 relPower_def2)
+   apply (simp add: B1_comb_def W21_comb_def reflexive_def2 relPower_def2)
    unfolding transitive_def2 relPower_def2 by (metis (no_types, opaque_lifting) B2_comb_def relComp_assoc)
 lemma relPower0_preorder: "preorder relPower0"
   unfolding partial_order_def preorder_def apply auto 
-  apply (smt (verit, best) B1_comb_def W21_comb_def reflexive_def4 relComp_id2 relPower0_def2)
+  apply (smt (verit, best) B1_comb_def W21_comb_def reflexive_def2 relComp_id2 relPower0_def2)
   unfolding transitive_def2 relPower0_def2 by (metis (no_types, opaque_lifting) B2_comb_def relComp_assoc relComp_id1)
 (*However, relational-power is not antisymmetric (and thus not partially ordered), because we have*)
 lemma "R = T \<circ>\<^sup>r T \<Longrightarrow> T = R \<circ>\<^sup>r R \<Longrightarrow> R = T" nitpick[card 'a=3] oops (*counterexample*)
@@ -696,9 +747,9 @@ subsection \<open>Existence and uniqueness under antisymmetry\<close>
 (*The following properties hold under the assumption that the given relation R is antisymmetric.*)
 
 (*There can be at most one least/greatest element in a set*)
-lemma antisymm_least_unique: "antisymmetric R \<Longrightarrow> !(R-least S)" 
+lemma antisymm_least_unique: "antisymmetric R \<Longrightarrow> unique(R-least S)" 
   unfolding endorel_defs rel_defs func_defs comb_defs by metis
-lemma antisymm_greatest_unique: "antisymmetric R \<Longrightarrow> !(R-greatest S)"
+lemma antisymm_greatest_unique: "antisymmetric R \<Longrightarrow> unique(R-greatest S)"
   unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
 (*If (the) least/greatest elements exist then they are identical to (the) min/max elements*)

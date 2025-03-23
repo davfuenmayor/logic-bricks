@@ -24,8 +24,8 @@ term "\<nexists> :: Space('a)" (* \<nexists> is the space that contains only the
 lemma nonEx_simp: "{\<emptyset>} = \<nexists>" unfolding Ex_def func_defs comb_defs by auto 
 
 (*In general, any property of sets corresponds to a space. For instance:*)
-term "! :: Space('a)" (* ! is the space that contains all and only univalent sets (having at most one element)*)
-term "\<exists>! :: Space('a)" (* ! is the space that contains all and only singleton sets*)
+term "unique :: Space('a)" (* unique is the space that contains all and only univalent sets (having at most one element)*)
+term "\<exists>! :: Space('a)" (* \<exists>! is the space that contains all and only singleton sets*)
 
 (*Further convenient instances of spaces*)
 definition doubleton::"Space('a)" ("\<exists>!\<^sub>2") (*\<exists>!! contains the doubletons (sets with two (different) elements)*)
@@ -35,8 +35,8 @@ definition upair::"Space('a)" ("\<exists>\<^sub>\<le>\<^sub>2") (*\<exists>\<^su
 
 declare unique_def[spaces_def] singleton_def[spaces_def] doubleton_def[spaces_def] upair_def[spaces_def] 
 
-lemma unique_def2: "! = \<nexists> \<union> \<exists>!" unfolding func_defs comb_defs by auto
-lemma singleton_def2: "\<exists>! = \<exists> \<inter> !" unfolding func_defs comb_defs by metis
+lemma unique_def2: "unique = \<nexists> \<union> \<exists>!" unfolding func_defs comb_defs by auto
+lemma singleton_def2: "\<exists>! = \<exists> \<inter> unique" unfolding func_defs comb_defs by metis
 lemma doubleton_def2: "\<exists>!\<^sub>2 = \<exists>\<^sub>\<le>\<^sub>2 \<setminus> \<exists>!" unfolding spaces_def func_defs comb_defs by blast
 lemma upair_def2: "\<exists>\<^sub>\<le>\<^sub>2 = \<exists>! \<union> \<exists>!\<^sub>2" unfolding spaces_def func_defs comb_defs by blast
 
@@ -46,7 +46,7 @@ lemma upair_def3: "\<exists>\<^sub>\<le>\<^sub>2A = (\<exists>a b. A = {a,b})" u
 
 (*Convenient abbreviation for sets that have 2 or more elements*)
 abbreviation nonUnique::"Space('a)" ("\<exists>\<^sub>\<ge>\<^sub>2")
-  where "\<exists>\<^sub>\<ge>\<^sub>2A \<equiv> \<not>!A"
+  where "\<exists>\<^sub>\<ge>\<^sub>2A \<equiv> \<not>(unique A)"
 
 (*Sets, in general, are the bigunions of their contained singletons*)
 lemma singleton_gen: "S = \<Union>(\<wp>S \<inter> \<exists>!)" unfolding singleton_def3 func_defs comb_defs by metis

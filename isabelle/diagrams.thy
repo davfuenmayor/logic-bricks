@@ -190,12 +190,12 @@ lemma "\<exists>(relSplitting  S) \<Longrightarrow>  leftTotal S" unfolding rel_
 (*If a relation is both right-total and right-unique (surjective partial function) then it always 
  has a section, and moreover, when it has a retraction then that retraction is unique*)
 lemma exist_section:     "rightTotal R \<Longrightarrow> rightUnique R \<Longrightarrow> \<exists>(relSplitting\<^sup>\<smile> R)" unfolding rel_defs comb_defs func_defs by metis
-lemma unique_retraction: "rightTotal S \<Longrightarrow> rightUnique S \<Longrightarrow> !(relSplitting S)" unfolding rel_defs comb_defs func_defs apply auto apply (rule ext)+ by metis
+lemma unique_retraction: "rightTotal S \<Longrightarrow> rightUnique S \<Longrightarrow> unique(relSplitting S)" unfolding rel_defs comb_defs func_defs apply auto apply (rule ext)+ by metis
 
 (*If a relation is both left-total and left-unique (injective nondeterministic function) then it has
  a retraction, and moreover, when it has a section it is unique*)
 lemma exist_retraction: "leftTotal S \<Longrightarrow> leftUnique S \<Longrightarrow> \<exists>(relSplitting S)" unfolding rel_defs comb_defs func_defs by metis
-lemma unique_section:   "leftTotal R \<Longrightarrow> leftUnique R \<Longrightarrow> !(relSplitting\<^sup>\<smile> R)" unfolding rel_defs comb_defs func_defs apply auto apply (rule ext)+ by metis
+lemma unique_section:   "leftTotal R \<Longrightarrow> leftUnique R \<Longrightarrow> unique(relSplitting\<^sup>\<smile> R)" unfolding rel_defs comb_defs func_defs apply auto apply (rule ext)+ by metis
 
 lemma splitting_trans: "relSplitting R T \<Longrightarrow> relSplitting (T\<^sup>\<smile>) (R\<^sup>\<smile>)" unfolding rel_defs comb_defs func_defs by metis
 
@@ -302,9 +302,9 @@ lemma "relSplitting n\<^sub>1 m \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup
   unfolding rel_defs func_defs comb_defs by metis
 lemma "relSplitting m n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r (n\<^sub>1 ;\<^sup>r T ;\<^sup>r m) T" 
   unfolding rel_defs func_defs comb_defs by metis
-lemma "\<exists>m. relSplitting m n\<^sub>1 \<Longrightarrow> !(n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R)" 
+lemma "\<exists>m. relSplitting m n\<^sub>1 \<Longrightarrow> unique(n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R)" 
   unfolding relDual_def by (smt (verit, del_insts) B12_comb_def B22_comb_def I_comb_def relComp_assoc relComp_id2 relSplitting_def relSquare_def relTriangle_def unique_def)
-lemma "\<exists>m. relSplitting n\<^sub>2 m \<Longrightarrow> !((n\<^sub>1,n\<^sub>2-DUAL\<^sup>r)\<^sup>\<smile> T)"
+lemma "\<exists>m. relSplitting n\<^sub>2 m \<Longrightarrow> unique((n\<^sub>1,n\<^sub>2-DUAL\<^sup>r)\<^sup>\<smile> T)"
   unfolding rel_defs func_defs comb_defs apply auto apply (rule ext)+ by (smt (verit, best))
 
 (*Moreover, if both n\<^sub>1 & n\<^sub>2 are involutive, then the dual relation is symmetric.*)
