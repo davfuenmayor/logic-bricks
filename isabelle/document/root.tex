@@ -1,0 +1,32 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{isabelle,isabellesym}
+
+\usepackage[a4paper, left=2.5cm, right=2cm, top=2.5cm, bottom=2cm]{geometry}
+
+\usepackage{amsmath,amssymb,amsfonts} % Math symbols
+\usepackage{stmaryrd} % More Math symbols
+
+% this should be the last package used
+\usepackage{pdfsetup}
+
+% urls in roman style, theory text in math-similar italics
+\urlstyle{rm}
+\isabellestyle{it}
+
+
+\begin{document}
+
+\title{Example}
+\maketitle
+
+Additional latex stuff. Dummy citation \cite{LNCS2283}.
+
+% include generated text of all theories
+\input{session}
+
+% Uncomment the tow lines below if you are using citations (e.g. BibTex)
+\bibliographystyle{abbrv}
+\bibliography{root}
+
+\end{document}

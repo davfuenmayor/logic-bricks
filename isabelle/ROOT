@@ -1,0 +1,23 @@
+(* There must be one session with the (short) name of the entry.
+   This session generates the web document and HTML files.
+
+   It is strongly encouraged to have precisely one session, but it
+   if needed, further sessions are permitted.
+   Every theory must be included in at least one of the sessions.
+*)
+session "Combinatory-Logic-Bricks" = "Main" +
+  options [document = pdf, document_output = output, show_question_marks = false]
+  theories [document = false]
+    combinators
+    base
+    connectives_equality
+    connectives_disequality
+    connectives
+    endopairs
+  theories
+    funcs
+    
+    
+  document_files
+    "root.tex"
+    "root.bib"

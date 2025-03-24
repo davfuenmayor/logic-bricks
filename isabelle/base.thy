@@ -3,7 +3,7 @@ theory base (* base theory for logic-based developments in Isabelle/HOL*)
 begin
 
 section \<open>Customized configuration and notation for Isabelle/HOL\<close>
-
+(*<*)
 subsection \<open>Tool configuration\<close>
 
 declare[[smt_timeout=30]]
@@ -11,184 +11,197 @@ declare[[smt_timeout=30]]
 declare[[syntax_ambiguity_warning=false]]
 sledgehammer_params[max_facts=100,isar_proof=false]
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, max_potential=0,max_genuine=1, format=3] (*default Nitpick settings*)
+(*>*)
 
 subsection \<open>Custom type notation\<close>
 
-(*Classical HOL systems come with a built-in boolean type, for which we introduce convenient notation alias*)
+subsubsection \<open>Basic types\<close>
+
+text \<open>Classical HOL systems come with a built-in boolean type, for which we introduce convenient notation alias.\<close>
 type_notation bool ("o")
 
-(*The creation of a functional type (starting with a type 'a) can be seen from two complementary perspectives:
- Environmentalization (aka. indexation or contextualization) and valuation (e.g. classification, coloring, etc.) *)
+text \<open>The creation of a functional type (starting with a type \<open>'a\<close>) can be seen from two complementary perspectives:
+ Environmentalization (aka. indexation or contextualization) and valuation (e.g. classification, coloring, etc.).\<close>
 type_synonym ('e,'a)Env = "'e \<Rightarrow> 'a" ("_-Env'(_')" [1000])
 type_synonym ('v,'a)Val = "'a \<Rightarrow> 'v" ("_-Val'(_')" [1000])
 
-(*Starting with the boolean type, we immediately obtain endopairs resp. sets via indexation resp. valuation*)
-type_synonym ('a)EPair = "o-Env('a)" ("EPair'(_')")  (*an endopair is encoded as a boolean-index *)
-type_synonym ('a)Set = "o-Val('a)" ("Set'(_')")  (*a set is encoded as a boolean-valuation (boolean classifier)*)
 
-term "((S :: Set('a)):: 'a-Env(o)) :: 'a \<Rightarrow> o"
+subsubsection \<open>Pairs and Sets\<close>
+
+text \<open>Starting with the boolean type, we immediately obtain endopairs resp. sets via indexation resp. valuation.\<close>
+type_synonym ('a)EPair = "o-Env('a)" ("EPair'(_')")  \<comment> \<open>an endopair is encoded as a boolean-index\<close>
+type_synonym ('a)Set = "o-Val('a)" ("Set'(_')")  \<comment> \<open>a set is encoded as a boolean-valuation (boolean classifier)\<close>
+
 term "((P :: EPair('a)):: 'a-Val(o)) :: o \<Rightarrow> 'a"
+term "((S :: Set('a)):: 'a-Env(o)) :: 'a \<Rightarrow> o"
 
-(*Sets of endopairs correspond to (directed) graphs (which are isomorphic to relations via currying)*)
+text \<open>Sets of endopairs correspond to (directed) graphs (which are isomorphic to relations via currying).\<close>
 type_synonym ('a)Graph = "Set(EPair('a))" ("Graph'(_')")
 term "(G :: Graph('a)) :: (o \<Rightarrow> 'a) \<Rightarrow> o"
 
-(*Valuations can be made binary (useful e.g. for classifying pairs of objects or encoding their 'distance')*)
+
+subsubsection \<open>Relations\<close>
+
+text \<open>Valuations can be made binary (useful e.g. for classifying pairs of objects or encoding their "distance").\<close>
 type_synonym ('v,'a,'b)Val2 = "'a \<Rightarrow> 'b \<Rightarrow> 'v" ("_-Val\<^sub>2'(_,_')" [1000])
 
-(*Binary valuations can also be seen as indexed (unary) valuations*)
+text \<open>Binary valuations can also be seen as indexed (unary) valuations.\<close>
 term "((F :: 'v-Val\<^sub>2('a,'b)) :: 'a-Env('v-Val('b))) :: 'a \<Rightarrow> 'b \<Rightarrow> 'v"
 
-(*In fact (heterogeneous) relations correspond to o-valued binary functions/valuations*)
+text \<open>In fact (heterogeneous) relations correspond to o-valued binary functions/valuations.\<close>
 type_synonym ('a,'b)Rel = "o-Val\<^sub>2('a,'b)" ("Rel'(_,_')")
-(*They can also be seen as set-valued functions/valuations or as indexed (families of) sets*)
+
+text \<open>They can also be seen as set-valued functions/valuations or as indexed (families of) sets.\<close>
 term "(((R :: Rel('a,'b)) :: Set('b)-Val('a)) :: 'a-Env(Set('b))) :: 'a \<Rightarrow> 'b \<Rightarrow> o"
 
-(*Ternary relations are seen as set-valued binary valuations (partial & non-deterministic binary functions)*)
+text \<open>Ternary relations are seen as set-valued binary valuations (partial and non-deterministic binary functions).\<close>
 type_synonym ('a,'b,'c)Rel3 = "Set('c)-Val\<^sub>2('a,'b)" ("Rel\<^sub>3'(_,_,_')")
-(*They can also be seen as indexed binary relations (e.g. an indexed family of programs or (a group of) agents)*)
+
+text \<open>They can also be seen as indexed binary relations (e.g. an indexed family of programs or (a group of) agents).\<close>
 term "((R::Rel\<^sub>3('a,'b,'c)) :: 'a-Env(Rel('b,'c))) :: 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> o"
 
-(*In general, we can encode n+1-ary relations as indexed n-ary relations*)
+text \<open>In general, we can encode n+1-ary relations as indexed n-ary relations.\<close>
 type_synonym ('a,'b,'c,'d)Rel4 = "'a-Env(Rel\<^sub>3('b,'c,'d))" ("Rel\<^sub>4'(_,_,_,_')")
 
-(*Convenient notation for the particular case where the relata have all the same type*)
-type_synonym ('a)ERel = "Rel('a,'a)" ("ERel'(_')") (* (binary) endorelations*)
-type_synonym ('a)ERel\<^sub>3 = "Rel\<^sub>3('a,'a,'a)" ("ERel\<^sub>3'(_')") (*ternary endorelations*)
-type_synonym ('a)ERel\<^sub>4 = "Rel\<^sub>4('a,'a,'a,'a)" ("ERel\<^sub>4'(_')") (*quaternary endorelations*)
+text \<open>Convenient notation for the particular case where the relata have all the same type.\<close>
+type_synonym ('a)ERel = "Rel('a,'a)" ("ERel'(_')") \<comment> \<open>(binary) endorelations\<close>
+type_synonym ('a)ERel\<^sub>3 = "Rel\<^sub>3('a,'a,'a)" ("ERel\<^sub>3'(_')") \<comment> \<open>ternary endorelations\<close>
+type_synonym ('a)ERel\<^sub>4 = "Rel\<^sub>4('a,'a,'a,'a)" ("ERel\<^sub>4'(_')") \<comment> \<open>quaternary endorelations\<close>
 
 term "(R :: ERel('a)) :: 'a \<Rightarrow> 'a \<Rightarrow> o"
 term "(R :: ERel\<^sub>3('a)) :: 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> o"
 term "(R :: ERel\<^sub>4('a)) :: 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> o"
 
 
-(*As a convenient mathematical abstraction, we introduce the notion of "operation".
+subsubsection \<open>Operations\<close>
+
+text \<open>As a convenient mathematical abstraction, we introduce the notion of "operation".
 In mathematical phraseology, operations are said to "operate" on (one or more) "operands".
-Operations can be seen as (curried) functions whose arguments have all the same type.*)
+Operations can be seen as (curried) functions whose arguments have all the same type.\<close>
 
-(*Unary case: (endo)operations just correspond to (endo)functions*)
+text \<open>Unary case: (endo)operations just correspond to (endo)functions.\<close>
 type_synonym ('a,'b)Op1 = "'a \<Rightarrow> 'b" ("Op'(_,_')")
-type_synonym ('a)EOp1 = "Op('a,'a)" ("EOp'(_')") (* same as: 'a \<Rightarrow> 'a *)
+type_synonym ('a)EOp1 = "Op('a,'a)" ("EOp'(_')") \<comment> \<open>same as: \<open>'a \<Rightarrow> 'a\<close> \<close>
 
-(*Binary case: (endo)bi-operations correspond to curried (endo)bi-functions*)
+text \<open>Binary case: (endo)bi-operations correspond to curried (endo)bi-functions.\<close>
 type_synonym ('a,'b)Op2 = "'a \<Rightarrow> 'a \<Rightarrow> 'b" ("Op\<^sub>2'(_,_')")
-type_synonym ('a)EOp2 = "Op\<^sub>2('a,'a)" ("EOp\<^sub>2'(_')") (* same as: 'a \<Rightarrow> ('a \<Rightarrow> 'a) *)
+type_synonym ('a)EOp2 = "Op\<^sub>2('a,'a)" ("EOp\<^sub>2'(_')") \<comment> \<open>same as: \<open>'a \<Rightarrow> ('a \<Rightarrow> 'a)\<close>\<close>
 
-(*Arbitrary case: generalized (endo)operations correspond to (endo)functions on sets*)
+text \<open>Arbitrary case: generalized (endo)operations correspond to (endo)functions on sets.\<close>
 type_synonym ('a,'b)OpG = "Op(Set('a),'b)" ("Op\<^sub>G'(_,_')")
-type_synonym ('a)EOpG = "Op\<^sub>G('a,'a)" ("EOp\<^sub>G'(_')") (* same as: Set('a) \<Rightarrow> 'a *)
+type_synonym ('a)EOpG = "Op\<^sub>G('a,'a)" ("EOp\<^sub>G'(_')") \<comment> \<open>same as: \<open>Set('a) \<Rightarrow> 'a\<close>\<close>
 
-(*** Operations on sets ***)
-
-(*Convenient type aliases for (endo)operations on sets*)
+text \<open>Convenient type aliases for (endo)operations on sets.\<close>
 type_synonym ('a,'b)SetOp = "Op(Set('a),Set('b))" ("SetOp'(_,_')")
-type_synonym ('a)SetEOp = "SetOp('a,'a)" ("SetEOp'(_')") (* same as: Set('a) \<Rightarrow> Set('a) *)
-(*Binary case: (endo)bi-operations correspond to curried (endo)bi-functions*)
+type_synonym ('a)SetEOp = "SetOp('a,'a)" ("SetEOp'(_')") \<comment> \<open>same as: \<open>Set('a) \<Rightarrow> Set('a)\<close>\<close>
+
+text \<open>Binary case: (endo)bi-operations correspond to curried (endo)bi-functions\<close>
 type_synonym ('a,'b)SetOp2 = "Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("SetOp\<^sub>2'(_,_')")
-type_synonym ('a)SetEOp2 = "SetOp\<^sub>2('a,'a)" ("SetEOp\<^sub>2'(_')") (*same as: Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('a) *)
+type_synonym ('a)SetEOp2 = "SetOp\<^sub>2('a,'a)" ("SetEOp\<^sub>2'(_')") \<comment> \<open>same as: \<open>Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('a)\<close>\<close>
 
 
-(*** Products of boolean types ***)
+subsubsection \<open>Products of boolean types\<close>
 
-(*Now consider the following equivalent type notations*)
+text \<open>Now consider the following equivalent type notations.\<close>
 term "((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o"
 term "((R :: ERel(o)) :: EOp\<^sub>2(o)) :: o \<Rightarrow> (o \<Rightarrow> o)"
 term "(((S :: Set(Set(o))) :: Graph(o)) :: EOp\<^sub>G(o)) :: (o \<Rightarrow> o) \<Rightarrow> o"
 
-(*We can make good sense of them by considering a new type having four inhabitants*)
+text \<open>We can make good sense of them by considering a new type having four inhabitants.\<close>
 type_synonym four = "o \<Rightarrow> o" ("oo")
 term "((P :: oo) :: EPair(o)) :: Set(o)"
 
-(*Using the new type we can seamlessly define types for (endo)quadruples and 4-valued sets*)
+text \<open>Using the new type we can seamlessly define types for (endo)quadruples and 4-valued sets.\<close>
 type_synonym ('a)EQuad = "oo \<Rightarrow> 'a" ("EQuad'(_')")
 type_synonym ('a)Set4 = "'a \<Rightarrow> oo" ("Set4'(_')")
 
-(*The following two types have each 16 elements (we show a bijection between their elements later on)*)
-type_synonym sixteen  = "o \<Rightarrow> oo" ("ooo")   (*4^2 = (2^2)^2 *)
-type_synonym sixteen' = "oo \<Rightarrow> o" ("ooo''") (*2^4 = 2^(2^2) *)
+text \<open>The following two types have each 16 elements (we show a bijection between their elements later on).\<close>
+type_synonym sixteen  = "o \<Rightarrow> oo" ("ooo")   \<comment> \<open>\<open>4^2 = (2^2)^2\<close>\<close>
+type_synonym sixteen' = "oo \<Rightarrow> o" ("ooo''") \<comment> \<open>\<open>2^4 = 2^(2^2)\<close>\<close>
 
-(*So we can have that the following type notations are in fact identical (not just isomorphic)*)
+text \<open>So we can have that the following type notations are in fact identical (not just isomorphic).\<close>
 term "(((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o) :: oo"
 term "(((((R :: ERel(o)) :: EOp\<^sub>2(o)) :: EPair(oo)) :: Set4(o)) :: o \<Rightarrow> o \<Rightarrow> o) :: ooo"
 term "((((((S :: Set(Set(o))) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: EQuad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
 
-(*...we can continue producing types (we stop giving them special notation after the magic number 64)*)
-type_synonym sixtyfour = "oo \<Rightarrow> oo" ("oooo") (*4^4 = (2^2)^(2^2) = 64*)
-type_synonym n256   = "o \<Rightarrow> ooo" (*16^2 = 256*)
-type_synonym n65536 = "oo \<Rightarrow> ooo" (*16^4 = 65536*)
-type_synonym n65536' = "ooo \<Rightarrow> o" (*2^16 = 65536*)
-type_synonym n4294967296 = "ooo \<Rightarrow> oo" (*4^16 = 4294967296*)
-(*and so on...*)
+text \<open>We can continue producing types (we stop giving them special notation after the magic number 64).\<close>
+type_synonym sixtyfour = "oo \<Rightarrow> oo" ("oooo") \<comment> \<open>\<open>4^4 = (2^2)^(2^2) = 64\<close>\<close>
+type_synonym n256   = "o \<Rightarrow> ooo" \<comment> \<open>\<open>16^2 = 256\<close>\<close>
+type_synonym n65536 = "oo \<Rightarrow> ooo" \<comment> \<open>\<open>16^4 = 65536\<close>\<close>
+type_synonym n65536' = "ooo \<Rightarrow> o" \<comment> \<open>\<open>2^16 = 65536\<close>\<close>
+type_synonym n4294967296 = "ooo \<Rightarrow> oo" \<comment> \<open>\<open>4^16 = 4294967296\<close>\<close>
+\<comment> \<open>and so on...\<close>
 
 
-(*** Continuations (with result type 'r) take inputs of type 'a ***)
-(* Unary case:  *)
-type_synonym ('a,'r)Cont1 = "'r-Val(Op('a,'r))" ("Cont'(_,_')") (*same as: ('a \<Rightarrow> 'r) \<Rightarrow> 'r *)
-(* Binary case:  *)
-type_synonym ('a,'r)Cont2 = "'r-Val(Op\<^sub>2('a,'r))" ("Cont\<^sub>2'(_,_')") (*same as: ('a \<Rightarrow> 'a \<Rightarrow> 'r) \<Rightarrow> 'r *)
+text \<open>Continuations (with result type \<open>'r\<close>) take inputs of type \<open>'a\<close>\<close>
+text \<open>Unary case:\<close>
+type_synonym ('a,'r)Cont1 = "'r-Val(Op('a,'r))" ("Cont'(_,_')") \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+text \<open>Binary case:\<close>
+type_synonym ('a,'r)Cont2 = "'r-Val(Op\<^sub>2('a,'r))" ("Cont\<^sub>2'(_,_')") \<comment> \<open>same as: \<open>('a \<Rightarrow> 'a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
 
 
 subsection \<open>Custom term notation\<close>
 
-(*Convenient combinator-like symbols \<Q> resp. \<D> to be used instead of (=) resp. (\<noteq>)*)
+text \<open>Convenient combinator-like symbols \<open>\<Q>\<close> resp. \<open>\<D>\<close> to be used instead of \<open>(=)\<close> resp. \<open>(\<noteq>)\<close>.\<close>
 notation HOL.eq ("\<Q>") and HOL.not_equal ("\<D>")
 
-(*Removes the (=) resp. (\<noteq>) symbols from output (we want to see \<Q>/{_} resp. \<D>/\<lbrace>_\<rbrace> instead) *)
+(*<*)
+(* Removes the (=) resp. (\<noteq>) symbols from output (we want to see \<Q>/{_} resp. \<D>/\<lbrace>_\<rbrace> instead) *)
 no_notation(output)
   HOL.eq (infix "=" 50) and HOL.not_equal (infix "\<noteq>" 50)
 notation (output)
   HOL.eq  ("(_ =/ _)" [51, 51] 50) and HOL.not_equal  ("(_ \<noteq>/ _)" [51, 51] 50)
+(*>*)
 
-(*Alternative (more concise) notation for boolean constants*)
+text \<open>Alternative (more concise) notation for boolean constants.\<close>
 notation HOL.True ("\<T>") and HOL.False ("\<F>")
 
-(*Add (binder) notation for indefinite descriptions (aka. Hilbert's epsilon or choice operator)*)
+text \<open>Add (binder) notation for indefinite descriptions (aka. Hilbert's epsilon or choice operator).\<close>
 notation Hilbert_Choice.Eps ("\<epsilon>") and Hilbert_Choice.Eps (binder "\<epsilon>" 10)
 
-(*Introduce a convenient 'dual' to Hilbert's epsilon operator (adds variable-binding notation)*)
+text \<open>Introduce a convenient "dual" to Hilbert's epsilon operator (adds variable-binding notation).\<close>
 definition Delta ("\<delta>")
   where "\<delta> \<equiv> \<lambda>A. \<epsilon> (\<lambda>x. \<not>A x)"
-
 notation Delta (binder "\<delta>" 10) 
 
-(*Sanity checks*)
-lemma "(\<epsilon> x. A x) = (SOME x. A x)" ..
-lemma "(\<delta> x. A x) = (SOME x. \<not>A x)" unfolding Delta_def ..
-
-(*Add (binder) notation for definite descriptions (incl. binder notation)*)
+text \<open>Add (binder) notation for definite descriptions (incl. binder notation).\<close>
 notation HOL.The ("\<iota>") and HOL.The (binder "\<iota>" 10)
 
+(*<*)(*Sanity checks*)
+lemma "(\<epsilon> x. A x) = (SOME x. A x)" ..
+lemma "(\<delta> x. A x) = (SOME x. \<not>A x)" unfolding Delta_def ..
 lemma "(\<iota> x. A x) = (THE x. A x)" ..
+(*>*)
 
-(*We introduce (pedagogically convenient) notation for HOL logical constants*)
+text \<open>We introduce (pedagogically convenient) notation for HOL logical constants.\<close>
 notation HOL.All ("\<forall>") 
 notation HOL.Ex  ("\<exists>")
 abbreviation Empty ("\<nexists>")
   where "\<nexists>A \<equiv> \<not>\<exists>A"                           
 
-notation HOL.implies (infixr "\<rightarrow>" 25) (* convenient alternative notation*)
-notation HOL.iff (infixr "\<leftrightarrow>" 25) (* convenient alternative notation*)
+notation HOL.implies (infixr "\<rightarrow>" 25)  \<comment> \<open>convenient alternative notation\<close>
+notation HOL.iff (infixr "\<leftrightarrow>" 25) \<comment> \<open>convenient alternative notation\<close>
 
-(*Add convenient logical connectives*)
-abbreviation(input) seilpmi (infixl "\<leftarrow>" 25) (* reversed implication *)
+text \<open>Add convenient logical connectives.\<close>
+abbreviation(input) seilpmi (infixl "\<leftarrow>" 25) \<comment> \<open>reversed implication\<close>
   where "A \<leftarrow> B \<equiv> B \<rightarrow> A"
-abbreviation(input) excludes (infixl "\<leftharpoondown>" 25) (*aka. co-implication*)
+abbreviation(input) excludes (infixl "\<leftharpoondown>" 25) \<comment> \<open>aka. co-implication\<close>
   where "A \<leftharpoondown> B \<equiv> A \<and> \<not>B"
-abbreviation(input) sedulcxe (infixr "\<rightharpoonup>" 25) (*aka. dual-implication*)
+abbreviation(input) sedulcxe (infixr "\<rightharpoonup>" 25) \<comment> \<open>aka. dual-implication\<close>
   where "A \<rightharpoonup> B \<equiv> B \<leftharpoondown> A"
-abbreviation(input) xor (infix "\<rightleftharpoons>" 25) (*aka. symmetric difference*)
+abbreviation(input) xor (infix "\<rightleftharpoons>" 25) \<comment> \<open>aka. symmetric difference\<close>
   where "A \<rightleftharpoons> B \<equiv> A \<noteq> B"
-abbreviation(input) nand (infix "\<up>" 35) (*aka. Sheffer stroke*)
+abbreviation(input) nand (infix "\<up>" 35) \<comment> \<open>aka. Sheffer stroke\<close>
   where "A \<up> B \<equiv> \<not>(A \<and> B)"
-abbreviation(input) nor (infix "\<down>" 30) (*aka. Peirce arrow or Quine dagger*)
+abbreviation(input) nor (infix "\<down>" 30) \<comment> \<open>aka. Peirce arrow or Quine dagger\<close>
   where "A \<down> B \<equiv> \<not>(A \<or> B)"
 
-(*Check relationships*)
+text \<open>Check relationships\<close>
 lemma disj_impl: "(A \<or> B) = ((A \<rightarrow> B) \<rightarrow> B)" by auto
 lemma conj_excl: "(A \<and> B) = ((A \<rightharpoonup> B) \<rightharpoonup> B)" by auto
 lemma xor_excl: "(A \<rightleftharpoons> B) = (A \<leftharpoondown> B) \<or> (A \<rightharpoonup> B)" by auto
 
-(*Reintroduces notation for negation to allow for conveniently referring to it as '\<not>' *)
+(*<*)(*Reintroduces notation for negation to allow for conveniently referring to it as '\<not>' *)
 notation(input) HOL.Not ("\<not>" 40)
 notation(output) HOL.Not ("\<not>_" [40] 40)
 
@@ -294,5 +307,7 @@ term "\<lambda>x. a = x"
 term "\<lambda>x. a \<noteq> x"
 term "\<lambda>x. x = a" (*symmetry of equality is not automatically considered*)
 term "\<lambda>x. x \<noteq> a" (*symmetry of disequality is not automatically considered*)
+
+(*>*)
 
 end
