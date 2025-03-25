@@ -14,8 +14,14 @@ session "Combinatory-Logic-Bricks" = "Main" +
     connectives_disequality
     connectives
     endopairs
-  theories
     funcs
+    rels
+    endorels
+    diagrams
+    adj
+    entailment
+  theories
+    operators
     
     
   document_files
