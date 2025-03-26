@@ -39,6 +39,10 @@ text \<open>Sets of endopairs correspond to (directed) graphs (which are isomorp
 type_synonym ('a)Graph = "Set(EPair('a))" ("Graph'(_')")
 term "(G :: Graph('a)) :: (o \<Rightarrow> 'a) \<Rightarrow> o"
 
+text \<open>Spaces (sets of sets) are the playground of mathematicians, so they deserve a special type notation.\<close>
+type_synonym ('a)Space = "Set(Set('a))" ("Space'(_')")
+term "(S :: Space('a)) :: ('a \<Rightarrow> o) \<Rightarrow> o"
+
 
 subsubsection \<open>Relations\<close>
 
@@ -105,7 +109,7 @@ subsubsection \<open>Products of boolean types\<close>
 text \<open>Now consider the following equivalent type notations.\<close>
 term "((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o"
 term "((R :: ERel(o)) :: EOp\<^sub>2(o)) :: o \<Rightarrow> (o \<Rightarrow> o)"
-term "(((S :: Set(Set(o))) :: Graph(o)) :: EOp\<^sub>G(o)) :: (o \<Rightarrow> o) \<Rightarrow> o"
+term "(((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: (o \<Rightarrow> o) \<Rightarrow> o"
 
 text \<open>We can make good sense of them by considering a new type having four inhabitants.\<close>
 type_synonym four = "o \<Rightarrow> o" ("oo")
@@ -122,7 +126,7 @@ type_synonym sixteen' = "oo \<Rightarrow> o" ("ooo''") \<comment> \<open>\<open>
 text \<open>So we can have that the following type notations are in fact identical (not just isomorphic).\<close>
 term "(((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o) :: oo"
 term "(((((R :: ERel(o)) :: EOp\<^sub>2(o)) :: EPair(oo)) :: Set4(o)) :: o \<Rightarrow> o \<Rightarrow> o) :: ooo"
-term "((((((S :: Set(Set(o))) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: EQuad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
+term "((((((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: EQuad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
 
 text \<open>We can continue producing types (we stop giving them special notation after the magic number 64).\<close>
 type_synonym sixtyfour = "oo \<Rightarrow> oo" ("oooo") \<comment> \<open>\<open>4^4 = (2^2)^(2^2) = 64\<close>\<close>

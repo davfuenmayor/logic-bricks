@@ -5,8 +5,9 @@
    if needed, further sessions are permitted.
    Every theory must be included in at least one of the sessions.
 *)
-session "Combinatory-Logic-Bricks" = "Main" +
-  options [document = pdf, document_output = output, show_question_marks = false]
+session "Combinatory-Logic-Bricks" = "HOL" +
+  options [document = pdf, document_output = output, show_question_marks = false, document_variants = "outline=-proof"]
+  directories "examples"
   theories [document = false]
     combinators
     base
@@ -20,10 +21,9 @@ session "Combinatory-Logic-Bricks" = "Main" +
     diagrams
     adj
     entailment
-  theories
     operators
-    
-    
+  theories
+    spaces         
   document_files
     "root.tex"
     "root.bib"
