@@ -1,5 +1,5 @@
 theory diagrams
- imports rels
+ imports relations
 begin
 
 section \<open>Commutative diagrams\<close>

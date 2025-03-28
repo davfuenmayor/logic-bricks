@@ -1,5 +1,5 @@
-theory adj
- imports diagrams endorels
+theory adjunctions
+ imports diagrams endorelations
 begin
 
 named_theorems adj_defs

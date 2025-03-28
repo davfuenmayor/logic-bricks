@@ -1,5 +1,5 @@
-theory endorels (* A basic theory of endorelations *)
-imports rels
+theory endorelations (* A basic theory of endorelations *)
+imports relations
 begin
 
 section \<open>Endorelations\<close>

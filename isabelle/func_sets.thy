@@ -1,4 +1,4 @@
-theory funcs (* A basic theory of sets and functions*)
+theory func_sets (* A basic theory of sets and functions*)
 imports connectives
 begin
 

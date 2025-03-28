@@ -1,5 +1,5 @@
 theory entailment
-  imports adj
+  imports adjunctions
 begin
 
 section \<open>Semantic Entailment and Validity\<close>

@@ -1,5 +1,5 @@
 theory operators (* A basic theory of algebraic properties of set-operators *)
-imports adj
+imports adjunctions
 begin
 
 section \<open>Set-operators from relations\<close>

@@ -71,12 +71,11 @@ term "(\<lambda>a. a\<^sup>*) :: \<pi> \<Rightarrow> \<pi>"
 lemma tran_closure_refl: "reflexive R \<longrightarrow> reflexive (R\<^sup>+)"
   unfolding reflexive_def2  biginterR_def2 endorel_defs func_defs comb_defs rel_defs by blast
 
-lemma tran_closure_symm: "symmetric R \<longrightarrow> symmetric (R\<^sup>+)"
-  unfolding symmetric_def transitiveClosure_char transitive_reldef
-  unfolding endorel_defs rel_defs func_defs comb_defs sorry (*kernel reconstruction fails*)
+lemma tran_closure_symm: "symmetric R \<longrightarrow> symmetric (R\<^sup>+)" sorry (*kernel reconstruction fails*)
+  (* unfolding symmetric_def transitiveClosure_char transitive_reldef *)
 
-lemma tran_closure_trans: "transitive (R\<^sup>+)"
-  by (smt (verit, del_insts) biginterR_def2 transitiveClosure_char transitive_def2)
+lemma tran_closure_trans: "transitive (R\<^sup>+)" sorry (*kernel reconstruction fails*)
+  (* by (smt (verit, del_insts) biginterR_def2 transitiveClosure_char transitive_def2) *)
 
 lemma tran_closure_equiv: "equivalence R \<longrightarrow> equivalence (R\<^sup>+)"
   by (simp add: equivalence_char tran_closure_refl tran_closure_symm tran_closure_trans)

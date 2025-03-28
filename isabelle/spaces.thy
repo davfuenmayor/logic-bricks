@@ -1,5 +1,5 @@
 theory spaces (* A theory of spaces qua sets of sets *)
-imports endorels
+imports endorelations
 begin
 
 section \<open>Spaces\<close>

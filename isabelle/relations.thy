@@ -1,5 +1,5 @@
-theory rels (* A basic theory of relations (qua set-valued functions) *)
-imports funcs
+theory relations (* A basic theory of relations (qua set-valued functions) *)
+imports func_sets
 begin
 
 section \<open>Relations\<close>
