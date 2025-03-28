@@ -8,7 +8,9 @@
 session "Combinatory-Logic-Bricks" = "HOL" +
   options [document = pdf, document_output = output, show_question_marks = false, document_variants = "outline=-proof"]
   directories "examples"
-  theories [document = false]
+ (* theories [document = false] *)
+    
+  theories
     combinators
     base
     connectives_equality
@@ -22,7 +24,6 @@ session "Combinatory-Logic-Bricks" = "HOL" +
     adj
     entailment
     operators
-  theories
     spaces         
   document_files
     "root.tex"
