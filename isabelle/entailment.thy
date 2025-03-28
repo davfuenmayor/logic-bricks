@@ -2,9 +2,9 @@ theory entailment
   imports adjunctions
 begin
 
-section \<open>Semantic Entailment and Validity\<close>
+section \<open>Entailment and Validity\<close>
 
-subsection \<open>Special case (for modal logicians and co.)\<close>
+subsection \<open>Special Case (for Modal Logicians and co.)\<close>
 
 text \<open>Modal logics model propositions as sets (of "worlds") and are primarily concerned with "validity" 
  of propositions. We encode below the set of valid (resp. unsatisfiable, satisfiable) propositions.\<close>
@@ -60,7 +60,7 @@ lemma "\<Turnstile> (a \<Rightarrow> c) \<Longrightarrow> {a} \<Turnstile>\<^sub
 lemma "{b} \<Turnstile>\<^sub>g (a \<Rightarrow> c) \<Longrightarrow> {a,b} \<Turnstile>\<^sub>g c" unfolding valid_def func_defs comb_defs by auto
 
 
-subsection \<open>General case (for algebraic and many-valued/fuzzy logicians)\<close>
+subsection \<open>General Case (for Algebraic and Many-valued/Fuzzy Logicians)\<close>
 
 text \<open>We introduce an "entailment" operation (for denotations) that corresponds to the semantic counterpart
  of the notion of consequence (for formulas). We refer to the literature on algebraic logic for detailed

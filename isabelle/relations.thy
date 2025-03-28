@@ -8,7 +8,7 @@ text \<open>Relations inherit the structure of both sets and functions and enric
 named_theorems rel_defs and rel_simps
 
 
-subsection \<open>Constructing relations\<close>
+subsection \<open>Constructing Relations\<close>
 
 subsubsection \<open>Product and Sum\<close>
 text \<open>Relations can also be constructed out of pairs of sets, via (cartesian) product and (disjoint) sum.\<close>
@@ -63,9 +63,9 @@ lemma pair_singletonR: "\<exists>!\<^sup>2 \<langle>a,b\<rangle>" unfolding rel_
 lemma singletonR_def3: "\<exists>!\<^sup>2 R = (\<exists>a b. R = \<langle>a,b\<rangle>)" unfolding rel_defs comb_defs by metis
 
 
-subsection \<open>Boolean algebraic structure\<close>
+subsection \<open>Boolean Algebraic Structure\<close>
 
-subsubsection \<open>Boolean operations\<close>
+subsubsection \<open>Boolean Operations\<close>
 text \<open>As we have seen, relations correspond to indexed (families of) sets. Hence it is not surprising
  that they inherit their boolean algebraic structure. Moreover, we saw previously how boolean set 
  operations arise via "indexation" of HOL's boolean connectives (via \<open>\<^bold>\<Phi>\<^sub>m\<^sub>1\<close> combinators). The relational
@@ -132,7 +132,7 @@ declare prodSum_simp1 [rel_simps] prodSum_simp2 [rel_simps]
         prodSum_simp1' [rel_simps] prodSum_simp2' [rel_simps]
 
 
-subsubsection \<open>Ordering structure\<close>
+subsubsection \<open>Ordering Structure\<close>
 text \<open>Similarly, relations also inherit the ordering structure of sets.\<close>
 
 text \<open>Analogously to the notion of "equalizer" of two functions, we have the "orderer" or two relations:\<close>
@@ -193,7 +193,7 @@ lemma "A \<sqinter>\<^sup>r B = \<exists>\<^sup>2(A \<inter>\<^sup>r B)" unfoldi
 lemma "A \<bottom>\<^sup>r B = \<nexists>\<^sup>2(A \<inter>\<^sup>r B)" unfolding rel_defs comb_defs ..
 
 
-subsection \<open>Infinitary operations\<close>
+subsubsection \<open>Infinitary Operations\<close>
 
 text \<open>We can also generalize union and intersection to the infinitary case.\<close>
 definition biginterR::"EOp\<^sub>G(Rel('a,'b))" ("\<Inter>\<^sup>r") 
@@ -224,7 +224,7 @@ lemma "\<Sqinter>\<^sup>rS = \<exists>\<^sup>2(\<Inter>\<^sup>rS)" unfolding com
 lemma "\<Squnion>\<^sup>rS = \<forall>\<^sup>2(\<Union>\<^sup>rS)" unfolding comb_defs ..
 
 
-subsection \<open>Function-like properties\<close>
+subsection \<open>Function-like Structure I\<close>
 
 text \<open>We have seen the shared (boolean) algebraic structure between sets and relations. 
  We now explore their shared structure with functions.\<close>
@@ -235,7 +235,7 @@ text \<open>We start by noting that, given a relation \<open>R\<close> of type \
  different from its codomain when seen as a (set-valued) function (corresponding to the type \<open>'b \<Rightarrow> o\<close>).\<close>
 
 
-subsubsection \<open>Range and cylindrification\<close>
+subsubsection \<open>Range and Cylindrification\<close>
 text \<open>We define the left- (right-) range of a relation as the set of those objects in the source (target)
  domain that reach to (are reached by) some element in the target (source) domain.\<close>
 
@@ -308,7 +308,7 @@ lemma "A\<downharpoonleft>R = (\<lambda>a b. A a \<and> R a b)" unfolding rel_de
 lemma "B\<downharpoonright>R = (\<lambda>a b. B b \<and> R a b)" unfolding rel_defs comb_defs func_defs by simp
 
 
-subsubsection \<open>Uniqueness and determinism\<close>
+subsubsection \<open>Uniqueness and Determinism\<close>
 
 text \<open>By composition with \<open>unique\<close>, we obtain the set of deterministic (or "univalent") elements.
  They get assigned at most one value under the relation (which then behaves deterministically on them)\<close>
@@ -350,7 +350,7 @@ lemma leftUnique_gen: "R = \<Union>\<^sup>r(\<wp>\<^sup>r R \<inter> leftUnique)
   unfolding bigunionR_def2 oops (*TODO*)
 
 
-subsubsection \<open>Totality properties\<close>
+subsubsection \<open>Totality\<close>
 
 text \<open>Right- resp. left-unique relations; aka. surjective resp. total/serial/multi-functional relations.\<close>
 definition rightTotal::"Set(Rel('a,'b))"
@@ -376,9 +376,9 @@ lemma "leftUnique f\<inverse>" unfolding rel_defs func_defs comb_defs by simp
 lemma "rightTotal f\<inverse>" unfolding rel_defs func_defs comb_defs by simp
 
 
-subsection \<open>Birectional transformations between relations and (sets of) functions\<close>
+subsection \<open>Transformations between Relations and (Sets of) Functions\<close>
 
-subsubsection \<open>From (sets of) functions to relations\<close>
+subsubsection \<open>From (Sets of) Functions to Relations\<close>
 
 text \<open>A given function can be disguised as a relation.\<close>
 definition asRel::"('a \<Rightarrow> 'b) \<Rightarrow> Rel('a,'b)" ("asRel")
@@ -413,7 +413,7 @@ lemma intoRel_def2: "intoRel = \<Union>\<^sup>r \<circ> (image asRel)" unfolding
 lemma "intoRel S = \<Union>\<^sup>r\<lparr>asRel S\<rparr>" unfolding intoRel_def2 comb_defs ..
 
 
-subsubsection \<open>From relations to (sets of) functions\<close>
+subsubsection \<open>From Relations to (Sets of) Functions\<close>
 
 text \<open>A given relation can be disguised as a function (and go unnoticed under certain circumstances).\<close>
 definition asFun::"Rel('a,'b) \<Rightarrow> ('a \<Rightarrow> 'b)" ("asFun")
@@ -441,7 +441,7 @@ text \<open>Another perspective:\<close>
 lemma intoFunSet_def2: "intoFunSet = \<^bold>B\<^sub>1\<^sub>1 \<wp>\<^sup>r \<^bold>I asRel" unfolding rel_defs func_defs comb_defs ..
 
 
-subsubsection \<open>Back and forth translation conditions\<close> (*TODO: make simplification rules out of this*)
+subsubsection \<open>Back-and-Forth Translation Conditions\<close> (*TODO: make simplification rules out of this*)
 
 text \<open>Disguising a function as a relation, and back as a function, gives back the original function.\<close>
 lemma funRel_trans: "asFun (asRel f) = f" unfolding rel_defs comb_defs by simp 
@@ -482,7 +482,7 @@ lemma relFunSet_simp: "leftTotal R \<Longrightarrow> intoRel (intoFunSet R) = R"
   by (simp add: relFunSet_trans1 relFunSet_trans2 subrel_antisym)
 
 
-subsection \<open>Transpose and cotranspose\<close>
+subsection \<open>Transpose and Cotranspose\<close>
 
 text \<open>Relations come with two further idiosyncratic unary operations.
  The first one is transposition (aka. "converse" or "reverse"), which naturally arises by seeing
@@ -541,7 +541,7 @@ lemma "interpolants     R\<^sub>1 R\<^sub>2 a b = (\<lambda>c. R\<^sub>1 a c \<a
 lemma "dualInterpolants R\<^sub>1 R\<^sub>2 a b = (\<lambda>c. R\<^sub>1 a c \<or> R\<^sub>2 c b)" unfolding rel_defs func_defs comb_defs ..
 
 
-subsection \<open>Structure preservation and reflection\<close>
+subsection \<open>Structure Preservation and Reflection\<close>
 
 text \<open>The function f preserves the relational structure of R into T.\<close>
 abbreviation(input) preserving::"ERel('a) \<Rightarrow> ERel('b) \<Rightarrow> Set(Op('a,'b))" ("_,_-preserving")
@@ -584,9 +584,9 @@ lemma closure_setprop: "(\<subseteq>)-CLOSURE f = (\<forall>A B. (A \<subseteq> 
   unfolding rel_defs func_defs comb_defs by (smt (z3)) 
 
 
-subsection \<open>Function-like algebraic structure\<close>
+subsection \<open>Function-like Structure II\<close>
 
-subsubsection \<open>Monoidal structure (relation-composition and its dual)\<close>
+subsubsection \<open>Monoidal Structure (composition and its dual)\<close>
 
 text \<open>In analogy to functions, relations can also be composed, as follows:\<close>
 definition relComp::"Rel('a,'b) \<Rightarrow> Rel('b,'c) \<Rightarrow>  Rel('a,'c)" (infixr ";\<^sup>r" 55)
@@ -676,7 +676,7 @@ lemma "(R \<circ>\<^sup>r S \<subseteq>\<^sup>r T) = (S \<subseteq>\<^sup>r R \<
 lemma "(R \<circ>\<^sup>r S \<subseteq>\<^sup>r T) = (R \<subseteq>\<^sup>r T \<Zdres>\<^sup>r S)" unfolding rel_defs func_defs comb_defs by auto
 
 
-subsubsection \<open>Ideals\<close>
+subsubsection \<open>Ideal Elements\<close>
 
 text \<open>A related property of relations is that of (generating a) left- resp. right ideal.\<close>
 definition leftIdeal::"Set(Rel('a,'b))"
@@ -699,7 +699,7 @@ lemma "rightIdeal = range rightCylinder" unfolding rel_defs func_defs comb_defs 
 lemma "leftIdeal  = range leftCylinder" unfolding rel_defs func_defs comb_defs apply (rule ext) by metis
 
 
-subsubsection \<open>Kernel of a relation\<close>
+subsubsection \<open>Kernel of a Relation\<close>
 
 text \<open>The \<open>kernel\<close> of a relation relates those elements in its source domain that are related to some 
  same value (i.e. whose images overlap).\<close>
@@ -715,7 +715,7 @@ lemma "relKernel (asRel f) = kernel f" unfolding rel_defs func_defs comb_defs by
 lemma "totalFunction R \<Longrightarrow> kernel (asFun R) = relKernel R" unfolding rel_defs func_defs comb_defs by (metis (mono_tags))
 
 
-subsubsection \<open>Pullback and equalizer of a pair of relations\<close>
+subsubsection \<open>Pullback and Equalizer of a Pair of Relations\<close>
 
 text \<open>The pullback (aka. fiber product) of two relations R and T (sharing the same target), 
  relates those pairs of elements that get assigned some same value by R and T respectively.\<close>
@@ -765,7 +765,7 @@ lemma "totalFunction R \<Longrightarrow> totalFunction T \<Longrightarrow> equal
   unfolding rel_defs comb_defs func_defs by (metis (mono_tags))
 
 
-subsubsection \<open>Pushout and coequalizer of a pair of relations\<close>
+subsubsection \<open>Pushout and Coequalizer of a Pair of Relations\<close>
 
 text \<open>The pushout (aka. fiber coproduct) of two relations R and T (sharing the same source), relates
  pairs of elements (in their targets) whose preimages under R resp. T intersect.\<close>
@@ -797,7 +797,7 @@ lemma "totalFunction R \<Longrightarrow> totalFunction T \<Longrightarrow> coequ
   unfolding rel_defs comb_defs func_defs by (metis (full_types))
 
 
-subsubsection \<open>Diagonal elements\<close>
+subsubsection \<open>Diagonal Elements\<close>
 
 text \<open>The notion of diagonal (aka. reflexive) elements of an endorelation is the relational counterpart 
  to the notion of fixed-points of an endofunction. It corresponds to the \<open>\<^bold>W\<close> combinator.\<close>
@@ -825,7 +825,7 @@ lemma "totalFunction R \<Longrightarrow> nFP (asFun R) = \<Delta>\<^sup>\<midarr
   unfolding rel_defs comb_defs func_defs by (metis someI)
 
 
-subsection \<open>Set-operations defined from relations\<close>
+subsection \<open>Relation-based Set-Operations\<close>
 
 text \<open>We can extend the definitions of the (pre)image set-operator from functions to relations
  together with their "dual" counterparts.\<close>
@@ -984,9 +984,9 @@ declare leftRange_simp[rel_simps] rightRange_simp[rel_simps]
         leftDualRange_simp[rel_simps] rightDualRange_simp[rel_simps]
 
 
-subsection \<open>Monads\<close>
+subsection \<open>Type-lifting and Monads\<close>
 
-subsubsection \<open>Set monad\<close>
+subsubsection \<open>Set Monad\<close>
 
 text \<open>We can conceive of types of form \<open>Set('a)\<close>, i.e. \<open>'a \<Rightarrow> o\<close>, as arising via an "environmentalization"
  (or "indexation") of the boolean type \<open>o\<close> by the type \<open>'a\<close> (i.e. as an instance of the environment 
@@ -1024,7 +1024,7 @@ lemma "monadLaw2 unit_set bind_set" unfolding rel_defs func_defs comb_defs by si
 lemma "monadLaw3 bind_set" unfolding rel_defs func_defs comb_defs by auto
 
 
-subsubsection \<open>Relation monad\<close>
+subsubsection \<open>Relation Monad\<close>
 
 text \<open>In fact, the \<open>Rel('a,'b)\<close> type constructor also comes with a monad structure, which can be seen as 
  a kind of "monad composition" of the environment monad with the set monad.\<close>

@@ -2,10 +2,10 @@ theory operators (* A basic theory of algebraic properties of set-operators *)
 imports adjunctions
 begin
 
-section \<open>Set-operators from relations\<close>
+section \<open>General Theory of Relation-based Operators\<close>
 text \<open>It is well known that (n+1-ary) relations give rise to (n-ary) operations on sets (called "operators").\<close>
 
-subsection \<open>Set-operators derived from binary relations\<close>
+subsection \<open>Set-Operators from Binary Relations\<close>
 text \<open>This is the (non-trivial) base case. It is very common in logic, so it gets an special treatment.\<close>
 
 text \<open>Add some convenient (arguably less visually-cluttering) notation, reminiscent of logical operations.\<close>
@@ -20,7 +20,7 @@ notation(input) leftImage ("\<diamond>\<^sub>\<leftarrow>") and leftDualImage ("
                 rightBound ("\<ominus>\<^sub>\<rightarrow>") and rightDualBound ("\<oslash>\<^sub>\<rightarrow>")
 
 
-subsubsection \<open>Order embedding\<close>
+subsubsection \<open>Order Embedding\<close>
 
 text \<open>This is a good moment to recall that unary operations on sets (set-operations) are also relations...\<close>
 term "(F :: SetOp('a,'b)) :: Rel(Set('a),'b)"
@@ -210,9 +210,9 @@ lemma   " \<sqdot> \<leftarrow>(R-\<box>\<^sub>\<rightarrow>)\<^sup>\<midarrow> 
           \<sqdot> \<midarrow>(R-\<box>\<^sub>\<leftarrow>)\<^sup>\<midarrow> \<rightarrow> \<sqdot>    " by (simp add: leftDualImage_dualconjugation)
 
 
-subsection \<open>Set-operators derived from n-ary relations\<close>
+subsection \<open>Set-Operators from n-ary Relations\<close>
 
-subsubsection \<open>Images and preimages of n-ary functions\<close>
+subsubsection \<open>Images and Preimages of n-ary Functions\<close>
 text \<open>We shall begin by extending the notions of image and preimage from unary to n-ary functions.\<close>
 
 text \<open>Recall that for unary functions we obtain a unary image set-operation as:\<close>
@@ -241,7 +241,7 @@ definition preimage3 :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd)
 declare preimage2_def[func_defs] preimage3_def[func_defs]
 
 
-subsubsection \<open>Images and bounds of n-ary relations\<close>
+subsubsection \<open>Images and Bounds of n-ary Relations\<close>
 
 text \<open>Let us start by recalling that images and bounds are two sides of the same dual coin.\<close>
 lemma "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<diamond>\<^sub>\<leftarrow> \<ominus>\<^sub>\<leftarrow>" using leftImageBound_dual by simp
@@ -378,7 +378,7 @@ lemma "R-\<ominus>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 
 \<comment> \<open>...\<open>R-\<ominus>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<ominus>\<^sub>k\<^sub>j\<^sub>i\<close>\<close> \<comment> \<open>full reverse\<close>
 
 
-subsubsection \<open>Dual-images and dual-bounds\<close>
+subsubsection \<open>Dual-Images and Dual-Bounds\<close>
 
 text \<open>As for the dual images, we take this as starting point.\<close>
 definition rightDualImage2::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)"  ("rightDualImage\<^sub>2")
@@ -528,7 +528,7 @@ proposition "(T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = ((\<lambda>a b. T a a 
 subsection \<open>Adjunctions\<close>
 text \<open>Check that similar adjunction conditions obtain among binary set-operators as for their unary counterparts.\<close>
 
-subsubsection \<open>Residuation and coresiduation\<close>
+subsubsection \<open>Residuation and Coresiduation\<close>
 text \<open>Residuation (coresiduation) between \<open>\<diamond>\<close> and \<open>\<box>\<close> (\<open>\<ominus>\<close> and \<open>\<oslash>\<close>) obtains when swapping second and third parameters.\<close>
 
 lemma image123_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>2\<^sub>3) (R-\<box>\<^sub>1\<^sub>3\<^sub>2)" unfolding adj_defs rel_defs comb_defs func_defs by metis
@@ -546,7 +546,7 @@ lemma bound312_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarr
 lemma bound321_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<ominus>\<^sub>3\<^sub>2\<^sub>1)) (\<midarrow> \<circ>\<^sub>2 (R-\<oslash>\<^sub>3\<^sub>1\<^sub>2))" unfolding adj_defs rel_defs comb_defs func_defs by metis
 
 
-subsubsection \<open>Galois-connection and its dual\<close>
+subsubsection \<open>Galois-connection and its Dual\<close>
 text \<open>(Dual)Galois-connections for pairs of \<open>\<ominus>\<close> (\<open>\<oslash>\<close>) also obtain when swapping second and third parameters.\<close>
 
 lemma bound123_galois: "(\<subseteq>),(\<subseteq>)-GAL\<^sub>2 (R-\<ominus>\<^sub>1\<^sub>2\<^sub>3) (R-\<ominus>\<^sub>1\<^sub>3\<^sub>2)" unfolding adj_defs rel_defs comb_defs func_defs by metis
@@ -558,7 +558,7 @@ lemma dualBound213_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<osl
 lemma dualBound312_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<oslash>\<^sub>3\<^sub>1\<^sub>2) (R-\<oslash>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
 
 
-subsubsection \<open>Conjugation and its dual\<close>
+subsubsection \<open>Conjugation and its Dual\<close>
 text \<open>Similarly, (dual)conjugations for pairs of \<open>\<diamond>\<close> (\<open>\<box>\<close>) obtain when swapping second and third parameters.\<close>
 
 lemma image123_conjugation: "(\<subseteq>),(\<subseteq>)-GAL\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>2\<^sub>3)) (\<midarrow> \<circ>\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>3\<^sub>2))"  unfolding adj_defs rel_defs comb_defs func_defs by metis

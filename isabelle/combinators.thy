@@ -16,7 +16,9 @@ text \<open>We aggregate theory-related definitions to be unfolded on demand. He
 named_theorems comb_defs 
 
 
-subsection \<open>Identity and Appliers\<close>
+subsection \<open>Traditional Combinators\<close>
+
+subsubsection \<open>Identity and Appliers\<close>
 
 text \<open>The convenient all-purpose identity combinator.\<close>
 definition I_comb :: "'a \<Rightarrow> 'a" ("\<^bold>I")
@@ -69,7 +71,7 @@ lemma "g <| f <| a = g (f a)" unfolding comb_defs ..
 lemma "(a |> f) <| b = f a b" unfolding comb_defs ..
 
 
-subsection \<open>Compositors\<close>
+subsubsection \<open>Compositors\<close>
 
 text \<open>The family of combinators \<open>\<^bold>B\<^sub>N\<close> are called "compositors" (with N an m-sized sequence of arities).
  They compose their first argument \<open>f\<close> (an m-ary function) with m functions \<open>g\<^sub>i\<^sub>\<le>\<^sub>m\<close> (each of arity \<open>N\<^sub>i\<close>).
@@ -207,7 +209,7 @@ proposition "\<^bold>B\<^sub>0\<^sub>1 \<circ> \<^bold>B\<^sub>1\<^sub>1 = \<^bo
 proposition "\<^bold>B\<^sub>1\<^sub>1\<^sub>2 \<circ> \<^bold>B\<^sub>1\<^sub>1\<^sub>1 = \<^bold>B\<^sub>2\<^sub>2\<^sub>3" nitpick \<comment> \<open>countermodel found\<close> oops
 
 
-subsection \<open>Permutators\<close>
+subsubsection \<open>Permutators\<close>
 
 text \<open>The family of combinators \<open>\<^bold>C\<^sub>N\<close> are called "permutators", where N an m-sized sequence of (different) 
  numbers indicating a permutation on the arguments of the first argument (an m-ary function).\<close>
@@ -269,7 +271,7 @@ lemma "\<^bold>I = \<^bold>L \<circ> \<^bold>L \<circ> \<^bold>L" unfolding comb
 lemma "\<^bold>I = \<^bold>R \<circ> \<^bold>R \<circ> \<^bold>R" unfolding comb_defs ..
 
 
-subsection \<open>Cancellators\<close>
+subsubsection \<open>Cancellators\<close>
 
 text \<open>The next family of combinators \<open>\<^bold>K\<^sub>m\<^sub>n\<close> are called "cancellators". They take m arguments and return the
   n-th one (thus ignoring or "cancelling" all others).\<close>
@@ -293,7 +295,7 @@ declare K21_comb_def[comb_defs] K22_comb_def[comb_defs]
         K31_comb_def[comb_defs] K32_comb_def[comb_defs] K33_comb_def[comb_defs]
 
 
-subsection \<open>Contractors\<close>
+subsubsection \<open>Contractors\<close>
 
 \<comment> \<open>The following family of combinators \<open>\<^bold>W\<^sub>m\<^sub>n\<close> are called "contractors" (aka. "duplicators"). They take an
  (m*n)-ary function \<open>f\<close> and contract/merge its arguments m-times, thus returning an n-ary function.\<close>
@@ -327,7 +329,7 @@ declare W21_comb_def[comb_defs] W31_comb_def[comb_defs]
         W32_comb_def[comb_defs] W33_comb_def[comb_defs]
 
 
-subsection \<open>Fusers\<close> (*TODO: name comes from Schönfinkel's "Verschmelzung". Find a better name? *)
+subsubsection \<open>Fusers\<close> (*TODO: name comes from Schönfinkel's "Verschmelzung". Find a better name? *)
 
 text \<open>The families \<open>\<^bold>S\<^sub>m\<^sub>n\<close> (resp. \<open>\<^bold>\<Sigma>\<^sub>m\<^sub>n\<close>) generalize the combinator \<open>\<^bold>S\<close> (resp. its evil twin \<open>\<^bold>\<Sigma>\<close>) towards higher arities.\<close>
 definition S11_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'c" ("\<^bold>S\<^sub>1\<^sub>1")
@@ -382,7 +384,7 @@ lemma "\<^bold>\<Sigma> = \<^bold>B (\<^bold>T \<^bold>C) \<^bold>B \<^bold>S" u
 lemma "\<^bold>\<Sigma>\<^sub>1\<^sub>2 = \<^bold>B \<^bold>S\<^sub>1\<^sub>2 \<^bold>L" unfolding comb_defs ..
 
 
-subsection \<open>Further convenient combinators\<close>
+subsection \<open>Further Combinators\<close>
 
 subsubsection \<open>Preprocessors\<close>
 text \<open>The family of \<open>\<^bold>\<Psi>\<^sub>m\<close> combinators below are special cases of compositors. They take an m-ary function 
@@ -516,7 +518,7 @@ lemma "\<^bold>\<Pi>\<^sub>2\<^sub>2\<^sub>2 = \<^bold>S\<^sub>2\<^sub>2 \<^bold
 \<comment> \<open>...and so on\<close>
 
 
-subsection \<open>Combinator interrelations\<close>
+subsection \<open>Combinator Interrelations\<close>
 
 \<comment> \<open>We can show (via \<open>\<lambda>\<close>-conversion) that the combinators \<open>\<^bold>S\<close> and \<open>\<^bold>K\<close> can be used to define all others\<close>
 lemma "\<^bold>B = \<^bold>S (\<^bold>K \<^bold>S) \<^bold>K" unfolding comb_defs ..

@@ -6,7 +6,7 @@ section \<open>Spaces\<close>
 
 named_theorems space_defs
 
-subsection \<open>Spaces as quantifiers and co.\<close>
+subsection \<open>Spaces as Quantifiers and co.\<close>
 
 text \<open>Quantifiers are particular kinds of spaces.\<close>
 term "\<forall> :: Space('a)" \<comment> \<open>\<open>\<forall>\<close> is the space that contains only the universe\<close>
@@ -66,7 +66,7 @@ lemma upair_prop: "(\<forall>D. D \<subseteq> S \<rightarrow> \<exists>\<^sub>\<
   unfolding upair_def3 unfolding func_defs comb_defs by (smt (verit, best))
 
 
-subsection \<open>Spaces via closure under operations\<close>
+subsection \<open>Spaces via Closure under Operations\<close>
 
 text \<open>We obtain spaces by considering the set of sets closed under the given (n-ary) operation.\<close>
 term "f-closed\<^sub>1 :: Space('a)"
@@ -75,11 +75,11 @@ term "F-closed\<^sub>G :: Space('a)"
 term "\<phi>-closed\<^sub>S :: Space('a)"
 
 
-subsection \<open>Spaces from endorelations\<close>
+subsection \<open>Spaces from Endorelations\<close>
 text \<open>The following definitions correspond to functions that take an endorelation R and return the space 
  of those sets satisfying a particular property wrt. R.\<close>
 
-subsubsection \<open>Lub/glb-related definitions\<close>
+subsubsection \<open>Lub- and Glb-related Definitions\<close>
 
 text \<open>These definitions generalize the "complete join/meet-semilattice" property (existence of suprema resp. infima).\<close>
 definition lubComplete::"ERel('a) \<Rightarrow> Space('a)" ("_-lubComplete")
@@ -144,7 +144,7 @@ lemma glbClosed_def2: "antisymmetric R \<Longrightarrow> limitComplete R \<Longr
   using glbClosed_glbComplete glbComplete_glbClosed by blast
 
 
-subsubsection \<open>Upwards/downwards closed\<close>
+subsubsection \<open>Upwards- and Downwards-Closure\<close>
 
 definition upwardsClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-upwardsClosed")
   where "R-upwardsClosed \<equiv> (R-upImage)-closed\<^sub>S"
@@ -172,7 +172,7 @@ lemma downwardsClosed_def4: "skeletal R \<Longrightarrow> limitComplete R \<Long
   by (simp add: downwardsClosed_defT limitComplete_defT lub_defT skeletal_symm upwardsClosed_def4)
 
 
-subsubsection \<open>Greatest/least existence\<close>
+subsubsection \<open>Existence of Greatest- and Least-Elements\<close>
 
 text \<open>Another interesting property is existence of greatest resp. least elements.\<close>
 definition greatestExist::"ERel('a) \<Rightarrow> Space('a)" ("_-greatestExist")
@@ -221,7 +221,7 @@ lemma leastExist_def4: "limitComplete R \<Longrightarrow> R-upwardsClosed S \<Lo
   by (simp add: glbClosed_defT greatestExist_def4 leastExist_defT limitComplete_defT upwardsClosed_defT)
 
 
-subsubsection \<open>Up-/downwards directedness\<close>
+subsubsection \<open>Upwards- and Downwards-Directedness\<close>
 
 text \<open>The property of a set being "up/downwards directed" wrt. an endorelation:
   Every pair of S-elements has upper/lower-bounds (wrt R) in S.\<close>
@@ -259,7 +259,7 @@ proposition "R-upwardsDirected S \<longrightarrow> \<exists>S" nitpick  \<commen
 proposition "R-downwardsDirected S \<longrightarrow> \<exists>S" nitpick  \<comment> \<open>countermodel found\<close> oops
 
 
-subsubsection \<open>Join- and meet-closure\<close>
+subsubsection \<open>Join- and Meet-Closure\<close>
 
 text \<open>Convenient abbreviations for joins resp. meets (lub resp. glb of sets with 2 elements).\<close>
 abbreviation(input) join ("_-join")
@@ -392,7 +392,7 @@ lemma ideal_def2: "partial_order R \<Longrightarrow> limitComplete R \<Longright
   unfolding func_defs  comb_defs by (metis ideal_prop1 ideal_prop2 ideal_prop3)
 
 
-subsubsection \<open>Well-founded and well-ordered sets\<close>
+subsubsection \<open>Well-Founded- and Well-Ordered-Sets\<close>
 
 text \<open>Well-foundedness of sets wrt. a given relation (as in "Nat is well-founded wrt. \<open><\<close> ").\<close>
 definition wellFoundedSet::"ERel('a) \<Rightarrow> Space('a)" ("_-wellFoundedSet")

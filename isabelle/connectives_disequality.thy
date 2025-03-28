@@ -2,11 +2,11 @@ theory connectives_disequality
   imports base
 begin
 
-section \<open>Basic logical connectives (using primitive disequality)\<close>
+section \<open>Logical Connectives (using primitive disequality)\<close>
 
 text \<open>Via negativa: disequality (notation: \<open>\<D>\<close>, infix \<open>\<noteq>\<close>) is all you can tell.\<close>
 
-subsection \<open>Basic connectives\<close>
+subsection \<open>Basic Connectives\<close>
 
 subsubsection \<open>Falsum\<close>
 text \<open>Since no function is non-self-identical, the following serves as definition of falsum/false.\<close>

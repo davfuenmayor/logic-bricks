@@ -4,13 +4,17 @@ begin
 
 section \<open>Functions and Sets\<close>
 
+text \<open>We introduce several convenient definitions and lemmata for working with functions and sets.\<close>
+
 named_theorems func_defs
 
+subsection \<open>Basic Functional Notions\<close>
 
-subsection \<open>Algebraic structure\<close>
+subsubsection \<open>Monoid Structure\<close>
 
-text \<open>The identity function is a nullary operation (i.e. a "constant"). It corresponds to the \<open>\<^bold>I\<close> combinator.
- Function composition is the main binary operation between functions and corresponds to the \<open>\<^bold>B\<close> combinator.\<close>
+text \<open>Functions feature a monoidal structure. The identity function is a nullary operation 
+ (i.e. a "constant"). It corresponds to the \<open>\<^bold>I\<close> combinator. Function composition is the main binary
+  operation between functions and corresponds to the \<open>\<^bold>B\<close> combinator.\<close>
 
 \<comment> \<open>Recalling\<close>
 lemma "f \<circ> g \<circ> h = (\<lambda>x. f (g (h x)))" unfolding comb_defs ..
@@ -22,7 +26,7 @@ lemma "\<^bold>I \<circ> f = f" unfolding comb_defs ..                   \<comme
 lemma "f \<circ> \<^bold>I = f" unfolding comb_defs ..                   \<comment> \<open>identity 2\<close>
 
 
-subsection \<open>Fixed-Points\<close>
+subsubsection \<open>Fixed-Points\<close>
 
 text \<open>The set of pre- resp. post-fixed-points of an endofunction \<open>f\<close> wrt an endorelation \<open>R\<close>, are those points
  sent by \<open>f\<close> backwards resp. forward wrt \<open>R\<close>. Note that if \<open>R\<close> is symmetric then both notions coincide.\<close>
@@ -83,9 +87,7 @@ lemma "R-wEXPN f = (\<forall>A. R (f A) (f (f A)))" unfolding func_defs comb_def
 lemma "R-wCNTR f = (\<forall>A. R (f (f A)) (f A))" unfolding func_defs comb_defs ..
 
 
-subsection \<open>Type-lifting\<close>
-
-subsubsection \<open>General case: Environment (aka. reader) monad\<close>
+subsubsection \<open>Type-lifting - General Case: Environment (aka. Reader) Monad\<close>
 
 text \<open>We can conceive of functional types of the form \<open>'a \<Rightarrow> 'b\<close> as arising via an "environmentalization", 
  or "indexation" of the type \<open>'b\<close> by the type \<open>'a\<close>, i.e. as \<open>'a-Env('b)\<close> using our type notation. 
@@ -127,7 +129,7 @@ lemma "monadLaw2 unit_env bind_env" unfolding comb_defs by simp
 lemma "monadLaw3 bind_env" unfolding comb_defs by simp
 
 
-subsubsection \<open>Digression: on higher-arities\<close>
+subsubsection \<open>Type-lifting - Digression: On Higher Arities\<close>
 
 text \<open>Note that \<open>\<^bold>\<Phi>\<^sub>m\<^sub>n\<close> combinators can be used to index (or "environmentalize") a given m-ary function n-times.\<close>
 term "(\<^bold>\<Phi>\<^sub>0\<^sub>1 (f::'a)) :: 'e-Env('a)"
@@ -153,7 +155,7 @@ abbreviation(input) rbind2_env::"('a \<Rightarrow> 'b \<Rightarrow> 'e-Env('c)) 
   where "rbind2_env  \<equiv> \<^bold>\<Sigma>\<^sub>2\<^sub>1"
 \<comment> \<open>...and so on\<close>
 
-subsubsection \<open>Base case: Identity monad\<close>
+subsubsection \<open>Type-lifting - Base Case: Identity Monad\<close>
 
 text \<open>Finally, we consider the (degenerate) base case arising from an identity type constructor\<close>
 abbreviation(input) unit_id::"'a \<Rightarrow> 'a"
@@ -176,7 +178,7 @@ lemma "monadLaw2 unit_id bind_id" unfolding comb_defs by simp
 lemma "monadLaw3 bind_id" unfolding comb_defs by simp
 
 
-subsection \<open>Type-lifting relations\<close>
+subsubsection \<open>Type-lifting - Relations\<close>
 
 text \<open>Relations can be seen (and thus type-lifted) from two equivalent perspectives: 
  \<^enum> As unary functions (with set codomain), or equivalently, as indexed families of sets.
@@ -196,7 +198,9 @@ definition relLiftAll :: "Rel('a,'b) \<Rightarrow> Rel('c-Env('a),'c-Env('b))" (
 declare relLiftEx_def[func_defs] relLiftAll_def[func_defs]
 
 
-subsection \<open>Set operations\<close>
+subsection \<open>Basic Set Notions\<close>
+
+subsubsection \<open>Set-Operations\<close>
 
 text \<open>Note that sets of As can be faithfully encoded as A-indexed booleans (aka. "characteristic functions").\<close>
 term "(S :: Set('a)) :: 'a-Env(o)"
@@ -250,7 +254,7 @@ lemma compl_fixedpoint: "nFP = \<midarrow> \<circ> FP" unfolding func_defs comb_
 lemma "nFP f = \<midarrow>(FP f)" unfolding func_defs comb_defs ..
 
 
-subsection \<open>Digression: dual-composition for unary set-operations\<close>
+subsubsection \<open>Dual-composition of Unary Set-Operations\<close>
 
 text \<open>Clearly, functional composition can be seamlessly applied to set-operations too.\<close>
 lemma fixes F::"Set('b) \<Rightarrow> Set('c)" and G::"Set('a) \<Rightarrow> Set('b)"
@@ -272,7 +276,7 @@ lemma compDuality3: "(f \<circ> g) = (f \<bullet> (\<midarrow> \<circ> g))"
   unfolding func_defs comb_defs by simp
 
 
-subsection \<open>Set ordering\<close>
+subsubsection \<open>Set Orderings\<close>
 
 text \<open>In the previous section we applied a kind of "functional lifting" to the boolean HOL operations in
  order to encode the corresponding operations on sets. Here we encode sets' (lattice) order structure
@@ -343,7 +347,7 @@ lemma "A \<sqinter> B = (\<not>(A \<subseteq> \<midarrow>B))" unfolding func_def
 lemma "A \<bottom> B = A \<subseteq> \<midarrow>B" unfolding func_defs comb_defs by simp
 
 
-subsection \<open>Constructing sets\<close>
+subsubsection \<open>Constructing Sets\<close>
 
 abbreviation(input) insert :: "'a \<Rightarrow> Set('a) \<Rightarrow> Set('a)"
   where "insert a S \<equiv> \<Q> a \<union> S"
@@ -396,7 +400,7 @@ definition singleton::"Set(Set('a))" ("\<exists>!")
 declare unique_def[func_defs] singleton_def[func_defs]
 
 
-subsection \<open>Infinitary operations\<close>
+subsubsection \<open>Infinitary Set-Operations\<close>
 
 text \<open>Union and intersection can be generalized to operate on arbitrary sets of sets (aka. "infinitary" operations).\<close>
 definition biginter::"EOp\<^sub>G(Set('a))" ("\<Inter>")
@@ -423,7 +427,7 @@ lemma "\<Squnion>S = \<forall>(\<Union>S)" unfolding func_defs comb_defs ..
 
 subsection \<open>Function Transformations\<close>
 
-subsubsection \<open>Inverse and range\<close>
+subsubsection \<open>Inverse and Range\<close>
 
 text \<open>The inverse of a function \<open>f\<close> is the relation that assigns to each object \<open>b\<close> in its codomain 
  the set of elements in its domain mapped to \<open>b\<close> (i.e. the preimage of \<open>b\<close> under \<open>f\<close>).\<close>
@@ -480,7 +484,7 @@ lemma "range\<^sub>3 f d = (\<exists>a b c. f a b c = d)" unfolding func_defs co
 \<comment> \<open>...\<open>range\<^sub>n f x = (\<exists>a\<^sub>1 ...a\<^sub>n. f a\<^sub>1 ... a\<^sub>n = x)\<close>\<close>
 
 
-subsubsection \<open>Kernel of a function\<close>
+subsubsection \<open>Kernel of a Function\<close>
 
 text \<open>The "kernel" of a function relates those elements in its domain that get assigned the same value.\<close>
 definition kernel::"('a \<Rightarrow> 'b) \<Rightarrow> ERel('a)"
@@ -494,7 +498,7 @@ text \<open>We add convenient superscript notation.\<close>
 notation(input) kernel ("_\<^sup>=")  notation(output) kernel ("'(_')\<^sup>=")
 
 
-subsubsection \<open>Pullback and equalizer of a pair of functions\<close>
+subsubsection \<open>Pullback and Equalizer of a Pair of Functions\<close>
 
 text \<open>The pullback (aka. fiber product) of two functions \<open>f\<close> and \<open>g\<close> (sharing the same codomain), 
  relates those pairs of elements that get assigned the same value by \<open>f\<close> and \<open>g\<close> respectively.\<close>
@@ -531,7 +535,7 @@ lemma "\<^bold>R equalizer x = (\<lambda>f g. f x = g x)" unfolding func_defs co
 lemma "\<^bold>C\<^sub>2 pullback x y = (\<lambda>f g. f x = g y)" unfolding func_defs comb_defs ..
 
 
-subsubsection \<open>Pushout and coequalizer of a pair of functions\<close>
+subsubsection \<open>Pushout and Coequalizer of a Pair of Functions\<close>
 
 text \<open>The pushout (aka. fiber coproduct) of two functions \<open>f\<close> and \<open>g\<close> (sharing the same domain), relates
  pairs of elements (in their codomains) whose preimages under \<open>f\<close> resp. \<open>g\<close> intersect.\<close>
@@ -565,7 +569,7 @@ text \<open>The coequalizer of two functions can be stated in terms of pushout.\
 lemma "coequalizer = \<^bold>W \<circ>\<^sub>2 pushout" unfolding func_defs comb_defs ..
 
 
-subsection \<open>Set-operations defined from functions\<close>
+subsubsection \<open>Image and Preimage\<close>
 
 text \<open>We can "lift" functions to act on sets via the image operator. The term \<open>image f\<close> denotes a
  set-operation that takes a set \<open>A\<close> and returns the set of elements whose \<open>f\<close>-preimage intersects \<open>A\<close>.\<close>

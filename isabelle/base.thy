@@ -4,7 +4,7 @@ begin
 
 section \<open>Customized configuration and notation for Isabelle/HOL\<close>
 (*<*)
-subsection \<open>Tool configuration\<close>
+subsection \<open>Tool Configuration\<close>
 
 declare[[smt_timeout=30]]
 (* declare[[show_types]] *)
@@ -13,9 +13,9 @@ sledgehammer_params[max_facts=100,isar_proof=false]
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, max_potential=0,max_genuine=1, format=3] (*default Nitpick settings*)
 (*>*)
 
-subsection \<open>Custom type notation\<close>
+subsection \<open>Custom Type Notation\<close>
 
-subsubsection \<open>Basic types\<close>
+subsubsection \<open>Basic Types\<close>
 
 text \<open>Classical HOL systems come with a built-in boolean type, for which we introduce convenient notation alias.\<close>
 type_notation bool ("o")
@@ -104,7 +104,7 @@ type_synonym ('a,'b)SetOp2 = "Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('b
 type_synonym ('a)SetEOp2 = "SetOp\<^sub>2('a,'a)" ("SetEOp\<^sub>2'(_')") \<comment> \<open>same as: \<open>Set('a) \<Rightarrow> Set('a) \<Rightarrow> Set('a)\<close>\<close>
 
 
-subsubsection \<open>Products of boolean types\<close>
+subsubsection \<open>Products of Boolean Types\<close>
 
 text \<open>Now consider the following equivalent type notations.\<close>
 term "((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o"
@@ -144,7 +144,7 @@ text \<open>Binary case:\<close>
 type_synonym ('a,'r)Cont2 = "'r-Val(Op\<^sub>2('a,'r))" ("Cont\<^sub>2'(_,_')") \<comment> \<open>same as: \<open>('a \<Rightarrow> 'a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
 
 
-subsection \<open>Custom term notation\<close>
+subsection \<open>Custom Term Notation\<close>
 
 text \<open>Convenient combinator-like symbols \<open>\<Q>\<close> resp. \<open>\<D>\<close> to be used instead of \<open>(=)\<close> resp. \<open>(\<noteq>)\<close>.\<close>
 notation HOL.eq ("\<Q>") and HOL.not_equal ("\<D>")
@@ -210,7 +210,7 @@ notation(input) HOL.Not ("\<not>" 40)
 notation(output) HOL.Not ("\<not>_" [40] 40)
 
 
-subsection \<open>Hiding symbols and notation from the Isabelle library\<close>
+subsection \<open>Hiding Symbols and Notation from the Isabelle Library\<close>
 
 (*We hide many symbols and notation from the Isabelle library (which we don't use) to avoid collisions.*)
 hide_const(open) Set.subset Set.subset_eq Set.supset Set.supset_eq 
@@ -276,7 +276,7 @@ no_notation Product_Type.Times (infixr "\<times>" 80)
 no_notation Fun.comp (infixl "\<circ>" 55) and Fun.comp (infixl "o" 55)
 
 
-subsection \<open>Notation tests\<close>
+subsection \<open>Notation Tests\<close>
 
 term "\<epsilon>"
 term "\<delta>"

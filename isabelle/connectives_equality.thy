@@ -2,11 +2,11 @@ theory connectives_equality
   imports base
 begin
 
-section \<open>Basic logical connectives (using primitive equality)\<close>
+section \<open>Logical Connectives (using primitive equality)\<close>
 
 text \<open>Via positiva: equality (notation: \<open>\<Q>\<close>, infix \<open>=\<close>) is all you can tell.\<close>
 
-subsection \<open>Basic connectives\<close>
+subsection \<open>Basic Connectives\<close>
 
 subsubsection \<open>Verum\<close>
 text \<open>Since any function is self-identical, the following serves as definition of verum/true.\<close>

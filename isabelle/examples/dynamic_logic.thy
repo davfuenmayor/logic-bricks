@@ -2,7 +2,7 @@ theory dynamic_logic
   imports modal_correspondence
 begin
 
-section \<open>Shallow embedding of Propositional Dynamic Logic (PDL)\<close>
+section \<open>Shallow Embedding of Propositional Dynamic Logic (PDL)\<close>
 
 typedecl w (*type of worlds or states*)
 type_synonym \<sigma> = "Set(w)" (*type of propositions or predicates*)
@@ -26,7 +26,7 @@ lemma "a \<subseteq>\<^sup>r b \<longrightarrow> [b]P \<subseteq> [a]P"
   by simp
 
 
-section \<open>Operations\<close>
+subsection \<open>Operations\<close>
 
 (*We explore the (algebraic) operations on actions/programs. 
   For instance actions/programs can be combined via a sequential or choice execution.*)

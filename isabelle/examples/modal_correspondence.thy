@@ -2,7 +2,7 @@ theory modal_correspondence
 imports "../operators" "../entailment"
 begin
 
-section \<open>Automating modal correspondences\<close>
+section \<open>Automating Modal Correspondences\<close>
 
 (*Syntactic sugar for object-logical Boolean connectives*)
 notation(input) compl ("\<^bold>\<not>") and inter (infixr "\<^bold>\<and>" 54) and union (infixr "\<^bold>\<or>" 53) and impl  (infixr "\<^bold>\<rightarrow>" 51)
@@ -15,7 +15,7 @@ abbreviation(input) relEmbedding ("_,_-embedding_")
   where "R,T-embedding \<phi> \<equiv> (\<And>X Y. R X Y = T (\<phi> X) (\<phi> Y))"
 
 
-subsection \<open>Traditional operators (\<box> & \<diamond>)\<close>
+subsection \<open>Traditional Operators (\<box> & \<diamond>)\<close>
 
 notation(input) leftImage ("\<^sup>_\<^bold>\<diamond>") and leftDualImage ("\<^sup>_\<^bold>\<box>") and 
                 rightImage ("\<^sup>_\<^bold>\<diamond>''") and rightDualImage ("\<^sup>_\<^bold>\<box>''")
@@ -86,7 +86,7 @@ lemma euclidean_corresp': "rightEuclidean R \<longleftrightarrow> (\<forall>P. \
 (*...and so on*)
 
 
-subsection \<open>Further operators\<close>
+subsection \<open>Further Operators\<close>
 
 notation(input) leftBound ("\<^sup>_\<^bold>\<Zdres>") and leftDualBound ("\<^sup>_\<^bold>\<Zndres>") and
                 rightBound ("\<^sup>_\<^bold>\<Zrres>") and rightDualBound ("\<^sup>_\<^bold>\<Znrres>")

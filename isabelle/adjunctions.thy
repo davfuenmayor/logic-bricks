@@ -9,14 +9,12 @@ text \<open>The term "adjunction" is quite overloaded in the literature. Here we
 \<^enum> Galois-connections (aka. dual-adjunctions or Galois-adjunctions), which are contravariant. 
 \<^enum> Adjunctions (aka. residuations), which are covariant. We refer to them just as "adjunctions" (simpliciter).\<close>
 
-subsection \<open>Galois-connections\<close>
-
 text \<open>Galois-connections (aka. Galois- or dual-adjunctions) relate pairs of functions (having flipped domain-codomain) 
  wrt. a pair of endorelations (usually orderings on the functions' domains). We focus in this section on
  the traditional notion of "contravariant" Galois-connection wrt. a pair of arbitrary relations \<open>R\<^sub>1\<close> and \<open>R\<^sub>2\<close>.
  Note that a "covariant" version, aka. adjunction (simpliciter), can always be defined by reversing \<open>R\<^sub>2\<close> below.\<close>
 
-subsubsection \<open>Relational version\<close>
+subsection \<open>For Relations\<close>
 
 text \<open>We introduce a convenient notion of "relational Galois-connection" relating a given pair of relations
  \<open>F\<close> and \<open>G\<close> wrt. another pair of relations \<open>R\<^sub>1\<close> and \<open>R\<^sub>2\<close> (as parameters). This generalizes the traditional
@@ -94,7 +92,7 @@ lemma relGalois_rightUnique: "skeletal R\<^sub>1 \<Longrightarrow> unique((R\<^s
   oops (*TODO: fix reconstruction*)
 
 
-subsection \<open>Functional version\<close>
+subsection \<open>For Functions\<close>
 
 text \<open>We now move towards the notion of (functional) Galois-connections, still slightly generalized, 
  such that it relates pairs of functions \<open>f\<close> and \<open>g\<close> wrt a pair of arbitrary relations \<open>R\<^sub>1\<close> and \<open>R\<^sub>2\<close>.

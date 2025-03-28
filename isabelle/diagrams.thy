@@ -4,9 +4,9 @@ begin
 
 section \<open>Commutative diagrams\<close>
 
-subsection \<open>Basic diagrams\<close>
+subsection \<open>Basic Diagrams\<close>
 
-subsubsection \<open>For functions\<close>
+subsubsection \<open>For Functions\<close>
 
 text \<open>A commutative triangle states that a function "factorizes" as a composition of two given functions.\<close>
 definition triangle :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'c) \<Rightarrow> ('c \<Rightarrow> 'b) \<Rightarrow> o" ("_-FACTOR") 
@@ -58,7 +58,7 @@ lemma " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot>
                         i;k\<rightarrow> \<sqdot>  " unfolding func_defs comb_defs ..
 
 
-subsubsection \<open>For relations\<close>
+subsubsection \<open>For Relations\<close>
 
 text \<open>A commutative triangle states that a relation "factorizes" as a composition of two given relations.\<close>
 definition relTriangle::"Rel('a,'b) \<Rightarrow> Rel('a,'c) \<Rightarrow> Rel('c,'b) \<Rightarrow> o" ("_-FACTOR\<^sup>r") 
@@ -139,7 +139,7 @@ lemma square_relfun: "relSquare (asRel i) (asRel j) (asRel k) (asRel l) =    squ
 
 subsection \<open>Splittings\<close>
 
-subsubsection \<open>For functions\<close>
+subsubsection \<open>For Functions\<close>
 
 text \<open>We say of two functions f and g that they form a splitting (of the identity \<open>\<^bold>I\<close>) when g "undoes the
  effect" of f. In some literature, g (f) is called a left (right) inverse of f (g). We adopt another
@@ -169,7 +169,7 @@ lemma "(involutive f \<and> idempotent f) = (f = \<^bold>I)"
   unfolding func_defs comb_defs by auto
 
 
-subsubsection \<open>For relations\<close>
+subsubsection \<open>For Relations\<close>
 
 text \<open>Analogously to functions, we can say of two relations S and R that they form a splitting (of the
  identity \<open>\<Q>\<close>). Similarly, we call S (R) the section (retraction) of R (S).\<close>
@@ -224,7 +224,7 @@ subsection \<open>Duality\<close>
 text \<open>We encode (relational) duality as a relation between functions (relations). It arises by fixing 
  two of the arguments of a (relational) square as parameters (which we refer to as \<open>n\<^sub>1\<close> and \<open>n\<^sub>2\<close>).\<close>
 
-subsubsection \<open>For functions\<close>
+subsubsection \<open>For Functions\<close>
 
 text \<open>Two functions f and g are said to be dual wrt. to a pair of functions \<open>n\<^sub>1\<close> and \<open>n\<^sub>2\<close> (as parameters).\<close>
 definition dual::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> Rel('a\<^sub>1 \<Rightarrow> 'b\<^sub>1, 'a\<^sub>2 \<Rightarrow> 'b\<^sub>2)" ("_,_-DUAL")
@@ -275,7 +275,7 @@ lemma " \<sqdot> \<Midarrow>  (\<setminus>)  \<rightarrow>  \<sqdot>
         \<sqdot> \<Midarrow>(\<midarrow>\<circ>\<^sub>2(\<inter>))\<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by simp
 
 
-subsubsection \<open>For relations\<close>
+subsubsection \<open>For Relations\<close>
 
 text \<open>Two relations R and T are said to be dual wrt. to a pair of relations \<open>n\<^sub>1\<close> and \<open>n\<^sub>2\<close> (as parameters).\<close>
 definition relDual::"Rel('a\<^sub>1,'a\<^sub>2) \<Rightarrow> Rel('b\<^sub>1,'b\<^sub>2) \<Rightarrow> Rel(Rel('a\<^sub>1,'b\<^sub>1), Rel('a\<^sub>2,'b\<^sub>2))" ("_,_-DUAL\<^sup>r")

@@ -13,7 +13,7 @@ method them = (unfold endorel_defs rel_defs func_defs comb_defs) ;
               (auto | metis | smt) ; ((rule ext)+ | skip) ; (auto | metis | smt)
 
 
-subsection \<open>Recap from the theory of relations\<close>
+subsection \<open>Recap from the Theory of Relations\<close>
 
 text \<open>Literature on relational algebra informally classifies relational connectives into two groups:
  a so-called "Boolean" (aka. additive) and a "Peircean" (aka. multiplicative) structure.
@@ -50,7 +50,7 @@ lemma "\<Q> \<subseteq>\<^sup>r (R \<dagger>\<^sup>r (R\<^sup>\<sim>))" by them
 lemma "(R ;\<^sup>r (R\<^sup>\<sim>)) \<subseteq>\<^sup>r \<D>" by them
 
 
-section \<open>Cyclic Linear Logic\<close>
+subsection \<open>Cyclic Linear Logic\<close>
 
 text \<open>We show how (extended) relation algebra can interpret a non-commutative, cyclic variant of linear logic.
  If modal logic can be said to adopt the "propositions as sets (of states)" paradigm. The present
