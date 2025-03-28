@@ -90,7 +90,7 @@ lemma relGalois_prop: "skeletal R\<^sub>1 \<Longrightarrow> \<exists>(R\<^sub>1,
   apply (rule ext)+ apply auto apply (metis (no_types, opaque_lifting)) by (smt (verit, best)) 
 
 text \<open>The related question of uniqueness of Galois adjoints (when they exist) is simpler.\<close>
-lemma relGalois_rightUnique: "skeletal R\<^sub>1 \<Longrightarrow> unique((R\<^sub>1,R\<^sub>2-GAL\<^sup>r F) \<inter> rightUnique)" 
+lemma relGalois_rightUnique: "skeletal R\<^sub>1 \<Longrightarrow> unique((R\<^sub>1,R\<^sub>2-GAL\<^sup>r F) \<inter> rightUnique)"  \<comment> \<open>proof by external provers\<close> 
   oops (*TODO: fix reconstruction*)
 
 
@@ -153,7 +153,7 @@ lemma adjunction_def2: " \<sqdot> \<leftarrow>g\<midarrow> \<sqdot>
   unfolding adj_defs rel_defs func_defs comb_defs by metis
 
 text \<open>Note that the (covariant) adjunction is not "symmetric" in the sense the Galois-connection is.\<close>
-lemma "R\<^sub>1,R\<^sub>2-ADJ f g = R\<^sub>2,R\<^sub>1-ADJ g f" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "R\<^sub>1,R\<^sub>2-ADJ f g = R\<^sub>2,R\<^sub>1-ADJ g f" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>A possible explanation for the adjectives "covariant" and "contravariant".\<close>
 lemma "preorder R \<Longrightarrow> R,R-ADJ f g \<Longrightarrow> R-MONO g" 
@@ -175,7 +175,7 @@ lemma "R\<^sub>1,R\<^sub>2-leftAdj = R\<^sub>2\<^sup>\<smile>,R\<^sub>1\<^sup>\<
 
 text \<open>Our adjoint operator behaves as expected for those functions that have indeed some adjoint (again,
  we still have to find out under which minimal conditions such adjoints exist for the general case).\<close>
-lemma galois_prop: "skeletal R\<^sub>1 \<Longrightarrow> \<exists>(R\<^sub>1,R\<^sub>2-GAL f) \<Longrightarrow> R\<^sub>1,R\<^sub>2-GAL f (R\<^sub>1,R\<^sub>2-adj f)"
+lemma galois_prop: "skeletal R\<^sub>1 \<Longrightarrow> \<exists>(R\<^sub>1,R\<^sub>2-GAL f) \<Longrightarrow> R\<^sub>1,R\<^sub>2-GAL f (R\<^sub>1,R\<^sub>2-adj f)"  \<comment> \<open>proof by external provers\<close>
   unfolding adj_defs skeletal_def2 reflexive_def4 antisymmetric_reldef comb_defs
   unfolding endorel_defs rel_defs  func_defs comb_defs apply (rule ext)+  oops (*TODO: reconstruct*)
 
@@ -192,11 +192,13 @@ lemma "R\<^sub>1,R\<^sub>2-ADJ\<^sub>2 f g = (\<forall>x. R\<^sub>1,R\<^sub>2-AD
 lemma    "R\<^sub>1,R\<^sub>2-GAL\<^sub>2 f g = (\<forall>a b c. R\<^sub>2 b (f c a) \<leftrightarrow> R\<^sub>1 a (g c b))" unfolding adj_defs rel_defs func_defs comb_defs by metis
 lemma "R\<^sub>1,R\<^sub>2-ADJ\<^sub>2 f g = (\<forall>a b c. R\<^sub>2 (f c a) b \<leftrightarrow> R\<^sub>1 a (g c b))" unfolding adj_defs rel_defs func_defs comb_defs by metis
 \<comment> \<open>For instance, in the case of subset ordering:\<close>
-lemma    "(\<subseteq>),(\<subseteq>)-GAL\<^sub>2 f g = (\<forall>a b c. b \<subseteq> (f c) a \<leftrightarrow> a \<subseteq> (g c) b)" unfolding adj_defs rel_defs func_defs comb_defs oops
-lemma "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 f g = (\<forall>a b c. (f c) a \<subseteq> b \<leftrightarrow> a \<subseteq> (g c) b)" unfolding adj_defs rel_defs func_defs comb_defs oops
+lemma "(\<subseteq>),(\<subseteq>)-GAL\<^sub>2 f g = (\<forall>a b c. b \<subseteq> (f c) a \<leftrightarrow> a \<subseteq> (g c) b)"  \<comment> \<open>proof by external provers\<close>
+  unfolding adj_defs rel_defs func_defs comb_defs oops (*TODO: reconstruct in kernel*)
+lemma "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 f g = (\<forall>a b c. (f c) a \<subseteq> b \<leftrightarrow> a \<subseteq> (g c) b)"  \<comment> \<open>proof by external provers\<close>
+  unfolding adj_defs rel_defs func_defs comb_defs oops (*TODO: reconstruct in kernel*)
 
 
-text \<open>A convenient "lifting" rule for (Galois) and adjunctions (and for any arities).\<close>
+text \<open>A convenient "lifting" rule for (Galois) adjunctions (and for any arities).\<close>
 lemma galois_lift1: "R\<^sub>1,R\<^sub>2-GAL f g \<Longrightarrow> (\<^bold>\<Phi>\<^sub>\<forall> R\<^sub>1),(\<^bold>\<Phi>\<^sub>\<forall> R\<^sub>2)-GAL (\<^bold>\<Phi>\<^sub>1\<^sub>1 f) (\<^bold>\<Phi>\<^sub>1\<^sub>1 g)"
   by (simp add: B1_comb_def B3_comb_def \<Phi>21_comb_def galois_def2 relLiftAll_def)
 lemma adjunction_lift1: "R\<^sub>1,R\<^sub>2-ADJ f g \<Longrightarrow> (\<^bold>\<Phi>\<^sub>\<forall> R\<^sub>1),(\<^bold>\<Phi>\<^sub>\<forall> R\<^sub>2)-ADJ (\<^bold>\<Phi>\<^sub>1\<^sub>1 f) (\<^bold>\<Phi>\<^sub>1\<^sub>1 g)"
@@ -215,13 +217,13 @@ lemma "\<Q>,\<Q>-GAL (\<lambda>x::int. x + a) (\<lambda>x. x - a)" unfolding adj
 lemma "(\<le>),(\<le>)-ADJ (\<lambda>x::int. x + a) (\<lambda>x. x - a)" unfolding adj_defs rel_defs func_defs comb_defs by (simp add: le_diff_eq)
 text \<open>Symmetric difference is self-adjoint wrt. equality (but not wrt inequality).\<close>
 lemma "\<Q>,\<Q>-GAL ((\<triangle>) a) ((\<triangle>) a)" unfolding adj_defs rel_defs func_defs comb_defs by auto
-lemma "(\<subseteq>),(\<subseteq>)-GAL ((\<triangle>) a) ((\<triangle>) a)" nitpick oops \<comment> \<open>counterexample\<close>
-lemma "(\<subseteq>),(\<subseteq>)-ADJ ((\<triangle>) a) ((\<triangle>) a)" nitpick oops \<comment> \<open>counterexample\<close>
+proposition "(\<subseteq>),(\<subseteq>)-GAL ((\<triangle>) a) ((\<triangle>) a)" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "(\<subseteq>),(\<subseteq>)-ADJ ((\<triangle>) a) ((\<triangle>) a)" nitpick \<comment> \<open>countermodel found\<close> oops
 
 lemma "(\<le>)-MONO (f::int\<Rightarrow>int) \<Longrightarrow> \<Q>,\<Q>-GAL f g \<Longrightarrow> (\<le>),(\<le>)-ADJ f g"
   unfolding adj_defs rel_defs func_defs comb_defs by (metis nle_le)
-lemma "(\<le>),(\<le>)-ADJ (f::int\<Rightarrow>int) (g::int\<Rightarrow>int) \<Longrightarrow> \<Q>,\<Q>-GAL f g"
-  unfolding adj_defs rel_defs func_defs comb_defs apply (rule ext)+ apply auto oops (*TODO prove*)
+lemma "(\<le>),(\<le>)-ADJ (f::int\<Rightarrow>int) (g::int\<Rightarrow>int) \<Longrightarrow> \<Q>,\<Q>-GAL f g" \<comment> \<open>proof by external provers\<close>
+  unfolding adj_defs rel_defs func_defs comb_defs apply (rule ext)+ apply auto oops (*TODO reconstruct in kernel*)
 
 text \<open>The relation-based right- and left-bound operators form a Galois-connection.\<close>
 lemma "(\<subseteq>),(\<subseteq>)-GAL R-rightBound R-leftBound" unfolding adj_defs rel_defs func_defs comb_defs by auto

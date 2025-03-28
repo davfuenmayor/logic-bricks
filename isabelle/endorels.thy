@@ -59,8 +59,8 @@ lemma reflexive_def4:     \<open>reflexive = FP reflexiveClosure\<close> unfoldi
 lemma irreflexive_def4: \<open>irreflexive = FP irreflexiveInterior\<close> unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
 text \<open>The smallest reflexive super-relation resp. largest irreflexive subrelation.\<close>
-lemma "reflexiveClosure R = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> reflexive T)" oops  (*TODO: reconstruct proof*)
-lemma "irreflexiveInterior R = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> irreflexive T)" oops (*TODO: reconstruct proof*)
+lemma "reflexiveClosure R = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> reflexive T)" \<comment> \<open>proof by external provers\<close> oops  (*TODO: reconstruct proof*)
+lemma "irreflexiveInterior R = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> irreflexive T)" \<comment> \<open>proof by external provers\<close> oops (*TODO: reconstruct proof*)
 
 
 subsection \<open>Strong-identity, weak-difference, and tests\<close>
@@ -83,8 +83,8 @@ text \<open>Elements in weak-differences are related to (at least) everyone else
 lemma weakDifference_def2: "weakDifference R = (\<forall>a. \<lbrace>a\<rbrace> \<subseteq> R a)" unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 text \<open>They are "weaker" than identity resp. difference since they may feature anti-diagonal resp. diagonal elements.\<close>
-lemma "strongIdentity R \<and> \<not>R a a" nitpick[satisfy] oops \<comment> \<open>satisfying model found\<close>
-lemma "weakDifference R \<and> R a a" nitpick[satisfy] oops \<comment> \<open>satisfying model found\<close>
+proposition "strongIdentity R \<and> \<not>R a a" nitpick[satisfy] \<comment> \<open>satisfying model found\<close> oops 
+proposition "weakDifference R \<and> R a a" nitpick[satisfy] \<comment> \<open>satisfying model found\<close> oops
 
 
 text \<open>We can naturally obtain strong-identities resp. weak-differences via the following operators.\<close>
@@ -115,8 +115,8 @@ lemma strongIdentity_def4:     \<open>strongIdentity = FP strongIdentityInterior
 lemma weakDifference_def4: \<open>weakDifference = FP weakDifferenceClosure\<close> unfolding subrel_defFP endorel_defs comb_defs ..
 
 text \<open>The largest strong-identity sub-relation resp. smallest weak-difference super-relation.\<close>
-lemma "R\<^sup>! = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> strongIdentity T)" oops (*TODO: reconstruct proof*)
-lemma "R\<^sup>? = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> weakDifference T)" oops  (*TODO: reconstruct proof*)
+lemma "R\<^sup>! = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> strongIdentity T)" \<comment> \<open>proof by external provers\<close> oops (*TODO: reconstruct proof*)
+lemma "R\<^sup>? = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> weakDifference T)" \<comment> \<open>proof by external provers\<close> oops  (*TODO: reconstruct proof*)
 
 
 text \<open>A convenient way of disguising sets as endorelations (cf. dynamic logics and program algebras).\<close>
@@ -259,8 +259,8 @@ lemma symmetric_reldef:   \<open>symmetric R = R  \<subseteq>\<^sup>r R\<^sup>\<
 lemma symmetric_reldefT:  \<open>symmetric R = R\<^sup>\<smile> \<subseteq>\<^sup>r R\<close> unfolding symmetric_defT2 rel_defs func_defs comb_defs ..
 lemma \<open>symmetric R = (\<forall>a b. R a b \<rightarrow> R b a)\<close> unfolding symmetric_def2 rel_defs func_defs comb_defs ..
 
-lemma "symmetricInterior R = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> symmetric T)" oops (*TODO: reconstruct proof*)
-lemma "symmetricClosure R  = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> symmetric T)" oops (*TODO: reconstruct proof*)
+lemma "symmetricInterior R = \<Union>\<^sup>r(\<lambda>T. T \<subseteq>\<^sup>r R \<and> symmetric T)" \<comment> \<open>proof by external provers\<close> oops (*TODO: reconstruct proof*)
+lemma "symmetricClosure R  = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> symmetric T)" \<comment> \<open>proof by external provers\<close> oops (*TODO: reconstruct proof*)
 
 lemma "symmetric R\<^sup>\<midarrow> = symmetric R" unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
@@ -392,7 +392,7 @@ lemma "relPower0 R = indSet\<^sub>1 {\<Q>} ((\<circ>\<^sup>r) R)" unfolding endo
 lemma relPower0_def2: "relPower0 R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S \<Q> \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
 
 text \<open>Definitions work as intended:\<close>
-lemma "relPower R \<Q>" nitpick oops \<comment> \<open>counterexample\<close>
+proposition "relPower R \<Q>" nitpick \<comment> \<open>countermodel found\<close> oops
 lemma "relPower R R" unfolding relPower_def2 by simp
 lemma "relPower R (R \<circ>\<^sup>r R)" unfolding relPower_def2 by simp
 lemma "relPower R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower_def2 by (simp add: relComp_assoc)
@@ -500,12 +500,12 @@ declare transitiveClosure_def [endorel_defs] preorderClosure_def [endorel_defs]
 lemma "R\<^sup>+ = \<Union>\<^sup>r(relPower R)" unfolding endorel_defs comb_defs ..
 lemma "R\<^sup>* = \<Union>\<^sup>r(relPower0 R)" unfolding endorel_defs comb_defs ..
 
-lemma transitiveClosure_char: "R\<^sup>+ = \<Inter>\<^sup>r(\<lambda>T. transitive T \<and> R \<subseteq>\<^sup>r T)"
+lemma transitiveClosure_char: "R\<^sup>+ = \<Inter>\<^sup>r(\<lambda>T. transitive T \<and> R \<subseteq>\<^sup>r T)" \<comment> \<open>proof by external provers\<close>
   unfolding transitiveClosure_def relPower_def transitive_def2
   unfolding endorel_defs rel_defs func_defs comb_defs 
   apply (rule ext)+ apply (rule iffI) oops (*TODO: prove*)
 
-lemma "R\<^sup>* = reflexiveClosure (R\<^sup>+)" oops (*TODO: prove*)
+lemma "R\<^sup>* = reflexiveClosure (R\<^sup>+)" \<comment> \<open>proof by external provers\<close> oops (*TODO: prove*)
 
 
 subsection \<open>Euclideanness and co.\<close>
@@ -599,8 +599,8 @@ lemma eq_filt_simp3: "(\<^bold>T::'a \<Rightarrow> Set(Set('a)))\<^sup>= = \<Q>\
   unfolding func_defs comb_defs by (metis (full_types))
 
 text \<open>Finally, note that:\<close>
-lemma "(\<forall>y::'a \<Rightarrow> o. y a = y b) \<Longrightarrow> (\<forall>y::'a \<Rightarrow> 'b. y a = y b)" oops \<comment> \<open>external provers find proof\<close>
-lemma "(\<forall>y::'a \<Rightarrow> 'b. y a = y b) \<Longrightarrow> (\<forall>y::'a \<Rightarrow> o. y a = y b)" nitpick oops \<comment> \<open>counterexample\<close>
+lemma "(\<forall>y::'a \<Rightarrow> o. y a = y b) \<Longrightarrow> (\<forall>y::'a \<Rightarrow> 'b. y a = y b)" \<comment> \<open>external provers find a proof\<close> oops
+proposition "(\<forall>y::'a \<Rightarrow> 'b. y a = y b) \<Longrightarrow> (\<forall>y::'a \<Rightarrow> o. y a = y b)" nitpick \<comment> \<open>counterexample found\<close> oops
 
 
 subsection \<open>Orderings\<close>
@@ -630,7 +630,7 @@ lemma subrel_partial_order: "partial_order (\<subseteq>\<^sup>r)"
   unfolding endorel_defs rel_defs func_defs comb_defs by fast
 
 text \<open>Functional-power is a preorder.\<close>
-lemma funPower_preorder: "preorder funPower"
+lemma funPower_preorder: "preorder funPower" \<comment> \<open>proof by external provers\<close>
   unfolding partial_order_def preorder_def apply auto 
    apply (simp add: B1_comb_def I_comb_def W21_comb_def funPower_def2 reflexive_def4)
   oops (*TODO: prove*)
@@ -646,7 +646,7 @@ lemma relPower0_preorder: "preorder relPower0"
   unfolding transitive_def2 relPower0_def2 by (metis (no_types, opaque_lifting) B2_comb_def relComp_assoc relComp_id1)
 
 text \<open>However, relational-power is not antisymmetric (and thus not partially ordered), because we have:\<close>
-lemma "R = T \<circ>\<^sup>r T \<Longrightarrow> T = R \<circ>\<^sup>r R \<Longrightarrow> R = T" nitpick[card 'a=3] oops \<comment> \<open>counterexample\<close>
+proposition "R = T \<circ>\<^sup>r T \<Longrightarrow> T = R \<circ>\<^sup>r R \<Longrightarrow> R = T" nitpick[card 'a=3] \<comment> \<open>countermodel found\<close> oops 
 
 
 subsection \<open>Set-operations defined from endorelations\<close>
@@ -780,7 +780,9 @@ declare wellFounded_def[endorel_defs] wellOrdered_def[endorel_defs]
 lemma "wellOrdered R = (\<forall>D. \<exists>D \<rightarrow> \<exists>(R-least D))" unfolding endorel_defs func_defs comb_defs .. 
 lemma "wellFounded R = (\<forall>D. \<exists>D \<rightarrow> \<exists>(R-min D))" unfolding endorel_defs func_defs comb_defs .. 
 
-lemma "preorder R \<Longrightarrow> wellFounded R \<Longrightarrow> A \<subseteq> R-rightImage(R-min A)" oops (*TODO prove*)
+(*<*)
+lemma "preorder R \<Longrightarrow> wellFounded R \<Longrightarrow> A \<subseteq> R-rightImage(R-min A)" oops (*TODO prove conjecture*)
+(*>*)
 
 
 subsection \<open>Limit-completeness\<close>
@@ -798,7 +800,7 @@ definition limitComplete::"Set(ERel('a))"
 
 lemma "limitComplete R = (\<forall>S. \<exists>(R-lub S))" unfolding limitComplete_def comb_defs ..
 
-lemma "limitComplete R \<Longrightarrow> (R-lub S) \<subseteq> S" nitpick oops \<comment> \<open>counterexample\<close>
+proposition "limitComplete R \<Longrightarrow> (R-lub S) \<subseteq> S" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>Transpose/converse definitions.\<close>
 lemma limitComplete_def2: "limitComplete =  \<forall> \<circ> (\<exists> \<circ>\<^sub>2 glb)" unfolding limitComplete_def comb_defs by (metis glb_def3 lub_def3)

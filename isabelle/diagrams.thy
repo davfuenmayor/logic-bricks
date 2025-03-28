@@ -124,8 +124,8 @@ lemma " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot>
 text \<open>Beware: Composition in relational squares must always be read along the principal (NW–SE) diagonal!\<close>
 lemma "relSquare i j k l = (i ;\<^sup>r k = j ;\<^sup>r l)" unfolding rel_defs comb_defs by meson
 lemma "relSquare i j k l = ((k\<^sup>\<smile>) ;\<^sup>r (i\<^sup>\<smile>) = (l\<^sup>\<smile>) ;\<^sup>r (j\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by meson
-lemma "relSquare i j k l \<Longrightarrow> ((i\<^sup>\<smile>) ;\<^sup>r j = k ;\<^sup>r (l\<^sup>\<smile>))" nitpick oops \<comment> \<open>countermodel: wrong diagonal!\<close>
-lemma "relSquare i j k l \<Longrightarrow> ((j\<^sup>\<smile>) ;\<^sup>r i = l ;\<^sup>r (k\<^sup>\<smile>))" nitpick oops \<comment> \<open>countermodel: wrong diagonal!\<close>
+proposition "relSquare i j k l \<Longrightarrow> ((i\<^sup>\<smile>) ;\<^sup>r j = k ;\<^sup>r (l\<^sup>\<smile>))" nitpick \<comment> \<open>countermodel: wrong diagonal!\<close> oops
+proposition "relSquare i j k l \<Longrightarrow> ((j\<^sup>\<smile>) ;\<^sup>r i = l ;\<^sup>r (k\<^sup>\<smile>))" nitpick \<comment> \<open>countermodel: wrong diagonal!\<close> oops
 
 text \<open>An alternative definition in terms of pullbacks.\<close>
 lemma relSquare_def2: "relSquare = \<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2 (\<^bold>B\<^sub>2\<^sub>2 \<Q> (relPullback \<circ> transpose) (relPullback \<circ> transpose))" 
@@ -249,7 +249,7 @@ lemma dual_symm: "involutive n\<^sub>1 \<Longrightarrow> involutive n\<^sub>2 \<
 lemma dual2_symm: "involutive n\<^sub>1 \<Longrightarrow> involutive n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g = n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g" unfolding func_defs comb_defs by simp
 
 text \<open>This notion does NOT correspond with the so-called "De Morgan duality" (although they are not unrelated).\<close>
-lemma "\<not>,\<not>-DUAL\<^sub>2 (\<and>) (\<or>)" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "\<not>,\<not>-DUAL\<^sub>2 (\<and>) (\<or>)" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>We add a (convenient?) diagram for duality of binary functions (for unary functions it is just the square).\<close>
 abbreviation(input) dual2Diagram (" \<sqdot> \<Midarrow>_\<rightarrow> \<sqdot> // _\<down> \<down>_ // \<sqdot> \<Midarrow>_\<rightarrow> \<sqdot>") 

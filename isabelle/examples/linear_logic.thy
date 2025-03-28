@@ -133,22 +133,22 @@ abbreviation(input) ll_invalid4  ("[_,_,_,_\<turnstile>]") where "[A,B,C,D \<tur
 
 text \<open>Cyclic linear logic is strictly weaker than linear logic: exchange does not hold unrestrictedly.\<close>
 lemma "[\<turnstile> R, S] \<longrightarrow> [\<turnstile> S, R]" by them \<comment> \<open>works because it is a cyclic rotation\<close>
-lemma "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> S, R, T]" nitpick[card 'a=2] oops \<comment> \<open>counterexample\<close>
-lemma "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> R, T, S]" nitpick[card 'a=2] oops \<comment> \<open>counterexample\<close>
-lemma "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> T, R, S]" by them     \<comment> \<open>only cyclic rotations allowed\<close>
-lemma "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> S, T, R]" by them     \<comment> \<open>only cyclic rotations allowed\<close>
+proposition "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> S, R, T]" nitpick[card 'a=2]  \<comment> \<open>countermodel found\<close> oops
+proposition "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> R, T, S]" nitpick[card 'a=2]  \<comment> \<open>countermodel found\<close> oops
+lemma "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> T, R, S]" by them  \<comment> \<open>only cyclic rotations allowed\<close>
+lemma "[\<turnstile> R, S, T] \<longrightarrow> [\<turnstile> S, T, R]" by them  \<comment> \<open>only cyclic rotations allowed\<close>
 
 text \<open>Negation allows formulas to change sides in a sequent (but a in a particular order!).\<close>
 lemma "[\<turnstile> A, B] \<longleftrightarrow> [A\<^sup>\<bottom> \<turnstile> B]" by them
 lemma "[C \<turnstile> A, B] \<longleftrightarrow> [A\<^sup>\<bottom>, C \<turnstile> B]" by them
 lemma "[C \<turnstile> A, B] \<longleftrightarrow> [C, B\<^sup>\<bottom> \<turnstile> A]" by them
-lemma "[C \<turnstile> A, B] \<longleftrightarrow> [C, A\<^sup>\<bottom> \<turnstile> B]" nitpick oops \<comment> \<open>countermodel: wrong order\<close>
-lemma "[C \<turnstile> A, B] \<longleftrightarrow> [B\<^sup>\<bottom>, C \<turnstile> A]" nitpick oops \<comment> \<open>countermodel: wrong order\<close>
+proposition "[C \<turnstile> A, B] \<longleftrightarrow> [C, A\<^sup>\<bottom> \<turnstile> B]" nitpick \<comment> \<open>countermodel found: wrong order\<close> oops
+proposition "[C \<turnstile> A, B] \<longleftrightarrow> [B\<^sup>\<bottom>, C \<turnstile> A]" nitpick \<comment> \<open>countermodel found: wrong order\<close> oops
 
 text \<open>The deduction metatheorem holds wrt \<open>-\<circ>\<close> (by taking into account the correct rotation).\<close>
 lemma "[\<turnstile> R -\<^bold>\<circ> T] \<longleftrightarrow> [R \<turnstile> T]" by them
 lemma "[A \<turnstile> R -\<^bold>\<circ> T] \<longleftrightarrow> [R, A \<turnstile> T]" by them
-lemma "[A \<turnstile> R -\<^bold>\<circ> T] \<longleftrightarrow> [A, R \<turnstile> T]" nitpick oops \<comment> \<open>counterexample: cyclicity must be respected\<close>
+proposition "[A \<turnstile> R -\<^bold>\<circ> T] \<longleftrightarrow> [A, R \<turnstile> T]" nitpick \<comment> \<open>counterexample: cyclicity must be respected\<close> oops
 
 text \<open>Excluded middle and ex contradictio.\<close>
 lemma "[\<turnstile> R, R\<^sup>\<bottom>]" by them
@@ -171,14 +171,14 @@ lemma "\<^bold>!(A \<^bold>& B) = (\<^bold>!A) \<^bold>\<otimes> (\<^bold>!B)" b
 lemma "\<^bold>?(A \<^bold>\<oplus> B) = (\<^bold>?A) \<^bold>\<section> (\<^bold>?B)" by them
 
 text \<open>And we get counterexamples for these non-theorems, as expected:\<close>
-lemma "\<^bold>!(A \<^bold>\<otimes> B) = (\<^bold>!A) \<^bold>& (\<^bold>!B)" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "\<^bold>?(A \<^bold>\<otimes> B) = (\<^bold>?A) \<^bold>& (\<^bold>?B)" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "\<^bold>?(A \<^bold>\<section> B) = (\<^bold>?A) \<^bold>\<oplus> (\<^bold>?B)" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "\<^bold>!(A \<^bold>\<section> B) = (\<^bold>!A) \<^bold>\<oplus> (\<^bold>!B)" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "\<^bold>!(A \<^bold>\<otimes> B) = (\<^bold>!A) \<^bold>& (\<^bold>!B)" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "\<^bold>?(A \<^bold>\<otimes> B) = (\<^bold>?A) \<^bold>& (\<^bold>?B)" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "\<^bold>?(A \<^bold>\<section> B) = (\<^bold>?A) \<^bold>\<oplus> (\<^bold>?B)" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "\<^bold>!(A \<^bold>\<section> B) = (\<^bold>!A) \<^bold>\<oplus> (\<^bold>!B)" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>Weakening fails in the general case, as expected:\<close>
-lemma "[A \<turnstile> C] \<longrightarrow> [A, H \<turnstile> C]" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "[A \<turnstile> C] \<longrightarrow> [H, A \<turnstile> C]" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "[A \<turnstile> C] \<longrightarrow> [A, H \<turnstile> C]" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "[A \<turnstile> C] \<longrightarrow> [H, A \<turnstile> C]" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>Indeed weakening is recoverable via exponentials (in any order)\<close>
 lemma "[A \<turnstile> C] \<longrightarrow> [A, \<^bold>!H \<turnstile> C]" by them
@@ -186,7 +186,7 @@ lemma "[A,B \<turnstile> C] \<longrightarrow> [A, B, \<^bold>!H \<turnstile> C]"
 lemma "[A,B \<turnstile> C] \<longrightarrow> [A, \<^bold>!H, B \<turnstile> C]" by them
 
 text \<open>Contraction also fails in the general case but is recoverable via exponentials.\<close>
-lemma "[A, A \<turnstile> C] \<longrightarrow> [A \<turnstile> C]" nitpick oops  \<comment> \<open>countermodel\<close>
+proposition "[A, A \<turnstile> C] \<longrightarrow> [A \<turnstile> C]" nitpick \<comment> \<open>countermodel found\<close> oops
 lemma "[\<^bold>!A, \<^bold>!A \<turnstile> C] \<longrightarrow> [\<^bold>!A \<turnstile> C]" by them
 lemma "[A, A \<turnstile> C] \<longrightarrow> [\<^bold>!A \<turnstile> C]" by them (*TODO: check this*)
 

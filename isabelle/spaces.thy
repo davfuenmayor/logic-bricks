@@ -107,8 +107,8 @@ lemma limitComplete_def4: "limitComplete R = R-glbComplete \<UU>"
   unfolding limitComplete_def2 space_defs func_defs comb_defs by simp
 
 text \<open>Note that lub/glb-completeness is neither monotonic nor antitonic, for instance:\<close>
-lemma "A \<subseteq> B \<Longrightarrow> R-lubComplete A \<Longrightarrow> R-lubComplete B" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "A \<subseteq> B \<Longrightarrow> R-lubComplete B \<Longrightarrow> R-lubComplete A" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "A \<subseteq> B \<Longrightarrow> R-lubComplete A \<Longrightarrow> R-lubComplete B" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "A \<subseteq> B \<Longrightarrow> R-lubComplete B \<Longrightarrow> R-lubComplete A" nitpick \<comment> \<open>countermodel found\<close> oops
 
 
 text \<open>The following related propertes correspond to closure under the lub resp. glb set-operation wrt R.\<close>
@@ -129,8 +129,8 @@ lemma glbComplete_glbClosed: "antisymmetric R \<Longrightarrow> R-glbComplete S 
   unfolding space_defs endorel_defs rel_defs func_defs comb_defs by metis
 
 text \<open>However, being closed under lub/glb does not entail existence of lub/glb.\<close>
-lemma "\<exists>S \<Longrightarrow> R-lubClosed S \<Longrightarrow>  R-lubComplete S" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "\<exists>S \<Longrightarrow> R-glbClosed S \<Longrightarrow> R-glbComplete S" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "\<exists>S \<Longrightarrow> R-lubClosed S \<Longrightarrow>  R-lubComplete S" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "\<exists>S \<Longrightarrow> R-glbClosed S \<Longrightarrow> R-glbComplete S" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>In fact, for limit-complete relations, closure under lub/glb does entail existence of lub/glb.\<close>
 lemma lubClosed_lubComplete: "limitComplete R \<Longrightarrow> R-lubClosed S \<Longrightarrow> R-lubComplete S" 
@@ -207,8 +207,8 @@ lemma glbComplete_least: "R-glbComplete \<subseteq> R-leastExist"
   unfolding space_defs endorel_defs func_defs comb_defs by auto
 lemma lubComplete_greatest: "R-lubComplete \<subseteq> R-greatestExist"
   unfolding space_defs endorel_defs func_defs comb_defs by auto
-lemma "R-greatestExist \<subseteq> R-lubComplete" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "R-leastExist \<subseteq> R-glbComplete" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "R-greatestExist \<subseteq> R-lubComplete" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "R-leastExist \<subseteq> R-glbComplete" nitpick \<comment> \<open>countermodel found\<close> oops
 
 lemma greatestExist_lubClosed: "R-downwardsClosed S \<Longrightarrow> R-greatestExist S \<Longrightarrow> R-lubClosed S"
   unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast
@@ -255,8 +255,8 @@ lemma downwardsDirected_def3:  "R-downwardsDirected S = (\<forall>D. D \<subsete
   unfolding downwardsDirected_def2 unfolding upair_prop ..
 
 text \<open>Note that up/downwards directedness does not entail non-emptyness of S.\<close>
-lemma "R-upwardsDirected S \<longrightarrow> \<exists>S" nitpick \<comment> \<open>counterexample\<close> oops
-lemma "R-downwardsDirected S \<longrightarrow> \<exists>S" nitpick \<comment> \<open>counterexample\<close> oops
+proposition "R-upwardsDirected S \<longrightarrow> \<exists>S" nitpick  \<comment> \<open>countermodel found\<close> oops
+proposition "R-downwardsDirected S \<longrightarrow> \<exists>S" nitpick  \<comment> \<open>countermodel found\<close> oops
 
 
 subsubsection \<open>Join- and meet-closure\<close>
@@ -308,8 +308,8 @@ lemma greatestExist_upwardsDirected: "R-greatestExist S \<Longrightarrow> R-upwa
 lemma leastExist_downwardsDirected: "R-leastExist S \<Longrightarrow> R-downwardsDirected S" 
   by (simp add: downwardsDirected_defT greatestExist_upwardsDirected leastExist_defT)
 text \<open>Note, however:\<close>
-lemma "\<exists>S \<Longrightarrow> R-upwardsDirected S \<Longrightarrow> R-greatestExist S" nitpick[card 'a=3] oops \<comment> \<open>counterexample\<close>
-lemma "\<exists>S \<Longrightarrow> R-downwardsDirected S \<Longrightarrow> R-leastExist S" nitpick[card 'a=3] oops \<comment> \<open>counterexample\<close>
+proposition "\<exists>S \<Longrightarrow> R-upwardsDirected S \<Longrightarrow> R-greatestExist S" nitpick  \<comment> \<open>countermodel found\<close> oops
+proposition "\<exists>S \<Longrightarrow> R-downwardsDirected S \<Longrightarrow> R-leastExist S" nitpick  \<comment> \<open>countermodel found\<close> oops
 
 lemma downwardsDirected_meetClosed: "R-upwardsClosed S \<Longrightarrow> R-downwardsDirected S \<Longrightarrow> R-meetClosed S"
   unfolding meetClosed_def2 space_defs endorel_defs rel_defs func_defs comb_defs by fast
@@ -415,11 +415,11 @@ lemma "wellOrdered R = R-wellOrderedSet \<UU>" unfolding endorel_defs rel_defs f
 
 text \<open>For non-empty sets, well-orderedness entails existence of least elements (but not the other way round).\<close>
 lemma "\<exists>S \<Longrightarrow> R-wellOrderedSet S \<Longrightarrow> R-leastExist S" unfolding space_defs endorel_defs func_defs comb_defs by simp
-lemma "\<exists>S \<Longrightarrow> R-leastExist S \<Longrightarrow> R-wellOrderedSet S" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "\<exists>S \<Longrightarrow> R-leastExist S \<Longrightarrow> R-wellOrderedSet S" nitpick \<comment> \<open>countermodel found\<close> oops
 
 lemma "(\<subseteq>)-wellFoundedSet {{1::nat},{2},{1,2}}" 
   unfolding endorel_defs rel_defs endorel_defs func_defs comb_defs by (smt (verit, best))
 lemma "\<not> (\<subseteq>)-wellOrderedSet {{1::nat},{2},{1,2}}" 
-  unfolding endorel_defs rel_defs func_defs comb_defs oops (*TODO: this used to work - fix*)
+  unfolding endorel_defs rel_defs func_defs comb_defs \<comment> \<open>proof by external provers\<close> oops (*TODO: this used to work - fix*)
 
 end

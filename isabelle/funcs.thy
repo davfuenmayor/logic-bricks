@@ -687,7 +687,7 @@ lemma "funPower f (f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<ci
 lemma funPower_ind: "funPower f g \<Longrightarrow> funPower f (f \<circ> g)" by (metis funPower_def2)
 
 (*Useful(?) property (cf. Bishop & Andrews 1998)*)
-lemma "(\<exists>g. funPower f g \<and> \<exists>!(FP g)) \<rightarrow> \<exists>(FP f)" 
+lemma "(\<exists>g. funPower f g \<and> \<exists>!(FP g)) \<rightarrow> \<exists>(FP f)" \<comment> \<open>proof by external provers\<close>
   unfolding funPower_def2 unfolding func_defs \<Phi>21_comb_def S11_comb_def 
   oops (*TODO: zipperpin can use "comm f \<equiv> \<lambda>g. f \<circ> g = g \<circ> f" to find a proof*)
 

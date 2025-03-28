@@ -2,6 +2,8 @@ theory combinators (*  A theory of generalized 'multi-dimensional' combinators  
   imports Main
 begin
 
+nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, max_potential=0,max_genuine=1, format=3] (*default Nitpick settings*)
+
 no_notation (*hides notation from the library, so we can reintroduce those symbols later on*)
   Fun.comp (infixl "\<circ>" 55) and Fun.comp (infixl "o" 55)
 
@@ -200,9 +202,9 @@ lemma "\<^bold>B\<^sub>2\<^sub>2\<^sub>2 \<circ> \<^bold>B\<^sub>1\<^sub>1\<^sub
 \<comment> \<open>... and so on\<close>
 
 text \<open>Note, however, that:\<close>     (*TODO: find exceptions rule *)
-lemma "\<^bold>B\<^sub>0\<^sub>1 \<circ> \<^bold>B\<^sub>1\<^sub>0 = \<^bold>B\<^sub>1\<^sub>1" nitpick oops \<comment> \<open>countermodel\<close>
-lemma "\<^bold>B\<^sub>0\<^sub>1 \<circ> \<^bold>B\<^sub>1\<^sub>1 = \<^bold>B\<^sub>1\<^sub>2"  nitpick oops \<comment> \<open>countermodel\<close>
-lemma "\<^bold>B\<^sub>1\<^sub>1\<^sub>2 \<circ> \<^bold>B\<^sub>1\<^sub>1\<^sub>1 = \<^bold>B\<^sub>2\<^sub>2\<^sub>3" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "\<^bold>B\<^sub>0\<^sub>1 \<circ> \<^bold>B\<^sub>1\<^sub>0 = \<^bold>B\<^sub>1\<^sub>1" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "\<^bold>B\<^sub>0\<^sub>1 \<circ> \<^bold>B\<^sub>1\<^sub>1 = \<^bold>B\<^sub>1\<^sub>2"  nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "\<^bold>B\<^sub>1\<^sub>1\<^sub>2 \<circ> \<^bold>B\<^sub>1\<^sub>1\<^sub>1 = \<^bold>B\<^sub>2\<^sub>2\<^sub>3" nitpick \<comment> \<open>countermodel found\<close> oops
 
 
 subsection \<open>Permutators\<close>

@@ -46,14 +46,14 @@ declare ex_defQ [eq_defs] all_defQ [eq_defs]
 lemma "\<exists>\<phi> = (\<phi> \<noteq> (\<lambda>x. \<F>))" by fastforce
 lemma "\<forall>\<phi> = (\<phi> = (\<lambda>x. \<T>))" by fastforce
 
-text \<open>Moreover, they are also definable using indefinite descriptions \<open>\<epsilon>\<close> resp. \<open>\<delta>\<close> and the \<open>\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>1/\<^bold>O\<close> combinator\<close>
+text \<open>Moreover, they are also definable using indefinite descriptions \<open>\<epsilon>\<close> resp. \<open>\<delta>\<close> and the \<open>\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>1/\<^bold>O\<close> combinator.\<close>
 lemma ex_defEps:  "\<exists> = \<^bold>O \<epsilon>" unfolding comb_defs by (metis (full_types))
 lemma all_defEps: "\<forall> = \<^bold>O \<delta>"  unfolding Delta_def comb_defs by (meson someI_ex)
 
 lemma "\<exists>\<phi> = \<phi>(\<epsilon> x.  \<phi> x)" unfolding ex_defEps comb_defs ..
 lemma "\<forall>\<phi> = \<phi>(\<epsilon> x. \<not>\<phi> x)" unfolding Delta_def all_defEps comb_defs ..
 
-text \<open>We introduce convenient arity-extended versions of the quantifiers\<close>
+text \<open>We introduce convenient arity-extended versions of the quantifiers.\<close>
 abbreviation(input) All2 ("\<forall>\<^sup>2") 
   where "\<forall>\<^sup>2R \<equiv> \<forall>a b. R a b" (* \<forall>(\<forall>\<circ>R) i.e. \<^bold>B\<forall>(\<^bold>B\<forall>)*)
 abbreviation(input) All3 ("\<forall>\<^sup>3") 
@@ -76,7 +76,7 @@ subsection \<open>Definite description (for booleans)\<close>
 text \<open>Henkin (1963) also defines \<open>\<iota>::(o\<Rightarrow>o)\<Rightarrow>o\<close> via equality, namely as: \<open>\<Q> \<^bold>I\<close>.
 Note, however, that in Isabelle/HOL the term \<open>\<iota>::(o\<Rightarrow>o)\<Rightarrow>o\<close> is not introduced as a definition.
 Instead, \<open>\<iota>::(o\<Rightarrow>o)\<Rightarrow>o\<close> is an instance of \<open>\<iota>::('a\<Rightarrow>o)\<Rightarrow>'a\<close>, which is an axiomatized (polymorphic) constant.\<close>
-lemma "\<iota> = \<Q> \<^bold>I" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "\<iota> = \<Q> \<^bold>I" nitpick \<comment> \<open>countermodel found\<close> oops
 
 
 end

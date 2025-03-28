@@ -520,9 +520,9 @@ lemma "R-\<box>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<box>\<^sub
 lemma "R-\<oslash>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<oslash>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) A" unfolding rel_defs comb_defs func_defs by metis
 
 text \<open>The converse conversion is not possible in general:\<close>
-lemma "\<forall>T. \<exists>R. \<forall>A. (T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = (R-\<diamond>\<^sub>\<rightarrow> A)" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "\<forall>T. \<exists>R. \<forall>A. (T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = (R-\<diamond>\<^sub>\<rightarrow> A)" nitpick \<comment> \<open>countermodel found\<close> oops
 text \<open>In particular, this does not hold (for arbitrary T)\<close>  (*TODO: how to restrict T so that it holds?*)
-lemma "(T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = ((\<lambda>a b. T a a b)-\<diamond>\<^sub>\<rightarrow> A)" nitpick oops \<comment> \<open>countermodel\<close>
+proposition "(T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = ((\<lambda>a b. T a a b)-\<diamond>\<^sub>\<rightarrow> A)" nitpick \<comment> \<open>countermodel found\<close> oops
 
 
 subsection \<open>Adjunctions\<close>
