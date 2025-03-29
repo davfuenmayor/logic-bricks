@@ -1,4 +1,4 @@
-theory base (* base theory for logic-based developments in Isabelle/HOL*)
+theory logic_bridge (* bridge theory for logic-based developments in Isabelle/HOL*)
    imports combinators
 begin
 

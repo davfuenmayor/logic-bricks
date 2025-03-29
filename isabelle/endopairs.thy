@@ -1,5 +1,5 @@
 theory endopairs (* A basic theory of endopairs *)
-  imports base
+  imports logic_bridge
 begin
 
 section \<open>Endopairs\<close>

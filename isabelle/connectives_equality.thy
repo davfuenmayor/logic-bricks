@@ -1,5 +1,5 @@
 theory connectives_equality
-  imports base
+  imports logic_bridge
 begin
 
 section \<open>Logical Connectives (using primitive equality)\<close>

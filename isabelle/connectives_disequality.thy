@@ -1,5 +1,5 @@
 theory connectives_disequality
-  imports base
+  imports logic_bridge
 begin
 
 section \<open>Logical Connectives (using primitive disequality)\<close>
