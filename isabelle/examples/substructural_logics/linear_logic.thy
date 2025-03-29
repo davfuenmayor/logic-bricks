@@ -1,5 +1,5 @@
 theory linear_logic
-imports "../operators" "../entailment" "HOL-Eisbach.Eisbach"
+imports "../../operators" "../../entailment" "HOL-Eisbach.Eisbach"
 begin
 
 section \<open>Encoding Example: Cyclic Linear Logic\<close>

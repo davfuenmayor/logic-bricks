@@ -1,5 +1,5 @@
 theory dynamic_logic
-  imports modal_correspondence
+  imports "../../operators" "../../entailment"
 begin
 
 section \<open>Shallow Embedding of Propositional Dynamic Logic (PDL)\<close>
@@ -7,6 +7,9 @@ section \<open>Shallow Embedding of Propositional Dynamic Logic (PDL)\<close>
 typedecl w (*type of worlds or states*)
 type_synonym \<sigma> = "Set(w)" (*type of propositions or predicates*)
 type_synonym \<pi> = "ERel(w)" (*type of actions or programs*)
+
+(*Syntactic sugar for object-logical Boolean connectives*)
+notation(input) compl ("\<^bold>\<not>") and inter (infixr "\<^bold>\<and>" 54) and union (infixr "\<^bold>\<or>" 53) and impl  (infixr "\<^bold>\<rightarrow>" 51)
 
 (*We now introduce our program-indexed family of modalities via the following definitions:*)
 notation(input) leftImage ("<_>_")

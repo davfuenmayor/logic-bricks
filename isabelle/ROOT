@@ -6,25 +6,25 @@
    Every theory must be included in at least one of the sessions.
 *)
 session "Combinatory-Logic-Bricks" = "HOL" +
-  options [document = pdf, document_output = output, show_question_marks = false, document_variants = "outline=-proof"]
-  directories "examples"
- (* theories [document = false] *)
-    
+  options [document = pdf, document_output = output, show_question_marks = false, document_variants = "outline=-proof", browser_info=true]
+ (* directories "examples" *)
+ (* theories [document = false] *)    
   theories
     combinators
     base
     connectives_equality
     connectives_disequality
     connectives
-    endopairs
-    funcs
-    rels
-    endorels
+    endopairs    
+    func_sets
+    relations
+    endorelations
+    graphs
     diagrams
-    adj
+    adjunctions
     entailment
     operators
-    spaces         
+    spaces   
   document_files
     "root.tex"
     "root.bib"

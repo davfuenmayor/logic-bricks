@@ -1,5 +1,5 @@
 theory modal_correspondence
-imports "../operators" "../entailment"
+imports "../../operators" "../../entailment"
 begin
 
 section \<open>Automating Modal Correspondences\<close>
