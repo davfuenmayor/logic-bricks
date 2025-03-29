@@ -1,8 +1,8 @@
+section \<open>Endopairs\<close>
+
 theory endopairs (* A basic theory of endopairs *)
   imports logic_bridge
 begin
-
-section \<open>Endopairs\<close>
 
 named_theorems endopair_defs and endopair_simps
 

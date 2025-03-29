@@ -1,12 +1,11 @@
-theory graphs (* A basic theory of graphs (as sets of endopairs and isomorphic to endorelations) *)
-imports endopairs endorelations
-begin
-
 section \<open>Graphs\<close>
 
 text \<open>Graphs are sets of endopairs and end up being isomorphic to endorelations (via currying).
  We replicate some of the theory of endorelations for illustration (exploiting currying).\<close>
- 
+
+theory graphs (* A basic theory of graphs (as sets of endopairs and isomorphic to endorelations) *)
+imports endopairs endorelations
+begin
 
 subsection \<open>Intervals and Powers\<close>
 

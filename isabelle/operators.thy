@@ -1,9 +1,10 @@
-theory operators (* A basic theory of algebraic properties of set-operators *)
+section \<open>General Theory of Relation-based Operators\<close>
+text \<open>It is well known that (n+1-ary) relations give rise to (n-ary) operations on sets (called "operators").
+ We explore some basic algebraic properties of relation-based set-operators.\<close>
+
+theory operators
 imports adjunctions
 begin
-
-section \<open>General Theory of Relation-based Operators\<close>
-text \<open>It is well known that (n+1-ary) relations give rise to (n-ary) operations on sets (called "operators").\<close>
 
 subsection \<open>Set-Operators from Binary Relations\<close>
 text \<open>This is the (non-trivial) base case. It is very common in logic, so it gets an special treatment.\<close>

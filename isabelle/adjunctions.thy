@@ -1,13 +1,14 @@
+section \<open>Adjunctions\<close>
+text \<open>The term "adjunction" is quite overloaded in the literature. Here we consider two flavors:
+\<^enum> Galois-connections (aka. dual-adjunctions or Galois-adjunctions), which are contravariant. 
+\<^enum> Adjunctions (aka. residuations), which are covariant. We refer to them just as "adjunctions" (simpliciter).
+ We will focus on Galois connections, since (covariant) adjunctions can easily defined in terms of them.\<close>
+
 theory adjunctions
  imports diagrams endorelations
 begin
 
 named_theorems adj_defs
-
-section \<open>Adjunctions\<close>
-text \<open>The term "adjunction" is quite overloaded in the literature. Here we consider two flavors:
-\<^enum> Galois-connections (aka. dual-adjunctions or Galois-adjunctions), which are contravariant. 
-\<^enum> Adjunctions (aka. residuations), which are covariant. We refer to them just as "adjunctions" (simpliciter).\<close>
 
 text \<open>Galois-connections (aka. Galois- or dual-adjunctions) relate pairs of functions (having flipped domain-codomain) 
  wrt. a pair of endorelations (usually orderings on the functions' domains). We focus in this section on

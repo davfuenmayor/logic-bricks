@@ -1,8 +1,9 @@
+section \<open>Spaces\<close>
+text \<open>Spaces are sets of sets (of ... "points"). They are the main playground of mathematicians.\<close>
+
 theory spaces (* A theory of spaces qua sets of sets *)
 imports endorelations
 begin
-
-section \<open>Spaces\<close>
 
 named_theorems space_defs
 

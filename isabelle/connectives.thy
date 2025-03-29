@@ -1,11 +1,11 @@
+subsection \<open>Defined connectives\<close>
+text \<open>We illustrate how the logical connectives could have been defined in terms of equality resp. disequality.
+ (We actually work with them as they are provided by Isabelle/HOL (with the notational changes).\<close>
+
 theory connectives (*Basic theory of logical connectives*)
 imports connectives_equality    \<comment> \<open>via positiva\<close>
         connectives_disequality \<comment> \<open>via negativa\<close>
 begin
-
-subsection \<open>Defined connectives\<close>
-text \<open>We illustrate how the logical connectives could have been defined in terms of equality resp. disequality.
- (We actually work with them as they are provided by Isabelle/HOL (with some notational changes).\<close>
 
 subsubsection \<open>Biconditional (aka. iff, double-implication)\<close>
 text \<open>Biconditional is just equality (for booleans).\<close>

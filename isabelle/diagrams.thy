@@ -1,8 +1,10 @@
+section \<open>Commutative diagrams\<close>
+text \<open>Commutative diagrams are convenient tools in mathematics that show how different paths of 
+ functions or maps between objects lead to the same result.\<close>
+
 theory diagrams
  imports relations
 begin
-
-section \<open>Commutative diagrams\<close>
 
 subsection \<open>Basic Diagrams\<close>
 

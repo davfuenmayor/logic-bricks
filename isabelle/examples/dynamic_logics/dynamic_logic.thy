@@ -1,8 +1,9 @@
+section \<open>Shallow Embedding of Propositional Dynamic Logic (PDL)\<close>
+
 theory dynamic_logic
   imports "../../operators" "../../entailment"
 begin
 
-section \<open>Shallow Embedding of Propositional Dynamic Logic (PDL)\<close>
 
 typedecl w (*type of worlds or states*)
 type_synonym \<sigma> = "Set(w)" (*type of propositions or predicates*)

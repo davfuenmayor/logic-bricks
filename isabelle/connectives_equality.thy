@@ -1,10 +1,9 @@
+section \<open>Logical Connectives using Primitive Equality\<close>
+text \<open>Via positiva: equality (notation: \<open>\<Q>\<close>, infix \<open>=\<close>) is all you can tell.\<close>
+
 theory connectives_equality
   imports logic_bridge
 begin
-
-section \<open>Logical Connectives (using primitive equality)\<close>
-
-text \<open>Via positiva: equality (notation: \<open>\<Q>\<close>, infix \<open>=\<close>) is all you can tell.\<close>
 
 subsection \<open>Basic Connectives\<close>
 

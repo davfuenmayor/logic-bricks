@@ -1,8 +1,8 @@
+section \<open>Automating Modal Correspondences\<close>
+
 theory modal_correspondence
 imports "../../operators" "../../entailment"
 begin
-
-section \<open>Automating Modal Correspondences\<close>
 
 (*Syntactic sugar for object-logical Boolean connectives*)
 notation(input) compl ("\<^bold>\<not>") and inter (infixr "\<^bold>\<and>" 54) and union (infixr "\<^bold>\<or>" 53) and impl  (infixr "\<^bold>\<rightarrow>" 51)

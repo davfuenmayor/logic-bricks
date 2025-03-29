@@ -1,8 +1,8 @@
+section \<open>Entailment and Validity\<close>
+
 theory entailment
   imports adjunctions
 begin
-
-section \<open>Entailment and Validity\<close>
 
 subsection \<open>Special Case (for Modal Logicians and co.)\<close>
 

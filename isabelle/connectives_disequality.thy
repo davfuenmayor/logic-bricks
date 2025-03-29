@@ -1,10 +1,9 @@
+section \<open>Logical Connectives using Primitive Disequality\<close>
+text \<open>Via negativa: disequality (notation: \<open>\<D>\<close>, infix \<open>\<noteq>\<close>) is all you can tell.\<close>
+
 theory connectives_disequality
   imports logic_bridge
 begin
-
-section \<open>Logical Connectives (using primitive disequality)\<close>
-
-text \<open>Via negativa: disequality (notation: \<open>\<D>\<close>, infix \<open>\<noteq>\<close>) is all you can tell.\<close>
 
 subsection \<open>Basic Connectives\<close>
 

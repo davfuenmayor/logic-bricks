@@ -1,13 +1,11 @@
+section \<open>Endorelations\<close>
+text \<open>Endorelations are particular cases of relations where the relata have the same type.\<close>
+
 theory endorelations (* A basic theory of endorelations *)
 imports relations
 begin
 
-section \<open>Endorelations\<close>
-
-text \<open>Endorelations are particular cases of relations where the relata have the same type.\<close>
- 
 named_theorems endorel_defs
-
 
 subsection \<open>Intervals and Powers\<close>
 

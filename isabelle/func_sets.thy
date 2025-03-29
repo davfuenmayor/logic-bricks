@@ -1,10 +1,9 @@
+section \<open>Functions and Sets\<close>
+text \<open>We introduce several convenient definitions and lemmata for working with functions and sets.\<close>
+
 theory func_sets (* A basic theory of sets and functions*)
 imports connectives
 begin
-
-section \<open>Functions and Sets\<close>
-
-text \<open>We introduce several convenient definitions and lemmata for working with functions and sets.\<close>
 
 named_theorems func_defs
 

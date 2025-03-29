@@ -1,12 +1,12 @@
+section \<open>Relations\<close>
+text \<open>A theory of (heterogeneous) relations as set-valued functions. Relations inherit the structures
+ of both sets and functions and enrich them in manifold ways.\<close>
+
 theory relations (* A basic theory of relations (qua set-valued functions) *)
 imports func_sets
 begin
 
-section \<open>Relations\<close>
-text \<open>Relations inherit the structure of both sets and functions and enrich them in manifold ways.\<close>
-
 named_theorems rel_defs and rel_simps
-
 
 subsection \<open>Constructing Relations\<close>
 

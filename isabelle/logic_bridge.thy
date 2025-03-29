@@ -1,10 +1,12 @@
-theory logic_bridge (* bridge theory for logic-based developments in Isabelle/HOL*)
+section \<open>Bridge with Isabelle/HOL Logic\<close>
+text \<open>This theory provides a bridge or "wrapper" for logic-based developments in Isabelle/HOL.\<close>
+
+theory logic_bridge 
    imports combinators
 begin
 
-section \<open>Customized configuration and notation for Isabelle/HOL\<close>
 (*<*)
-subsection \<open>Tool Configuration\<close>
+subsection \<open>Custom Tool Configuration\<close>
 
 declare[[smt_timeout=30]]
 (* declare[[show_types]] *)
