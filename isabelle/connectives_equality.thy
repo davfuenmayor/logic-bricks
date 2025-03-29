@@ -39,5 +39,4 @@ named_theorems eq_defs
 declare true_defQ [eq_defs] id_defQ [eq_defs] 
         false_defQ [eq_defs] not_defQ [eq_defs] diseq_defQ [eq_defs]
 
-
 end

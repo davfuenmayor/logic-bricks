@@ -1,6 +1,6 @@
 theory connectives (*Basic theory of logical connectives*)
-(* imports connectives_equality    (*via positiva*) *)
-imports connectives_disequality (*via negativa*)
+imports connectives_equality    \<comment> \<open>via positiva\<close>
+        connectives_disequality \<comment> \<open>via negativa\<close>
 begin
 
 subsection \<open>Defined connectives\<close>
@@ -9,30 +9,33 @@ text \<open>We illustrate how the logical connectives could have been defined in
 
 subsubsection \<open>Biconditional (aka. iff, double-implication)\<close>
 text \<open>Biconditional is just equality (for booleans).\<close>
-lemma iff_defQ: "(\<leftrightarrow>) = \<Q>" by auto
+lemma iff_def: "(\<leftrightarrow>) = \<Q>" by auto
 lemma "(\<leftrightarrow>) = (\<lambda>A B. A = B)" by auto
 
 subsubsection \<open>XOR (aka. symmetric difference)\<close>
 text \<open>XOR is just disequality (for booleans).\<close>
-lemma xor_defQ: "(\<rightleftharpoons>) = \<D>" by auto
+lemma xor_def: "(\<rightleftharpoons>) = \<D>" by auto
 lemma "(\<rightleftharpoons>) = (\<lambda>A B. A \<noteq> B)" by auto
 
 
 subsubsection \<open>Conjunction, disjunction, and (co)implication\<close>
 text \<open>We can encode them by their truth tables.\<close>
 
-lemma and_defQ:  "(\<and>) = \<^bold>B\<^sub>2\<^sub>0 (\<Q>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<T> \<T>)" unfolding comb_defs by (metis (full_types))
-lemma or_defQ:   "(\<or>) = \<^bold>B\<^sub>2\<^sub>0 (\<D>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<F> \<F>)" unfolding comb_defs by (metis (full_types))
-lemma impl_defQ: "(\<rightarrow>) = \<^bold>B\<^sub>2\<^sub>0 (\<D>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<T> \<F>)" unfolding comb_defs by (metis (full_types))
-lemma excl_defQ: "(\<leftharpoondown>) = \<^bold>B\<^sub>2\<^sub>0 (\<Q>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<T> \<F>)" unfolding comb_defs by (metis (mono_tags, lifting))
+lemma and_def:  "(\<and>) = \<^bold>B\<^sub>2\<^sub>0 (\<Q>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<T> \<T>)" unfolding comb_defs by (metis (full_types))
+lemma or_def:   "(\<or>) = \<^bold>B\<^sub>2\<^sub>0 (\<D>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<F> \<F>)" unfolding comb_defs by (metis (full_types))
+lemma impl_def: "(\<rightarrow>) = \<^bold>B\<^sub>2\<^sub>0 (\<D>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<T> \<F>)" unfolding comb_defs by (metis (full_types))
+lemma excl_def: "(\<leftharpoondown>) = \<^bold>B\<^sub>2\<^sub>0 (\<Q>::ERel(Set(ERel(o)))) \<^bold>V (\<^bold>V \<T> \<F>)" unfolding comb_defs by (metis (mono_tags, lifting))
 
 lemma "(\<and>)  = (\<lambda>A B. (\<lambda>r::ERel(o). r A B) = (\<lambda>r. r \<T> \<T>))" by (metis (full_types))
 lemma "(\<or>)  = (\<lambda>A B. (\<lambda>r::ERel(o). r A B) \<noteq> (\<lambda>r. r \<F> \<F>))" by (metis (full_types))
 lemma "(\<rightarrow>) = (\<lambda>A B. (\<lambda>r::ERel(o). r A B) \<noteq> (\<lambda>r. r \<T> \<F>))" by (metis (full_types))
 lemma "(\<leftharpoondown>) = (\<lambda>A B. (\<lambda>r::ERel(o). r A B) = (\<lambda>r. r \<T> \<F>))" by (metis (full_types) le_boolI' order_antisym)
 
-declare iff_defQ [eq_defs] xor_defQ [eq_defs] 
-        and_defQ [eq_defs] or_defQ [eq_defs] impl_defQ [eq_defs] excl_defQ [eq_defs]
+text \<open>We add to both the equality and disequality definition bags:\<close>
+declare iff_def [eq_defs] xor_def [eq_defs] 
+        and_def [eq_defs] or_def [eq_defs] impl_def [eq_defs] excl_def [eq_defs]
+declare iff_def [diseq_defs] xor_def [diseq_defs] 
+        and_def [diseq_defs] or_def [diseq_defs] impl_def [diseq_defs] excl_def [diseq_defs]
 
 
 subsection \<open>Quantifiers and co.\<close>
@@ -77,6 +80,5 @@ text \<open>Henkin (1963) also defines \<open>\<iota>::(o\<Rightarrow>o)\<Righta
 Note, however, that in Isabelle/HOL the term \<open>\<iota>::(o\<Rightarrow>o)\<Rightarrow>o\<close> is not introduced as a definition.
 Instead, \<open>\<iota>::(o\<Rightarrow>o)\<Rightarrow>o\<close> is an instance of \<open>\<iota>::('a\<Rightarrow>o)\<Rightarrow>'a\<close>, which is an axiomatized (polymorphic) constant.\<close>
 proposition "\<iota> = \<Q> \<^bold>I" nitpick \<comment> \<open>countermodel found\<close> oops
-
 
 end
