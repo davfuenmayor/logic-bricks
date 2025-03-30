@@ -64,10 +64,10 @@ subsection \<open>General Case (for Algebraic and Many-valued/Fuzzy Logicians)\<
 
 text \<open>We introduce an "entailment" operation (for denotations) that corresponds to the semantic counterpart
  of the notion of consequence (for formulas). We refer to the literature on algebraic logic for detailed
- explanations, in particular \<^cite>\<open>font2007\<close> for an overview, and references therein.\<close>
+ explanations, in particular \<^cite>\<open>Font2007\<close> for an overview, and references therein.\<close>
 
 text \<open>We encode below a general notion of logical entailment as discussed in the algebraic logic literature;
- cf. "ramified matrices" (e.g. \<^cite>\<open>wojcicki1970\<close>) and "generalized matrices" (e.g. \<^cite>\<open>font2007\<close>).
+ cf. "ramified matrices" (e.g. \<^cite>\<open>Wojcicki1970\<close>) and "generalized matrices" (e.g. \<^cite>\<open>Font2007\<close>).
  Entailment becomes parameterized with a class \<open>TT\<close> of "truth-sets". We say that a set of assumptions
  \<open>A\<close> entails the conclusion \<open>c\<close> iff when all \<open>A\<close>s are in \<open>T\<close> then \<open>c\<close> is in \<open>T\<close> too, for all truth-sets \<open>T\<close> in \<open>TT\<close>.\<close>
 definition entailment::"Set(Set('a)) \<Rightarrow> SetEOp('a)" ("\<E>")
@@ -88,7 +88,7 @@ lemma entailment_closure: "\<forall>X. X \<subseteq> TT \<longrightarrow> TT (\<
 text \<open>One special case of the definition above occurs when \<open>TT\<close> is a singleton \<open>{T}\<close>. This corresponds to
  the traditional notion of logical consequence associated to "logical matrices" in algebraic logic, and 
  which is characterized by the principle of truth(-value) preservation ("truth-preserving consequence"
- in \<^cite>\<open>font2007\<close>). We thus refer to its encoding below as "(truth-)value-preserving entailment".\<close>
+ in \<^cite>\<open>Font2007\<close>). We thus refer to its encoding below as "(truth-)value-preserving entailment".\<close>
 definition valueEntailment::"Set('a) \<Rightarrow> SetEOp('a)" ("\<E>\<^sub>v")
   where "\<E>\<^sub>v T \<equiv> \<E> {T}"
 
@@ -111,7 +111,7 @@ lemma entailment_prop2: "preorder R \<Longrightarrow> [range R | {a} \<Turnstile
 
 text \<open>The properties above justify the following special case, in which the class of truth-sets is 
  given as the (functional) range of a relation (qua set-valued function). 
- Following \<^cite>\<open>font2007\<close> we speak of "(truth-)degree-preserving" entailment.\<close>
+ Following \<^cite>\<open>Font2007\<close> we speak of "(truth-)degree-preserving" entailment.\<close>
 definition degreeEntailment::"ERel('a) \<Rightarrow> SetEOp('a)" ("\<E>\<^sub>d")
   where "\<E>\<^sub>d R \<equiv> \<E> (range R)"
 

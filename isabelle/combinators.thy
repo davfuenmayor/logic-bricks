@@ -1,5 +1,7 @@
 section \<open>Multi-Dimensional Combinators\<close>
-text \<open>We introduce several convenient definitions for families of (arity-extended variants of) combinators.\<close>
+text \<open>We introduce several convenient definitions for families of (arity-extended variants of) combinators.
+ In the spirit of Schönfinkel \<^cite>\<open>Schoenfinkel1924\<close>, our aim is to provide building blocks for "point-free"
+ representations of mathematical knowledge (rather than reducing our vocabulary to its base minimum).\<close>
 
 theory combinators (*  A theory of generalized 'multi-dimensional' combinators  *)
   imports Main
@@ -54,8 +56,8 @@ abbreviation T3_comb ("\<^bold>T\<^sub>3")
 \<comment> \<open>... and so on\<close>
 
 text \<open>Special notation for unary and binary cases.\<close>
-notation T1_comb ("\<^bold>T")  \<comment> \<open>cf. "Let"; Smullyan's "thrush" \<^cite>\<open>smullyanBook\<close>\<close>
-notation T2_comb ("\<^bold>V")  \<comment> \<open>cf. "pairing" in \<open>\<lambda>\<close>-calculus; Smullyan's "vireo" \<^cite>\<open>smullyanBook\<close>\<close>
+notation T1_comb ("\<^bold>T")  \<comment> \<open>cf. "Let"; Smullyan's "thrush" \<^cite>\<open>SmullyanBook\<close>\<close>
+notation T2_comb ("\<^bold>V")  \<comment> \<open>cf. "pairing" in \<open>\<lambda>\<close>-calculus; Smullyan's "vireo" \<^cite>\<open>SmullyanBook\<close>\<close>
 
 text \<open>Convenient "pipe" notation for \<open>\<^bold>A\<^sub>1\<close> and its reverse \<open>\<^bold>T\<^sub>1\<close> in their role as function application.\<close>
 notation(input) A1_comb (infixr "<|" 54)
@@ -81,7 +83,7 @@ abbreviation(input) B0_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightar
 definition B1_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>B\<^sub>1")
   where "\<^bold>B\<^sub>1 \<equiv> \<lambda>f g x. f (g x)" \<comment> \<open>the traditional \<open>\<^bold>B\<close> combinator\<close>
 definition B2_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'b" ("\<^bold>B\<^sub>2")
-  where "\<^bold>B\<^sub>2 \<equiv> \<lambda>f g x y. f (g x y)" \<comment> \<open>cf. Smullyan's "blackbird" combinator \<^cite>\<open>smullyanBook\<close>\<close>
+  where "\<^bold>B\<^sub>2 \<equiv> \<lambda>f g x y. f (g x y)" \<comment> \<open>cf. Smullyan's "blackbird" combinator \<^cite>\<open>SmullyanBook\<close>\<close>
 definition B3_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'b" ("\<^bold>B\<^sub>3")
   where "\<^bold>B\<^sub>3 \<equiv> \<lambda>f g x y z. f (g x y z)"
 definition B4_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'b" ("\<^bold>B\<^sub>4")
@@ -90,9 +92,9 @@ definition B4_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd 
 abbreviation(input) B00_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c" ("\<^bold>B\<^sub>0\<^sub>0")
   where "\<^bold>B\<^sub>0\<^sub>0 \<equiv> \<^bold>A\<^sub>2"  \<comment> \<open>composing with two nullary functions corresponds to binary function application\<close>
 definition B01_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> ('d \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'c" ("\<^bold>B\<^sub>0\<^sub>1")
-  where "\<^bold>B\<^sub>0\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>2. f g\<^sub>1 (g\<^sub>2 x\<^sub>2)"   \<comment> \<open> \<open>\<^bold>D\<close> combinator (cf. Smullyan's "dove"\<^cite>\<open>smullyanBook\<close>)\<close>
+  where "\<^bold>B\<^sub>0\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>2. f g\<^sub>1 (g\<^sub>2 x\<^sub>2)"   \<comment> \<open> \<open>\<^bold>D\<close> combinator (cf. Smullyan's "dove"\<^cite>\<open>SmullyanBook\<close>)\<close>
 definition B02_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'c" ("\<^bold>B\<^sub>0\<^sub>2")
-  where "\<^bold>B\<^sub>0\<^sub>2 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>2 y\<^sub>2. f g\<^sub>1 (g\<^sub>2 x\<^sub>2 y\<^sub>2)" \<comment> \<open>\<open>\<^bold>E\<close> combinator (cf. Smullyan's "eagle"\<^cite>\<open>smullyanBook\<close>)\<close>
+  where "\<^bold>B\<^sub>0\<^sub>2 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>2 y\<^sub>2. f g\<^sub>1 (g\<^sub>2 x\<^sub>2 y\<^sub>2)" \<comment> \<open>\<open>\<^bold>E\<close> combinator (cf. Smullyan's "eagle"\<^cite>\<open>SmullyanBook\<close>)\<close>
 definition B03_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'c" ("\<^bold>B\<^sub>0\<^sub>3")
   where "\<^bold>B\<^sub>0\<^sub>3 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>2 y\<^sub>2 z\<^sub>2. f g\<^sub>1 (g\<^sub>2 x\<^sub>2 y\<^sub>2 z\<^sub>2)"
 \<comment> \<open>... and so on\<close>
@@ -393,7 +395,7 @@ text \<open>The family of \<open>\<^bold>\<Psi>\<^sub>m\<close> combinators belo
 abbreviation(input) \<Psi>1_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>1")  
   where "\<^bold>\<Psi>\<^sub>1 \<equiv> \<^bold>B"            \<comment> \<open>trivial case m = 1 corresponds to the \<open>\<^bold>B\<close> combinator\<close>
 definition \<Psi>2_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>2")
-  where "\<^bold>\<Psi>\<^sub>2 \<equiv> \<lambda>f g x y. f (g x) (g y)" \<comment> \<open>cf. "\<open>\<Psi>\<close>" in \<^cite>\<open>curry1931\<close>; "on" in Haskell Data.Function\<close>
+  where "\<^bold>\<Psi>\<^sub>2 \<equiv> \<lambda>f g x y. f (g x) (g y)" \<comment> \<open>cf. "\<open>\<Psi>\<close>" in \<^cite>\<open>Curry1931\<close>; "on" in Haskell Data.Function\<close>
 definition \<Psi>3_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>3")
   where "\<^bold>\<Psi>\<^sub>3 \<equiv> \<lambda>f g x y z. f (g x) (g y) (g z)"
 definition \<Psi>4_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>4")
@@ -430,9 +432,9 @@ abbreviation(input) \<Phi>14_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<
 
 text \<open>Combinators \<open>\<^bold>\<Phi>\<^sub>m\<^sub>n\<close> with m > 1 have their idiosyncratic definition.\<close>
 definition \<Phi>21_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'a) \<Rightarrow> ('d \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'c" ("\<^bold>\<Phi>\<^sub>2\<^sub>1")
-  where "\<^bold>\<Phi>\<^sub>2\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x. f (g\<^sub>1 x) (g\<^sub>2 x)" \<comment> \<open>cf. "\<open>\<Phi>\<^sub>1\<close>" in \<^cite>\<open>curry1931\<close>; "liftA2" in Haskell; "monadic fork" in APL)\<close>
+  where "\<^bold>\<Phi>\<^sub>2\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x. f (g\<^sub>1 x) (g\<^sub>2 x)" \<comment> \<open>cf. "\<open>\<Phi>\<^sub>1\<close>" in \<^cite>\<open>Curry1931\<close>; "liftA2" in Haskell; "monadic fork" in APL)\<close>
 definition \<Phi>22_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'a) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'c" ("\<^bold>\<Phi>\<^sub>2\<^sub>2")
-  where "\<^bold>\<Phi>\<^sub>2\<^sub>2 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x y. f (g\<^sub>1 x y) (g\<^sub>2 x y)" \<comment> \<open>cf. "\<open>\<Phi>\<^sub>2\<close>" in \<^cite>\<open>curry1931\<close>; "dyadic fork" in APL\<close>
+  where "\<^bold>\<Phi>\<^sub>2\<^sub>2 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x y. f (g\<^sub>1 x y) (g\<^sub>2 x y)" \<comment> \<open>cf. "\<open>\<Phi>\<^sub>2\<close>" in \<^cite>\<open>Curry1931\<close>; "dyadic fork" in APL\<close>
 \<comment> \<open>...and so on\<close>
 definition \<Phi>31_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> ('e \<Rightarrow> 'a) \<Rightarrow> ('e \<Rightarrow> 'b) \<Rightarrow> ('e \<Rightarrow> 'c) \<Rightarrow> 'e \<Rightarrow> 'd" ("\<^bold>\<Phi>\<^sub>3\<^sub>1")
   where "\<^bold>\<Phi>\<^sub>3\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 x. f (g\<^sub>1 x) (g\<^sub>2 x) (g\<^sub>3 x)"
@@ -477,7 +479,7 @@ text \<open>The family of projectors \<open>\<^bold>\<Pi>\<^sub>l\<^sub>m\<^sub>
 
 abbreviation(input) \<Pi>110_comb :: "'a \<Rightarrow> 'a" ("\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>0")  
   where "\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>0 \<equiv> \<^bold>I"     \<comment> \<open>trivial case corresponds to the identity combinator \<open>\<^bold>I\<close> \<close>
-definition \<Pi>111_comb :: "(('a \<Rightarrow> 'b) \<Rightarrow> 'a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b" ("\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>1") \<comment> \<open>Smullyan's "owl" \<^cite>\<open>smullyanBook\<close>\<close>
+definition \<Pi>111_comb :: "(('a \<Rightarrow> 'b) \<Rightarrow> 'a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b" ("\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>1") \<comment> \<open>Smullyan's "owl" \<^cite>\<open>SmullyanBook\<close>\<close>
   where "\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>1 \<equiv> \<lambda>h x. x (h x)"
 definition \<Pi>112_comb :: "(('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a) \<Rightarrow> (('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'c" ("\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>2")
   where "\<^bold>\<Pi>\<^sub>1\<^sub>1\<^sub>2 \<equiv> \<lambda>h\<^sub>1 h\<^sub>2 x. x (h\<^sub>1 x) (h\<^sub>2 x)"

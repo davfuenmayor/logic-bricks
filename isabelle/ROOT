@@ -11,7 +11,7 @@ session "Combinatory-Logic-Bricks" = "HOL" +
  (* theories [document = false] *)    
   theories
     combinators
-    base
+    logic_bridge
     connectives_equality
     connectives_disequality
     connectives
