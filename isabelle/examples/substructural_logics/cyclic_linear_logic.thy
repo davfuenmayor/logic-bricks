@@ -53,9 +53,9 @@ lemma "(R ;\<^sup>r (R\<^sup>\<sim>)) \<subseteq>\<^sup>r \<D>" by them
 
 subsection \<open>Cyclic Linear Logic\<close>
 
-text \<open>We show how (extended) relation algebra can interpret a non-commutative, cyclic variant of linear logic.
+text \<open>We show how relations can interpret a non-commutative, cyclic variant of linear logic \<^cite>\<open>Desharnais1997\<close>.
  If modal logic can be said to adopt the "propositions as sets (of states)" paradigm. The present
- encoding can be paraphrased as "propositions as relations (between states)". Understanding propositions
+ encoding can be paraphrased as "propositions as relations (on states)". Understanding propositions
  as sets of transitions between states offers an enriching dynamic perspective.\<close>
 
 text \<open>Nullary connectives are interpreted as relational constants.\<close>
