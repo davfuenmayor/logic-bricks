@@ -30,16 +30,16 @@ subsubsection \<open>Powers\<close>
 text \<open>The set of all powers (via iterated composition) for a given endorelation can be defined in two 
  ways, depending whether we want to include the "zero-power" (i.e. \<open>R\<^sup>0 = \<Q>\<close>) or not.\<close>
 definition relPower::"ERel(ERel('a))"
-  where "relPower \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 indSet\<^sub>1 \<Q> (\<circ>\<^sup>r)"
+  where "relPower \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 indSet\<^sub>1 \<^bold>I (\<circ>\<^sup>r)"
 definition relPower0::"ERel(ERel('a))"
-  where "relPower0 \<equiv> \<^bold>B (indSet\<^sub>1 (\<Q> \<Q>)) (\<circ>\<^sup>r)"
+  where "relPower0 \<equiv> \<^bold>B (indSet\<^sub>1 \<Q>) (\<circ>\<^sup>r)"
 
 declare relPower_def[endorel_defs] relPower0_def[endorel_defs]
 
-lemma "relPower R = indSet\<^sub>1 {R} ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
+lemma "relPower R = indSet\<^sub>1 R ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
 lemma relPower_def2: "relPower R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S R \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
 
-lemma "relPower0 R = indSet\<^sub>1 {\<Q>} ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
+lemma "relPower0 R = indSet\<^sub>1 \<Q> ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
 lemma relPower0_def2: "relPower0 R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S \<Q> \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
 
 text \<open>Definitions work as intended:\<close>
@@ -51,10 +51,8 @@ lemma "relPower0 R \<Q>" unfolding relPower0_def2 by simp
 lemma "relPower0 R R" unfolding relPower0_def2 by (metis relComp_id2)
 lemma "relPower0 R (R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis relComp_id2)
 lemma "relPower0 R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis (no_types, lifting) relComp_assoc relComp_id2)
-
 lemma relPower_ind:  "relPower  R T \<Longrightarrow> relPower  R (R \<circ>\<^sup>r T)" by (metis relPower_def2)
 lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R \<circ>\<^sup>r T)" using relPower0_def2 by blast
-
 
 
 subsection \<open>Properties and Operations\<close>
