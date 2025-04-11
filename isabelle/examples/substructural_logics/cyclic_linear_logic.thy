@@ -1,7 +1,7 @@
 section \<open>Cyclic Linear Logic\<close>
 text \<open>This is an example shallow encoding of an object-logical system using the library.\<close>
 
-theory linear_logic
+theory cyclic_linear_logic
 imports "../../operators" "../../entailment" "HOL-Eisbach.Eisbach"
 begin
 
