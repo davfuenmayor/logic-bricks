@@ -228,6 +228,7 @@ hide_const(open) Set.subset Set.subset_eq Set.supset Set.supset_eq
                  Product_Type.prod Product_Type.Pair Product_Type.Pair_Rep Product_Type.Times
                  Transitive_Closure.trancl Transitive_Closure.rtrancl
                  Lattices.sup_class.sup Lattices.inf_class.inf
+                 Inductive.lfp Inductive.gfp 
                  (* Fun.comp Fun.fun_upd *)
 
 unbundle no set_enumeration_syntax
