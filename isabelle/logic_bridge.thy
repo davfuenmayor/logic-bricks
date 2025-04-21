@@ -130,9 +130,9 @@ term "(((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o) :: oo"
 term "(((((R :: ERel(o)) :: EOp\<^sub>2(o)) :: EPair(oo)) :: Set4(o)) :: o \<Rightarrow> o \<Rightarrow> o) :: ooo"
 term "((((((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: EQuad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
 
-text \<open>We can continue producing types (we stop giving them special notation after the magic number 64).\<close>
-type_synonym sixtyfour = "oo \<Rightarrow> oo" ("oooo") \<comment> \<open>\<open>4^4 = (2^2)^(2^2) = 64\<close>\<close>
-type_synonym n256   = "o \<Rightarrow> ooo" \<comment> \<open>\<open>16^2 = 256\<close>\<close>
+text \<open>We can continue producing types, e.g.\<close>
+type_synonym n256 = "oo \<Rightarrow> oo"  ("oooo")   \<comment> \<open>\<open>4^4 = 256\<close>\<close>
+type_synonym n256' = "o \<Rightarrow> ooo" ("oooo''") \<comment> \<open>\<open>16^2 = 256\<close>\<close>
 type_synonym n65536 = "oo \<Rightarrow> ooo" \<comment> \<open>\<open>16^4 = 65536\<close>\<close>
 type_synonym n65536' = "ooo \<Rightarrow> o" \<comment> \<open>\<open>2^16 = 65536\<close>\<close>
 type_synonym n4294967296 = "ooo \<Rightarrow> oo" \<comment> \<open>\<open>4^16 = 4294967296\<close>\<close>
