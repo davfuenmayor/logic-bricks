@@ -131,6 +131,13 @@ lemma copair_simp: "\<midarrow>\<^sup>r\<lblot>a,b\<rblot> = \<langle>a,b\<rangl
 declare prodSum_simp1 [rel_simps] prodSum_simp2 [rel_simps] 
         prodSum_simp1' [rel_simps] prodSum_simp2' [rel_simps]
 
+text \<open>Unary relation-operations also have "duals".\<close>
+definition dualopR:: "(Rel('a,'b) \<Rightarrow> Rel('c,'d)) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('c,'d)"
+  where "dualopR \<phi> \<equiv> \<midarrow>\<^sup>r \<circ> \<phi> \<circ> \<midarrow>\<^sup>r"
+
+notation(input) dualopR ("(_)\<^sup>d") notation(output) dualopR ("'(_')\<^sup>d")
+declare dualopR_def[rel_defs]
+
 
 subsubsection \<open>Ordering Structure\<close>
 text \<open>Similarly, relations also inherit the ordering structure of sets.\<close>

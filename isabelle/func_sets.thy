@@ -252,8 +252,18 @@ lemma compl_deMorgan2: "\<midarrow>(\<midarrow>A \<inter> \<midarrow>B) = (A \<u
 lemma compl_fixedpoint: "nFP = \<midarrow> \<circ> FP" unfolding func_defs comb_defs ..
 lemma "nFP f = \<midarrow>(FP f)" unfolding func_defs comb_defs ..
 
+lemma distr1: "A \<inter> (B \<union> C) = (A \<inter> B) \<union> (A \<inter> C)" unfolding func_defs comb_defs by auto 
+lemma distr2: "A \<union> (B \<inter> C) = (A \<union> B) \<inter> (A \<union> C)" unfolding func_defs comb_defs by auto 
 
-subsubsection \<open>Dual-composition of Unary Set-Operations\<close>
+
+subsubsection \<open>Dual and composition of Unary Set-Operations\<close>
+
+text \<open>Unary set-operations have "duals".\<close>
+definition dualop::"SetOp('a,'b) \<Rightarrow> SetOp('a,'b)"
+  where "dualop \<phi> \<equiv> \<midarrow> \<circ> \<phi> \<circ> \<midarrow>"
+
+notation(input) dualop ("(_)\<^sup>d") notation(output) dualop ("'(_')\<^sup>d")
+declare dualop_def[func_defs]
 
 text \<open>Clearly, functional composition can be seamlessly applied to set-operations too.\<close>
 lemma fixes F::"Set('b) \<Rightarrow> Set('c)" and G::"Set('a) \<Rightarrow> Set('b)"
@@ -411,7 +421,6 @@ lemma "\<Inter>S x = (\<forall>A. S A \<rightarrow> A x)" unfolding biginter_def
 lemma "\<Union>S x = (\<exists>A. S A \<and> A x)" unfolding bigunion_def func_defs comb_defs ..
 
 declare biginter_def[func_defs] bigunion_def[func_defs]
-
 
 text \<open>We say of a set of sets that it "overlaps" (or "intersects") if there exists a shared element.\<close>
 abbreviation(input) bigoverlap::"Set(Set(Set('a)))" ("\<Sqinter>")
