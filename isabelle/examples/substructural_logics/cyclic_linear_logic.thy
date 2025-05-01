@@ -70,12 +70,14 @@ abbreviation(input) ll_neg::"EOp(ERel('a))"  ("(_)\<^sup>\<bottom>") where "r\<^
 text \<open>The "additive" binary connectives are interpreted with "Boolean" binary operations.\<close>
 abbreviation(input) ll_plus::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<oplus>" 99) where "(\<^bold>\<oplus>) \<equiv> (\<union>\<^sup>r)"
 abbreviation(input) ll_with::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>&" 99) where "(\<^bold>&) \<equiv> (\<inter>\<^sup>r)"
-abbreviation(input) ll_lpmi::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<bullet>-" 99) where "(\<^bold>\<bullet>-) \<equiv> (\<Zndres>\<^sup>r)"
 
 text \<open>The "multiplicative" binary connectives are interpreted with "Peircean" binary operations.\<close>
 abbreviation(input) ll_tensor::"EOp\<^sub>2(ERel('a))" (infixr "\<^bold>\<otimes>" 99) where "(\<^bold>\<otimes>) \<equiv> (;\<^sup>r)"
 abbreviation(input) ll_par::"EOp\<^sub>2(ERel('a))" (infixl "\<^bold>\<section>" 99) where "(\<^bold>\<section>) \<equiv> (\<dagger>\<^sup>r)" (* \<section> as in par-agraph ;*)
+
+text \<open>Linear implication and its dual correspond to residuals.\<close>
 abbreviation(input) ll_impl::"EOp\<^sub>2(ERel('a))" (infix "-\<^bold>\<circ>" 99) where "(-\<^bold>\<circ>) \<equiv> (\<Zrres>\<^sup>r)"
+abbreviation(input) ll_lpmi::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<bullet>-" 99) where "(\<^bold>\<bullet>-) \<equiv> (\<Zndres>\<^sup>r)"
 
 text \<open>Exponentials are interpreted with special unary operations that give strong-identities and weak-differences.\<close>
 abbreviation(input) ll_ofcourse::"EOp(ERel('a))"  ("\<^bold>!_") where "\<^bold>!r \<equiv> r\<^sup>!"
