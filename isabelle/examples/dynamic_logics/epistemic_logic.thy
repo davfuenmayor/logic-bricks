@@ -1,13 +1,11 @@
-section \<open>Shallow Embedding of an Epistemic Dynamic Logic\<close>
-
 theory epistemic_logic
   imports pdl
 begin
 
-
+section \<open>Shallow Embedding of an Epistemic Dynamic Logic\<close>   (*Beware: work in progress!*)
 
 (* \<Sigma>\<^sup>+ G is the accessibility relation corresponding to the common knowledge of a group G of agents*)
-definition commonAccessRel::"Set(\<pi>) \<Rightarrow> \<pi>" ("\<Sigma>\<^sup>+")
+definition commonAccessRel ("\<Sigma>\<^sup>+")
   where "\<Sigma>\<^sup>+ G \<equiv> (\<Union>\<^sup>rG)\<^sup>+"
 
 lemma commonAccessRel_equiv: "\<exists>G \<Longrightarrow> (\<forall>r. G r \<longrightarrow> equivalence r) \<Longrightarrow> equivalence (\<Sigma>\<^sup>+ G)"
@@ -29,9 +27,9 @@ definition Cknows ("\<^bold>K\<^sup>C{_}_")
   where "\<^bold>K\<^sup>C{G} P \<equiv> [\<Sigma>\<^sup>+ G]P"
 
 (*Exercise: encode the "wise-muddy children" puzzle using the constructions above*)
-consts muddy :: "\<pi>\<Rightarrow>\<sigma>" (* "is muddy" predicate*) 
-consts children :: "\<pi>\<Rightarrow>bool" (* "is child" predicate, i.e. set of "children" *)
-consts a::"\<pi>" b::"\<pi>" c::"\<pi>" (*three individual constants *)
+consts muddy :: "ERel('a) \<Rightarrow> Set('a)" (* "is muddy" predicate*) 
+consts children :: "Set(ERel('a))" (* "is child" predicate, i.e. set of "children" *)
+consts a::"ERel('a)" b::"ERel('a)" c::"ERel('a)" (*three individual constants *)
 
 axiomatization where 
    A0: "children a \<and> children b \<and> children c" and
@@ -46,7 +44,7 @@ axiomatization where
 
 (* "Cut-lemma" required as stepping stone for automated provers*)
 lemma commonAccessRelChildren_refl: "reflexive (\<Sigma>\<^sup>+ children)"
-  using A0 A1 commonAccessRel_equiv equivalence_char by blast
+  using A0 A1 commonAccessRel_equiv equivalence_char by metis
 
 theorem "\<Turnstile> \<^bold>K{c} (muddy c)" (*c knows he is muddy.*)
   using A0 A1 A2 A3 A4 A5
@@ -54,6 +52,6 @@ theorem "\<Turnstile> \<^bold>K{c} (muddy c)" (*c knows he is muddy.*)
   unfolding valid_def Cknows_def
   unfolding rel_defs func_defs
   unfolding comb_defs
-  by metis
+  by (metis (full_types))
 
 end
