@@ -1068,4 +1068,140 @@ lemma "monadLaw1 unit_rel bind_rel" unfolding rel_defs func_defs comb_defs by si
 lemma "monadLaw2 unit_rel bind_rel" unfolding rel_defs func_defs comb_defs by simp
 lemma "monadLaw3 bind_rel" unfolding rel_defs func_defs comb_defs by auto
 
+
+subsection \<open>Lifting Relations: from Points to Sets\<close>
+
+text \<open>Relations (on "points") can be lifted towards binary functions on sets (of "points"). Moreover,
+these can be further collapsed into relations on sets using quantifiers. We use visual metaphors for 
+talking about related points (for an implicit R both "x sees y" and "y is seen by x" mean that "R x y").\<close>
+
+subsubsection \<open>From Relations to Binary Set-Operations\<close>
+
+text \<open>The border of A relative to B is the set of elements in A that see some element in B.\<close>
+definition relativeBorder :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('a)"
+  where "relativeBorder \<equiv> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I) \<circ> leftImage"
+
+lemma "relativeBorder R A B = A \<inter> R-leftImage B" unfolding relativeBorder_def comb_defs ..
+lemma "relativeBorder R A B = A \<inter> (\<lambda>a. R a \<sqinter> B)" unfolding relativeBorder_def rel_defs comb_defs ..
+lemma "relativeBorder R A B a = (A a \<and> (\<exists>b. R a b \<and> B b))" unfolding relativeBorder_def rel_defs func_defs comb_defs ..
+
+text \<open>Similarly, the coborder of A relative to B is the set of elements in B seen by some element in A.\<close>
+abbreviation(input) relativeCoborder :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('b)"
+  where "relativeCoborder \<equiv> \<^bold>C \<circ> relativeBorder \<circ> \<smile>"
+
+lemma "relativeCoborder R A B = B \<inter> R-rightImage A" unfolding relativeBorder_def rel_defs comb_defs ..
+lemma "relativeCoborder R A B = B \<inter> (\<lambda>b. R\<^sup>\<smile> b \<sqinter> A)" unfolding relativeBorder_def rel_defs comb_defs ..
+lemma "relativeCoborder R A B b = (B b \<and> (\<exists>a. R a b \<and> A a))" unfolding relativeBorder_def rel_defs func_defs comb_defs ..
+
+text \<open>Following alternative point-free definition of coborder exploits commutativity of \<open>(\<inter>)\<close>.\<close>
+lemma relativeCoborder_def2: "relativeCoborder = (\<inter>) \<circ>\<^sub>2 rightImage" unfolding relativeBorder_def rel_defs func_defs comb_defs by auto
+
+
+text \<open>The interior of A relative to B is the set of elements in A that see no element in B.\<close>
+definition relativeInterior :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('a)"
+  where "relativeInterior \<equiv> (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I) \<circ> leftImage"
+
+lemma "relativeInterior R A B = A \<setminus> R-leftImage B" unfolding relativeInterior_def comb_defs ..
+lemma "relativeInterior R A B = A \<setminus> (\<lambda>a. R a \<sqinter> B)" unfolding relativeInterior_def rel_defs comb_defs ..
+lemma "relativeInterior R A B a = (A a \<and> \<not>(\<exists>b. R a b \<and> B b))" unfolding relativeInterior_def rel_defs func_defs comb_defs ..
+
+
+text \<open>Similarly, the exterior of A relative to B is the set of elements in B seen by no element in A.\<close>
+abbreviation(input) relativeExterior :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('b)"
+  where "relativeExterior \<equiv> \<^bold>C \<circ> relativeInterior \<circ> \<smile>"
+
+lemma "relativeExterior R A B = B \<setminus> R-rightImage A" unfolding relativeInterior_def rel_defs comb_defs ..
+lemma "relativeExterior R A B = B \<setminus> (\<lambda>b. R\<^sup>\<smile> b \<sqinter> A)" unfolding relativeInterior_def rel_defs comb_defs ..
+lemma "relativeExterior R A B b = (B b \<and> \<not>(\<exists>a. R a b \<and> A a))" unfolding relativeInterior_def rel_defs func_defs comb_defs ..
+
+declare relativeBorder_def[rel_defs] relativeInterior_def[rel_defs]
+
+text \<open>We have the following interrelations between the previous concepts:\<close>
+lemma "relativeInterior R A B = A \<setminus> relativeBorder   R A B" unfolding rel_defs func_defs comb_defs by auto
+lemma "relativeExterior R A B = B \<setminus> relativeCoborder R A B" unfolding rel_defs func_defs comb_defs by auto
+lemma "relativeBorder   R A B = A \<setminus> relativeInterior R A B" unfolding rel_defs func_defs comb_defs by auto
+lemma "relativeCoborder R A B = B \<setminus> relativeExterior R A B" unfolding rel_defs func_defs comb_defs by auto
+
+
+text \<open>We can use the previous definitions to encode other binary functions on sets (via relation-complement)\<close>
+
+text \<open>The elements in A that see every element in B.\<close>
+lemma "relativeInterior \<circ> \<midarrow>\<^sup>r = (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I) \<circ> leftBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "relativeInterior (R\<^sup>\<midarrow>) A B = A \<inter> leftBound R B" unfolding rel_defs func_defs comb_defs by auto
+
+text \<open>The elements in B that are seen by every element in A.\<close>
+lemma "relativeExterior \<circ> \<midarrow>\<^sup>r = \<^bold>C \<circ> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I) \<circ> rightBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "relativeExterior (R\<^sup>\<midarrow>) A B = B \<inter> rightBound R A" unfolding rel_defs func_defs comb_defs by auto
+lemma "relativeExterior \<circ> \<midarrow>\<^sup>r = (\<inter>) \<circ>\<^sub>2 rightBound" unfolding rel_defs func_defs comb_defs by metis
+
+text \<open>The elements in A that don't see some element in B.\<close>
+lemma "relativeBorder \<circ> \<midarrow>\<^sup>r = (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I) \<circ> leftBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "relativeBorder (R\<^sup>\<midarrow>) A B = A \<setminus> leftBound R B" unfolding rel_defs func_defs comb_defs by auto
+
+text \<open>The elements in B that aren't seen by some element in A.\<close>
+lemma "relativeCoborder \<circ> \<midarrow>\<^sup>r = \<^bold>C \<circ> (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I) \<circ> rightBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "relativeCoborder (R\<^sup>\<midarrow>) A B = B \<setminus> rightBound R A" unfolding rel_defs func_defs comb_defs by auto
+
+
+subsubsection \<open>From Relations on Points to Relations on Sets\<close>
+
+text \<open>"Some element in A sees an element in B", or equivalently, "some element in B is seen by an element in A".\<close>
+definition relLiftEE :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
+  where "relLiftEE \<equiv> \<exists> \<circ>\<^sub>3 relativeBorder"
+
+declare relLiftEE_def[rel_defs]
+
+lemma relLiftEE_def2: "relLiftEE = \<exists> \<circ>\<^sub>3 relativeCoborder" unfolding rel_defs func_defs comb_defs by metis
+
+lemma "relLiftEE R A B = A \<sqinter> leftImage R B" unfolding rel_defs func_defs comb_defs ..
+lemma "relLiftEE R A B = B \<sqinter> rightImage R A" unfolding relLiftEE_def2 rel_defs func_defs comb_defs ..
+lemma "relLiftEE R A B = (\<exists>a.\<exists>b. A a \<and> B b \<and> R a b)" unfolding rel_defs func_defs comb_defs by auto
+
+
+text \<open>"Some element in A sees every element in B" resp. "some element in B is seen by every element in A".\<close>
+definition relLiftEA_left :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
+  where "relLiftEA_left  \<equiv> \<exists> \<circ>\<^sub>3 relativeInterior \<circ> \<midarrow>\<^sup>r"
+definition relLiftEA_right :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
+  where "relLiftEA_right \<equiv> \<exists> \<circ>\<^sub>3 relativeExterior \<circ> \<midarrow>\<^sup>r"
+
+declare relLiftEA_left_def[rel_defs] relLiftEA_right_def[rel_defs]
+
+lemma "relLiftEA_left  R A B = A \<sqinter> leftBound  R B" unfolding rel_defs func_defs comb_defs by metis
+lemma "relLiftEA_right R A B = B \<sqinter> rightBound R A" unfolding rel_defs func_defs comb_defs by metis
+lemma "relLiftEA_left  R A B = (\<exists>a. A a \<and> (\<forall>b. B b \<rightarrow> R a b))" unfolding rel_defs func_defs comb_defs by metis
+lemma "relLiftEA_right R A B = (\<exists>b. B b \<and> (\<forall>a. A a \<rightarrow> R a b))" unfolding rel_defs func_defs comb_defs by metis
+
+
+text \<open>"Every element in A sees some element in B" resp. "every element in B is seen by some element in A".\<close>
+definition relLiftAE_left :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
+  where "relLiftAE_left  \<equiv> \<nexists> \<circ>\<^sub>3 relativeInterior"
+definition relLiftAE_right :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
+  where "relLiftAE_right \<equiv> \<nexists> \<circ>\<^sub>3 relativeExterior"
+
+declare relLiftAE_left_def[rel_defs] relLiftAE_right_def[rel_defs]
+
+lemma "relLiftAE_left  R A B = A \<subseteq> leftImage  R B" unfolding rel_defs func_defs comb_defs by simp
+lemma "relLiftAE_right R A B = B \<subseteq> rightImage R A" unfolding rel_defs func_defs comb_defs by simp
+lemma "relLiftAE_left  R A B = (\<forall>a. A a \<rightarrow> (\<exists>b. R a b \<and> B b))" unfolding rel_defs func_defs comb_defs by simp
+lemma "relLiftAE_right R A B = (\<forall>b. B b \<rightarrow> (\<exists>a. R a b \<and> A a))" unfolding rel_defs func_defs comb_defs by simp
+
+
+text \<open>"Every element in A sees every element in B", or equivalently, "every element in B is seen by every element in A".\<close>
+definition relLiftAA :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
+  where "relLiftAA  \<equiv> \<nexists> \<circ>\<^sub>3 relativeBorder \<circ> \<midarrow>\<^sup>r"
+
+declare relLiftAA_def[rel_defs]
+
+lemma relLiftAA_def2: "relLiftAA = \<nexists> \<circ>\<^sub>3 relativeCoborder \<circ> \<midarrow>\<^sup>r" unfolding rel_defs func_defs comb_defs by metis
+
+lemma "relLiftAA R A B = A \<subseteq> leftBound  R B" unfolding rel_defs func_defs comb_defs by auto
+lemma "relLiftAA R A B = B \<subseteq> rightBound R A" unfolding relLiftAA_def2 rel_defs func_defs comb_defs by auto
+lemma "relLiftAA R A B = (\<forall>a.\<forall>b. A a \<and> B b \<rightarrow> R a b)" unfolding rel_defs func_defs comb_defs by auto
+
+text \<open>Finally, we show how to recover unary set operations from the previous relations\<close>
+lemma rightImage_def3: "rightImage = \<Union> \<circ>\<^sub>2 relLiftAE_right"  unfolding rel_defs func_defs comb_defs by metis
+lemma rightBound_def3: "rightBound = \<Union> \<circ>\<^sub>2 relLiftAA" unfolding rel_defs func_defs comb_defs apply (rule ext)+ sorry (*TODO: reconstruct in kernel*) 
+lemma leftImage_def3:  "leftImage  = \<Union> \<circ>\<^sub>2 relLiftAE_right \<circ> \<smile>"  unfolding rel_defs func_defs comb_defs apply (rule ext) by fastforce
+lemma leftBound_def3:  "leftBound  = \<Union> \<circ>\<^sub>2 relLiftAA \<circ> \<smile>"  unfolding rel_defs func_defs comb_defs apply (rule ext)+ sorry  (*TODO: reconstruct in kernel*)
+
 end
