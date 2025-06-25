@@ -589,14 +589,13 @@ lemma "image f A b = (\<exists>x. f\<inverse> b x \<and> A x)" unfolding image_d
 
 text \<open>Analogously, the term \<open>preimage f\<close> denotes a set-operation that takes a set \<open>B\<close> and returns the 
   set of those elements which \<open>f\<close> maps to some element in \<open>B\<close>.\<close>
-definition preimage::"('a \<Rightarrow> 'b) \<Rightarrow> SetOp('b,'a)"
-  where "preimage \<equiv> \<^bold>C \<^bold>B" \<comment> \<open>i.e. (;)\<close>
+abbreviation(input) preimage::"('a \<Rightarrow> 'b) \<Rightarrow> SetOp('b,'a)"
+  where "preimage \<equiv> (;)" \<comment> \<open>i.e. \<open>\<^bold>C \<^bold>B\<close>\<close>
 
-lemma "preimage f B = f ; B" unfolding preimage_def comb_defs ..
-lemma "preimage f B = (\<lambda>a. B (f a))" unfolding preimage_def comb_defs ..
+lemma "preimage f B = f ; B" unfolding comb_defs ..
+lemma "preimage f B = (\<lambda>a. B (f a))" unfolding comb_defs ..
 
-
-declare image_def[func_defs] preimage_def[func_defs]
+declare image_def[func_defs] 
 
 text \<open>Introduce convenient notation.\<close>
 notation(input) image ("\<lparr>_ _\<rparr>") and preimage ("\<lparr>_ _\<rparr>\<inverse>")
@@ -628,8 +627,12 @@ lemma preimage_morph1: "preimage (f \<circ> g) = preimage g \<circ> preimage f" 
 lemma preimage_morph2: "preimage \<^bold>I = \<^bold>I" 
   unfolding func_defs comb_defs ..
 
+text \<open>Residuation conditions.\<close>
+lemma image_resid: "(image f A \<subseteq> B) = (A \<subseteq> preimage f B)" unfolding func_defs comb_defs by auto
+lemma image_resid_gen: "((image \<circ> X) f A \<subseteq> B) = (A \<subseteq> (preimage \<circ> X) f B)" unfolding func_defs comb_defs by auto
+
 text \<open>Random-looking simplification(?) rule that becomes useful later on.\<close> (*TODO: interpret*)
-lemma image_simp1: "image ((G \<circ> R) a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S (G \<circ> R))"
+lemma image_simp1: "image (F a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S F)"
   apply(rule ext) unfolding comb_defs func_defs by fastforce
 
 
@@ -641,83 +644,14 @@ definition update :: "('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b \<
 
 declare update_def[func_defs]
 
-text \<open>A set S can be closed under a n-ary endooperation, a generalized endooperation, or a set endooperation.\<close>
-definition op1_closed::"EOp('a) \<Rightarrow> Set(Set('a))" ("_-closed\<^sub>1")
-  where "f-closed\<^sub>1 \<equiv> \<lambda>S. \<forall>x. S x \<rightarrow> S(f x)"
-definition op2_closed::"EOp\<^sub>2('a) \<Rightarrow> Set(Set('a))" ("_-closed\<^sub>2")
-  where "g-closed\<^sub>2 \<equiv> \<lambda>S. \<forall>x y. S x \<rightarrow> S y \<rightarrow> S(g x y)"
-definition opG_closed::"EOp\<^sub>G('a) \<Rightarrow> Set(Set('a))" ("_-closed\<^sub>G")
-  where "F-closed\<^sub>G \<equiv> \<lambda>S. \<forall>X. X \<subseteq> S \<rightarrow> S(F X)"
-definition setop_closed::"SetEOp('a) \<Rightarrow> Set(Set('a))" ("_-closed\<^sub>S")
-  where "\<phi>-closed\<^sub>S \<equiv> \<lambda>S. \<forall>X. X \<subseteq> S \<rightarrow> \<phi> X \<subseteq> S"
-
-declare op1_closed_def[func_defs] op2_closed_def[func_defs] 
-        opG_closed_def[func_defs] setop_closed_def[func_defs]
-
-text \<open>Closure under n-ary endooperations can be reduced to closure under (n-1)-ary endooperations.\<close>
-lemma op2_closed_def2: "g-closed\<^sub>2 = (\<lambda>S. (\<forall>x. S x \<longrightarrow> (g x)-closed\<^sub>1 S))"
-  unfolding func_defs by simp
-lemma "(\<lambda>S. \<forall>x y z. S x \<rightarrow> S y \<rightarrow> S z \<rightarrow> S(g x y z)) = (\<lambda>S. (\<forall>x. S x \<longrightarrow> (g x)-closed\<^sub>2 S))"
-  unfolding func_defs by simp
-\<comment> \<open>and so on ...\<close>
-
-text \<open>The inductive set build up from a single "zero" element by using a sequence of constructors.\<close>
-definition inductiveSet1 :: "'a \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("indSet\<^sub>1") 
-  where "indSet\<^sub>1 z f \<equiv> \<Inter>(\<lambda>S. S z \<and> f-closed\<^sub>1 S)" \<comment> \<open>one unary constructor\<close>
-definition inductiveSet2 :: "'a \<Rightarrow> EOp\<^sub>2('a) \<Rightarrow> Set('a)" ("indSet\<^sub>2") 
-  where "indSet\<^sub>2 z g \<equiv> \<Inter>(\<lambda>S. S z \<and> g-closed\<^sub>2 S)" \<comment> \<open>one binary constructor\<close>
-\<comment> \<open>and so on ...\<close>
-definition inductiveSet11 :: "'a \<Rightarrow> EOp('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("indSet\<^sub>1\<^sub>1") 
-  where "indSet\<^sub>1\<^sub>1 z f\<^sub>1 f\<^sub>2 \<equiv> \<Inter>(\<lambda>S. S z \<and> f\<^sub>1-closed\<^sub>1 S \<and> f\<^sub>2-closed\<^sub>1 S)" \<comment> \<open>two unary constructors\<close>
-definition inductiveSet12 :: "'a \<Rightarrow> EOp('a) \<Rightarrow> EOp\<^sub>2('a) \<Rightarrow> Set('a)" ("indSet\<^sub>1\<^sub>2") 
-  where "indSet\<^sub>1\<^sub>2 z f g \<equiv> \<Inter>(\<lambda>S. S z \<and> f-closed\<^sub>1 S \<and> g-closed\<^sub>2 S)" \<comment> \<open>a unary and a binary constructor\<close>
-\<comment> \<open>and so on ...\<close>
-
-text \<open>The inductive set generated by a set \<open>G\<close> of generators by using a sequence of constructors.\<close>
-definition inductiveSetGen1 :: "Set('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("indSetGen\<^sub>1") 
-  where "indSetGen\<^sub>1 G f \<equiv> \<Inter>(\<lambda>S. G \<subseteq> S \<and> f-closed\<^sub>1 S)" \<comment> \<open>one unary constructor\<close>
-definition inductiveSetGen2 :: "Set('a) \<Rightarrow> EOp\<^sub>2('a) \<Rightarrow> Set('a)" ("indSetGen\<^sub>2") 
-  where "indSetGen\<^sub>2 G g \<equiv> \<Inter>(\<lambda>S. G \<subseteq> S \<and> g-closed\<^sub>2 S)" \<comment> \<open>one binary constructor\<close>
-\<comment> \<open>and so on ...\<close>
-definition inductiveSetGen11 :: "Set('a) \<Rightarrow> EOp('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("indSetGen\<^sub>1\<^sub>1") 
-  where "indSetGen\<^sub>1\<^sub>1 G f\<^sub>1 f\<^sub>2 \<equiv> \<Inter>(\<lambda>S. G \<subseteq> S \<and> f\<^sub>1-closed\<^sub>1 S \<and> f\<^sub>2-closed\<^sub>1 S)" \<comment> \<open>two unary constructors\<close>
-definition inductiveSetGen12 :: "Set('a) \<Rightarrow> EOp('a) \<Rightarrow> EOp\<^sub>2('a) \<Rightarrow> Set('a)" ("indSetGen\<^sub>1\<^sub>2") 
-  where "indSetGen\<^sub>1\<^sub>2 G f g   \<equiv> \<Inter>(\<lambda>S. G \<subseteq> S \<and> f-closed\<^sub>1 S \<and> g-closed\<^sub>2 S)"  \<comment> \<open>a unary and a binary constructor\<close>
-\<comment> \<open>and so on ...\<close>
-
-declare inductiveSet1_def[func_defs] inductiveSet2_def[func_defs] 
-        inductiveSet11_def[func_defs] inductiveSet12_def[func_defs]
-        inductiveSetGen1_def[func_defs] inductiveSetGen2_def[func_defs] 
-        inductiveSetGen11_def[func_defs] inductiveSetGen12_def[func_defs]
-
-text \<open>Clearly, when the set of generators \<open>G\<close> is a singleton \<open>{g}\<close> both definitions converge.\<close>
-lemma inductiveSet1_singleton: "indSetGen\<^sub>1 {z} f = indSet\<^sub>1 z f" unfolding func_defs comb_defs by simp
-lemma inductiveSet2_singleton: "indSetGen\<^sub>2 {z} g = indSet\<^sub>2 z g" unfolding func_defs comb_defs by simp
-lemma inductiveSet11_singleton: "indSetGen\<^sub>1\<^sub>1 {z} f\<^sub>1 f\<^sub>2 = indSet\<^sub>1\<^sub>1 z f\<^sub>1 f\<^sub>2" unfolding func_defs comb_defs by simp
-lemma inductiveSet12_singleton: "indSetGen\<^sub>1\<^sub>2 {z} f g = indSet\<^sub>1\<^sub>2 z f g" unfolding func_defs comb_defs by simp
-\<comment> \<open>and so on ...\<close>
-
-text \<open>The set of all powers (via iterated composition) for a given endofunction (including \<open>\<^bold>I\<close>).\<close>
-definition funPower::"ERel(EOp('a))"
-  where "funPower \<equiv> \<^bold>B (indSet\<^sub>1 \<^bold>I) (\<circ>)"
-
-declare funPower_def[func_defs]
-
-lemma "funPower f = indSet\<^sub>1 \<^bold>I (\<lambda>h. f \<circ> h)" unfolding func_defs comb_defs ..
-lemma funPower_def2: "funPower f g = (\<forall>S. (\<forall>h. S h \<rightarrow> S (f \<circ> h)) \<rightarrow> S \<^bold>I \<rightarrow> S g)" 
-  unfolding func_defs comb_defs by metis
-
-text \<open>Definition works as expected:\<close>
-lemma "funPower f \<^bold>I" unfolding funPower_def2 by simp
-lemma "funPower f f" unfolding funPower_def2 comb_defs by simp
-lemma "funPower f (f\<circ>f)" unfolding funPower_def2 comb_defs by simp
-lemma "funPower f (f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f)" unfolding funPower_def2 comb_defs by simp
-lemma funPower_ind: "funPower f g \<Longrightarrow> funPower f (f \<circ> g)" by (metis funPower_def2)
-
-(*Useful(?) property (cf. Bishop & Andrews 1998)*)
-lemma "(\<exists>g. funPower f g \<and> \<exists>!(FP g)) \<rightarrow> \<exists>(FP f)" \<comment> \<open>proof by external provers\<close>
-  unfolding funPower_def2 unfolding func_defs \<Phi>21_comb_def S11_comb_def 
-  oops (*TODO: zipperpin can use "comm f \<equiv> \<lambda>g. f \<circ> g = g \<circ> f" to find a proof*)
-
+text \<open>Some useful theorems.\<close>
+lemma bigdistr1: "(A \<inter> \<Union>S) = \<Union>\<lparr>(\<lambda>X. A \<inter> X) S\<rparr>" 
+  unfolding func_defs comb_defs by fastforce
+lemma bigdistr2: "(A \<union> \<Inter>S) = \<Inter>\<lparr>(\<lambda>X. A \<union> X) S\<rparr>" 
+  unfolding func_defs comb_defs by fastforce
+lemma compl_bigdeMorgan1: "\<midarrow>(\<Union>S) = \<Inter>\<lparr>\<midarrow> S\<rparr>" 
+  unfolding func_defs comb_defs by fastforce
+lemma compl_bigdeMorgan2: "\<midarrow>(\<Inter>S) = \<Union>\<lparr>\<midarrow> S\<rparr>" 
+  unfolding func_defs comb_defs by fastforce
 
 end

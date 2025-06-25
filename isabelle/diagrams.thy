@@ -36,8 +36,9 @@ lemma "idempotent f =  \<sqdot> \<midarrow>f\<rightarrow> \<sqdot>
 
 lemma "idempotent f = (\<forall>x. f x = f (f x))" unfolding func_defs comb_defs by metis
 lemma "idempotent f = (f = (f ; f))" unfolding func_defs comb_defs ..
-lemma "idempotent = \<^bold>W (\<Q> \<circ> (\<^bold>W \<^bold>B))" unfolding func_defs comb_defs by fastforce
-
+lemma idempotent_def2: "idempotent = \<^bold>W (\<Q> \<circ> (\<^bold>W \<^bold>B))" unfolding func_defs comb_defs by auto
+lemma idempotent_def3: "idempotent = \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) range FP" unfolding func_defs comb_defs by metis
+lemma "idempotent f = (range f \<subseteq> FP f)" unfolding idempotent_def3 comb_defs ..
 
 definition square :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'c) \<Rightarrow> ('b \<Rightarrow> 'd) \<Rightarrow> ('c \<Rightarrow> 'd) \<Rightarrow> o"
   where "square \<equiv> \<^bold>B\<^sub>2\<^sub>2 \<Q> (;) (;)"
@@ -169,6 +170,19 @@ lemma "involutive = (\<Q> \<^bold>I) \<circ> (\<^bold>W \<^bold>B)" unfolding fu
 text \<open>Identity is the only function which is both involutive and idempotent.\<close>
 lemma "(involutive f \<and> idempotent f) = (f = \<^bold>I)"
   unfolding func_defs comb_defs by auto
+
+text \<open>For involutive functions the notions of image and preimage coincide.\<close>
+lemma invol_image: "involutive f \<Longrightarrow> image f = preimage f" unfolding func_defs comb_defs by metis
+  
+text \<open>For involutive functions the image (or preimage) operation is self-residuated wrt. \<open>(\<subseteq>)\<close>.\<close>
+lemma invol_resid: "involutive f \<Longrightarrow> (image f A \<subseteq> B) = (A \<subseteq> image f B)"
+  unfolding func_defs comb_defs by metis
+
+text \<open>Some famous involutive functions:\<close>
+lemma neg_invol: "involutive (\<not>)" unfolding func_defs comb_defs by simp
+lemma compl_invol: "involutive \<midarrow>" unfolding func_defs comb_defs by simp
+lemma complR_invol: "involutive \<midarrow>\<^sup>r" unfolding func_defs rel_defs comb_defs by simp
+lemma dualop_invol: "involutive dualop" unfolding func_defs rel_defs comb_defs by simp
 
 
 subsubsection \<open>For Relations\<close>

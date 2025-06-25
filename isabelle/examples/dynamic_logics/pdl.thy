@@ -1,5 +1,5 @@
 theory pdl
-  imports "../../operators" "../../entailment"
+  imports "../../induction" "../../operators" "../../entailment"
 begin
 
 section \<open>Shallow Embedding of Propositional Dynamic Logic (PDL)\<close>  (*Beware: work in progress!*)
@@ -69,7 +69,7 @@ term "(\<lambda>a. a\<^sup>+) :: ERel('a) \<Rightarrow> ERel('a)"
 term "(\<lambda>a. a\<^sup>*) :: ERel('a) \<Rightarrow> ERel('a)"
 
 lemma tran_closure_refl: "reflexive R \<longrightarrow> reflexive (R\<^sup>+)"
-  unfolding reflexive_def2  biginterR_def2 endorel_defs func_defs comb_defs rel_defs by blast
+  unfolding reflexive_def2  biginterR_def2 ind_defs func_defs comb_defs rel_defs by blast
 
 lemma tran_closure_symm: "symmetric R \<longrightarrow> symmetric (R\<^sup>+)" sorry (*kernel reconstruction fails*)
   (* unfolding symmetric_def transitiveClosure_char transitive_reldef *)

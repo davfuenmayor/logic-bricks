@@ -67,13 +67,152 @@ lemma upair_prop: "(\<forall>D. D \<subseteq> S \<rightarrow> \<exists>\<^sub>\<
   unfolding upair_def3 unfolding func_defs comb_defs by (smt (verit, best))
 
 
-subsection \<open>Spaces via Closure under Operations\<close>
+subsection \<open>Spaces via Closure under Endo-operations\<close>
 
-text \<open>We obtain spaces by considering the set of sets closed under the given (n-ary) operation.\<close>
-term "f-closed\<^sub>1 :: Space('a)"
-term "g-closed\<^sub>2 :: Space('a)"
-term "F-closed\<^sub>G :: Space('a)"
-term "\<phi>-closed\<^sub>S :: Space('a)"
+text \<open>We obtain spaces by considering the set of sets closed under the given (n-ary) endo-operation.\<close>
+
+text \<open>We start, quite trivially, with closure under nullary endooperations.\<close>
+abbreviation(input) op0_closed::"'a \<Rightarrow> Space('a)"  ("_-closed\<^sub>0")
+  where "op0_closed \<equiv> \<^bold>T"
+
+lemma "c-closed\<^sub>0 S = S c" unfolding comb_defs ..
+
+text \<open>Things get more interesting with closure under unary endooperations.\<close>
+definition op1_closed::"EOp('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>1")
+  where "op1_closed \<equiv> (\<subseteq>)-preFP \<circ> image"
+
+declare op1_closed_def[func_defs]
+
+lemma "f-closed\<^sub>1 S = (image f S \<subseteq> S)" unfolding func_defs comb_defs ..
+
+text \<open>Recalling that image and preimage are residuated, we have in fact that:\<close>
+lemma op1_closed_def2: "op1_closed = (\<subseteq>)-postFP \<circ> preimage" unfolding func_defs comb_defs by auto
+lemma "f-closed\<^sub>1 S = (S \<subseteq> preimage f S)" unfolding op1_closed_def2 func_defs comb_defs ..
+lemma "f-closed\<^sub>1 S = (S \<subseteq> S \<circ> f)" unfolding op1_closed_def2 func_defs comb_defs ..
+lemma op1_closed_def3: "f-closed\<^sub>1 S = (\<forall>x. S x \<rightarrow> S(f x))" unfolding op1_closed_def2 func_defs comb_defs ..
+
+text \<open>Note also that we have:\<close>
+lemma "op1_closed = ((\<^bold>S (\<subseteq>)) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op0_closed" unfolding func_defs comb_defs by auto
+
+text \<open>In fact, we can define "closure under an n-ary endooperation" inductively on n, as follows.\<close>
+definition op2_closed::"EOp\<^sub>2('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>2")
+  where "op2_closed \<equiv> ((\<^bold>S (\<subseteq>)) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op1_closed"
+definition op3_closed::"('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'a) \<Rightarrow> Space('a)" ("_-closed\<^sub>3")
+  where "op3_closed \<equiv> ((\<^bold>S (\<subseteq>)) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op2_closed"
+\<comment> \<open>... and so on\<close>
+
+declare op2_closed_def[func_defs] op3_closed_def[func_defs]
+
+lemma op2_closed_def2: "g-closed\<^sub>2 S = (\<forall>x y. S x \<and> S y \<rightarrow> S(g x y))"  unfolding func_defs comb_defs by auto
+lemma op3_closed_def2: "g-closed\<^sub>3 S = (\<forall>x y z. S x \<and> S y \<and> S z \<rightarrow> S(g x y z))" unfolding func_defs comb_defs by auto
+
+
+text \<open>Closure under set-endo-operations of different arities can be defined as follows.\<close>
+abbreviation(input) setop0_closed::"Set('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>S\<^sub>0")
+  where "setop0_closed F S \<equiv> op0_closed F (\<wp> S)"
+abbreviation(input) setop1_closed::"SetEOp('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>S\<^sub>1")
+  where "setop1_closed F S \<equiv> op1_closed F (\<wp> S)"
+abbreviation(input) setop2_closed::"SetEOp\<^sub>2('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>S\<^sub>2")
+  where "setop2_closed F S \<equiv> op2_closed F (\<wp> S)"
+\<comment> \<open>... and so on\<close>
+
+lemma "C-closed\<^sub>S\<^sub>0 = (\<lambda>S. C \<subseteq> S)"  unfolding func_defs comb_defs by auto
+lemma "F-closed\<^sub>S\<^sub>1 = (\<lambda>S. \<forall>X. X \<subseteq> S \<rightarrow> F X \<subseteq> S)"  unfolding func_defs comb_defs by auto
+lemma "G-closed\<^sub>S\<^sub>2 = (\<lambda>S. \<forall>X Y. X \<subseteq> S \<and> Y \<subseteq> S \<rightarrow> G X Y \<subseteq> S)"  unfolding func_defs comb_defs by blast
+
+
+text \<open>Moreover, a set S can also be closed under generalized endooperations (unary in this case).\<close>
+definition opG_closed::"EOp\<^sub>G('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>G")
+  where "opG_closed \<equiv> ((\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) \<wp>) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op0_closed"
+
+declare opG_closed_def[func_defs]
+
+lemma "F-closed\<^sub>G S = (\<forall>X. X \<subseteq> S \<rightarrow> S(F X))" unfolding func_defs comb_defs by auto
+
+text \<open>The space of all those sets closed under some function(s) is always closed under arbitrary 
+ intersections (\<open>\<Inter>\<close>). Such spaces are known in the literature as "closure systems".\<close>
+abbreviation(input) closureSystem :: "Set(Space('a))"
+  where "closureSystem S \<equiv> \<Inter>-closed\<^sub>G S"
+
+lemma "closureSystem (c-closed\<^sub>0)" unfolding comb_defs func_defs by simp
+lemma "closureSystem (f-closed\<^sub>1)" unfolding comb_defs func_defs by metis
+lemma "closureSystem (g-closed\<^sub>2)" unfolding comb_defs func_defs by metis
+lemma "closureSystem (C-closed\<^sub>S\<^sub>0)" unfolding comb_defs func_defs by metis
+lemma "closureSystem (F-closed\<^sub>S\<^sub>1)" unfolding comb_defs func_defs by metis
+lemma "closureSystem (G-closed\<^sub>S\<^sub>2)" unfolding comb_defs func_defs by metis
+lemma "closureSystem (F-closed\<^sub>G)" unfolding comb_defs func_defs by auto
+
+text \<open>Closure systems are closed under (arbitrary) intersections.\<close>
+lemma closureSystem_meetClosed: "(\<inter>)-closed\<^sub>2 closureSystem" unfolding comb_defs func_defs by auto
+lemma closureSystem_infimumClosed: "closureSystem closureSystem" unfolding comb_defs func_defs by auto
+lemma closureSystem_nonEmpty: "closureSystem X \<Longrightarrow> \<exists>X" unfolding func_defs comb_defs by auto
+
+text \<open>Closure systems closed under a single nullary (constant) and an n-ary constructor arise often.\<close>
+definition op01_closed::"'a \<Rightarrow> EOp('a) \<Rightarrow> Space('a)" ("_,_-closed\<^sub>0\<^sub>1")
+  where "z,f-closed\<^sub>0\<^sub>1 \<equiv> z-closed\<^sub>0 \<inter> f-closed\<^sub>1" \<comment> \<open>one unary constructor\<close>
+definition op02_closed::"'a \<Rightarrow> EOp\<^sub>2('a) \<Rightarrow> Space('a)" ("_,_-closed\<^sub>0\<^sub>2")
+  where "z,g-closed\<^sub>0\<^sub>2 \<equiv> z-closed\<^sub>0 \<inter> g-closed\<^sub>2" \<comment> \<open>one binary constructor\<close>
+\<comment> \<open>...and so on\<close>
+
+declare op01_closed_def[func_defs] op02_closed_def[func_defs]
+
+lemma "z,f-closed\<^sub>0\<^sub>1 = (\<lambda>S. S z \<and> f-closed\<^sub>1 S)" unfolding func_defs comb_defs .. 
+lemma "z,g-closed\<^sub>0\<^sub>2 = (\<lambda>S. S z \<and> g-closed\<^sub>2 S)" unfolding func_defs comb_defs ..
+
+text \<open>Being closure systems, their intersections are also closure systems.\<close>
+lemma op01_ClosureSystem: "closureSystem (z,f-closed\<^sub>0\<^sub>1)" unfolding comb_defs func_defs by metis
+lemma op02_ClosureSystem: "closureSystem (z,g-closed\<^sub>0\<^sub>2)" unfolding comb_defs func_defs by metis
+
+
+text \<open>More generally, we can introduce (on demand) closure systems that are generated by an arbitrary 
+ set \<open>G\<close> of generators by using a sequence of constructors.\<close>
+definition opGen1_closed::"EOp('a) \<Rightarrow> Set('a) \<Rightarrow> Space('a)" ("_-closedGen\<^sub>1")
+  where "f-closedGen\<^sub>1 G \<equiv> G-closed\<^sub>S\<^sub>0 \<inter> f-closed\<^sub>1" \<comment> \<open>one unary constructor\<close>
+definition opGen2_closed::"EOp\<^sub>2('a) \<Rightarrow> Set('a) \<Rightarrow> Space('a)" ("_-closedGen\<^sub>2")
+  where "g-closedGen\<^sub>2 G \<equiv> G-closed\<^sub>S\<^sub>0 \<inter> g-closed\<^sub>2" \<comment> \<open>one binary constructor\<close>
+    \<comment> \<open>...and so on\<close>
+definition opGen12_closed::"EOp('a) \<Rightarrow> EOp\<^sub>2('a) \<Rightarrow> Set('a) \<Rightarrow> Space('a)" ("_,_-closedGen\<^sub>1\<^sub>2")
+  where "f,g-closedGen\<^sub>1\<^sub>2 G \<equiv> G-closed\<^sub>S\<^sub>0 \<inter> f-closed\<^sub>1 \<inter> g-closed\<^sub>2" \<comment> \<open>one unary and one binary constructor\<close>
+\<comment> \<open>...and so on\<close>
+
+declare opGen1_closed_def[func_defs] opGen2_closed_def[func_defs] opGen12_closed_def[func_defs]
+
+lemma "f-closedGen\<^sub>1 G S = (G \<subseteq> S \<and> f-closed\<^sub>1 S)" unfolding comb_defs func_defs by simp
+lemma "f,g-closedGen\<^sub>1\<^sub>2 G S = (G \<subseteq> S \<and> f-closed\<^sub>1 S \<and> g-closed\<^sub>2 S)" unfolding comb_defs func_defs by simp
+
+text \<open>Being closure systems, their intersections are also closure systems.\<close>
+lemma opGen1_ClosureSystem: "closureSystem (f-closedGen\<^sub>1 G)" unfolding comb_defs func_defs by metis
+lemma opGen2_ClosureSystem: "closureSystem (g-closedGen\<^sub>2 G)" unfolding comb_defs func_defs by metis
+
+text \<open>Set-operations, in general, do not distribute over arbitrary unions or intersections (of spaces).\<close>
+proposition "F (\<Union> S) = \<Union> (image F S)" nitpick \<comment> \<open>countermodel found\<close> oops
+proposition "F (\<Inter> S) = \<Inter> (image F S)" nitpick \<comment> \<open>countermodel found\<close> oops
+
+text \<open>Distribution over unions holds if the set-operation is obtained as an image or preimage operator.\<close>
+lemma image_distr_bigunion: "image f (\<Union> S) = \<Union> ((image \<circ> image) f S)"
+  unfolding comb_defs func_defs apply rule by (smt (verit, best))
+lemma preimage_distr_bigunion: "preimage f (\<Union> S) = \<Union> ((image \<circ> preimage) f S)"
+  unfolding comb_defs func_defs apply rule by (smt (verit, best))
+
+text \<open>If the space is a closure system, then an analogous fact holds for arbitrary intersections too.\<close>
+lemma image_distr_biginter: "closureSystem S \<Longrightarrow> image F (\<Inter> S) = \<Inter> ((image \<circ> image) F S)"
+  unfolding comb_defs func_defs apply rule by (smt (verit, best))
+lemma preimage_distr_biginter: "closureSystem S \<Longrightarrow> preimage F (\<Inter> S) = \<Inter> ((image \<circ> preimage) F S)" 
+  unfolding comb_defs func_defs apply rule by (smt (verit, best))
+
+text \<open>Another convenient lemma: closure under a function (wrt one generator) can be conveniently 
+ stated in terms of closure under composition with that function (wrt the identity function \<open>\<^bold>I\<close>).\<close>
+lemma funClosure_prop: "z,f-closed\<^sub>0\<^sub>1 = (image \<circ> image) (\<^bold>T z) (\<^bold>I,((\<circ>) f)-closed\<^sub>0\<^sub>1)"
+  unfolding comb_defs func_defs apply (rule ext) apply (rule iffI) defer apply auto sorry (*TODO: kernel reconstruction*) 
+
+text \<open>Also note that:\<close>
+lemma "\<Inter>((\<circ>)-closed\<^sub>2)  = \<Inter> ((\<circ>) f)-closed\<^sub>1" for f::"'a \<Rightarrow> 'a" unfolding func_defs comb_defs by fast
+lemma "\<Inter>((\<circ>)-closed\<^sub>2)  = \<Inter>((\<circ>\<^sup>r) f)-closed\<^sub>1" for f::"ERel('a)" unfolding func_defs comb_defs by fast
+lemma "\<Inter>((\<circ>\<^sup>r)-closed\<^sub>2) = \<Inter> ((\<circ>) f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding func_defs comb_defs by fast
+lemma "\<Inter>((\<circ>\<^sup>r)-closed\<^sub>2) = \<Inter>((\<circ>\<^sup>r) f)-closed\<^sub>1" for f::"ERel('a)" unfolding func_defs comb_defs by fast
+text \<open>However:\<close>
+proposition "((\<circ>)-closed\<^sub>2)  = ((\<circ>) f-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
+proposition "((\<circ>\<^sup>r)-closed\<^sub>2) = ((\<circ>\<^sup>r) f-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
 
 
 subsection \<open>Spaces from Endorelations\<close>
@@ -114,9 +253,9 @@ proposition "A \<subseteq> B \<Longrightarrow> R-lubComplete B \<Longrightarrow>
 
 text \<open>The following related propertes correspond to closure under the lub resp. glb set-operation wrt R.\<close>
 definition lubClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-lubClosed")
-  where "R-lubClosed \<equiv> (R-lub)-closed\<^sub>S" 
+  where "R-lubClosed \<equiv> (R-lub)-closed\<^sub>S\<^sub>1" 
 definition glbClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-glbClosed")
-  where "R-glbClosed \<equiv> (R-glb)-closed\<^sub>S"
+  where "R-glbClosed \<equiv> (R-glb)-closed\<^sub>S\<^sub>1"
 
 declare lubClosed_def[space_defs] glbClosed_def[space_defs]
 
@@ -125,9 +264,9 @@ lemma glbClosed_defT: "R-glbClosed = R\<^sup>\<smile>-lubClosed" unfolding leftB
 
 text \<open>Recalling that antisymmetry entails uniqueness of lub/glb (when they exist), we have in fact.\<close>
 lemma lubComplete_lubClosed: "antisymmetric R \<Longrightarrow> R-lubComplete S \<Longrightarrow> R-lubClosed S" 
-  unfolding space_defs endorel_defs rel_defs func_defs comb_defs by metis
+  unfolding space_defs endorel_defs rel_defs func_defs comb_defs apply safe by metis
 lemma glbComplete_glbClosed: "antisymmetric R \<Longrightarrow> R-glbComplete S \<Longrightarrow>  R-glbClosed S" 
-  unfolding space_defs endorel_defs rel_defs func_defs comb_defs by metis
+  unfolding space_defs endorel_defs rel_defs func_defs comb_defs apply safe by metis
 
 text \<open>However, being closed under lub/glb does not entail existence of lub/glb.\<close>
 proposition "\<exists>S \<Longrightarrow> R-lubClosed S \<Longrightarrow>  R-lubComplete S" nitpick \<comment> \<open>countermodel found\<close> oops
@@ -135,9 +274,9 @@ proposition "\<exists>S \<Longrightarrow> R-glbClosed S \<Longrightarrow> R-glbC
 
 text \<open>In fact, for limit-complete relations, closure under lub/glb does entail existence of lub/glb.\<close>
 lemma lubClosed_lubComplete: "limitComplete R \<Longrightarrow> R-lubClosed S \<Longrightarrow> R-lubComplete S" 
-  unfolding space_defs endorel_defs func_defs comb_defs by metis
+  unfolding space_defs endorel_defs func_defs comb_defs by blast
 lemma glbClosed_glbComplete: "limitComplete R \<Longrightarrow> R-glbClosed S \<Longrightarrow>  R-glbComplete S" 
-  unfolding limitComplete_def2 space_defs endorel_defs func_defs comb_defs by metis
+  unfolding limitComplete_def2 space_defs endorel_defs func_defs comb_defs by blast
 
 lemma lubClosed_def2: "antisymmetric R \<Longrightarrow> limitComplete R \<Longrightarrow> R-lubComplete = R-lubClosed" 
   using lubClosed_lubComplete lubComplete_lubClosed by blast
@@ -148,9 +287,9 @@ lemma glbClosed_def2: "antisymmetric R \<Longrightarrow> limitComplete R \<Longr
 subsubsection \<open>Upwards- and Downwards-Closure\<close>
 
 definition upwardsClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-upwardsClosed")
-  where "R-upwardsClosed \<equiv> (R-upImage)-closed\<^sub>S"
+  where "R-upwardsClosed \<equiv> (R-upImage)-closed\<^sub>S\<^sub>1"
 definition downwardsClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-downwardsClosed")
-  where "R-downwardsClosed \<equiv> (R-downImage)-closed\<^sub>S"
+  where "R-downwardsClosed \<equiv> (R-downImage)-closed\<^sub>S\<^sub>1"
 
 declare upwardsClosed_def[space_defs] downwardsClosed_def[space_defs]
 

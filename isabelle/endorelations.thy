@@ -25,36 +25,6 @@ lemma "R-interval a b     = (\<lambda>c. R a c \<and> R c b)" unfolding endorel_
 lemma "R-dualInterval a b = (\<lambda>c. R a c \<or> R c b)" unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 
-subsubsection \<open>Powers\<close>
-
-text \<open>The set of all powers (via iterated composition) for a given endorelation can be defined in two 
- ways, depending whether we want to include the "zero-power" (i.e. \<open>R\<^sup>0 = \<Q>\<close>) or not.\<close>
-definition relPower::"ERel(ERel('a))"
-  where "relPower \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 indSet\<^sub>1 \<^bold>I (\<circ>\<^sup>r)"
-definition relPower0::"ERel(ERel('a))"
-  where "relPower0 \<equiv> \<^bold>B (indSet\<^sub>1 \<Q>) (\<circ>\<^sup>r)"
-
-declare relPower_def[endorel_defs] relPower0_def[endorel_defs]
-
-lemma "relPower R = indSet\<^sub>1 R ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
-lemma relPower_def2: "relPower R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S R \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
-
-lemma "relPower0 R = indSet\<^sub>1 \<Q> ((\<circ>\<^sup>r) R)" unfolding endorel_defs comb_defs ..
-lemma relPower0_def2: "relPower0 R T = (\<forall>S. (\<forall>H. S H \<rightarrow> S (R \<circ>\<^sup>r H)) \<rightarrow> S \<Q> \<rightarrow> S T)" unfolding endorel_defs func_defs comb_defs by auto
-
-text \<open>Definitions work as intended:\<close>
-proposition "relPower R \<Q>" nitpick \<comment> \<open>countermodel found\<close> oops
-lemma "relPower R R" unfolding relPower_def2 by simp
-lemma "relPower R (R \<circ>\<^sup>r R)" unfolding relPower_def2 by simp
-lemma "relPower R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower_def2 by (simp add: relComp_assoc)
-lemma "relPower0 R \<Q>" unfolding relPower0_def2 by simp
-lemma "relPower0 R R" unfolding relPower0_def2 by (metis relComp_id2)
-lemma "relPower0 R (R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis relComp_id2)
-lemma "relPower0 R (R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R \<circ>\<^sup>r R)" unfolding relPower0_def2 by (metis (no_types, lifting) relComp_assoc relComp_id2)
-lemma relPower_ind:  "relPower  R T \<Longrightarrow> relPower  R (R \<circ>\<^sup>r T)" by (metis relPower_def2)
-lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R \<circ>\<^sup>r T)" using relPower0_def2 by blast
-
-
 subsection \<open>Properties and Operations\<close>
 
 subsubsection \<open>Reflexivity and Irreflexivity\<close>
@@ -489,28 +459,6 @@ text \<open>Symmetry entails both quasi-transitivity and quasi-antitransitivity.
 lemma "symmetric R \<Longrightarrow> quasiTransitive R" unfolding endorel_defs rel_defs func_defs comb_defs by metis
 lemma "symmetric R \<Longrightarrow> quasiAntitransitive R" unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
-text \<open>The property of transitivity is closed under arbitrary infima (i.e. it is a "closure system").\<close>
-lemma "\<Inter>\<^sup>r-closed\<^sub>G transitive" 
-  unfolding transitive_def2 endorel_defs rel_defs func_defs comb_defs by metis
-
-text \<open>Natural ways to obtain transitive relations resp. preorders.\<close>
-definition transitiveClosure::"ERel('a) \<Rightarrow> ERel('a)" ("_\<^sup>+")
-  where "transitiveClosure \<equiv> \<Union>\<^sup>r \<circ> relPower"
-definition preorderClosure::"ERel('a) \<Rightarrow> ERel('a)"  ("_\<^sup>*") \<comment> \<open>aka. reflexive-transitive closure\<close>
-  where "preorderClosure \<equiv> \<Union>\<^sup>r \<circ> relPower0"
-
-declare transitiveClosure_def [endorel_defs] preorderClosure_def [endorel_defs]
-
-lemma "R\<^sup>+ = \<Union>\<^sup>r(relPower R)" unfolding endorel_defs comb_defs ..
-lemma "R\<^sup>* = \<Union>\<^sup>r(relPower0 R)" unfolding endorel_defs comb_defs ..
-
-lemma transitiveClosure_char: "R\<^sup>+ = \<Inter>\<^sup>r(\<lambda>T. transitive T \<and> R \<subseteq>\<^sup>r T)" \<comment> \<open>proof by external provers\<close>
-  unfolding transitiveClosure_def relPower_def transitive_def2
-  unfolding endorel_defs rel_defs func_defs comb_defs 
-  apply (rule ext)+ apply (rule iffI) oops (*TODO: prove*)
-
-lemma "R\<^sup>* = reflexiveClosure (R\<^sup>+)" \<comment> \<open>proof by external provers\<close> oops (*TODO: prove*)
-
 
 subsubsection \<open>Euclideanness and co.\<close>
 
@@ -632,25 +580,6 @@ lemma subset_partial_order: "partial_order (\<subseteq>)"
   unfolding endorel_defs rel_defs func_defs comb_defs by fast
 lemma subrel_partial_order: "partial_order (\<subseteq>\<^sup>r)"
   unfolding endorel_defs rel_defs func_defs comb_defs by fast
-
-text \<open>Functional-power is a preorder.\<close>
-lemma funPower_preorder: "preorder funPower" \<comment> \<open>proof by external provers\<close>
-  unfolding partial_order_def preorder_def apply auto 
-   apply (simp add: B1_comb_def I_comb_def W21_comb_def funPower_def2 reflexive_def4)
-  oops (*TODO: prove*)
-
-text \<open>Relational-power is a preorder\<close>
-lemma relPower_preorder: "preorder relPower"
-  unfolding partial_order_def preorder_def apply auto 
-   apply (simp add: B1_comb_def W21_comb_def reflexive_def2 relPower_def2)
-   unfolding transitive_def2 relPower_def2 by (metis (no_types, opaque_lifting) B2_comb_def relComp_assoc)
-lemma relPower0_preorder: "preorder relPower0"
-  unfolding partial_order_def preorder_def apply auto 
-  apply (smt (verit, best) B1_comb_def W21_comb_def reflexive_def2 relComp_id2 relPower0_def2)
-  unfolding transitive_def2 relPower0_def2 by (metis (no_types, opaque_lifting) B2_comb_def relComp_assoc relComp_id1)
-
-text \<open>However, relational-power is not antisymmetric (and thus not partially ordered), because we have:\<close>
-proposition "R = T \<circ>\<^sup>r T \<Longrightarrow> T = R \<circ>\<^sup>r R \<Longrightarrow> R = T" nitpick[card 'a=3] \<comment> \<open>countermodel found\<close> oops 
 
 
 subsection \<open>Endorelation-based Set-Operations\<close>

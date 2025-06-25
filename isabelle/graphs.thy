@@ -19,13 +19,6 @@ lemma "G-interval a b = (\<lambda>c. G <a,c> \<and> G <c,b>)"
   unfolding endorel_defs rel_defs func_defs comb_defs curry_def by auto
 
 
-subsubsection \<open>Powers\<close>
-
-text \<open>We can extrapolate the notion of (relational) powers to graphs using currying.\<close>
-abbreviation graphPower::"ERel(Graph('a))"
-  where "graphPower G \<equiv> \<lparr>uncurry (relPower \<lfloor>G\<rfloor>)\<rparr>"
-
-
 subsection \<open>Properties and Operations\<close>
 text \<open>Properties of endorelations can be seamlessly transported to the world of graphs via currying.\<close>
 
