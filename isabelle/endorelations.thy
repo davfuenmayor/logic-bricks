@@ -699,6 +699,17 @@ lemma antisymm_least_glb: "antisymmetric R \<Longrightarrow> \<exists>(R-least S
 lemma antisymm_greatest_lub: "antisymmetric R \<Longrightarrow> \<exists>(R-greatest S) \<Longrightarrow> (R-greatest S) = (R-lub S)"
   unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
+text \<open>Moreover, we have that:\<close>
+lemma set_lub_singleton: "\<exists>! ((\<subseteq>)-lub S)" by (metis (mono_tags, lifting) B1_comb_def \<Phi>21_comb_def antisymm_least_unique bigunion_lub func_sets.singleton_def lub_def partial_order_def subset_partial_order unique_def)
+lemma set_glb_singleton: "\<exists>! ((\<subseteq>)-glb S)" by (metis (mono_tags, lifting) B1_comb_def \<Phi>21_comb_def antisymm_greatest_unique biginter_glb func_sets.singleton_def glb_def partial_order_def subset_partial_order unique_def)
+lemma rel_lub_singleton: "\<exists>! ((\<subseteq>\<^sup>r)-lub S)" by (metis (mono_tags, lifting) B1_comb_def \<Phi>21_comb_def antisymm_least_unique bigunionR_lub func_sets.singleton_def lub_def partial_order_def subrel_partial_order unique_def)
+lemma rel_glb_singleton: "\<exists>! ((\<subseteq>\<^sup>r)-glb S)" by (metis (mono_tags, lifting) B1_comb_def \<Phi>21_comb_def antisymm_greatest_unique biginterR_glb func_sets.singleton_def glb_def partial_order_def subrel_partial_order unique_def)
+text \<open>And thus:\<close>
+lemma bigunion_lub_def: "\<Union>S = \<iota>((\<subseteq>)-lub S)" by (metis bigunion_lub singleton_def set_lub_singleton theI_unique)
+lemma biginter_glb_def: "\<Inter>S = \<iota>((\<subseteq>)-glb S)" by (metis biginter_glb singleton_def set_glb_singleton theI_unique)
+lemma bigunionR_lub_def:"\<Union>\<^sup>rS = \<iota>((\<subseteq>\<^sup>r)-lub S)" by (metis bigunionR_lub singleton_def rel_lub_singleton theI_unique)
+lemma biginterR_glb_def: "\<Inter>\<^sup>rS = \<iota>((\<subseteq>\<^sup>r)-glb S)" by (metis biginterR_glb singleton_def rel_glb_singleton theI_unique)
+
 
 subsection \<open>Further Properties of Endorelations\<close>
 

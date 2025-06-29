@@ -59,8 +59,8 @@ definition nonFixedPoint::"('a \<Rightarrow> 'a) \<Rightarrow> Set('a)" ("nFP")
 
 declare fixedPoint_def[func_defs] nonFixedPoint_def[func_defs]
 
-lemma "FP f x = (x = f x)" unfolding func_defs comb_defs ..
-lemma "nFP f x = (x \<noteq> f x)" unfolding func_defs comb_defs ..
+lemma fixedPoint_def2: "FP f x = (x = f x)" unfolding func_defs comb_defs ..
+lemma nonFixedPoint_def2: "nFP f x = (x \<noteq> f x)" unfolding func_defs comb_defs ..
 
 lemma fixedPoint_defT: "FP = \<Q>-preFP" unfolding func_defs comb_defs by metis
 lemma nonFixedPoint_defT: "nFP = \<D>-preFP" unfolding func_defs comb_defs by metis
@@ -408,6 +408,10 @@ definition singleton::"Set(Set('a))" ("\<exists>!")
 
 declare unique_def[func_defs] singleton_def[func_defs]
 
+text \<open>Some useful lemmata\<close>
+lemma iota_simp: "\<exists>! A \<Longrightarrow> S (\<iota> A) = A \<subseteq> S" unfolding func_defs comb_defs by (metis theI)
+lemma singleton_simp: "{a} \<subseteq> S = S a" unfolding func_defs comb_defs by simp
+
 
 subsubsection \<open>Infinitary Set-Operations\<close>
 
@@ -653,5 +657,12 @@ lemma compl_bigdeMorgan1: "\<midarrow>(\<Union>S) = \<Inter>\<lparr>\<midarrow> 
   unfolding func_defs comb_defs by fastforce
 lemma compl_bigdeMorgan2: "\<midarrow>(\<Inter>S) = \<Union>\<lparr>\<midarrow> S\<rparr>" 
   unfolding func_defs comb_defs by fastforce
+
+text \<open>The operations \<open>\<Union>\<close> and \<open>\<wp>\<close> are residuals wrt. set inclusion.\<close>
+lemma bigunion_resid: "(\<Union>S \<subseteq> X) = (S \<subseteq> \<wp>X)" unfolding func_defs comb_defs by auto
+
+text \<open>An instance of the Bourbaki-Witt fixed-point theorem wrt. set inclusion.\<close>
+lemma expansive_hasFP: "(\<subseteq>)-EXPN f \<Longrightarrow> \<exists>(FP f)"
+  unfolding func_defs comb_defs by auto
 
 end
