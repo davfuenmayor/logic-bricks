@@ -321,6 +321,7 @@ declare K21_comb_def[comb_defs] K22_comb_def[comb_defs] K31_comb_def[comb_defs]
         K32_comb_def[comb_defs] K33_comb_def[comb_defs] K41_comb_def[comb_defs]
 
 
+(* joiners *)
 subsubsection \<open>Contractors\<close>
 
 \<comment> \<open>The following family of combinators \<open>\<^bold>W\<^sub>m\<^sub>n\<close> are called "contractors" (aka. "duplicators"). They take an
@@ -357,10 +358,15 @@ declare W21_comb_def[comb_defs] W31_comb_def[comb_defs] W41_comb_def[comb_defs]
         W22_comb_def[comb_defs] W23_comb_def[comb_defs]
         W32_comb_def[comb_defs] W33_comb_def[comb_defs]
 
-
+(* applicatives and binders *)
 subsubsection \<open>Fusers\<close> (*TODO: name comes from Schönfinkel's "Verschmelzung". Find a better name? *)
 
 text \<open>The families \<open>\<^bold>S\<^sub>m\<^sub>n\<close> (resp. \<open>\<^bold>\<Sigma>\<^sub>m\<^sub>n\<close>) generalize the combinator \<open>\<^bold>S\<close> (resp. its evil twin \<open>\<^bold>\<Sigma>\<close>) towards higher arities.\<close>
+abbreviation(input) S01_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b" ("\<^bold>S\<^sub>0\<^sub>1")  
+  where "\<^bold>S\<^sub>0\<^sub>1 \<equiv> \<^bold>A\<^sub>1"         \<comment> \<open> for the degenerate case m = 0: \<open>\<^bold>S\<^sub>0\<^sub>n = \<^bold>A\<^sub>n\<close> \<close>
+abbreviation(input) S02_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c" ("\<^bold>S\<^sub>0\<^sub>2")  
+  where "\<^bold>S\<^sub>0\<^sub>2 \<equiv> \<^bold>A\<^sub>2"
+\<comment> \<open>... and so on\<close>
 definition S11_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'c" ("\<^bold>S\<^sub>1\<^sub>1")
   where "\<^bold>S\<^sub>1\<^sub>1 \<equiv> \<lambda>f g x. f x (g x)" \<comment> \<open> aka. \<open>\<^bold>S\<close> (same as \<open>\<^bold>B\<^bold>\<Sigma>\<^bold>C\<close>)\<close>
 definition S12_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> ('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'd" ("\<^bold>S\<^sub>1\<^sub>2")
@@ -377,6 +383,9 @@ definition S23_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \
                         \<Rightarrow> ('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'e) \<Rightarrow> ('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'f) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'g" ("\<^bold>S\<^sub>2\<^sub>3")
   where "\<^bold>S\<^sub>2\<^sub>3 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 x y z. f x y z (g\<^sub>1 x y z) (g\<^sub>2 x y z) (g\<^sub>3 x y z)"
 \<comment> \<open>... and so on\<close>
+definition S31_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> 'd) \<Rightarrow> 'a \<Rightarrow> 'e" ("\<^bold>S\<^sub>3\<^sub>1")
+  where "\<^bold>S\<^sub>3\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 x. f x (g\<^sub>1 x) (g\<^sub>2 x) (g\<^sub>3 x)"
+\<comment> \<open>... and so on\<close>
 definition \<Sigma>11_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('b \<Rightarrow> 'a) \<Rightarrow> 'b \<Rightarrow> 'c" ("\<^bold>\<Sigma>\<^sub>1\<^sub>1")
   where "\<^bold>\<Sigma>\<^sub>1\<^sub>1 \<equiv> \<lambda>f g x. f (g x) x "  \<comment> \<open>aka. \<open>\<^bold>\<Sigma>\<close> (same as \<open>\<^bold>B\<^bold>S\<^bold>C\<close>)\<close>
 definition \<Sigma>12_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> ('b \<Rightarrow> 'c \<Rightarrow> 'a) \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd" ("\<^bold>\<Sigma>\<^sub>1\<^sub>2")
@@ -392,14 +401,18 @@ definition \<Sigma>22_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarro
 definition \<Sigma>23_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'g) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'a) 
                           \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'b) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'c) \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'g" ("\<^bold>\<Sigma>\<^sub>2\<^sub>3")
   where "\<^bold>\<Sigma>\<^sub>2\<^sub>3 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 x y z. f (g\<^sub>1 x y z) (g\<^sub>2 x y z) (g\<^sub>3 x y z) x y z"
+\<comment> \<open>... and so on\<close>
+definition \<Sigma>31_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> ('d \<Rightarrow> 'a) \<Rightarrow> ('d \<Rightarrow> 'b) \<Rightarrow> ('d \<Rightarrow> 'c) \<Rightarrow> 'd \<Rightarrow> 'e" ("\<^bold>\<Sigma>\<^sub>3\<^sub>1")
+  where "\<^bold>\<Sigma>\<^sub>3\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 x. f (g\<^sub>1 x) (g\<^sub>2 x) (g\<^sub>3 x) x"
+\<comment> \<open>... and so on\<close>
 
 notation S11_comb ("\<^bold>S")
 notation \<Sigma>11_comb ("\<^bold>\<Sigma>")
 
 declare S11_comb_def[comb_defs] S12_comb_def[comb_defs] S13_comb_def[comb_defs]
-        S21_comb_def[comb_defs] S22_comb_def[comb_defs] S23_comb_def[comb_defs]
+        S21_comb_def[comb_defs] S22_comb_def[comb_defs] S23_comb_def[comb_defs] S31_comb_def[comb_defs]
         \<Sigma>11_comb_def[comb_defs] \<Sigma>12_comb_def[comb_defs] \<Sigma>13_comb_def[comb_defs]
-        \<Sigma>21_comb_def[comb_defs] \<Sigma>22_comb_def[comb_defs] \<Sigma>23_comb_def[comb_defs]
+        \<Sigma>21_comb_def[comb_defs] \<Sigma>22_comb_def[comb_defs] \<Sigma>23_comb_def[comb_defs] \<Sigma>31_comb_def[comb_defs]
 
 text \<open>\<open>\<^bold>S/\<^bold>\<Sigma>\<close> can be interdefined\<close>
 lemma "\<^bold>S = \<^bold>B \<^bold>\<Sigma> \<^bold>C" unfolding comb_defs ..
@@ -426,7 +439,7 @@ definition \<Psi>4_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 
 
 declare \<Psi>2_comb_def[comb_defs] \<Psi>3_comb_def[comb_defs] \<Psi>4_comb_def[comb_defs]
 
-
+(* mappers *)
 subsubsection \<open>Imitators\<close>
 text \<open>The combinators \<open>\<^bold>\<Phi>\<^sub>m\<^sub>n\<close> are called "imitators". They compose a m-ary function \<open>f\<close> with m functions \<open>g\<^sub>i\<^sub>\<le>\<^sub>m\<close>
  (having arity n each) by sharing their input arguments, so as to return an n-ary function.
@@ -469,9 +482,13 @@ definition \<Phi>33_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow>
                                          \<Rightarrow> ('e \<Rightarrow> 'f \<Rightarrow> 'g \<Rightarrow> 'c) \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'g \<Rightarrow> 'd"  ("\<^bold>\<Phi>\<^sub>3\<^sub>3")
   where "\<^bold>\<Phi>\<^sub>3\<^sub>3 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 x y z. f (g\<^sub>1 x y z) (g\<^sub>2 x y z) (g\<^sub>3 x y z)"
 \<comment> \<open>...and so on\<close>
+definition \<Phi>41_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) 
+                            \<Rightarrow> ('f \<Rightarrow> 'a) \<Rightarrow> ('f \<Rightarrow> 'b) \<Rightarrow> ('f \<Rightarrow> 'c) \<Rightarrow> ('f \<Rightarrow> 'd) \<Rightarrow> 'f \<Rightarrow> 'e" ("\<^bold>\<Phi>\<^sub>4\<^sub>1")
+  where "\<^bold>\<Phi>\<^sub>4\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 g\<^sub>4 x. f (g\<^sub>1 x) (g\<^sub>2 x) (g\<^sub>3 x) (g\<^sub>4 x)"
+\<comment> \<open>...and so on\<close>
 
 declare \<Phi>21_comb_def[comb_defs] \<Phi>22_comb_def[comb_defs] \<Phi>23_comb_def[comb_defs]
-        \<Phi>31_comb_def[comb_defs] \<Phi>32_comb_def[comb_defs] \<Phi>33_comb_def[comb_defs]
+        \<Phi>31_comb_def[comb_defs] \<Phi>32_comb_def[comb_defs] \<Phi>33_comb_def[comb_defs] \<Phi>41_comb_def[comb_defs]
 
 
 subsubsection \<open>Projectors\<close>
