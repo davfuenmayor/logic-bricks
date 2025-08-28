@@ -255,9 +255,11 @@ lemma "rightImage = \<Union> \<circ>\<^sub>2 image" unfolding rightImage_def2 ..
 text \<open>We extend this notion of direct (i.e. right) image to n+1-ary relations, thus obtaining n-ary set-operations.\<close>
 definition rightImage2 ::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)"  ("rightImage\<^sub>2")
   where "rightImage\<^sub>2 \<equiv> \<Union> \<circ>\<^sub>3 image\<^sub>2"
+definition rightImage3 ::"Rel\<^sub>4('a,'b,'c,'d) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('d)"  ("rightImage\<^sub>3")
+  where "rightImage\<^sub>3 \<equiv> \<Union> \<circ>\<^sub>4 image\<^sub>3"
 \<comment> \<open>... \<open>rightImage\<^sub>n \<equiv> \<Union> \<circ>\<^sub>n\<^sub>+\<^sub>1 image\<^sub>n\<close>\<close>
 
-declare rightImage2_def[rel_defs]
+declare rightImage2_def[rel_defs] rightImage3_def[rel_defs]
 
 text \<open>Or, alternatively:\<close>
 lemma rightImage2_def2: "rightImage\<^sub>2 = (\<^bold>B\<^sub>1\<^sub>1\<^sub>1 ((\<sqinter>\<^sup>r) \<circ>\<^sub>2 (\<times>)) \<^bold>I \<^bold>I) \<circ> \<^bold>R" 

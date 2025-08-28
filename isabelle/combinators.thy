@@ -648,6 +648,15 @@ lemma "\<^bold>B\<^sub>3\<^sub>3\<^sub>3 = \<^bold>B\<^sub>1\<^sub>1\<^sub>1 \<c
 lemma "\<^bold>B\<^sub>3\<^sub>3\<^sub>3 = \<^bold>B\<^sub>2\<^sub>2\<^sub>2 \<circ> \<^bold>B\<^sub>1\<^sub>1\<^sub>1" unfolding comb_defs ..
 \<comment> \<open>... and so on\<close>
 
+text \<open>Moreover, also note that\<close>
+lemma "\<^bold>B\<^sub>1\<^sub>1 \<^bold>I = \<^bold>B\<^sub>1\<^sub>0 \<^bold>B\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>B\<^sub>1\<^sub>2 \<^bold>I = \<^bold>B\<^sub>1\<^sub>0 \<^bold>B\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>B\<^sub>1\<^sub>2 \<^bold>I = \<^bold>B\<^sub>1\<^sub>1 \<^bold>B\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>B\<^sub>1\<^sub>3 \<^bold>I = \<^bold>B\<^sub>1\<^sub>0 \<^bold>B\<^sub>3" unfolding comb_defs ..
+lemma "\<^bold>B\<^sub>1\<^sub>3 \<^bold>I = \<^bold>B\<^sub>1\<^sub>1 \<^bold>B\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>B\<^sub>1\<^sub>3 \<^bold>I = \<^bold>B\<^sub>1\<^sub>2 \<^bold>B\<^sub>1" unfolding comb_defs ..
+\<comment> \<open>... and so on\<close>
+
 
 \<comment> \<open>\<open>\<^bold>\<Phi>\<^sub>m\<^sub>(\<^sub>i\<^sub>+\<^sub>j\<^sub>)\<close> can be defined as: \<open>\<^bold>\<Phi>\<^sub>m\<^sub>i \<circ> \<^bold>\<Phi>\<^sub>m\<^sub>j\<close>.\<close>
 lemma "\<^bold>\<Phi>\<^sub>1\<^sub>2 = \<^bold>\<Phi>\<^sub>1\<^sub>1 \<circ> \<^bold>\<Phi>\<^sub>1\<^sub>1" unfolding comb_defs ..
