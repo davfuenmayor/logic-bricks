@@ -108,42 +108,58 @@ type_synonym ('a)SetEOp2 = "SetOp\<^sub>2('a,'a)" ("SetEOp\<^sub>2'(_')") \<comm
 
 subsubsection \<open>Products of Boolean Types\<close>
 
-text \<open>Now consider the following equivalent type notations.\<close>
+text \<open>Now consider the following sets of equivalent type notations.\<close>
 term "((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o"
 term "((R :: ERel(o)) :: EOp\<^sub>2(o)) :: o \<Rightarrow> (o \<Rightarrow> o)"
 term "(((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: (o \<Rightarrow> o) \<Rightarrow> o"
 
 text \<open>We can make good sense of them by considering a new type having four inhabitants.\<close>
 type_synonym four = "o \<Rightarrow> o" ("oo")
-term "((P :: oo) :: EPair(o)) :: Set(o)"
 
-text \<open>Using the new type we can seamlessly define types for (endo)quadruples and 4-valued sets.\<close>
+term "(((P :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o) :: oo"
+
+text \<open>Using the new type we can seamlessly define types for (endo)quadruples and 4-valued "sets".\<close>
 type_synonym ('a)EQuad = "oo \<Rightarrow> 'a" ("EQuad'(_')")
 type_synonym ('a)Set4 = "'a \<Rightarrow> oo" ("Set4'(_')")
 
-text \<open>The following two types have each 16 elements (we show a bijection between their elements later on).\<close>
-type_synonym sixteen  = "o \<Rightarrow> oo" ("ooo")   \<comment> \<open>\<open>4^2 = (2^2)^2\<close>\<close>
-type_synonym sixteen' = "oo \<Rightarrow> o" ("ooo''") \<comment> \<open>\<open>2^4 = 2^(2^2)\<close>\<close>
+text \<open>In the same spirit, we have two types with 16 elements (being "isomorphic" in a sense):\<close>
+type_synonym sixteen  = "o \<Rightarrow> oo" ("ooo")   \<comment> \<open>\<open>16  = 4^2 = (2^2)^2\<close>\<close>
+type_synonym sixteen' = "oo \<Rightarrow> o" ("ooo''") \<comment> \<open>\<open>16' = 2^4 = 2^(2^2)\<close>\<close>
 
-text \<open>So we can have that the following type notations are in fact identical (not just isomorphic).\<close>
-term "(((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o) :: oo"
 term "(((((R :: ERel(o)) :: EOp\<^sub>2(o)) :: EPair(oo)) :: Set4(o)) :: o \<Rightarrow> o \<Rightarrow> o) :: ooo"
 term "((((((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: EQuad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
 
-text \<open>We can continue producing types, e.g.\<close>
-type_synonym n256 = "oo \<Rightarrow> oo"  ("oooo")   \<comment> \<open>\<open>4^4 = 256\<close>\<close>
-type_synonym n256' = "o \<Rightarrow> ooo" ("oooo''") \<comment> \<open>\<open>16^2 = 256\<close>\<close>
-type_synonym n65536 = "oo \<Rightarrow> ooo" \<comment> \<open>\<open>16^4 = 65536\<close>\<close>
-type_synonym n65536' = "ooo \<Rightarrow> o" \<comment> \<open>\<open>2^16 = 65536\<close>\<close>
-type_synonym n4294967296 = "ooo \<Rightarrow> oo" \<comment> \<open>\<open>4^16 = 4294967296\<close>\<close>
+text \<open>Analogously, we can seamlessly define types for 16-sized arrays and 16-valued "sets.\<close>
+term "array16  :: ooo \<Rightarrow> 'a"
+term "array16' :: ooo' \<Rightarrow> 'a"
+term "set16  :: 'a \<Rightarrow> ooo"
+term "set16' :: 'a \<Rightarrow> ooo'"
+
+text \<open>In a similar vein, we can get three types with 256 elements (also "isomorphic" in a sense):\<close>
+type_synonym n256  = "o \<Rightarrow> ooo" ("oooo")    \<comment> \<open>\<open>256  = 16 ^2 = (4^2)^2 = ((2^2)^2)^2\<close>\<close>
+type_synonym n256' = "o \<Rightarrow> ooo'" ("oooo''") \<comment> \<open>\<open>256' = 16'^2 = (2^4)^2 = (2^(2^2))^2\<close>\<close>
+type_synonym n256s = "oo \<Rightarrow> oo" ("oooo\<^sup>s")   \<comment> \<open>\<open>256\<^sup>s = 4^4 = (2^2)^(2^2)\<close>\<close>
+
+term "((((R :: ERel\<^sub>3(o))) :: EPair(ooo)) :: o \<Rightarrow> o \<Rightarrow> o \<Rightarrow> o) :: oooo"
+term "(((R :: Rel(o,oo)) :: EPair(ooo')) :: o \<Rightarrow> (o\<Rightarrow>o) \<Rightarrow> o) :: oooo'"
+term "(((R :: Rel(oo,o)) :: EQuad(oo))   :: (o\<Rightarrow>o) \<Rightarrow> (o\<Rightarrow>o)) :: oooo\<^sup>s"
+
+text \<open>We can continue producing ("isomorphic" families of) types in analogous ways.\<close>
+type_synonym n65536  = "o \<Rightarrow> oooo" \<comment> \<open>\<open>65536 = 256^2 = (((2^2)^2)^2)^2\<close>\<close>
+type_synonym n65536a = "ooo \<Rightarrow> o"  \<comment> \<open>\<open>65536 = 2^16  = 2^((2^2)^2)\<close>\<close>
+type_synonym n65536b = "oo \<Rightarrow> ooo" \<comment> \<open>\<open>65536 = 16^4  = ((2^2)^2)^(2^2)\<close>\<close>
+ \<comment> \<open>and so on...\<close>
+type_synonym n4294967296 = "o \<Rightarrow> o \<Rightarrow> oooo"  \<comment> \<open>\<open>65536^2\<close>\<close>
+type_synonym n4294967296a = "ooo \<Rightarrow> oo" \<comment> \<open>\<open>4^16\<close>\<close>
+type_synonym n4294967296b = "oo \<Rightarrow> oooo" \<comment> \<open>\<open>256^4\<close>\<close>
 \<comment> \<open>and so on...\<close>
 
 
-text \<open>Continuations (with result type \<open>'r\<close>) take inputs of type \<open>'a\<close>\<close>
+text \<open>Continuations (with result type \<open>'r\<close>) taking inputs of type \<open>'a\<close>\<close>
 text \<open>Unary case:\<close>
-type_synonym ('a,'r)Cont1 = "'r-Val(Op('a,'r))" ("Cont'(_,_')") \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r,'a)Cont1 = "'r-Val(Op('a,'r))" ("_-Cont'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
 text \<open>Binary case:\<close>
-type_synonym ('a,'r)Cont2 = "'r-Val(Op\<^sub>2('a,'r))" ("Cont\<^sub>2'(_,_')") \<comment> \<open>same as: \<open>('a \<Rightarrow> 'a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r,'a)Cont2 = "'r-Val(Op\<^sub>2('a,'r))" ("_-Cont\<^sub>2'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
 
 
 subsection \<open>Custom Term Notation\<close>
