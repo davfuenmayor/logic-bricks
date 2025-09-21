@@ -155,11 +155,15 @@ type_synonym n4294967296b = "oo \<Rightarrow> oooo" \<comment> \<open>\<open>256
 \<comment> \<open>and so on...\<close>
 
 
-text \<open>Continuations (with result type \<open>'r\<close>) taking inputs of type \<open>'a\<close>\<close>
-text \<open>Unary case:\<close>
-type_synonym ('r,'a)Cont1 = "'r-Val(Op('a,'r))" ("_-Cont'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
-text \<open>Binary case:\<close>
-type_synonym ('r,'a)Cont2 = "'r-Val(Op\<^sub>2('a,'r))" ("_-Cont\<^sub>2'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+text \<open>Continuations (with result type \<open>'r\<close>)\<close>
+text \<open>Unary case (with \<open>'a\<close> as input type):\<close>
+type_synonym ('r,'a)Cont1 = "'r-Val('a \<Rightarrow> 'r)" ("_-Cont'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+text \<open>Binary case (with \<open>'a\<close> and \<open>'b\<close> as input types):\<close>
+type_synonym ('r,'a,'b)Cont2 = "'r-Val('a \<Rightarrow> 'b \<Rightarrow> 'r)" ("_-Cont\<^sub>2'(_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+text \<open>Ternary case (with \<open>'a\<close>, \<open>'b\<close> and \<open>'c\<close> as input types):\<close>
+type_synonym ('r,'a,'b,'c)Cont3 = "'r-Val('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r)" ("_-Cont\<^sub>3'(_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+text \<open>Quaternary case (with \<open>'a\<close>, \<open>'b\<close>, \<open>'c\<close> and \<open>'d\<close> as input types):\<close>
+type_synonym ('r,'a,'b,'c,'d)Cont4 = "'r-Val('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'r)" ("_-Cont\<^sub>4'(_',_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
 
 
 subsection \<open>Custom Term Notation\<close>
