@@ -142,11 +142,11 @@ abbreviation(input) asArrowM::"('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightar
   where "asArrowM \<equiv> \<^bold>B \<^bold>K"
 
 text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
-abbreviation(input) intoArrow::"'e-Env('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'e-Env('b))"
-  where "intoArrow \<equiv> \<^bold>C"
+abbreviation(input) intoArrowM::"'e-Env('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'e-Env('b))"
+  where "intoArrowM \<equiv> \<^bold>C"
 text \<open>Takes a monadic arrow and transforms it into an applicative arrow.\<close>
-abbreviation(input) intoIndex::"('a \<Rightarrow> 'e-Env('b)) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b)"
-  where "intoIndex \<equiv> \<^bold>C"
+abbreviation(input) intoArrowA::"('a \<Rightarrow> 'e-Env('b)) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b)"
+  where "intoArrowA \<equiv> \<^bold>C"
 
 
 subsubsection \<open>Functional composition\<close>
@@ -190,25 +190,12 @@ subsubsection \<open>Applicative composition\<close>
 
 text \<open>Analogously, we can introduce applicative composition.\<close>
 abbreviation(input) acomp::"'e-Env('b \<Rightarrow> 'c) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('a \<Rightarrow> 'c)" 
-  where "acomp \<equiv> intoIndex \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 (\<circ>\<^sub>2) ap intoArrow)"
+  where "acomp \<equiv> intoArrowA \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 (\<circ>\<^sub>2) ap intoArrowM)"
 abbreviation(input) acomp' (infixr "\<Zinj>" 56) \<comment> \<open>reversed applicative composition\<close>
   where "f \<Zinj> g \<equiv> acomp g f"
 
-text \<open>General equivalent definitions:\<close>
-lemma "acomp = intoIndex \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>2 \<^bold>I ap intoArrow)" unfolding comb_defs ..
-lemma "acomp g f = intoIndex (\<lambda>x. ap g (intoArrow f x) )"  unfolding comb_defs ..
-lemma "acomp g f = intoIndex ((ap g) \<circ> (intoArrow f))"  unfolding comb_defs ..
-lemma "acomp = intoIndex \<circ>\<^sub>2 (\<^bold>D (;\<^sub>2) intoArrow ap)" unfolding comb_defs ..
-lemma "acomp = (\<lambda>x. intoIndex \<circ> (intoArrow ;\<^sub>2 (ap x)))" unfolding comb_defs ..
-lemma "acomp =  \<^bold>B\<^sub>1\<^sub>1 (intoIndex \<circ>\<^sub>2 \<^bold>B) ap intoArrow"  unfolding comb_defs ..
-
-text \<open>The following holds in the current (environment) monad only:\<close>
-lemma "(acomp) = fmap2 (\<circ>)" unfolding comb_defs ..
-lemma "acomp g f = ap (fmap (\<circ>) g) f" unfolding comb_defs ..
-lemma "acomp g f = ap (ap (unit (\<circ>)) g) f" unfolding comb_defs ..
-
-lemma "f \<Zinj> g = intoIndex (intoArrow f ; ap g)" unfolding comb_defs ..
-lemma "f \<Zinj> g = intoIndex (\<lambda>x. (intoArrow f x) \<ggreater> g)"  unfolding comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (intoArrowM f ; ap g)" unfolding comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (\<lambda>x. (intoArrowM f x) \<ggreater> g)" unfolding comb_defs ..
 lemma "f \<Zinj> g = (\<lambda>e\<^sub>1. \<lambda>x. ((\<lambda>e\<^sub>2. f e\<^sub>2 x) \<ggreater> g) e\<^sub>1)" unfolding comb_defs ..
 
 text \<open>Note the corresponding types:\<close>
@@ -218,5 +205,10 @@ term "(\<Zinj>) :: 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b \<Rightar
 text \<open>Applicative composition is associative and suitably interrelates with ap to build pipelines:\<close>
 lemma "f \<Zinj> (g \<Zinj> h) = (f \<Zinj> g) \<Zinj> h" unfolding comb_defs ..
 lemma "(x \<ggreater> f \<ggreater> g \<ggreater> h) = (x \<ggreater> f \<Zinj> g \<Zinj> h)" unfolding comb_defs ..
+
+text \<open>The following holds in the current (environment) monad only:\<close>
+lemma "(acomp) = fmap2 (\<circ>)" unfolding comb_defs ..
+lemma "acomp g f = ap (fmap (\<circ>) g) f" unfolding comb_defs ..
+lemma "acomp g f = ap (ap (unit (\<circ>)) g) f" unfolding comb_defs ..
 
 end
