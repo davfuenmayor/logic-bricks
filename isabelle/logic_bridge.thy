@@ -155,15 +155,21 @@ type_synonym n4294967296b = "oo \<Rightarrow> oooo" \<comment> \<open>\<open>256
 \<comment> \<open>and so on...\<close>
 
 
-text \<open>Continuations (with result type \<open>'r\<close>)\<close>
+text \<open>Continuations (with result types \<open>'r\<^sub>1\<close> and \<open>'r\<^sub>2\<close>)\<close>
 text \<open>Unary case (with \<open>'a\<close> as input type):\<close>
-type_synonym ('r,'a)Cont1 = "'r-Val('a \<Rightarrow> 'r)" ("_-Cont'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r\<^sub>1,'r\<^sub>2,'a)Cont1 = "'r\<^sub>2-Val('a \<Rightarrow> 'r\<^sub>1)" ("_,_-Cont'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2\<close>\<close>
 text \<open>Binary case (with \<open>'a\<close> and \<open>'b\<close> as input types):\<close>
-type_synonym ('r,'a,'b)Cont2 = "'r-Val('a \<Rightarrow> 'b \<Rightarrow> 'r)" ("_-Cont\<^sub>2'(_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r\<^sub>1,'r\<^sub>2,'a,'b)Cont2 = "'r\<^sub>2-Val('a \<Rightarrow> 'b \<Rightarrow> 'r\<^sub>1)" ("_,_-Cont\<^sub>2'(_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2\<close>\<close>
 text \<open>Ternary case (with \<open>'a\<close>, \<open>'b\<close> and \<open>'c\<close> as input types):\<close>
-type_synonym ('r,'a,'b,'c)Cont3 = "'r-Val('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r)" ("_-Cont\<^sub>3'(_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r\<^sub>1,'r\<^sub>2,'a,'b,'c)Cont3 = "'r\<^sub>2-Val('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r\<^sub>1)" ("_,_-Cont\<^sub>3'(_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2\<close>\<close>
 text \<open>Quaternary case (with \<open>'a\<close>, \<open>'b\<close>, \<open>'c\<close> and \<open>'d\<close> as input types):\<close>
-type_synonym ('r,'a,'b,'c,'d)Cont4 = "'r-Val('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'r)" ("_-Cont\<^sub>4'(_',_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r\<^sub>1,'r\<^sub>2,'a,'b,'c,'d)Cont4 = "'r\<^sub>2-Val('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'r\<^sub>1)" ("_,_-Cont\<^sub>4'(_',_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2\<close>\<close>
+
+text \<open>Endocontinuations (with same unique result type \<open>'r\<close>)\<close>
+type_synonym ('r,'a)ECont1 = "'r,'r-Cont('a)" ("_-ECont'(_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r,'a,'b)ECont2 = "'r,'r-Cont\<^sub>2('a,'b)" ("_-ECont\<^sub>2'(_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r,'a,'b,'c)ECont3 = "'r,'r-Cont\<^sub>3('a,'b,'c)" ("_-ECont\<^sub>3'(_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
+type_synonym ('r,'a,'b,'c,'d)ECont4 = "'r,'r-Cont\<^sub>4('a,'b,'c,'d)" ("_-ECont\<^sub>4'(_',_',_',_')" [1000]) \<comment> \<open>same as: \<open>('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'r) \<Rightarrow> 'r\<close>\<close>
 
 
 subsection \<open>Custom Term Notation\<close>
