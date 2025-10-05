@@ -112,7 +112,7 @@ lemma monad_assoc: "((x \<bind> f) \<bind> g) = (x \<bind> (\<lambda>z. f z \<bi
 
 
 abbreviation join::"'r\<^sub>2,'r\<^sub>3-Cont('r\<^sub>1,'r\<^sub>2-Cont('a)) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('a)"
-  where "join \<equiv> \<^bold>C\<^bold>B \<^bold>T" (* preImage (;) wrt. \<^bold>T *)
+  where "join \<equiv> \<^bold>C\<^bold>B \<^bold>T" (* preImage (;) wrt. \<^bold>T (|>) *)
 
 text \<open>In fact, the term corresponding to join could have been given a more general type:\<close>
 term "\<^bold>C\<^bold>B \<^bold>T :: ((('a \<Rightarrow> 'b) \<Rightarrow> 'b) \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> 'c"
@@ -121,6 +121,7 @@ lemma "join = (\<lambda>k. \<lambda>g. k (\<lambda>y. y g))" unfolding comb_defs
 lemma "join = (\<lambda>k. \<lambda>g. k (\<^bold>T g))" unfolding comb_defs ..
 lemma "join = (\<lambda>k. \<lambda>g. \<^bold>B k \<^bold>T g)" unfolding comb_defs ..
 lemma "join = (;) \<^bold>T" unfolding comb_defs ..
+lemma "join = (;) (|>)" unfolding comb_defs ..
 
 
 subsection \<open>Interrelations\<close>
@@ -151,5 +152,73 @@ lemma "ap1 =  \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap1)" unfold
 lemma "ap2 =  \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap2)" unfolding comb_defs ..
 lemma "ap3 =  \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap3)" unfolding comb_defs ..
 lemma "ap4 =  \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap4)" unfolding comb_defs ..
+
+
+subsection \<open>Pipelines\<close>
+
+subsubsection \<open>Arrows\<close>
+
+text \<open>Monadic (aka. Kleisli) arrows\<close>
+term "(m :: 'a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b)) :: 'a \<Rightarrow> ('b \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2"
+text \<open>Applicative (aka. static) arrows\<close>
+term "(a :: 'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b)) :: (('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2"
+
+text \<open>Takes a plain function and disguises it as a monadic arrow.\<close>
+abbreviation(input) asArrowM::"('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'r-ECont('b))"
+  where "asArrowM \<equiv> \<^bold>L \<^bold>B"
+
+text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
+abbreviation(input) intoArrowM::"'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b))"
+  where "intoArrowM \<equiv> \<^bold>C\<^bold>B\<^sub>2 (\<^bold>R \<^bold>B)"
+
+(***TODO***)
+text \<open>Takes a monadic arrow and transforms it into an applicative arrow (wrt. a given transformation function).\<close>
+term "intoArrowA :: ('r\<^sub>1 \<Rightarrow> 'r\<^sub>2) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b)) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b)"
+term "intoArrowA :: ('r\<^sub>1 \<Rightarrow> 'r\<^sub>2) \<Rightarrow> ('a \<Rightarrow> ('b \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2) \<Rightarrow> (('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2"
+
+
+subsubsection \<open>Monadic composition\<close>
+
+text \<open>Thus, monadic (aka. Kleisli-) composition is to "bindr" as functional composition is to application.\<close>
+abbreviation(input) mcomp::"('b \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('c)) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('b)) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('c))"
+  where "mcomp \<equiv> \<^bold>D bindr"
+abbreviation(input) mcomp' (infixr "\<Zfinj>" 56) \<comment> \<open>reversed monadic composition, aka. the fish operator ">=>"\<close>
+  where "f \<Zfinj> g \<equiv> mcomp g f"
+
+lemma "f \<Zfinj> g = (\<lambda>x. f x \<bind> g)" unfolding comb_defs ..
+
+text \<open>Note the corresponding types:\<close>
+term "(\<bind>) :: 'r\<^sub>2,'r\<^sub>3-Cont('a) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b)) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)"
+term "(\<Zfinj>)  :: ('a \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('b)) \<Rightarrow> ('b \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('c)) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('c))"
+
+text \<open>As expected, monadic composition is associative and suitably interrelates with bind to build pipelines:\<close>
+lemma "f \<Zfinj> (g \<Zfinj> h) = (f \<Zfinj> g) \<Zfinj> h" unfolding comb_defs ..
+lemma "(x \<bind> f \<bind> g \<bind> h) = (x \<bind> f \<Zfinj> g \<Zfinj> h)" unfolding comb_defs ..
+
+
+subsubsection \<open>Applicative composition\<close>
+
+text \<open>Analogously, we can introduce applicative composition.\<close>
+
+abbreviation(input) acomp  :: "'r\<^sub>2,'r\<^sub>3-Cont('b \<Rightarrow> 'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('a \<Rightarrow> 'c)"
+  where "acomp \<equiv> \<^bold>C\<^bold>B\<^sub>2 ap"
+abbreviation(input) acomp' (infixr "\<Zinj>" 56) \<comment> \<open>reversed applicative composition\<close>
+  where "f \<Zinj> g \<equiv> acomp g f"
+
+lemma "acomp = (\<lambda>g f k. g (k \<ggreater> f))" unfolding comb_defs ..
+lemma "acomp = (\<lambda>g f k. (k \<ggreater> f) |> g)" unfolding comb_defs ..
+lemma "acomp = (\<lambda>g f k. g (\<lambda>h. f (\<lambda>x. k (h \<circ> x))))" unfolding comb_defs ..
+
+text \<open>Note the corresponding types:\<close>
+term "(\<Zfinj>)  :: ('a \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('b)) \<Rightarrow> ('b \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('c)) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('c))"
+term "(\<Zinj>) :: 'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('b \<Rightarrow> 'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('a \<Rightarrow> 'c)"
+
+text \<open>Applicative composition is associative and suitably interrelates with ap to build pipelines:\<close>
+lemma "f \<Zinj> (g \<Zinj> h) = (f \<Zinj> g) \<Zinj> h" unfolding comb_defs ..
+lemma "(x \<ggreater> f \<ggreater> g \<ggreater> h) = (x \<ggreater> f \<Zinj> g \<Zinj> h)" unfolding comb_defs ..
+
+text \<open>Some interrelations:\<close>
+lemma "acomp g f = ap (fmap (\<circ>) g) f" unfolding comb_defs ..
+lemma "acomp g f = ap (ap (unit (\<circ>)) g) f" unfolding comb_defs ..
 
 end

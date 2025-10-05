@@ -206,9 +206,11 @@ text \<open>Applicative composition is associative and suitably interrelates wit
 lemma "f \<Zinj> (g \<Zinj> h) = (f \<Zinj> g) \<Zinj> h" unfolding comb_defs ..
 lemma "(x \<ggreater> f \<ggreater> g \<ggreater> h) = (x \<ggreater> f \<Zinj> g \<Zinj> h)" unfolding comb_defs ..
 
-text \<open>The following holds in the current (environment) monad only:\<close>
-lemma "(acomp) = fmap2 (\<circ>)" unfolding comb_defs ..
+text \<open>Some interrelations:\<close>
 lemma "acomp g f = ap (fmap (\<circ>) g) f" unfolding comb_defs ..
 lemma "acomp g f = ap (ap (unit (\<circ>)) g) f" unfolding comb_defs ..
+
+text \<open>The following holds in the current (environment) monad only:\<close>
+lemma "(acomp) = fmap2 (\<circ>)" unfolding comb_defs ..
 
 end
