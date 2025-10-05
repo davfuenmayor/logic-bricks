@@ -50,6 +50,12 @@ lemma "ap1 =  \<^bold>\<Phi>\<^sub>2\<^sub>1 set.ap" unfolding all_defs ..
 lemma "ap2 =  \<^bold>\<Phi>\<^sub>3\<^sub>1 set.ap2" unfolding all_defs ..
 \<comment> \<open>...and so on\<close>
 
+text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
+lemma applicative_unit1: "x = x \<ggreater> (unit \<^bold>I)" unfolding all_defs by simp
+lemma applicative_unit2: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding all_defs by simp
+lemma applicative_unit3: "apr (unit x) f = apr f (unit (\<^bold>T x))" unfolding all_defs by simp
+lemma applicative_assoc: "apr (apr w v) u = apr w (apr v (apr u (unit \<^bold>B)))" unfolding all_defs by fast
+
 
 subsection \<open>Monad\<close>
 

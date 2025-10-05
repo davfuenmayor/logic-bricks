@@ -39,6 +39,18 @@ lemma "fmap4 f = (\<lambda>k g. (f ;\<^sub>4 g) |> k)" unfolding comb_defs ..
 text \<open>Functor's classic "fmap" corresponds to the unary case.\<close>
 abbreviation "fmap \<equiv> fmap1"
 
+text \<open>In contrast to the environment functor, in the case of the continuation functor, "unit" does 
+  not correspond exactly to "fmap0". It is not unrelated however.\<close>
+abbreviation(input) unit::"'a \<Rightarrow> 'r-ECont('a)"
+  where "unit \<equiv> \<^bold>T"
+
+lemma "unit = (|>)" unfolding comb_defs ..
+lemma "unit = \<^bold>C \<^bold>A" unfolding comb_defs ..
+lemma "unit = \<^bold>C \<^bold>I" unfolding comb_defs ..
+lemma "unit = \<^bold>C fmap0 \<^bold>A" unfolding comb_defs ..
+lemma "unit = \<^bold>C fmap0 \<^bold>I" unfolding comb_defs ..
+lemma "unit = \<^bold>C\<^bold>C \<^bold>I fmap0" unfolding comb_defs ..
+
 
 subsection \<open>Applicative\<close>
 
@@ -63,6 +75,12 @@ text \<open>Applicative's classic "ap" corresponds to the unary case.\<close>
 abbreviation "ap \<equiv> ap1"
 abbreviation(input) apr :: "'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)" (infixl "\<ggreater>" 54)
   where "a \<ggreater> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
+
+text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
+lemma applicative_unit1: "x = x \<ggreater> (unit \<^bold>I)" unfolding comb_defs ..
+lemma applicative_unit2: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
+lemma applicative_unit3: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
+lemma applicative_assoc: "(w \<ggreater> v) \<ggreater> u = w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B)))" unfolding comb_defs ..
 
 
 subsection \<open>Monad\<close>
@@ -91,19 +109,6 @@ text \<open>Note that\<close>
 lemma "\<^bold>D\<^bold>C\<^bold>B = \<^bold>B (\<^bold>C\<^bold>B)" unfolding comb_defs ..
 lemma "\<^bold>D\<^bold>C\<^bold>B = \<^bold>C\<^sub>3\<^sub>1\<^sub>2\<^sub>4 \<^bold>B\<^sub>2" unfolding comb_defs ..
 lemma "\<^bold>D\<^bold>C\<^bold>B = (\<lambda>g x f z. f (g x z))" unfolding comb_defs ..
-
-
-text \<open>In contrast to the environment monad, in the case of the continuation monad "unit" does not 
-correspond exactly to "fmap0". It is not unrelated however.\<close>
-abbreviation(input) unit::"'a \<Rightarrow> 'r-ECont('a)"
-  where "unit \<equiv> \<^bold>T"
-
-lemma "unit = (|>)" unfolding comb_defs ..
-lemma "unit = \<^bold>C \<^bold>A" unfolding comb_defs ..
-lemma "unit = \<^bold>C \<^bold>I" unfolding comb_defs ..
-lemma "unit = \<^bold>C fmap0 \<^bold>A" unfolding comb_defs ..
-lemma "unit = \<^bold>C fmap0 \<^bold>I" unfolding comb_defs ..
-lemma "unit = \<^bold>C\<^bold>C \<^bold>I fmap0" unfolding comb_defs ..
 
 text \<open>The so-called "monad laws". They guarantee that term operations compose reliably.\<close>
 lemma monad_unit1: "(unit x \<bind> f) = f x" unfolding comb_defs ..  \<comment> \<open>left identity\<close>

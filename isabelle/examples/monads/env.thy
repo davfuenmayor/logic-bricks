@@ -71,6 +71,12 @@ abbreviation(input) apr :: "'e-Env('a) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b)
 text \<open>Indeed, we have:\<close>
 lemma "ap = \<^bold>S" unfolding comb_defs ..
 
+text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
+lemma applicative_unit1: "x = x \<ggreater> (unit \<^bold>I)" unfolding comb_defs ..
+lemma applicative_unit2: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
+lemma applicative_unit3: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
+lemma applicative_assoc: "(w \<ggreater> v) \<ggreater> u = w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B)))" unfolding comb_defs ..
+
 
 subsection \<open>Monad\<close>
 

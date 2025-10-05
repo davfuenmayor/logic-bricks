@@ -53,6 +53,12 @@ lemma "ap = rightImage \<circ> intoRel"  unfolding all_defs by blast
 lemma "ap = \<Union>\<^sup>r \<circ> (image image)" unfolding all_defs by blast
 \<comment> \<open>...and so on\<close>
 
+text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
+lemma applicative_unit1: "x = x \<ggreater> (unit \<^bold>I)" unfolding all_defs by simp
+lemma applicative_unit2: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding all_defs by simp
+lemma applicative_unit3: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding all_defs by simp
+lemma applicative_assoc: "(w \<ggreater> v) \<ggreater> u = w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B)))" unfolding all_defs by fast
+
 
 subsection \<open>Monad\<close>
 
