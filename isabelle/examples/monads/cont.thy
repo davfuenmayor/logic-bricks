@@ -226,4 +226,91 @@ text \<open>Some interrelations:\<close>
 lemma "acomp g f = ap (fmap (\<circ>) g) f" unfolding comb_defs ..
 lemma "acomp g f = ap (ap (unit (\<circ>)) g) f" unfolding comb_defs ..
 
+
+subsection \<open>Special functions for manipulating (delimited) continuations\<close>
+
+text \<open>Evaluate a (CPS) expression by passing the identity continuation to it.\<close>
+abbreviation(input) eval :: "'p,'o-Cont('p) \<Rightarrow> 'o"
+  where "eval \<equiv> unit \<^bold>I"
+
+lemma "eval = \<^bold>T\<^bold>I" unfolding comb_defs ..
+lemma "eval m = m (\<lambda>x. x)" unfolding comb_defs ..
+
+text \<open>Reset (aka. "prompt") delimits the start of the continuation.
+ The type is the principal (i.e. most general) type assigned by the HM type inference algorithm.\<close>
+abbreviation(input) reset :: "'a,'r-Cont('a) \<Rightarrow> 'o,'o-Cont('r)"
+  where "reset \<equiv> \<^bold>T \<circ> eval"
+
+notation reset ("prompt") (*another common wording*)
+
+lemma "reset = \<^bold>B \<^bold>T (\<^bold>T \<^bold>I)" unfolding comb_defs ..
+lemma "reset = \<^bold>B \<^bold>B \<^bold>B \<^bold>T \<^bold>T \<^bold>I" unfolding comb_defs ..
+lemma "reset = (\<^bold>T \<circ>\<^sub>2 \<^bold>T) \<^bold>I" unfolding comb_defs ..
+lemma "reset = eval (\<^bold>T \<circ>\<^sub>2 \<^bold>T)" unfolding comb_defs ..
+
+lemma "reset m = (\<lambda>k. k (m \<^bold>I))" unfolding comb_defs ..
+lemma "reset m = (\<lambda>k. k (m (\<lambda>x. x)))" unfolding comb_defs ..
+lemma "reset = (\<lambda>m k. k (m (\<lambda>x. x)))" unfolding comb_defs ..
+
+text \<open>An alternative (but unduly constrained) type often used in the literature:\<close>
+term "reset:: 'a-ECont('a) \<Rightarrow> 'o-ECont('a)"
+
+text \<open>Captures the current continuation up to the nearest \<open>reset\<close> and hands it to its first argument
+  as a reified function, which, when called, "jumps" back to the captured point (reinstalling the delimiter).
+  The type given is the principal (i.e. most general) type assigned by the HM type-inference algorithm.\<close>
+abbreviation(input) shift::"(('a \<Rightarrow> 'o,'o-Cont('p)) \<Rightarrow> 'r,'q-Cont('r)) \<Rightarrow> 'p,'q-Cont('a)"
+  where  "shift \<equiv> eval \<circ>\<^sub>2 (\<^bold>C\<^bold>B (\<^bold>B\<^bold>T))"
+
+lemma "shift = (\<lambda>f k. eval (f (\<^bold>B\<^bold>T k)))" unfolding comb_defs ..
+lemma "shift = (\<lambda>f k. f (\<^bold>B\<^bold>T k) \<^bold>I)" unfolding comb_defs ..
+lemma "shift = (\<lambda>f k. f (\<lambda>a c. c (k a)) \<^bold>I)" unfolding comb_defs ..
+
+lemma "shift = \<^bold>B\<^sub>1\<^sub>1 (eval \<circ>\<^sub>2 \<^bold>A) \<^bold>I (\<^bold>B\<^bold>T)" unfolding comb_defs ..
+lemma "shift = (\<^bold>C\<^bold>B (\<^bold>B\<^bold>T)) \<circ> (\<^bold>C\<^bold>C \<^bold>I)" unfolding comb_defs ..
+
+text \<open>An alternative (but unduly constrained) type often used in the literature:\<close>
+term "shift :: (('a \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('a)"
+
+
+text \<open>Control is analogous to shift (but without reinstalling the delimiter)\<close>
+abbreviation(input) control:: "(('a \<Rightarrow> 'x,'o-Cont('p)) \<Rightarrow> 'r,'q-Cont('r)) \<Rightarrow> 'o,'q-Cont('a)"
+  where "control \<equiv> eval \<circ>\<^sub>2 (\<^bold>C\<^bold>B (\<^bold>B\<^bold>K))"
+
+lemma "control = (\<lambda>f k. eval (f (\<^bold>B\<^bold>K k)))" unfolding comb_defs ..
+lemma "control = (\<lambda>f k. f (\<^bold>B\<^bold>K k) \<^bold>I)" unfolding comb_defs ..
+lemma "control = (\<lambda>f k. f (\<lambda>a c. k a) \<^bold>I)" unfolding comb_defs ..
+
+lemma "control = \<^bold>B\<^sub>1\<^sub>1 (eval \<circ>\<^sub>2 \<^bold>A) \<^bold>I (\<^bold>B\<^bold>K)" unfolding comb_defs ..
+lemma "control = ((\<^bold>C\<^bold>B (\<^bold>B\<^bold>K)) \<circ> (\<^bold>C\<^bold>C \<^bold>I))" unfolding comb_defs ..
+
+text \<open>Alternative (but unduly constrained) types found in the literature:\<close>
+term "control :: (('a \<Rightarrow> 'r-ECont('b)) \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('a)"
+term "control :: (('a \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('a)"
+
+text \<open>In fact, the principal type for the definiens (as computed by HM algo) is a bit more general:\<close>
+term "(\<lambda>f k. f (\<lambda>a c. k a) \<^bold>I) ::(('a \<Rightarrow> 'b \<Rightarrow> 'o) \<Rightarrow> ('r \<Rightarrow> 'r) \<Rightarrow> 'q) \<Rightarrow> ('a \<Rightarrow> 'o) \<Rightarrow> 'q"
+
+text \<open>Escape (aka. call/cc) invokes the first argument with the current continuation.\<close>
+abbreviation(input) escape :: "(('a \<Rightarrow> 'x,'r\<^sub>1-Cont('b)) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a)) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a)"
+  where "escape \<equiv> \<^bold>C \<^bold>\<Sigma> (\<^bold>B\<^bold>K)"
+
+lemma "escape = (\<lambda>f. \<^bold>\<Sigma> f (\<^bold>B\<^bold>K))" unfolding comb_defs ..
+lemma "escape = (\<lambda>f k. f (\<^bold>B\<^bold>K k) k)" unfolding comb_defs ..
+lemma "escape = (\<lambda>f k. f (\<lambda>a c. k a) k)" unfolding comb_defs ..
+
+text \<open> An alternative (but unduly constrained) type often used in the literature:\<close>
+term "escape :: (('a \<Rightarrow> 'r-ECont('b)) \<Rightarrow> 'r-ECont('a)) \<Rightarrow> 'r-ECont('a)"
+
+text \<open>In fact, the principal type for the definiens is a bit more general:\<close>
+term "(\<lambda>f k. f (\<lambda>a c. k a) k) :: (('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> 'c) \<Rightarrow> 'd) \<Rightarrow> ('a \<Rightarrow> 'c) \<Rightarrow> 'd"
+
+text \<open>Some interrelations satisfied by escape, shift and control\<close>
+lemma "escape (\<lambda>k. m) = m" unfolding comb_defs ..
+lemma "shift (\<lambda>k. m \<bind> k) = m" unfolding comb_defs ..
+lemma "control (\<lambda>k. m \<bind> k) = m" unfolding comb_defs ..
+lemma "escape h = shift (\<lambda>k. h (\<lambda>x. shift (\<lambda>c. k x)) \<bind> k)" unfolding comb_defs ..
+lemma "escape h = control (\<lambda>k. h (\<lambda>x. control (\<lambda>c. k x)) \<bind> k)" unfolding comb_defs ..
+
+(*TODO: Tests checking operational semantics *)
+
 end
