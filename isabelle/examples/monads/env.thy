@@ -72,10 +72,10 @@ text \<open>Indeed, we have:\<close>
 lemma "ap = \<^bold>S" unfolding comb_defs ..
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
-lemma applicative_unit1: "x = x \<ggreater> (unit \<^bold>I)" unfolding comb_defs ..
-lemma applicative_unit2: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
-lemma applicative_unit3: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
-lemma applicative_assoc: "(w \<ggreater> v) \<ggreater> u = w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B)))" unfolding comb_defs ..
+lemma ap_identity:    "x \<ggreater> (unit \<^bold>I) = x" unfolding comb_defs ..
+lemma ap_composition: "w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B))) = (w \<ggreater> v) \<ggreater> u" unfolding comb_defs ..
+lemma ap_homomorphism: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
+lemma ap_interchange: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
 
 
 subsection \<open>Monad\<close>
@@ -154,6 +154,9 @@ text \<open>Takes a monadic arrow and transforms it into an applicative arrow.\<
 abbreviation(input) intoArrowA::"('a \<Rightarrow> 'e-Env('b)) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b)"
   where "intoArrowA \<equiv> \<^bold>C"
 
+text \<open>Note that\<close>
+lemma "ap = bindr \<circ> intoArrowM" unfolding comb_defs ..
+
 
 subsubsection \<open>Functional composition\<close>
 
@@ -169,8 +172,11 @@ text \<open>Composition is associative and suitably interrelates with applicatio
 lemma "f ; (g ; h) = (f ; g) ; h" unfolding comb_defs ..
 lemma "(x |> f |> g |> h) = (x |> f ; g ; h)" unfolding comb_defs ..
 
-text \<open>Composition can be stated in terms of application only.\<close>
+text \<open>Interrelation between application and composition.\<close>
 lemma "f ; g = (\<lambda>x. f x |> g)" unfolding comb_defs ..
+lemma "(\<circ>) = (\<lambda>g f x. g @ f @ x)" unfolding comb_defs ..
+lemma "(@) = (\<circ>) \<^bold>I" unfolding comb_defs ..
+lemma "(\<circ>) = \<^bold>D (@)" unfolding comb_defs ..
 
 
 subsubsection \<open>Monadic composition\<close>
@@ -190,6 +196,10 @@ term "(\<Zfinj>)  :: ('a \<Rightarrow> 'e-Env('b)) \<Rightarrow> ('b \<Rightarro
 text \<open>As expected, monadic composition is associative and suitably interrelates with bind to build pipelines:\<close>
 lemma "f \<Zfinj> (g \<Zfinj> h) = (f \<Zfinj> g) \<Zfinj> h" unfolding comb_defs ..
 lemma "(x \<bind> f \<bind> g \<bind> h) = (x \<bind> f \<Zfinj> g \<Zfinj> h)" unfolding comb_defs ..
+
+text \<open>Bind in terms of monadic composition\<close>
+lemma "bindr = (\<Zfinj>) \<^bold>I" unfolding comb_defs ..
+lemma "(\<bind>) = (\<^bold>C \<circ> (\<Zfinj>)) \<^bold>I" unfolding comb_defs ..
 
 
 subsubsection \<open>Applicative composition\<close>

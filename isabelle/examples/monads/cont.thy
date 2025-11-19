@@ -17,39 +17,48 @@ abbreviation(input) fmap3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 
   where "fmap3 \<equiv> \<^bold>L (\<^bold>T \<circ>\<^sub>2 \<^bold>B\<^sub>3)"
 abbreviation(input) fmap4::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>4('a,'b,'c,'d) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('e)"
   where "fmap4 \<equiv> \<^bold>L (\<^bold>T \<circ>\<^sub>2 \<^bold>B\<^sub>4)"
+\<comment> \<open>and so on...\<close>
 
 lemma "fmap0 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>0)) \<^bold>T" unfolding comb_defs ..
 lemma "fmap1 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>1)) \<^bold>T" unfolding comb_defs ..
 lemma "fmap2 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>2)) \<^bold>T" unfolding comb_defs ..
 lemma "fmap3 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>3)) \<^bold>T" unfolding comb_defs ..
 lemma "fmap4 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>4)) \<^bold>T" unfolding comb_defs ..
+\<comment> \<open>and so on...\<close>
 
 lemma "fmap0 = (\<lambda>f k g. k (g f))" unfolding comb_defs ..
 lemma "fmap1 = (\<lambda>f k g. k (g \<circ> f))" unfolding comb_defs ..
 lemma "fmap2 = (\<lambda>f k g. k (g \<circ>\<^sub>2 f))" unfolding comb_defs ..
 lemma "fmap3 = (\<lambda>f k g. k (g \<circ>\<^sub>3 f))" unfolding comb_defs ..
 lemma "fmap4 = (\<lambda>f k g. k (g \<circ>\<^sub>4 f))" unfolding comb_defs ..
+\<comment> \<open>and so on...\<close>
 
 lemma "fmap0 f = (\<lambda>k g. (f |> g) |> k)" unfolding comb_defs ..
 lemma "fmap1 f = (\<lambda>k g. (f ; g)  |> k)" unfolding comb_defs ..
 lemma "fmap2 f = (\<lambda>k g. (f ;\<^sub>2 g) |> k)" unfolding comb_defs ..
 lemma "fmap3 f = (\<lambda>k g. (f ;\<^sub>3 g) |> k)" unfolding comb_defs ..
 lemma "fmap4 f = (\<lambda>k g. (f ;\<^sub>4 g) |> k)" unfolding comb_defs ..
+\<comment> \<open>and so on...\<close>
 
 text \<open>Functor's classic "fmap" corresponds to the unary case.\<close>
 abbreviation "fmap \<equiv> fmap1"
 
 text \<open>In contrast to the environment functor, in the case of the continuation functor, "unit" does 
-  not correspond exactly to "fmap0". It is not unrelated however.\<close>
-abbreviation(input) unit::"'a \<Rightarrow> 'r-ECont('a)"
-  where "unit \<equiv> \<^bold>T"
+ not correspond to "fmap0". We introduce "unit" for different arities as follows:\<close>
+abbreviation(input) unit1::"'a \<Rightarrow> 'r-ECont('a)"
+  where "unit1 \<equiv> \<^bold>T\<^sub>1"
+abbreviation(input) unit2::"'a \<Rightarrow> 'b \<Rightarrow> 'r-ECont\<^sub>2('a,'b)"
+  where "unit2 \<equiv> \<^bold>T\<^sub>2"
+abbreviation(input) unit3::"'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r-ECont\<^sub>3('a,'b,'c)"
+  where "unit3 \<equiv> \<^bold>T\<^sub>3"
+\<comment> \<open>and so on...\<close>
+
+abbreviation "unit \<equiv> unit1"
 
 lemma "unit = (|>)" unfolding comb_defs ..
 lemma "unit = \<^bold>C \<^bold>A" unfolding comb_defs ..
-lemma "unit = \<^bold>C \<^bold>I" unfolding comb_defs ..
-lemma "unit = \<^bold>C fmap0 \<^bold>A" unfolding comb_defs ..
-lemma "unit = \<^bold>C fmap0 \<^bold>I" unfolding comb_defs ..
-lemma "unit = \<^bold>C\<^bold>C \<^bold>I fmap0" unfolding comb_defs ..
+lemma "unit1 = \<^bold>C fmap0 \<^bold>A" unfolding comb_defs ..
+lemma "unit2 = \<^bold>V" unfolding comb_defs ..
 
 
 subsection \<open>Applicative\<close>
@@ -77,10 +86,10 @@ abbreviation(input) apr :: "'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^su
   where "a \<ggreater> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
-lemma applicative_unit1: "x = x \<ggreater> (unit \<^bold>I)" unfolding comb_defs ..
-lemma applicative_unit2: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
-lemma applicative_unit3: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
-lemma applicative_assoc: "(w \<ggreater> v) \<ggreater> u = w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B)))" unfolding comb_defs ..
+lemma ap_identity:    "x \<ggreater> (unit \<^bold>I) = x" unfolding comb_defs ..
+lemma ap_composition: "w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B))) = (w \<ggreater> v) \<ggreater> u" unfolding comb_defs ..
+lemma ap_homomorphism: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
+lemma ap_interchange: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
 
 
 subsection \<open>Monad\<close>
@@ -182,6 +191,23 @@ term "intoArrowA :: ('r\<^sub>1 \<Rightarrow> 'r\<^sub>2) \<Rightarrow> ('a \<Ri
 term "intoArrowA :: ('r\<^sub>1 \<Rightarrow> 'r\<^sub>2) \<Rightarrow> ('a \<Rightarrow> ('b \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2) \<Rightarrow> (('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1) \<Rightarrow> 'r\<^sub>2"
 
 
+subsubsection \<open>Functional composition\<close>
+
+text \<open>Quickly recall, again, that for the case of plain functions, we have:\<close>
+term "(|>) :: 'a \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b"                  \<comment> \<open>reversed application\<close>
+term "(;)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
+
+text \<open>Composition is associative and suitably interrelates with application to build pipelines.\<close>
+lemma "f ; (g ; h) = (f ; g) ; h" unfolding comb_defs ..
+lemma "(x |> f |> g |> h) = (x |> f ; g ; h)" unfolding comb_defs ..
+
+text \<open>Interrelation between application and composition.\<close>
+lemma "f ; g = (\<lambda>x. f x |> g)" unfolding comb_defs ..
+lemma "(\<circ>) = (\<lambda>g f x. g @ f @ x)" unfolding comb_defs ..
+lemma "(@) = (\<circ>) \<^bold>I" unfolding comb_defs ..
+lemma "(\<circ>) = \<^bold>D (@)" unfolding comb_defs ..
+
+
 subsubsection \<open>Monadic composition\<close>
 
 text \<open>Thus, monadic (aka. Kleisli-) composition is to "bindr" as functional composition is to application.\<close>
@@ -199,6 +225,10 @@ term "(\<Zfinj>)  :: ('a \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('b)) \<Rightar
 text \<open>As expected, monadic composition is associative and suitably interrelates with bind to build pipelines:\<close>
 lemma "f \<Zfinj> (g \<Zfinj> h) = (f \<Zfinj> g) \<Zfinj> h" unfolding comb_defs ..
 lemma "(x \<bind> f \<bind> g \<bind> h) = (x \<bind> f \<Zfinj> g \<Zfinj> h)" unfolding comb_defs ..
+
+text \<open>Bind in terms of monadic composition\<close>
+lemma "bindr = (\<Zfinj>) \<^bold>I" unfolding comb_defs ..
+lemma "(\<bind>) = (\<^bold>C \<circ> (\<Zfinj>)) \<^bold>I" unfolding comb_defs ..
 
 
 subsubsection \<open>Applicative composition\<close>
