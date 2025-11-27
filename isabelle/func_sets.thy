@@ -548,6 +548,17 @@ text \<open>Random-looking simplification(?) rule that becomes useful later on.\
 lemma image_simp1: "image (F a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S F)"
   apply(rule ext) unfolding comb_defs func_defs by fastforce
 
+text \<open>Finally, we introduce a notion dual to image.\<close>
+definition dualimage :: "('a \<Rightarrow> 'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b)"
+  where "dualimage \<equiv> \<^bold>C (\<^bold>B\<^sub>2\<^sub>0 (\<subseteq>) inverse)"
+
+declare dualimage_def[func_defs]
+
+lemma "dualimage f A = (\<lambda>b. f\<inverse> b \<subseteq> A)" unfolding func_defs comb_defs ..
+lemma "dualimage f A = (\<lambda>b. \<forall>a. f a = b \<rightarrow> A a)" unfolding func_defs comb_defs ..
+lemma image_dual1: "image f = \<midarrow> \<circ> (dualimage f) \<circ> \<midarrow>"  unfolding func_defs comb_defs by simp
+lemma image_dual2: "dualimage f = \<midarrow> \<circ> (image f) \<circ> \<midarrow>"  unfolding func_defs comb_defs by simp
+
 
 subsection \<open>Miscellaneous\<close>
 
