@@ -39,18 +39,18 @@ syntax "lg_fusion"::"any \<Rightarrow> any \<Rightarrow> any \<Rightarrow> logic
 syntax "lg_implR"::"any \<Rightarrow> any \<Rightarrow> any \<Rightarrow> logic" ("_ \<^bold>\<triangleright>\<^sup>_ _")
 syntax "lg_implL"::"any \<Rightarrow> any \<Rightarrow> any \<Rightarrow> logic" ("_ \<^bold>\<triangleleft>\<^sup>_ _")
 translations "P \<^bold>\<otimes>\<^sup>R Q" == "CONST image123 R  P Q"
-translations "P \<^bold>\<triangleright>\<^sup>R Q" == "CONST dualImage132 R P Q"
-translations "P \<^bold>\<triangleleft>\<^sup>R Q" == "CONST dualImage231 R Q P"
+translations "P \<^bold>\<triangleright>\<^sup>R Q" == "CONST implicative132 R P Q"
+translations "P \<^bold>\<triangleleft>\<^sup>R Q" == "CONST implicative231 R Q P"
 
 text \<open>The above syntax configuration basically means that:\<close>
 lemma "P \<^bold>\<otimes>\<^sup>R Q = R-\<diamond>\<^sub>1\<^sub>2\<^sub>3 P Q" ..
-lemma "P \<^bold>\<triangleright>\<^sup>R Q = R-\<box>\<^sub>1\<^sub>3\<^sub>2 P Q" ..
-lemma "P \<^bold>\<triangleleft>\<^sup>R Q = R-\<box>\<^sub>2\<^sub>3\<^sub>1 Q P" ..
+lemma "P \<^bold>\<triangleright>\<^sup>R Q = R-\<Rrightarrow>\<^sub>1\<^sub>3\<^sub>2 P Q" ..
+lemma "P \<^bold>\<triangleleft>\<^sup>R Q = R-\<Rrightarrow>\<^sub>2\<^sub>3\<^sub>1 Q P" ..
 
 text \<open>We unfold definitions for illustration:\<close>
-lemma "A \<^bold>\<otimes>\<^sup>R B = (\<lambda>c. \<exists>a b. (A a \<and> B b) \<and> R a b c)" unfolding rightImage2_def2 rel_defs func_defs comb_defs ..
-lemma "A \<^bold>\<triangleright>\<^sup>R C = (\<lambda>b. \<forall>a c. R a b c \<rightarrow> A a \<rightarrow> C c)" unfolding rel_defs func_defs comb_defs ..
-lemma "C \<^bold>\<triangleleft>\<^sup>R B = (\<lambda>a. \<forall>b c. R a b c \<rightarrow> B b \<rightarrow> C c)" unfolding rel_defs func_defs comb_defs ..
+lemma "A \<^bold>\<otimes>\<^sup>R B = (\<lambda>c. \<exists>a b. R a b c \<and> A a \<and> B b)" unfolding rel_defs func_defs comb_defs by fast
+lemma "A \<^bold>\<triangleright>\<^sup>R C = (\<lambda>b. \<forall>a c. R a b c \<rightarrow> A a \<rightarrow> C c)" unfolding rel_defs func_defs comb_defs by simp
+lemma "C \<^bold>\<triangleleft>\<^sup>R B = (\<lambda>a. \<forall>b c. R a b c \<rightarrow> B b \<rightarrow> C c)" unfolding rel_defs func_defs comb_defs by simp
 
 text \<open>As in modal logic, we control operator's behaviour by suitably restricting the underlying relation.
  This ternary relation stands for grammatical composition or "merge". 
