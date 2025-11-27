@@ -247,48 +247,7 @@ definition dual::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>
   where "n\<^sub>1,n\<^sub>2-DUAL f g \<equiv>   \<sqdot> \<midarrow>f\<rightarrow> \<sqdot> 
                           n\<^sub>1\<down>      \<down>n\<^sub>2
                             \<sqdot> \<midarrow>g\<rightarrow> \<sqdot>  "
-
-text \<open>We can also lift the previous notion of duality to apply to n-ary functions.\<close>
-definition dual2::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> Rel('e \<Rightarrow> 'a\<^sub>1 \<Rightarrow> 'b\<^sub>1, 'e \<Rightarrow> 'a\<^sub>2 \<Rightarrow> 'b\<^sub>2)" ("_,_-DUAL\<^sub>2")
-  where "n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 \<equiv> \<^bold>\<Phi>\<^sub>\<forall> (n\<^sub>1,n\<^sub>2-DUAL)"
-definition dual3::"('a\<^sub>1 \<Rightarrow> 'a\<^sub>2) \<Rightarrow> ('b\<^sub>1 \<Rightarrow> 'b\<^sub>2) \<Rightarrow> Rel('e\<^sub>1 \<Rightarrow> 'e\<^sub>2 \<Rightarrow> 'a\<^sub>1 \<Rightarrow> 'b\<^sub>1, 'e\<^sub>1 \<Rightarrow> 'e\<^sub>2 \<Rightarrow> 'a\<^sub>2 \<Rightarrow> 'b\<^sub>2)" ("_,_-DUAL\<^sub>3")
-  where "n\<^sub>1,n\<^sub>2-DUAL\<^sub>3 \<equiv> \<^bold>\<Phi>\<^sub>\<forall> (n\<^sub>1,n\<^sub>2-DUAL\<^sub>2)"
-\<comment> \<open>... \<open>n\<^sub>1,n\<^sub>2-DUAL\<^sub>n \<equiv> \<^bold>\<Phi>\<^sub>\<forall> n\<^sub>1,n\<^sub>2-DUAL\<^sub>n\<^sub>-\<^sub>1\<close>\<close>
-
-declare dual_def[func_defs] dual2_def[func_defs] dual3_def[func_defs]
-
-lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g = (\<forall>x y. g x (n\<^sub>1 y) = n\<^sub>2 (f x y))" unfolding func_defs comb_defs by metis
-lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sub>3 f g = (\<forall>x y z. g x y (n\<^sub>1 z) = n\<^sub>2 (f x y z))" unfolding func_defs comb_defs by metis
-
-text \<open>Note that if both \<open>n\<^sub>1\<close> and \<open>n\<^sub>2\<close> are involutive, then the dual relation is symmetric.\<close>
-lemma dual_symm: "involutive n\<^sub>1 \<Longrightarrow> involutive n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL f g = n\<^sub>1,n\<^sub>2-DUAL f g" unfolding func_defs comb_defs by simp
-lemma dual2_symm: "involutive n\<^sub>1 \<Longrightarrow> involutive n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g = n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g" unfolding func_defs comb_defs by simp
-
-text \<open>This notion does NOT correspond with the so-called "De Morgan duality" (although they are not unrelated).\<close>
-proposition "\<not>,\<not>-DUAL\<^sub>2 (\<and>) (\<or>)" nitpick \<comment> \<open>countermodel found\<close> oops
-
-text \<open>We add a (convenient?) diagram for duality of binary functions (for unary functions it is just the square).\<close>
-abbreviation(input) dual2Diagram (" \<sqdot> \<Midarrow>_\<rightarrow> \<sqdot> // _\<down> \<down>_ // \<sqdot> \<Midarrow>_\<rightarrow> \<sqdot>") 
-  where "  \<sqdot> \<Midarrow> f \<rightarrow> \<sqdot> 
-         n\<^sub>1\<down>        \<down>n\<^sub>2
-           \<sqdot> \<Midarrow> g \<rightarrow> \<sqdot>   \<equiv> n\<^sub>1,n\<^sub>2-DUAL\<^sub>2 f g"
-
-text \<open>Some examples of dual pairs of binary operations (recall that negation and complement are involutive).\<close>
-lemma " \<sqdot> \<Midarrow> (\<and>) \<rightarrow> \<sqdot> 
-      \<not>\<down>           \<down>\<not>
-        \<sqdot> \<Midarrow> (\<rightarrow>) \<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by simp
-
-lemma " \<sqdot> \<Midarrow> (\<or>) \<rightarrow> \<sqdot> 
-      \<not>\<down>           \<down>\<not>
-        \<sqdot> \<Midarrow> (\<rightharpoonup>) \<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by auto
-
-lemma " \<sqdot> \<Midarrow> (\<Rightarrow>) \<rightarrow> \<sqdot> 
-      \<midarrow>\<down>           \<down>\<midarrow>
-        \<sqdot> \<Midarrow> (\<inter>) \<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by simp
-
-lemma " \<sqdot> \<Midarrow>  (\<setminus>)  \<rightarrow>  \<sqdot> 
-      \<midarrow>\<down>             \<down>\<midarrow>
-        \<sqdot> \<Midarrow>(\<midarrow>\<circ>\<^sub>2(\<inter>))\<rightarrow> \<sqdot>  " unfolding func_defs comb_defs by simp
+declare dual_def[func_defs]
 
 
 subsubsection \<open>For Relations\<close>
