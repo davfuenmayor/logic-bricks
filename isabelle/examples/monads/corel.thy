@@ -1,20 +1,20 @@
-theory rel
-  imports env set
+theory corel
+  imports env coset
 begin
 
 (*Disambiguate notation*)
 no_notation
   env.apr  (infixl "\<ggreater>" 54) and env.bind  (infixl "\<bind>" 54) and env.mcomp' (infixr "\<Zfinj>" 56) and env.acomp' (infixr "\<Zinj>" 56) and
-  set.apr  (infixl "\<ggreater>" 54) and set.bind  (infixl "\<bind>" 54) and set.mcomp' (infixr "\<Zfinj>" 56) and set.acomp' (infixr "\<Zinj>" 56)
+  coset.apr  (infixl "\<ggreater>" 54) and coset.bind  (infixl "\<bind>" 54) and coset.mcomp' (infixr "\<Zfinj>" 56) and coset.acomp' (infixr "\<Zinj>" 56)
 notation
   env.apr  (infixl "\<ggreater>\<^sup>e" 54) and env.bind  (infixl "\<bind>\<^sup>e" 54) and env.mcomp' (infixr "\<Zfinj>\<^sup>e" 56) and env.acomp' (infixr "\<Zinj>\<^sup>e" 56) and
-  set.apr  (infixl "\<ggreater>\<^sup>s" 54) and set.bind  (infixl "\<bind>\<^sup>s" 54) and set.mcomp' (infixr "\<Zfinj>\<^sup>s" 56) and set.acomp' (infixr "\<Zinj>\<^sup>s" 56)
+  coset.apr  (infixl "\<ggreater>\<^sup>s" 54) and coset.bind  (infixl "\<bind>\<^sup>s" 54) and coset.mcomp' (infixr "\<Zfinj>\<^sup>s" 56) and coset.acomp' (infixr "\<Zinj>\<^sup>s" 56)
 
 
-section \<open>Relation Monad\<close>
+section \<open>Co-Relation Monad\<close>
 
-text \<open>The \<open>Rel('a,'b)\<close> type constructor also comes with a monad structure, which merges, 
- in a sense, the environment monad with the set monad.\<close>
+text \<open>The \<open>Rel('a,'b)\<close> type constructor also comes with a "dual" monad structure, which merges, 
+ in a sense, the environment monad with the dual of the set (aka. coset) monad.\<close>
 
 named_theorems all_defs
 declare comb_defs[all_defs] func_defs[all_defs] rel_defs[all_defs]
@@ -23,13 +23,13 @@ declare comb_defs[all_defs] func_defs[all_defs] rel_defs[all_defs]
 subsection \<open>Functor\<close>
 
 abbreviation(input) fmap0::"'a \<Rightarrow>  Rel('b,'a)"
-  where "fmap0 \<equiv> env.fmap0 \<circ> set.fmap0"
+  where "fmap0 \<equiv> env.fmap0 \<circ> coset.fmap0"
 abbreviation(input) fmap1::"('a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
-  where "fmap1 \<equiv> env.fmap1 \<circ> set.fmap1"
+  where "fmap1 \<equiv> env.fmap1 \<circ> coset.fmap1"
 abbreviation(input) fmap2::"('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> (Rel('d,'a) \<Rightarrow> Rel('d,'b) \<Rightarrow> Rel('d,'c))"
-  where "fmap2 \<equiv> env.fmap2 \<circ> set.fmap2"
+  where "fmap2 \<equiv> env.fmap2 \<circ> coset.fmap2"
 abbreviation(input) fmap3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> (Rel('e,'a) \<Rightarrow> Rel('e,'b) \<Rightarrow> Rel('e,'c) \<Rightarrow> Rel('e,'d))"
-  where "fmap3 \<equiv> env.fmap3 \<circ> set.fmap3"
+  where "fmap3 \<equiv> env.fmap3 \<circ> coset.fmap3"
 \<comment> \<open>...and so on\<close>
 
 text \<open>Functor's "unit" (monad's "return" resp. applicative's "pure") corresponds to the nullary case.\<close>
@@ -41,11 +41,11 @@ abbreviation fmap where "fmap \<equiv> fmap1"
 subsection \<open>Applicative\<close>
 
 abbreviation(input) ap0::"Rel('b,'a) \<Rightarrow> Rel('b,'a)"
-  where "ap0 \<equiv> env.fmap1 set.ap0" \<comment> \<open>ie. \<open>\<^bold>A\<close>\<close>
+  where "ap0 \<equiv> env.fmap1 coset.ap0" \<comment> \<open>ie. \<open>\<^bold>A\<close>\<close>
 abbreviation(input) ap1::"Rel('c,'a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
-  where "ap1 \<equiv> env.fmap2 set.ap1"
+  where "ap1 \<equiv> env.fmap2 coset.ap1"
 abbreviation(input) ap2::"Rel('d,'a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> (Rel('d,'a) \<Rightarrow> Rel('d,'b) \<Rightarrow> Rel('d,'c))"
-  where "ap2 \<equiv> env.fmap3 set.ap2"
+  where "ap2 \<equiv> env.fmap3 coset.ap2"
 \<comment> \<open>...and so on\<close>
 
 text \<open>Applicative's classic "ap" corresponds to the unary case.\<close>
@@ -69,11 +69,11 @@ lemma ap_interchange: "(unit x) \<ggreater> f = f \<ggreater> (unit (\<^bold>T x
 subsection \<open>Monad\<close>
 
 abbreviation(input) bindr1::"('a \<Rightarrow> Rel('c,'b)) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
-  where "bindr1 \<equiv> (env.fmap2 set.bindr1) \<circ> \<^bold>C" \<comment> \<open>bind-reversed\<close>
+  where "bindr1 \<equiv> (env.fmap2 coset.bindr1) \<circ> \<^bold>C" \<comment> \<open>bind-reversed\<close>
 abbreviation(input) bindr2::"('a \<Rightarrow> 'b \<Rightarrow> Rel('d,'c)) \<Rightarrow> Rel('d,'a) \<Rightarrow> Rel('d,'b) \<Rightarrow> Rel('d,'c)"
-  where "bindr2 \<equiv> (env.fmap3 set.bindr2) \<circ> \<^bold>R"
+  where "bindr2 \<equiv> (env.fmap3 coset.bindr2) \<circ> \<^bold>R"
 abbreviation(input) bindr3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> Rel('e,'d)) \<Rightarrow> Rel('e,'a) \<Rightarrow> Rel('e,'b) \<Rightarrow> Rel('e,'c) \<Rightarrow> Rel('e,'d)"
-  where "bindr3 \<equiv> (env.fmap4 set.bindr3) \<circ> \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1" 
+  where "bindr3 \<equiv> (env.fmap4 coset.bindr3) \<circ> \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1" 
 \<comment> \<open>...and so on\<close>
 
 text \<open>Monad's usual "bind" corresponds to the (reversed) unary case, and gets its customary notation.\<close>
@@ -93,7 +93,7 @@ lemma monad_assoc: "((x \<bind> f) \<bind> g) = (x \<bind> (\<lambda>z. (f z) \<
 
 
 abbreviation(input) join::"Rel('c,Rel('c,'a)) \<Rightarrow> Rel('c,'a)"
-  where "join \<equiv>  env.join \<circ> (env.fmap (set.join \<circ>\<^sub>2 set.intoArrowM))"
+  where "join \<equiv>  env.join \<circ> (env.fmap (coset.join \<circ>\<^sub>2 coset.intoArrowM))"
 
 text \<open>Recalling that\<close>
 lemma "join = bindr \<^bold>I" unfolding all_defs by metis
@@ -126,14 +126,14 @@ term "a :: Rel('b,'a \<Rightarrow> 'c)"
 
 text \<open>Takes a plain function and disguises it as a monadic arrow.\<close>
 abbreviation(input) asArrowM::"('a \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> Rel('b,'c))"
-  where "asArrowM \<equiv> env.asArrowM \<circ> set.asArrowM"
+  where "asArrowM \<equiv> env.asArrowM \<circ> coset.asArrowM"
 
 text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
 abbreviation(input) intoArrowM::"Rel('b,'a \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> Rel('b,'c))"
-  where "intoArrowM \<equiv> (env.intoArrowM \<circ>\<^sub>2 env.fmap) set.intoArrowM"
+  where "intoArrowM \<equiv> (env.intoArrowM \<circ>\<^sub>2 env.fmap) coset.intoArrowM"
 text \<open>Takes a monadic arrow and transforms it into an applicative arrow.\<close>
 abbreviation(input) intoArrowA::"('a \<Rightarrow> Rel('b,'c)) \<Rightarrow> Rel('b,'a \<Rightarrow> 'c)"
-  where "intoArrowA \<equiv> set.intoArrowA \<circ>\<^sub>2 env.intoArrowA"
+  where "intoArrowA \<equiv> coset.intoArrowA \<circ>\<^sub>2 env.intoArrowA"
 
 text \<open>Note that\<close>
 lemma "ap = bindr \<circ> intoArrowM" unfolding all_defs by fast
