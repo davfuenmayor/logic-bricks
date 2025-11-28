@@ -12,13 +12,13 @@ text \<open>This is the (non-trivial) base case. It is very common in logic, so 
 text \<open>Add some convenient (arguably less visually-cluttering) notation, reminiscent of logical operations.\<close>
 notation(input) leftImage ("_-\<diamond>\<^sub>\<leftarrow>") and leftDualImage ("_-\<box>\<^sub>\<leftarrow>") and 
                 rightImage ("_-\<diamond>\<^sub>\<rightarrow>") and rightDualImage ("_-\<box>\<^sub>\<rightarrow>") and
-                leftBound ("_-\<odot>\<^sub>\<leftarrow>") and leftDualBound ("_-\<oslash>\<^sub>\<leftarrow>") and
-                rightBound ("_-\<odot>\<^sub>\<rightarrow>") and rightDualBound ("_-\<oslash>\<^sub>\<rightarrow>")
+                leftBound ("_-\<odot>\<^sub>\<leftarrow>") and leftDualBound ("_-\<ominus>\<^sub>\<leftarrow>") and
+                rightBound ("_-\<odot>\<^sub>\<rightarrow>") and rightDualBound ("_-\<ominus>\<^sub>\<rightarrow>")
 \<comment> \<open>and extend this notation to the transformations themselves\<close>
 notation(input) leftImage ("\<diamond>\<^sub>\<leftarrow>") and leftDualImage ("\<box>\<^sub>\<leftarrow>") and 
                 rightImage ("\<diamond>\<^sub>\<rightarrow>") and rightDualImage ("\<box>\<^sub>\<rightarrow>") and
-                leftBound ("\<odot>\<^sub>\<leftarrow>") and leftDualBound ("\<oslash>\<^sub>\<leftarrow>") and
-                rightBound ("\<odot>\<^sub>\<rightarrow>") and rightDualBound ("\<oslash>\<^sub>\<rightarrow>")
+                leftBound ("\<odot>\<^sub>\<leftarrow>") and leftDualBound ("\<ominus>\<^sub>\<leftarrow>") and
+                rightBound ("\<odot>\<^sub>\<rightarrow>") and rightDualBound ("\<ominus>\<^sub>\<rightarrow>")
 
 
 subsubsection \<open>Order Embedding\<close>
@@ -42,9 +42,9 @@ lemma rightBound_embedding: "(\<subseteq>\<^sup>r),(\<subseteq>\<^sup>r)-embeddi
   unfolding rel_defs func_defs comb_defs by fast
 lemma leftBound_embedding: "(\<subseteq>\<^sup>r),(\<subseteq>\<^sup>r)-embedding \<odot>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma rightDualBound_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<oslash>\<^sub>\<rightarrow>"
+lemma rightDualBound_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<ominus>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma leftDualBound_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<oslash>\<^sub>\<leftarrow>"
+lemma leftDualBound_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<ominus>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by fast
 
 
@@ -64,9 +64,9 @@ lemma rightBound_hom_id: "\<D>-\<odot>\<^sub>\<rightarrow> = \<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 lemma leftBound_hom_id: "\<D>-\<odot>\<^sub>\<leftarrow> = \<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualBound_hom_id: "\<D>-\<oslash>\<^sub>\<rightarrow> = \<midarrow>"
+lemma rightDualBound_hom_id: "\<D>-\<ominus>\<^sub>\<rightarrow> = \<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualBound_hom_id: "\<D>-\<oslash>\<^sub>\<leftarrow> = \<midarrow>"
+lemma leftDualBound_hom_id: "\<D>-\<ominus>\<^sub>\<leftarrow> = \<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Moreover, they map the relational composition \<open>\<circ>\<^sup>r\<close> (resp. its dual \<open>\<bullet>\<^sup>r\<close>) to their functional counterparts.\<close>
@@ -82,9 +82,9 @@ lemma rightBound_hom_comp: "(A \<bullet>\<^sup>r B)-\<odot>\<^sub>\<rightarrow> 
   unfolding rel_defs func_defs comb_defs by auto
 lemma leftBound_hom_comp: "(A \<bullet>\<^sup>r B)-\<odot>\<^sub>\<leftarrow> = (B-\<odot>\<^sub>\<leftarrow>) \<bullet> (A-\<odot>\<^sub>\<leftarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualBound_hom_comp: "(A \<bullet>\<^sup>r B)-\<oslash>\<^sub>\<rightarrow> = (A-\<oslash>\<^sub>\<rightarrow>) \<bullet> (B-\<oslash>\<^sub>\<rightarrow>)" 
+lemma rightDualBound_hom_comp: "(A \<bullet>\<^sup>r B)-\<ominus>\<^sub>\<rightarrow> = (A-\<ominus>\<^sub>\<rightarrow>) \<bullet> (B-\<ominus>\<^sub>\<rightarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualBound_hom_comp: "(A \<bullet>\<^sup>r B)-\<oslash>\<^sub>\<leftarrow> = (B-\<oslash>\<^sub>\<leftarrow>) \<bullet> (A-\<oslash>\<^sub>\<leftarrow>)" 
+lemma leftDualBound_hom_comp: "(A \<bullet>\<^sup>r B)-\<ominus>\<^sub>\<leftarrow> = (B-\<ominus>\<^sub>\<leftarrow>) \<bullet> (A-\<ominus>\<^sub>\<leftarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Operators are also (dual) lattice homomorphisms from the BA of relations to the BA of set-operators.\<close>
@@ -101,9 +101,9 @@ lemma rightDualImage_hom_join: "(R\<^sub>1 \<union>\<^sup>r R\<^sub>2)-\<box>\<^
   unfolding rel_defs func_defs comb_defs by auto
 lemma leftDualImage_hom_join: "(R\<^sub>1 \<union>\<^sup>r R\<^sub>2)-\<box>\<^sub>\<leftarrow> = R\<^sub>1-\<box>\<^sub>\<leftarrow> \<inter>\<^sup>r R\<^sub>2-\<box>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<oslash>\<^sub>\<rightarrow> = R\<^sub>1-\<oslash>\<^sub>\<rightarrow> \<union>\<^sup>r R\<^sub>2-\<oslash>\<^sub>\<rightarrow>"
+lemma rightDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<ominus>\<^sub>\<rightarrow> = R\<^sub>1-\<ominus>\<^sub>\<rightarrow> \<union>\<^sup>r R\<^sub>2-\<ominus>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<oslash>\<^sub>\<leftarrow> = R\<^sub>1-\<oslash>\<^sub>\<leftarrow> \<union>\<^sup>r R\<^sub>2-\<oslash>\<^sub>\<leftarrow>"
+lemma leftDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<ominus>\<^sub>\<leftarrow> = R\<^sub>1-\<ominus>\<^sub>\<leftarrow> \<union>\<^sup>r R\<^sub>2-\<ominus>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>As for complement, we have a particular morphism property between images and bounds (cf. dualities below).\<close>
@@ -111,17 +111,17 @@ lemma rightImage_hom_compl: "(R\<^sup>\<midarrow>)-\<diamond>\<^sub>\<rightarrow
   unfolding rel_defs func_defs comb_defs by auto
 lemma leftImage_hom_compl: "(R\<^sup>\<midarrow>)-\<diamond>\<^sub>\<leftarrow> = (R-\<odot>\<^sub>\<leftarrow>)\<^sup>\<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualImage_hom_compl: "(R\<^sup>\<midarrow>)-\<box>\<^sub>\<rightarrow> = (R-\<oslash>\<^sub>\<rightarrow>)\<^sup>\<midarrow>"
+lemma rightDualImage_hom_compl: "(R\<^sup>\<midarrow>)-\<box>\<^sub>\<rightarrow> = (R-\<ominus>\<^sub>\<rightarrow>)\<^sup>\<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualImage_hom_compl: "(R\<^sup>\<midarrow>)-\<box>\<^sub>\<leftarrow> = (R-\<oslash>\<^sub>\<leftarrow>)\<^sup>\<midarrow>"
+lemma leftDualImage_hom_compl: "(R\<^sup>\<midarrow>)-\<box>\<^sub>\<leftarrow> = (R-\<ominus>\<^sub>\<leftarrow>)\<^sup>\<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 lemma rightBound_hom_compl: "(R\<^sup>\<midarrow>)-\<odot>\<^sub>\<rightarrow> = (R-\<diamond>\<^sub>\<rightarrow>)\<^sup>\<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 lemma leftBound_hom_compl: "(R\<^sup>\<midarrow>)-\<odot>\<^sub>\<leftarrow> = (R-\<diamond>\<^sub>\<leftarrow>)\<^sup>\<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualBound_hom_compl: "(R\<^sup>\<midarrow>)-\<oslash>\<^sub>\<rightarrow> = (R-\<box>\<^sub>\<rightarrow>)\<^sup>\<midarrow>"
+lemma rightDualBound_hom_compl: "(R\<^sup>\<midarrow>)-\<ominus>\<^sub>\<rightarrow> = (R-\<box>\<^sub>\<rightarrow>)\<^sup>\<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualBound_hom_compl: "(R\<^sup>\<midarrow>)-\<oslash>\<^sub>\<leftarrow> = (R-\<box>\<^sub>\<leftarrow>)\<^sup>\<midarrow>"
+lemma leftDualBound_hom_compl: "(R\<^sup>\<midarrow>)-\<ominus>\<^sub>\<leftarrow> = (R-\<box>\<^sub>\<leftarrow>)\<^sup>\<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 
 
@@ -137,14 +137,14 @@ lemma "  \<sqdot> \<midarrow>R-\<diamond>\<^sub>\<rightarrow> \<rightarrow> \<sq
        \<midarrow>\<down>           \<down>\<midarrow>
          \<sqdot> \<midarrow>R-\<box>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightImage_dual by blast
 
-lemma leftBound_dual: "\<midarrow>,\<midarrow>-DUAL (R-\<odot>\<^sub>\<leftarrow>) (R-\<oslash>\<^sub>\<leftarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by auto
+lemma leftBound_dual: "\<midarrow>,\<midarrow>-DUAL (R-\<odot>\<^sub>\<leftarrow>) (R-\<ominus>\<^sub>\<leftarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by auto
 lemma "  \<sqdot> \<midarrow>R-\<odot>\<^sub>\<leftarrow> \<rightarrow> \<sqdot> 
        \<midarrow>\<down>           \<down>\<midarrow>
-         \<sqdot> \<midarrow>R-\<oslash>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>   " using dual_def leftBound_dual by blast
-lemma rightBound_dual: "\<midarrow>,\<midarrow>-DUAL (R-\<odot>\<^sub>\<rightarrow>) (R-\<oslash>\<^sub>\<rightarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by auto
+         \<sqdot> \<midarrow>R-\<ominus>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>   " using dual_def leftBound_dual by blast
+lemma rightBound_dual: "\<midarrow>,\<midarrow>-DUAL (R-\<odot>\<^sub>\<rightarrow>) (R-\<ominus>\<^sub>\<rightarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by auto
 lemma "  \<sqdot> \<midarrow>R-\<odot>\<^sub>\<rightarrow> \<rightarrow> \<sqdot> 
        \<midarrow>\<down>           \<down>\<midarrow>
-         \<sqdot> \<midarrow>R-\<oslash>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightBound_dual by blast
+         \<sqdot> \<midarrow>R-\<ominus>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightBound_dual by blast
 
 text \<open>Recall that set-operators are also relations (and thus can be ordered as such). We thus have following
   dualities between the transformations themselves (cf. morphisms wrt. complement discussed above).\<close>
@@ -157,14 +157,14 @@ lemma "  \<sqdot> \<midarrow>\<diamond>\<^sub>\<rightarrow> \<rightarrow> \<sqdo
        \<midarrow>\<^sup>r\<down>         \<down>\<midarrow>\<^sup>r
          \<sqdot> \<midarrow>\<odot>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightImageBound_dual by blast
 
-lemma leftDualImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<box>\<^sub>\<leftarrow> \<oslash>\<^sub>\<leftarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
+lemma leftDualImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<box>\<^sub>\<leftarrow> \<ominus>\<^sub>\<leftarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
 lemma "  \<sqdot> \<midarrow>\<box>\<^sub>\<leftarrow> \<rightarrow> \<sqdot> 
        \<midarrow>\<^sup>r\<down>        \<down>\<midarrow>\<^sup>r
-         \<sqdot> \<midarrow>\<oslash>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>   " using dual_def leftDualImageBound_dual by blast
-lemma rightDualImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<box>\<^sub>\<rightarrow> \<oslash>\<^sub>\<rightarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
+         \<sqdot> \<midarrow>\<ominus>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>   " using dual_def leftDualImageBound_dual by blast
+lemma rightDualImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<box>\<^sub>\<rightarrow> \<ominus>\<^sub>\<rightarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
 lemma "  \<sqdot> \<midarrow>\<box>\<^sub>\<rightarrow> \<rightarrow> \<sqdot> 
        \<midarrow>\<^sup>r\<down>        \<down>\<midarrow>\<^sup>r
-         \<sqdot> \<midarrow>\<oslash>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightDualImageBound_dual by blast
+         \<sqdot> \<midarrow>\<ominus>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightDualImageBound_dual by blast
 
 
 subsubsection \<open>Adjunctions (illustrated with diagrams)\<close>
@@ -180,12 +180,12 @@ lemma   " \<sqdot> \<leftarrow>R-\<box>\<^sub>\<leftarrow> \<midarrow> \<sqdot>
           \<sqdot> \<midarrow>R-\<diamond>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>    " by (simp add: rightImage_residuation)
 
 text \<open>We may refer to a residuation between complements of operators as a "co-residuation" (between the operators).\<close>
-lemma leftBound_coresiduation:  "(\<subseteq>),(\<subseteq>)-ADJ (R-\<odot>\<^sub>\<leftarrow>)\<^sup>\<midarrow> (R-\<oslash>\<^sub>\<rightarrow>)\<^sup>\<midarrow>" unfolding adj_defs rel_defs comb_defs func_defs by auto
-lemma   " \<sqdot> \<leftarrow>(R-\<oslash>\<^sub>\<rightarrow>)\<^sup>\<midarrow> \<midarrow> \<sqdot> 
+lemma leftBound_coresiduation:  "(\<subseteq>),(\<subseteq>)-ADJ (R-\<odot>\<^sub>\<leftarrow>)\<^sup>\<midarrow> (R-\<ominus>\<^sub>\<rightarrow>)\<^sup>\<midarrow>" unfolding adj_defs rel_defs comb_defs func_defs by auto
+lemma   " \<sqdot> \<leftarrow>(R-\<ominus>\<^sub>\<rightarrow>)\<^sup>\<midarrow> \<midarrow> \<sqdot> 
       (\<subseteq>)\<up>              \<up>(\<subseteq>)
           \<sqdot> \<midarrow>(R-\<odot>\<^sub>\<leftarrow>)\<^sup>\<midarrow> \<rightarrow> \<sqdot>    " by (simp add: leftBound_coresiduation)
-lemma rightBound_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ (R-\<odot>\<^sub>\<rightarrow>)\<^sup>\<midarrow> (R-\<oslash>\<^sub>\<leftarrow>)\<^sup>\<midarrow>" unfolding adj_defs rel_defs comb_defs func_defs by auto
-lemma   " \<sqdot> \<leftarrow>(R-\<oslash>\<^sub>\<leftarrow>)\<^sup>\<midarrow> \<midarrow> \<sqdot> 
+lemma rightBound_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ (R-\<odot>\<^sub>\<rightarrow>)\<^sup>\<midarrow> (R-\<ominus>\<^sub>\<leftarrow>)\<^sup>\<midarrow>" unfolding adj_defs rel_defs comb_defs func_defs by auto
+lemma   " \<sqdot> \<leftarrow>(R-\<ominus>\<^sub>\<leftarrow>)\<^sup>\<midarrow> \<midarrow> \<sqdot> 
       (\<subseteq>)\<up>              \<up>(\<subseteq>)
           \<sqdot> \<midarrow>(R-\<odot>\<^sub>\<rightarrow>)\<^sup>\<midarrow> \<rightarrow> \<sqdot>    " by (simp add: rightBound_coresiduation)
 
@@ -195,10 +195,10 @@ lemma   " \<sqdot> \<leftarrow>R-\<odot>\<^sub>\<leftarrow> \<midarrow> \<sqdot>
       (\<subseteq>)\<up>           \<down>(\<subseteq>)
           \<sqdot> \<midarrow>R-\<odot>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>    " by (simp add: rightBound_galois)
 text \<open>We shall refer to a Galois connection with reversed orderings as a "dual-Galois-connection".\<close>
-lemma leftDualBound_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL (R-\<oslash>\<^sub>\<leftarrow>) (R-\<oslash>\<^sub>\<rightarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by auto
-lemma   " \<sqdot> \<leftarrow>R-\<oslash>\<^sub>\<rightarrow> \<midarrow> \<sqdot> 
+lemma leftDualBound_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL (R-\<ominus>\<^sub>\<leftarrow>) (R-\<ominus>\<^sub>\<rightarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by auto
+lemma   " \<sqdot> \<leftarrow>R-\<ominus>\<^sub>\<rightarrow> \<midarrow> \<sqdot> 
       (\<supseteq>)\<up>           \<down>(\<supseteq>)
-          \<sqdot> \<midarrow>R-\<oslash>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>    " by (simp add: leftDualBound_dualgalois)
+          \<sqdot> \<midarrow>R-\<ominus>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>    " by (simp add: leftDualBound_dualgalois)
 
 text \<open>We also refer to a (dual) Galois connection between complements of operators as "(dual) conjugation".\<close>
 lemma rightImage_conjugation: "(\<subseteq>),(\<subseteq>)-GAL (R-\<diamond>\<^sub>\<rightarrow>)\<^sup>\<midarrow> (R-\<diamond>\<^sub>\<leftarrow>)\<^sup>\<midarrow>" unfolding adj_defs rel_defs comb_defs func_defs by auto
@@ -369,51 +369,51 @@ lemma "R-\<box>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>2\<^sub>1\<^sub>3 R)-
 lemma "R-\<box>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 R)-\<box>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs ..
 \<comment> \<open>...\<open>R-\<box>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<box>\<^sub>k\<^sub>j\<^sub>i\<close>\<close> \<comment> \<open>full reverse\<close>
 
-abbreviation(input) dualBound123::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)" ("\<oslash>\<^sub>1\<^sub>2\<^sub>3")
-  where "\<oslash>\<^sub>1\<^sub>2\<^sub>3 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>1\<^sub>2\<^sub>3" \<comment> \<open>\<open>\<^bold>C\<^sub>1\<^sub>2\<^sub>3\<close> as identity permutation is its own inverse (involutive)\<close>
-abbreviation(input) dualBound132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('c) \<Rightarrow> Set('b)" ("\<oslash>\<^sub>1\<^sub>3\<^sub>2")
-  where "\<oslash>\<^sub>1\<^sub>3\<^sub>2 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>1\<^sub>3\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>1\<^sub>3\<^sub>2\<close> is its own inverse\<close>
-abbreviation(input) dualBound213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<oslash>\<^sub>2\<^sub>1\<^sub>3")
-  where "\<oslash>\<^sub>2\<^sub>1\<^sub>3 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>2\<^sub>1\<^sub>3" \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>1\<^sub>3\<close> is its own inverse\<close>
-abbreviation(input) dualBound231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<oslash>\<^sub>2\<^sub>3\<^sub>1")
-  where "\<oslash>\<^sub>2\<^sub>3\<^sub>1 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>3\<^sub>1\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close>\<close>
-abbreviation(input) dualBound312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<oslash>\<^sub>3\<^sub>1\<^sub>2")
-  where "\<oslash>\<^sub>3\<^sub>1\<^sub>2 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>2\<^sub>3\<^sub>1" \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close>\<close>
-abbreviation(input) dualBound321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<oslash>\<^sub>3\<^sub>2\<^sub>1")
-  where "\<oslash>\<^sub>3\<^sub>2\<^sub>1 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>3\<^sub>2\<^sub>1" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1\<close> is its own inverse\<close>
+abbreviation(input) dualBound123::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)" ("\<ominus>\<^sub>1\<^sub>2\<^sub>3")
+  where "\<ominus>\<^sub>1\<^sub>2\<^sub>3 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>1\<^sub>2\<^sub>3" \<comment> \<open>\<open>\<^bold>C\<^sub>1\<^sub>2\<^sub>3\<close> as identity permutation is its own inverse (involutive)\<close>
+abbreviation(input) dualBound132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('c) \<Rightarrow> Set('b)" ("\<ominus>\<^sub>1\<^sub>3\<^sub>2")
+  where "\<ominus>\<^sub>1\<^sub>3\<^sub>2 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>1\<^sub>3\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>1\<^sub>3\<^sub>2\<close> is its own inverse\<close>
+abbreviation(input) dualBound213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<ominus>\<^sub>2\<^sub>1\<^sub>3")
+  where "\<ominus>\<^sub>2\<^sub>1\<^sub>3 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>2\<^sub>1\<^sub>3" \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>1\<^sub>3\<close> is its own inverse\<close>
+abbreviation(input) dualBound231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<ominus>\<^sub>2\<^sub>3\<^sub>1")
+  where "\<ominus>\<^sub>2\<^sub>3\<^sub>1 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>3\<^sub>1\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close>\<close>
+abbreviation(input) dualBound312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<ominus>\<^sub>3\<^sub>1\<^sub>2")
+  where "\<ominus>\<^sub>3\<^sub>1\<^sub>2 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>2\<^sub>3\<^sub>1" \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close>\<close>
+abbreviation(input) dualBound321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<ominus>\<^sub>3\<^sub>2\<^sub>1")
+  where "\<ominus>\<^sub>3\<^sub>2\<^sub>1 \<equiv> rightDualBound\<^sub>2 \<circ> \<^bold>C\<^sub>3\<^sub>2\<^sub>1" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1\<close> is its own inverse\<close>
 
-notation(input) dualBound123 ("_-\<oslash>\<^sub>1\<^sub>2\<^sub>3") and dualBound132 ("_-\<oslash>\<^sub>1\<^sub>3\<^sub>2") and
-                dualBound213 ("_-\<oslash>\<^sub>2\<^sub>1\<^sub>3") and dualBound231 ("_-\<oslash>\<^sub>2\<^sub>3\<^sub>1") and 
-                dualBound312 ("_-\<oslash>\<^sub>3\<^sub>1\<^sub>2") and dualBound321 ("_-\<oslash>\<^sub>3\<^sub>2\<^sub>1")
+notation(input) dualBound123 ("_-\<ominus>\<^sub>1\<^sub>2\<^sub>3") and dualBound132 ("_-\<ominus>\<^sub>1\<^sub>3\<^sub>2") and
+                dualBound213 ("_-\<ominus>\<^sub>2\<^sub>1\<^sub>3") and dualBound231 ("_-\<ominus>\<^sub>2\<^sub>3\<^sub>1") and 
+                dualBound312 ("_-\<ominus>\<^sub>3\<^sub>1\<^sub>2") and dualBound321 ("_-\<ominus>\<^sub>3\<^sub>2\<^sub>1")
 
-lemma "R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = (\<lambda>A B. \<lambda>c. \<exists>a b. \<not>A a \<and> \<not>B b \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<oslash>\<^sub>1\<^sub>3\<^sub>2 = (\<lambda>A C. \<lambda>b. \<exists>a c. \<not>A a \<and> \<not>C c \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<oslash>\<^sub>2\<^sub>1\<^sub>3 = (\<lambda>B A. \<lambda>c. \<exists>b a. \<not>B b \<and> \<not>A a \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<oslash>\<^sub>2\<^sub>3\<^sub>1 = (\<lambda>B C. \<lambda>a. \<exists>b c. \<not>B b \<and> \<not>C c \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<oslash>\<^sub>3\<^sub>1\<^sub>2 = (\<lambda>C A. \<lambda>b. \<exists>c a. \<not>C c \<and> \<not>A a \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<oslash>\<^sub>3\<^sub>2\<^sub>1 = (\<lambda>C B. \<lambda>a. \<exists>c b. \<not>C c \<and> \<not>B b \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
+lemma "R-\<ominus>\<^sub>1\<^sub>2\<^sub>3 = (\<lambda>A B. \<lambda>c. \<exists>a b. \<not>A a \<and> \<not>B b \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
+lemma "R-\<ominus>\<^sub>1\<^sub>3\<^sub>2 = (\<lambda>A C. \<lambda>b. \<exists>a c. \<not>A a \<and> \<not>C c \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
+lemma "R-\<ominus>\<^sub>2\<^sub>1\<^sub>3 = (\<lambda>B A. \<lambda>c. \<exists>b a. \<not>B b \<and> \<not>A a \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
+lemma "R-\<ominus>\<^sub>2\<^sub>3\<^sub>1 = (\<lambda>B C. \<lambda>a. \<exists>b c. \<not>B b \<and> \<not>C c \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
+lemma "R-\<ominus>\<^sub>3\<^sub>1\<^sub>2 = (\<lambda>C A. \<lambda>b. \<exists>c a. \<not>C c \<and> \<not>A a \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
+lemma "R-\<ominus>\<^sub>3\<^sub>2\<^sub>1 = (\<lambda>C B. \<lambda>a. \<exists>c b. \<not>C c \<and> \<not>B b \<and> \<not>R a b c)" unfolding rel_defs func_defs comb_defs by fast
 
 text \<open>Similarly, dual-bounds can also be similarly interrelated by permutation.\<close>
-lemma "R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>1\<^sub>3\<^sub>2 R)-\<oslash>\<^sub>1\<^sub>3\<^sub>2" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>2\<^sub>1\<^sub>3 R)-\<oslash>\<^sub>2\<^sub>1\<^sub>3" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<oslash>\<^sub>2\<^sub>3\<^sub>1" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>3\<^sub>1\<^sub>2 R)-\<oslash>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 R)-\<oslash>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
-\<comment> \<open>...\<open>R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<oslash>\<^sub>i\<^sub>j\<^sub>k\<close>\<close> \<comment> \<open>same permutation\<close>
-lemma "R-\<oslash>\<^sub>1\<^sub>3\<^sub>2 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<oslash>\<^sub>2\<^sub>1\<^sub>3" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>1\<^sub>3\<^sub>2 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 R)-\<oslash>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
-\<comment> \<open>...\<open>R-\<oslash>\<^sub>1\<^sub>3\<^sub>2 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<oslash>\<^sub>i\<^sub>k\<^sub>j\<close>\<close> \<comment> \<open>swap 2 and 3\<close>
-lemma "R-\<oslash>\<^sub>2\<^sub>1\<^sub>3 = (\<^bold>C\<^sub>1\<^sub>3\<^sub>2 R)-\<oslash>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>2\<^sub>1\<^sub>3 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<oslash>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
-\<comment> \<open>...\<open>R-\<oslash>\<^sub>2\<^sub>1\<^sub>3 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<oslash>\<^sub>j\<^sub>i\<^sub>k\<close>\<close> \<comment> \<open>swap 1 and 2\<close>
-lemma "R-\<oslash>\<^sub>2\<^sub>3\<^sub>1 = (\<^bold>C\<^sub>1\<^sub>3\<^sub>2 R)-\<oslash>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>2\<^sub>3\<^sub>1 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<oslash>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
-\<comment> \<open>...\<open>R-\<oslash>\<^sub>2\<^sub>3\<^sub>1 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<oslash>\<^sub>j\<^sub>k\<^sub>i\<close>\<close> \<comment> \<open>left rotation\<close>
-lemma "R-\<oslash>\<^sub>3\<^sub>1\<^sub>2 = (\<^bold>C\<^sub>2\<^sub>1\<^sub>3 R)-\<oslash>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>3\<^sub>1\<^sub>2 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<oslash>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>2\<^sub>1\<^sub>3 R)-\<oslash>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
-lemma "R-\<oslash>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 R)-\<oslash>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs ..
-\<comment> \<open>...\<open>R-\<oslash>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<oslash>\<^sub>k\<^sub>j\<^sub>i\<close>\<close> \<comment> \<open>full reverse\<close>
+lemma "R-\<ominus>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>1\<^sub>3\<^sub>2 R)-\<ominus>\<^sub>1\<^sub>3\<^sub>2" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>2\<^sub>1\<^sub>3 R)-\<ominus>\<^sub>2\<^sub>1\<^sub>3" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<ominus>\<^sub>2\<^sub>3\<^sub>1" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>3\<^sub>1\<^sub>2 R)-\<ominus>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 R)-\<ominus>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
+\<comment> \<open>...\<open>R-\<ominus>\<^sub>1\<^sub>2\<^sub>3 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<ominus>\<^sub>i\<^sub>j\<^sub>k\<close>\<close> \<comment> \<open>same permutation\<close>
+lemma "R-\<ominus>\<^sub>1\<^sub>3\<^sub>2 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<ominus>\<^sub>2\<^sub>1\<^sub>3" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>1\<^sub>3\<^sub>2 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 R)-\<ominus>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
+\<comment> \<open>...\<open>R-\<ominus>\<^sub>1\<^sub>3\<^sub>2 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<ominus>\<^sub>i\<^sub>k\<^sub>j\<close>\<close> \<comment> \<open>swap 2 and 3\<close>
+lemma "R-\<ominus>\<^sub>2\<^sub>1\<^sub>3 = (\<^bold>C\<^sub>1\<^sub>3\<^sub>2 R)-\<ominus>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>2\<^sub>1\<^sub>3 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<ominus>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
+\<comment> \<open>...\<open>R-\<ominus>\<^sub>2\<^sub>1\<^sub>3 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<ominus>\<^sub>j\<^sub>i\<^sub>k\<close>\<close> \<comment> \<open>swap 1 and 2\<close>
+lemma "R-\<ominus>\<^sub>2\<^sub>3\<^sub>1 = (\<^bold>C\<^sub>1\<^sub>3\<^sub>2 R)-\<ominus>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>2\<^sub>3\<^sub>1 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<ominus>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
+\<comment> \<open>...\<open>R-\<ominus>\<^sub>2\<^sub>3\<^sub>1 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<ominus>\<^sub>j\<^sub>k\<^sub>i\<close>\<close> \<comment> \<open>left rotation\<close>
+lemma "R-\<ominus>\<^sub>3\<^sub>1\<^sub>2 = (\<^bold>C\<^sub>2\<^sub>1\<^sub>3 R)-\<ominus>\<^sub>3\<^sub>2\<^sub>1" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>3\<^sub>1\<^sub>2 = (\<^bold>C\<^sub>2\<^sub>3\<^sub>1 R)-\<ominus>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>2\<^sub>1\<^sub>3 R)-\<ominus>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs ..
+lemma "R-\<ominus>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>3\<^sub>2\<^sub>1 R)-\<ominus>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs ..
+\<comment> \<open>...\<open>R-\<ominus>\<^sub>3\<^sub>2\<^sub>1 = (\<^bold>C\<^sub>i\<^sub>j\<^sub>k R)-\<ominus>\<^sub>k\<^sub>j\<^sub>i\<close>\<close> \<comment> \<open>full reverse\<close>
 
 
 subsection \<open>Transformations\<close>
@@ -426,130 +426,68 @@ lemma "R-\<odot>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<odot>\<^s
 
 text \<open>And the same holds for the dual variants.\<close>
 lemma "R-\<box>\<^sub>\<rightarrow> A = (\<^bold>K R)-\<box>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
-lemma "R-\<oslash>\<^sub>\<rightarrow> A = (\<^bold>K R)-\<oslash>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<ominus>\<^sub>\<rightarrow> A = (\<^bold>K R)-\<ominus>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
 lemma "R-\<box>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<box>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
-lemma "R-\<oslash>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<oslash>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
+lemma "R-\<ominus>\<^sub>\<leftarrow> A = (\<^bold>K R\<^sup>\<smile>)-\<ominus>\<^sub>1\<^sub>2\<^sub>3 A A" unfolding rel_defs comb_defs func_defs by metis
 
 text \<open>The converse conversion is not possible in general:\<close>
 proposition "\<forall>T. \<exists>R. \<forall>A. (T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = (R-\<diamond>\<^sub>\<rightarrow> A)" nitpick \<comment> \<open>countermodel found\<close> oops
 text \<open>In particular, this does not hold (for arbitrary T)\<close>  (*TODO: how to restrict T so that it holds?*)
 proposition "(T-\<diamond>\<^sub>1\<^sub>2\<^sub>3 A A) = ((\<lambda>a b. T a a b)-\<diamond>\<^sub>\<rightarrow> A)" nitpick \<comment> \<open>countermodel found\<close> oops
 
+text \<open>Note, among others:\<close>
+lemma "(\<inter>) = \<Q>\<^sub>3-\<diamond>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs func_defs by fast
+lemma "(\<union>) = \<Q>\<^sub>3-\<box>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs func_defs by fast
+lemma "(\<Rightarrow>) = \<Q>\<^sub>3-\<box>\<^sub>1\<^sub>2\<^sub>3 \<circ> \<midarrow>" unfolding rel_defs comb_defs func_defs by fast
+lemma "\<midarrow> \<circ>\<^sub>2 (\<inter>) = \<D>\<^sub>3-\<odot>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs func_defs by fast
+lemma "\<midarrow> \<circ>\<^sub>2 (\<union>) = \<D>\<^sub>3-\<ominus>\<^sub>1\<^sub>2\<^sub>3" unfolding rel_defs comb_defs func_defs by fast
+lemma "(\<setminus>) = \<D>\<^sub>3-\<ominus>\<^sub>1\<^sub>2\<^sub>3 \<circ> \<midarrow>" unfolding rel_defs comb_defs func_defs by fast
+text \<open>In fact, the previous hold for any permutation (ternary dis/equality being also fully commutative).\<close>
+lemma "(\<inter>) = \<Q>\<^sub>3-\<diamond>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs func_defs by fast
+lemma "(\<union>) = \<Q>\<^sub>3-\<box>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs func_defs by fast
+lemma "(\<Rightarrow>) = \<Q>\<^sub>3-\<box>\<^sub>3\<^sub>1\<^sub>2 \<circ> \<midarrow>" unfolding rel_defs comb_defs func_defs by fast
+lemma "\<midarrow> \<circ>\<^sub>2 (\<inter>) = \<D>\<^sub>3-\<odot>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs func_defs by fast
+lemma "\<midarrow> \<circ>\<^sub>2 (\<union>) = \<D>\<^sub>3-\<ominus>\<^sub>3\<^sub>1\<^sub>2" unfolding rel_defs comb_defs func_defs by fast
+lemma "(\<setminus>) = \<D>\<^sub>3-\<ominus>\<^sub>3\<^sub>1\<^sub>2 \<circ> \<midarrow>" unfolding rel_defs comb_defs func_defs by fast
+\<comment> \<open>... and so on\<close>
+
 
 subsection \<open>Adjunctions\<close>
 text \<open>Similar adjunction conditions obtain among binary set-operators as for their unary counterparts.\<close>
 
-
-subsubsection \<open>Implication-like Operations (and their duals)\<close>
-
-text \<open>We obtain implication-like operations by negating/complementing the first argument of the binary operation.\<close>
-abbreviation(input) implicative123::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)" ("\<Rrightarrow>\<^sub>1\<^sub>2\<^sub>3")
-  where "\<Rrightarrow>\<^sub>1\<^sub>2\<^sub>3 R \<equiv> (\<box>\<^sub>1\<^sub>2\<^sub>3 R) \<circ> \<midarrow>"
-abbreviation(input) implicative132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('c) \<Rightarrow> Set('b)" ("\<Rrightarrow>\<^sub>1\<^sub>3\<^sub>2")
-  where "\<Rrightarrow>\<^sub>1\<^sub>3\<^sub>2 R \<equiv> (\<box>\<^sub>1\<^sub>3\<^sub>2 R) \<circ> \<midarrow>"    
-abbreviation(input) implicative213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<Rrightarrow>\<^sub>2\<^sub>1\<^sub>3")
-  where "\<Rrightarrow>\<^sub>2\<^sub>1\<^sub>3 R \<equiv> (\<box>\<^sub>2\<^sub>1\<^sub>3 R) \<circ> \<midarrow>"   
-abbreviation(input) implicative231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<Rrightarrow>\<^sub>2\<^sub>3\<^sub>1")
-  where "\<Rrightarrow>\<^sub>2\<^sub>3\<^sub>1 R \<equiv> (\<box>\<^sub>2\<^sub>3\<^sub>1 R) \<circ> \<midarrow>"   
-abbreviation(input) implicative312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<Rrightarrow>\<^sub>3\<^sub>1\<^sub>2")
-  where "\<Rrightarrow>\<^sub>3\<^sub>1\<^sub>2 R \<equiv> (\<box>\<^sub>3\<^sub>1\<^sub>2 R) \<circ> \<midarrow>"   
-abbreviation(input) implicative321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1")
-  where "\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1 R \<equiv> (\<box>\<^sub>3\<^sub>2\<^sub>1 R) \<circ> \<midarrow>"  
-
-notation(input) implicative123 ("_-\<Rrightarrow>\<^sub>1\<^sub>2\<^sub>3") and implicative132 ("_-\<Rrightarrow>\<^sub>1\<^sub>3\<^sub>2") and implicative213 ("_-\<Rrightarrow>\<^sub>2\<^sub>1\<^sub>3") and
-                implicative231 ("_-\<Rrightarrow>\<^sub>2\<^sub>3\<^sub>1") and implicative312 ("_-\<Rrightarrow>\<^sub>3\<^sub>1\<^sub>2") and implicative321 ("_-\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1")
-
-text \<open>We have, for instance:\<close>
-lemma "R-\<Rrightarrow>\<^sub>1\<^sub>2\<^sub>3 A B = R-\<box>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) B" unfolding rel_defs func_defs comb_defs ..
-
-text \<open>More explicitly, we have:\<close>
-lemma "R-\<Rrightarrow>\<^sub>1\<^sub>2\<^sub>3 = (\<lambda>A B. \<lambda>c. \<forall>a b. R a b c \<rightarrow> (A a \<rightarrow> B b))" unfolding rel_defs func_defs comb_defs by simp
-lemma "R-\<Rrightarrow>\<^sub>1\<^sub>3\<^sub>2 = (\<lambda>A C. \<lambda>b. \<forall>a c. R a b c \<rightarrow> (A a \<rightarrow> C c))" unfolding rel_defs func_defs comb_defs by simp
-lemma "R-\<Rrightarrow>\<^sub>2\<^sub>1\<^sub>3 = (\<lambda>B A. \<lambda>c. \<forall>b a. R a b c \<rightarrow> (B b \<rightarrow> A a))" unfolding rel_defs func_defs comb_defs by simp
-lemma "R-\<Rrightarrow>\<^sub>2\<^sub>3\<^sub>1 = (\<lambda>B C. \<lambda>a. \<forall>b c. R a b c \<rightarrow> (B b \<rightarrow> C c))" unfolding rel_defs func_defs comb_defs by simp
-lemma "R-\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1 = (\<lambda>C B. \<lambda>a. \<forall>c b. R a b c \<rightarrow> (C c \<rightarrow> B b))" unfolding rel_defs func_defs comb_defs by simp
-lemma "R-\<Rrightarrow>\<^sub>3\<^sub>1\<^sub>2 = (\<lambda>C A. \<lambda>b. \<forall>c a. R a b c \<rightarrow> (C c \<rightarrow> A a))" unfolding rel_defs func_defs comb_defs by simp
-
-text \<open>We obtain their duals in the same way.\<close>
-abbreviation(input) dualimplicative123::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)" ("\<angle>\<^sub>1\<^sub>2\<^sub>3")
-  where "\<angle>\<^sub>1\<^sub>2\<^sub>3 R \<equiv> (\<oslash>\<^sub>1\<^sub>2\<^sub>3 R) \<circ> \<midarrow>"
-abbreviation(input) dualimplicative132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('c) \<Rightarrow> Set('b)" ("\<angle>\<^sub>1\<^sub>3\<^sub>2")
-  where "\<angle>\<^sub>1\<^sub>3\<^sub>2 R \<equiv> (\<oslash>\<^sub>1\<^sub>3\<^sub>2 R) \<circ> \<midarrow>"    
-abbreviation(input) dualimplicative213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<angle>\<^sub>2\<^sub>1\<^sub>3")
-  where "\<angle>\<^sub>2\<^sub>1\<^sub>3 R \<equiv> (\<oslash>\<^sub>2\<^sub>1\<^sub>3 R) \<circ> \<midarrow>"   
-abbreviation(input) dualimplicative231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<angle>\<^sub>2\<^sub>3\<^sub>1")
-  where "\<angle>\<^sub>2\<^sub>3\<^sub>1 R \<equiv> (\<oslash>\<^sub>2\<^sub>3\<^sub>1 R) \<circ> \<midarrow>"   
-abbreviation(input) dualimplicative312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<angle>\<^sub>3\<^sub>1\<^sub>2")
-  where "\<angle>\<^sub>3\<^sub>1\<^sub>2 R \<equiv> (\<oslash>\<^sub>3\<^sub>1\<^sub>2 R) \<circ> \<midarrow>"   
-abbreviation(input) dualimplicative321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<angle>\<^sub>3\<^sub>2\<^sub>1")
-  where "\<angle>\<^sub>3\<^sub>2\<^sub>1 R \<equiv> (\<oslash>\<^sub>3\<^sub>2\<^sub>1 R) \<circ> \<midarrow>"  
-
-notation(input) dualimplicative123 ("_-\<angle>\<^sub>1\<^sub>2\<^sub>3") and dualimplicative132 ("_-\<angle>\<^sub>1\<^sub>3\<^sub>2") and dualimplicative213 ("_-\<angle>\<^sub>2\<^sub>1\<^sub>3") and
-                dualimplicative231 ("_-\<angle>\<^sub>2\<^sub>3\<^sub>1") and dualimplicative312 ("_-\<angle>\<^sub>3\<^sub>1\<^sub>2") and dualimplicative321 ("_-\<angle>\<^sub>3\<^sub>2\<^sub>1")
-
-text \<open>We have, for instance:\<close>
-lemma "R-\<angle>\<^sub>1\<^sub>2\<^sub>3 A B = R-\<oslash>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) B" unfolding rel_defs func_defs comb_defs ..
-
-text \<open>More explicitly, we have:\<close>
-lemma "R-\<angle>\<^sub>1\<^sub>2\<^sub>3 = (\<lambda>A B. \<lambda>c. \<exists>a b. (A a \<leftharpoondown> B b) \<leftharpoondown> R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<angle>\<^sub>1\<^sub>3\<^sub>2 = (\<lambda>A C. \<lambda>b. \<exists>a c. (A a \<leftharpoondown> C c) \<leftharpoondown> R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<angle>\<^sub>2\<^sub>1\<^sub>3 = (\<lambda>B A. \<lambda>c. \<exists>b a. (B b \<leftharpoondown> A a) \<leftharpoondown> R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<angle>\<^sub>2\<^sub>3\<^sub>1 = (\<lambda>B C. \<lambda>a. \<exists>b c. (B b \<leftharpoondown> C c) \<leftharpoondown> R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<angle>\<^sub>3\<^sub>2\<^sub>1 = (\<lambda>C B. \<lambda>a. \<exists>c b. (C c \<leftharpoondown> B b) \<leftharpoondown> R a b c)" unfolding rel_defs func_defs comb_defs by fast
-lemma "R-\<angle>\<^sub>3\<^sub>1\<^sub>2 = (\<lambda>C A. \<lambda>b. \<exists>c a. (C c \<leftharpoondown> A a) \<leftharpoondown> R a b c)" unfolding rel_defs func_defs comb_defs by fast
-
-text \<open>Note, among others:\<close>
-lemma "\<Q>\<^sub>3-\<diamond>\<^sub>1\<^sub>2\<^sub>3 = (\<inter>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<Q>\<^sub>3-\<box>\<^sub>1\<^sub>2\<^sub>3 = (\<union>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<Q>\<^sub>3-\<Rrightarrow>\<^sub>1\<^sub>2\<^sub>3 = (\<Rightarrow>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<D>\<^sub>3-\<odot>\<^sub>1\<^sub>2\<^sub>3 = \<midarrow> \<circ>\<^sub>2 (\<inter>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<D>\<^sub>3-\<oslash>\<^sub>1\<^sub>2\<^sub>3 = \<midarrow> \<circ>\<^sub>2 (\<union>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<D>\<^sub>3-\<angle>\<^sub>1\<^sub>2\<^sub>3 = (\<setminus>)" unfolding rel_defs comb_defs func_defs by fast
-text \<open>In fact, the previous hold for any permutation (ternary dis/equality being also fully commutative).\<close>
-lemma "\<Q>\<^sub>3-\<diamond>\<^sub>3\<^sub>1\<^sub>2 = (\<inter>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<Q>\<^sub>3-\<box>\<^sub>3\<^sub>1\<^sub>2 = (\<union>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<Q>\<^sub>3-\<Rrightarrow>\<^sub>3\<^sub>1\<^sub>2 = (\<Rightarrow>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<D>\<^sub>3-\<odot>\<^sub>3\<^sub>1\<^sub>2 = \<midarrow> \<circ>\<^sub>2 (\<inter>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<D>\<^sub>3-\<oslash>\<^sub>3\<^sub>1\<^sub>2 = \<midarrow> \<circ>\<^sub>2 (\<union>)" unfolding rel_defs comb_defs func_defs by fast
-lemma "\<D>\<^sub>3-\<angle>\<^sub>3\<^sub>1\<^sub>2 = (\<setminus>)" unfolding rel_defs comb_defs func_defs by fast
-\<comment> \<open>... and so on\<close>
-
-text \<open>Implicative and dual-implicative are "dual" in the following sense (for any permutation):\<close>
-lemma "\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1 = \<midarrow> \<circ>\<^sub>3 \<angle>\<^sub>3\<^sub>2\<^sub>1 \<circ> \<midarrow>\<^sup>3" unfolding adj_defs rel_defs comb_defs func_defs by fast
-lemma "\<angle>\<^sub>3\<^sub>2\<^sub>1 = \<midarrow> \<circ>\<^sub>3 \<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1 \<circ> \<midarrow>\<^sup>3" unfolding adj_defs rel_defs comb_defs func_defs by fast
-lemma "R-\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1 = \<midarrow> \<circ>\<^sub>2 (R\<^sup>\<midarrow>-\<angle>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by fast
-lemma "R-\<angle>\<^sub>3\<^sub>2\<^sub>1 = \<midarrow> \<circ>\<^sub>2 (R\<^sup>\<midarrow>-\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by fast
-\<comment> \<open>... and so on\<close>
-
-
 subsubsection \<open>Residuation and Coresiduation\<close>
-text \<open>Residuation (coresiduation) between \<open>\<diamond>\<close> and \<open>\<Rrightarrow>\<close> (\<open>\<odot>\<close> and \<open>\<angle>\<close>) obtains when swapping second and third parameters.\<close>
+text \<open>Residuation (coresiduation) between \<open>\<diamond>\<close> and \<open>\<box>\<close> obtains when swapping second and third parameters
+ and complementing/negating the first argument.\<close>
 
-lemma image123_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>2\<^sub>3) (R-\<Rrightarrow>\<^sub>1\<^sub>3\<^sub>2)" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma image132_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>3\<^sub>2) (R-\<Rrightarrow>\<^sub>1\<^sub>2\<^sub>3)" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma image213_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>2\<^sub>1\<^sub>3) (R-\<Rrightarrow>\<^sub>2\<^sub>3\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma image231_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>2\<^sub>3\<^sub>1) (R-\<Rrightarrow>\<^sub>2\<^sub>1\<^sub>3)" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma image312_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>3\<^sub>1\<^sub>2) (R-\<Rrightarrow>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs func_defs comb_defs by metis
-lemma image321_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>3\<^sub>2\<^sub>1) (R-\<Rrightarrow>\<^sub>3\<^sub>1\<^sub>2)" unfolding adj_defs rel_defs func_defs comb_defs by metis
+text \<open>Noting that:\<close>
+lemma "(R-\<box>\<^sub>1\<^sub>2\<^sub>3 \<circ> \<midarrow>) A B = R-\<box>\<^sub>1\<^sub>2\<^sub>3 (\<midarrow>A) B" unfolding rel_defs func_defs comb_defs ..
 
-lemma bound123_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<odot>\<^sub>1\<^sub>2\<^sub>3)) (\<midarrow> \<circ>\<^sub>2 (R-\<angle>\<^sub>1\<^sub>3\<^sub>2))" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma bound132_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<odot>\<^sub>1\<^sub>3\<^sub>2)) (\<midarrow> \<circ>\<^sub>2 (R-\<angle>\<^sub>1\<^sub>2\<^sub>3))" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma bound213_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<odot>\<^sub>2\<^sub>1\<^sub>3)) (\<midarrow> \<circ>\<^sub>2 (R-\<angle>\<^sub>2\<^sub>3\<^sub>1))" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma bound231_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<odot>\<^sub>2\<^sub>3\<^sub>1)) (\<midarrow> \<circ>\<^sub>2 (R-\<angle>\<^sub>2\<^sub>1\<^sub>3))" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma bound312_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<odot>\<^sub>3\<^sub>1\<^sub>2)) (\<midarrow> \<circ>\<^sub>2 (R-\<angle>\<^sub>3\<^sub>2\<^sub>1))" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma bound321_coresiduation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<midarrow> \<circ>\<^sub>2 (R-\<odot>\<^sub>3\<^sub>2\<^sub>1)) (\<midarrow> \<circ>\<^sub>2 (R-\<angle>\<^sub>3\<^sub>1\<^sub>2))" unfolding adj_defs rel_defs comb_defs func_defs by metis
+text \<open>We have:\<close>
+lemma image123_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>2\<^sub>3) (R-\<box>\<^sub>1\<^sub>3\<^sub>2 \<circ> \<midarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma image132_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>3\<^sub>2) (R-\<box>\<^sub>1\<^sub>2\<^sub>3 \<circ> \<midarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma image213_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>2\<^sub>1\<^sub>3) (R-\<box>\<^sub>2\<^sub>3\<^sub>1 \<circ> \<midarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma image231_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>2\<^sub>3\<^sub>1) (R-\<box>\<^sub>2\<^sub>1\<^sub>3 \<circ> \<midarrow>)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma image312_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>3\<^sub>1\<^sub>2) (R-\<box>\<^sub>3\<^sub>2\<^sub>1 \<circ> \<midarrow>)" unfolding adj_defs rel_defs func_defs comb_defs by metis
+lemma image321_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>3\<^sub>2\<^sub>1) (R-\<box>\<^sub>3\<^sub>1\<^sub>2 \<circ> \<midarrow>)" unfolding adj_defs rel_defs func_defs comb_defs by metis
+
+lemma dualimage123_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>2\<^sub>3 \<circ> \<midarrow>) (R-\<box>\<^sub>1\<^sub>3\<^sub>2)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma dualimage132_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>1\<^sub>3\<^sub>2 \<circ> \<midarrow>) (R-\<box>\<^sub>1\<^sub>2\<^sub>3)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma dualimage213_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>2\<^sub>1\<^sub>3 \<circ> \<midarrow>) (R-\<box>\<^sub>2\<^sub>3\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma dualimage231_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>2\<^sub>3\<^sub>1 \<circ> \<midarrow>) (R-\<box>\<^sub>2\<^sub>1\<^sub>3)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma dualimage312_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>3\<^sub>1\<^sub>2 \<circ> \<midarrow>) (R-\<box>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs func_defs comb_defs by metis
+lemma dualimage321_residuation: "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (R-\<diamond>\<^sub>3\<^sub>2\<^sub>1 \<circ> \<midarrow>) (R-\<box>\<^sub>3\<^sub>1\<^sub>2)" unfolding adj_defs rel_defs func_defs comb_defs by metis
 
 
 subsubsection \<open>Galois-connection and its Dual\<close>
-text \<open>(Dual)Galois-connections for pairs of \<open>\<odot>\<close> (\<open>\<oslash>\<close>) also obtain when swapping second and third parameters.\<close>
+text \<open>(Dual)Galois-connections for pairs of \<open>\<odot>\<close> (\<open>\<ominus>\<close>) also obtain when swapping second and third parameters.\<close>
 
 lemma bound123_galois: "(\<subseteq>),(\<subseteq>)-GAL\<^sub>2 (R-\<odot>\<^sub>1\<^sub>2\<^sub>3) (R-\<odot>\<^sub>1\<^sub>3\<^sub>2)" unfolding adj_defs rel_defs comb_defs func_defs by metis
 lemma bound213_galois: "(\<subseteq>),(\<subseteq>)-GAL\<^sub>2 (R-\<odot>\<^sub>2\<^sub>1\<^sub>3) (R-\<odot>\<^sub>2\<^sub>3\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
 lemma bound312_galois: "(\<subseteq>),(\<subseteq>)-GAL\<^sub>2 (R-\<odot>\<^sub>3\<^sub>1\<^sub>2) (R-\<odot>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by fastforce 
 
-lemma dualBound123_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<oslash>\<^sub>1\<^sub>2\<^sub>3) (R-\<oslash>\<^sub>1\<^sub>3\<^sub>2)" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma dualBound213_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<oslash>\<^sub>2\<^sub>1\<^sub>3) (R-\<oslash>\<^sub>2\<^sub>3\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma dualBound312_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<oslash>\<^sub>3\<^sub>1\<^sub>2) (R-\<oslash>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma dualBound123_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<ominus>\<^sub>1\<^sub>2\<^sub>3) (R-\<ominus>\<^sub>1\<^sub>3\<^sub>2)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma dualBound213_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<ominus>\<^sub>2\<^sub>1\<^sub>3) (R-\<ominus>\<^sub>2\<^sub>3\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
+lemma dualBound312_dualgalois: "(\<supseteq>),(\<supseteq>)-GAL\<^sub>2 (R-\<ominus>\<^sub>3\<^sub>1\<^sub>2) (R-\<ominus>\<^sub>3\<^sub>2\<^sub>1)" unfolding adj_defs rel_defs comb_defs func_defs by metis
 
 
 subsubsection \<open>Conjugation and its Dual\<close>
