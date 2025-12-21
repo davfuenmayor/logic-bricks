@@ -42,28 +42,28 @@ lemma inductionGen2: "G \<subseteq> S \<Longrightarrow> g-closed\<^sub>2 S \<Lon
 \<comment> \<open>...and so on\<close>
 
 text \<open>Some useful lemmata.\<close>
-lemma image_indSet01: "image h (z,f-indSet\<^sub>0\<^sub>1) = \<Inter>((image \<circ> image) h (z,f-closed\<^sub>0\<^sub>1))" 
+lemma image_indSet01: "image h (z,f-indSet\<^sub>0\<^sub>1) = \<Inter>((image \<ggreater> image) h (z,f-closed\<^sub>0\<^sub>1))" 
   by (simp add: image_distr_biginter inductiveSet01_def op01_ClosureSystem)
 
-lemma preimage_indSet01: "preimage h (z,f-indSet\<^sub>0\<^sub>1) = \<Inter>((image \<circ> preimage) h (z,f-closed\<^sub>0\<^sub>1))" 
+lemma preimage_indSet01: "preimage h (z,f-indSet\<^sub>0\<^sub>1) = \<Inter>((preimage \<ggreater> image) h (z,f-closed\<^sub>0\<^sub>1))" 
   by (simp add: preimage_distr_biginter inductiveSet01_def op01_ClosureSystem)
 
-lemma image_indSet02: "image h (z,g-indSet\<^sub>0\<^sub>2) = \<Inter>((image \<circ> image) h (z,g-closed\<^sub>0\<^sub>2))" 
+lemma image_indSet02: "image h (z,g-indSet\<^sub>0\<^sub>2) = \<Inter>((image \<ggreater> image) h (z,g-closed\<^sub>0\<^sub>2))" 
   by (simp add: image_distr_biginter inductiveSet02_def op02_ClosureSystem)
 
-lemma preimage_indSet02: "preimage h (z,g-indSet\<^sub>0\<^sub>2) = \<Inter>((image \<circ> preimage) h (z,g-closed\<^sub>0\<^sub>2))" 
+lemma preimage_indSet02: "preimage h (z,g-indSet\<^sub>0\<^sub>2) = \<Inter>((preimage \<ggreater> image) h (z,g-closed\<^sub>0\<^sub>2))" 
   by (simp add: preimage_distr_biginter inductiveSet02_def op02_ClosureSystem)
 
-lemma image_indSetGen1: "image h (f-indSetGen\<^sub>1 G) = \<Inter>((image \<circ> image) h (f-closedGen\<^sub>1 G))" 
+lemma image_indSetGen1: "image h (f-indSetGen\<^sub>1 G) = \<Inter>((image \<ggreater> image) h (f-closedGen\<^sub>1 G))" 
   by (simp add: image_distr_biginter inductiveSetGen1_def opGen1_ClosureSystem)
 
-lemma preimage_indSetGen1: "preimage h (f-indSetGen\<^sub>1 G) = \<Inter>((image \<circ> preimage) h (f-closedGen\<^sub>1 G))" 
+lemma preimage_indSetGen1: "preimage h (f-indSetGen\<^sub>1 G) = \<Inter>((preimage \<ggreater> image) h (f-closedGen\<^sub>1 G))" 
   by (simp add: preimage_distr_biginter inductiveSetGen1_def opGen1_ClosureSystem)
 
-lemma image_indSetGen2: "image h (f-indSetGen\<^sub>2 G) = \<Inter>((image \<circ> image) h (f-closedGen\<^sub>2 G))" 
+lemma image_indSetGen2: "image h (f-indSetGen\<^sub>2 G) = \<Inter>((image \<ggreater> image) h (f-closedGen\<^sub>2 G))" 
   by (simp add: image_distr_biginter inductiveSetGen2_def opGen2_ClosureSystem)
 
-lemma preimage_indSetGen2: "preimage h (f-indSetGen\<^sub>2 G) = \<Inter>((image \<circ> preimage) h (f-closedGen\<^sub>2 G))" 
+lemma preimage_indSetGen2: "preimage h (f-indSetGen\<^sub>2 G) = \<Inter>((preimage \<ggreater> image) h (f-closedGen\<^sub>2 G))" 
   by (simp add: preimage_distr_biginter inductiveSetGen2_def opGen2_ClosureSystem)
 
 
@@ -71,33 +71,33 @@ subsection \<open>Function Powers\<close>
 
 text \<open>The set of all powers (via iterated composition) for a given endofunction \<open>f\<close> can be defined 
  in two ways. First, by taking composition \<open>(\<circ>)\<close> as a binary constructor (with \<open>f\<close> as the generator).
- Second, by taking \<open>(\<circ>) f\<close> as a unary constructor (with \<open>\<^bold>I\<close> as the generator).\<close>
+ Second, by taking \<open>(\<ggreater>) f\<close> as a unary constructor (with \<open>\<^bold>I\<close> as the generator).\<close>
 definition funPower :: "ERel(EOp('a))"
-  where "funPower f \<equiv> f,(\<circ>)-indSet\<^sub>0\<^sub>2"
+  where "funPower f \<equiv> f,(\<ggreater>)-indSet\<^sub>0\<^sub>2"
 definition funPower0::"ERel(EOp('a))"
-  where "funPower0 f \<equiv> \<^bold>I,((\<circ>) f)-indSet\<^sub>0\<^sub>1"
+  where "funPower0 f \<equiv> \<^bold>I,((\<ggreater>) f)-indSet\<^sub>0\<^sub>1"
 
 declare funPower_def[ind_defs] funPower0_def[ind_defs]
 
 text \<open>Definitions work as expected:\<close>
 proposition "funPower f \<^bold>I" nitpick \<comment> \<open>countermodel found\<close> oops
 lemma "funPower f f" unfolding ind_defs space_defs func_defs comb_defs by simp
-lemma "funPower f (f\<circ>f)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma "funPower f (f\<circ>f\<circ>f)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma "funPower f (f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "funPower f (f\<ggreater>f)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "funPower f (f\<ggreater>f\<ggreater>f)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "funPower f (f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f)" unfolding ind_defs space_defs func_defs comb_defs by metis
 lemma "funPower0 f \<^bold>I" unfolding ind_defs space_defs func_defs comb_defs by simp
 lemma "funPower0 f f" unfolding ind_defs space_defs func_defs comb_defs by auto
-lemma "funPower0 f (f\<circ>f)" unfolding ind_defs space_defs func_defs comb_defs by auto
-lemma "funPower0 f (f\<circ>f\<circ>f)" unfolding ind_defs space_defs func_defs comb_defs by auto
-lemma "funPower0 f (f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f\<circ>f)" unfolding ind_defs space_defs func_defs comb_defs by blast
+lemma "funPower0 f (f\<ggreater>f)" unfolding ind_defs space_defs func_defs comb_defs by auto
+lemma "funPower0 f (f\<ggreater>f\<ggreater>f)" unfolding ind_defs space_defs func_defs comb_defs by auto
+lemma "funPower0 f (f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f\<ggreater>f)" unfolding ind_defs space_defs func_defs comb_defs by blast
 
-lemma funPower_comp1: "funPower f g \<Longrightarrow> funPower f (f \<circ> g)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma funPower_comp2: "funPower f g \<Longrightarrow> funPower f (g \<circ> f)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma funPower0_comp1: "funPower0 f g \<Longrightarrow> funPower0 f (f \<circ> g)" unfolding ind_defs space_defs func_defs comb_defs by blast
-lemma funPower0_comp2: "funPower0 f g \<Longrightarrow> funPower0 f (g \<circ> f)" sorry (*TODO: fix kernel reconstruction*)
+lemma funPower_comp1: "funPower f g \<Longrightarrow> funPower f (f \<ggreater> g)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma funPower_comp2: "funPower f g \<Longrightarrow> funPower f (g \<ggreater> f)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma funPower0_comp1: "funPower0 f g \<Longrightarrow> funPower0 f (f \<ggreater> g)" unfolding ind_defs space_defs func_defs comb_defs by blast
+lemma funPower0_comp2: "funPower0 f g \<Longrightarrow> funPower0 f (g \<ggreater> f)" sorry (*TODO: fix kernel reconstruction*)
 
 text \<open>The first variant can also be defined with \<open>(\<circ>) f\<close> as a unary constructor and \<open>f\<close> as generator.\<close>
-lemma "funPower f = f,((\<circ>) f)-indSet\<^sub>0\<^sub>1" oops (*TODO: check*)
+lemma "funPower f = f,((\<ggreater>) f)-indSet\<^sub>0\<^sub>1" oops (*TODO: check*)
 
 text \<open>Extensionally, both variants differ on whether the "zero-power" (i.e. \<open>f\<^sup>0 = \<^bold>I\<close>) is included.\<close>
 lemma "funPower0 f = funPower f \<union> {\<^bold>I}" oops (*TODO: check*)
@@ -112,17 +112,18 @@ lemma "inductiveSet01 = \<^bold>B\<^sub>1\<^sub>1 image \<^bold>T funPower0" unf
 subsection \<open>Relation Powers\<close>
 
 text \<open>The set of all powers (via iterated composition) for a given endorelation \<open>R\<close> can also be defined 
- in two ways. First, by taking composition \<open>(\<circ>\<^sup>r)\<close> as a binary constructor (with \<open>R\<close> as the generator).
- Second, by taking \<open>(\<circ>\<^sup>r) R\<close> as a unary constructor (with \<open>\<Q>\<close> as the generator).\<close>
+ in two ways. First, by taking composition \<open>(;\<^sup>r)\<close> as a binary constructor (with \<open>R\<close> as the generator).
+ Second, by taking \<open>(;\<^sup>r) R\<close> as a unary constructor (with \<open>\<Q>\<close> as the generator).\<close>
 definition relPower :: "ERel(ERel('a))"
-  where "relPower R \<equiv> R,(\<circ>\<^sup>r)-indSet\<^sub>0\<^sub>2"
+  where "relPower R \<equiv> R,(;\<^sup>r)-indSet\<^sub>0\<^sub>2"
 definition relPower0::"ERel(ERel('a))"
-  where "relPower0 R \<equiv> \<Q>,((\<circ>\<^sup>r) R)-indSet\<^sub>0\<^sub>1"
+  where "relPower0 R \<equiv> \<Q>,((;\<^sup>r) R)-indSet\<^sub>0\<^sub>1"
 
 declare relPower_def[ind_defs] relPower0_def[ind_defs]
 
-text \<open>The first variant can also be defined with \<open>(\<circ>\<^sup>r) R\<close> as a unary constructor and \<open>R\<close> as generator.\<close>
-lemma "relPower R = R,((\<circ>\<^sup>r) R)-indSet\<^sub>0\<^sub>1" oops (*TODO: check*)
+text \<open>The first variant can also be defined with \<open>(;\<^sup>r) R\<close> as a unary constructor and \<open>R\<close> as generator.\<close>
+lemma "relPower R = R,((;\<^sup>r) R)-indSet\<^sub>0\<^sub>1" unfolding rel_defs ind_defs space_defs func_defs comb_defs 
+  apply (rule ext)+ apply safe defer apply (metis (no_types, lifting) ext) oops (*TODO: check*)
 
 text \<open>Extensionally, both variants differ on whether the "zero-power" (i.e. \<open>R\<^sup>0 = \<Q>\<close>) is included.\<close>
 lemma "relPower0 R = relPower R \<union> {\<Q>}" oops (*TODO: check*)
@@ -130,17 +131,17 @@ lemma "relPower0 R = relPower R \<union> {\<Q>}" oops (*TODO: check*)
 text \<open>Definitions work as expected:\<close>
 proposition "relPower R \<Q>" nitpick \<comment> \<open>countermodel found\<close> oops
 lemma "relPower R R" unfolding ind_defs space_defs func_defs comb_defs by simp
-lemma "relPower R (R\<circ>\<^sup>rR)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma "relPower R (R\<circ>\<^sup>rR\<circ>\<^sup>rR)" unfolding ind_defs space_defs func_defs comb_defs by auto
-lemma "relPower R (R\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "relPower R (R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "relPower R (R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "relPower R (R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by metis
 lemma "relPower0 R \<Q>" unfolding ind_defs space_defs func_defs comb_defs by simp
 lemma "relPower0 R R" unfolding ind_defs space_defs rel_defs func_defs comb_defs by auto
-lemma "relPower0 R (R\<circ>\<^sup>rR)" unfolding ind_defs space_defs func_defs comb_defs using relComp_id2 by blast
-lemma "relPower0 R (R\<circ>\<^sup>rR\<circ>\<^sup>rR)" unfolding ind_defs space_defs func_defs comb_defs by (metis relComp_assoc relComp_id2)
-lemma "relPower0 R (R\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR\<circ>\<^sup>rR)" unfolding ind_defs space_defs func_defs comb_defs by (metis (no_types, lifting) relComp_assoc relComp_id2)
+lemma "relPower0 R (R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs using relComp_id2 by blast
+lemma "relPower0 R (R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by (metis relComp_assoc relComp_id2)
+lemma "relPower0 R (R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by (metis (no_types, lifting) relComp_assoc relComp_id2)
 
-lemma relPower_ind: "relPower R T \<Longrightarrow> relPower R (R \<circ>\<^sup>r T)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R \<circ>\<^sup>r T)" unfolding ind_defs space_defs func_defs comb_defs by blast
+lemma relPower_ind: "relPower R T \<Longrightarrow> relPower R (R ;\<^sup>r T)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R ;\<^sup>r T)" unfolding ind_defs space_defs func_defs comb_defs by blast
 
 text \<open>We can relate both functional and relational power to each other.\<close>
 lemma "funPower f = image asFun (relPower (asRel f))" oops (*TODO: check*)
@@ -171,9 +172,9 @@ lemma iterativeClosure_nonEmpty: "\<exists>(iterativeClosure f z)" unfolding ind
 
 text \<open>Natural ways to obtain transitive relations resp. preorders.\<close>
 definition transitiveClosure::"ERel('a) \<Rightarrow> ERel('a)" ("_\<^sup>+")
-  where "transitiveClosure \<equiv> \<Union>\<^sup>r \<circ> relPower"
+  where "transitiveClosure \<equiv> relPower \<ggreater> \<Union>\<^sup>r"
 definition preorderClosure::"ERel('a) \<Rightarrow> ERel('a)"  ("_\<^sup>*") \<comment> \<open>aka. reflexive-transitive closure\<close>
-  where "preorderClosure \<equiv> \<Union>\<^sup>r \<circ> relPower0"
+  where "preorderClosure \<equiv>  relPower0 \<ggreater> \<Union>\<^sup>r"
 
 declare transitiveClosure_def [ind_defs] preorderClosure_def [ind_defs]
 
@@ -196,7 +197,7 @@ lemma relPower_preorder: "preorder relPower" oops (*TODO: check*)
 lemma relPower0_preorder: "preorder relPower0" oops (*TODO: check*)
 
 text \<open>However, relational-power is not antisymmetric (and thus not partially ordered), because we have:\<close>
-proposition "R = T \<circ>\<^sup>r T \<Longrightarrow> T = R \<circ>\<^sup>r R \<Longrightarrow> R = T" nitpick[card 'a=3] \<comment> \<open>countermodel found\<close> oops 
+proposition "R = T ;\<^sup>r T \<Longrightarrow> T = R ;\<^sup>r R \<Longrightarrow> R = T" nitpick[card 'a=3] \<comment> \<open>countermodel found\<close> oops 
 
 text \<open>Iterative-closure is a preorder\<close>
 lemma "preorder (iterativeClosure f)" unfolding ind_defs space_defs endorel_defs rel_defs func_defs comb_defs by metis
@@ -219,9 +220,9 @@ subsubsection \<open>In General\<close>
 
 text \<open>The \<open>\<mu>\<close> resp. \<open>\<nu>\<close> operators (Beware: in our approach they are NOT always least- or greatest-fixedpoints).\<close>
 definition mu :: "ERel('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("_-\<mu>")
-  where "R-\<mu> \<equiv> R-glb \<circ> (R-preFP)"
+  where "R-\<mu> \<equiv> R-preFP \<ggreater> R-glb"
 definition nu :: "ERel('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("_-\<nu>") 
-  where "R-\<nu> \<equiv> R-lub \<circ> (R-postFP)"
+  where "R-\<nu> \<equiv> R-postFP \<ggreater> R-lub"
 
 declare mu_def[ind_defs] nu_def[ind_defs]
 
@@ -235,9 +236,9 @@ lemma nu_singleton: "antisymmetric R \<Longrightarrow> limitComplete R \<Longrig
 
 text \<open>Now we draw the connection to the notions of least-/greatest-fixedpoints.\<close>
 definition leastFixedPoint :: "ERel('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("_-lfp")
-  where "R-lfp \<equiv> R-least \<circ> FP"
+  where "R-lfp \<equiv> FP \<ggreater> R-least"
 definition greatestFixedPoint :: "ERel('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("_-gfp")
-  where "R-gfp \<equiv> R-greatest \<circ> FP"
+  where "R-gfp \<equiv> FP \<ggreater> R-greatest"
 
 declare leastFixedPoint_def[ind_defs] greatestFixedPoint_def[ind_defs]
 
@@ -271,13 +272,13 @@ lemma nu_def2: "partial_order R \<Longrightarrow> limitComplete R \<Longrightarr
 subsubsection \<open>For Sets and Relations\<close>
 
 definition setMu :: "SetEOp('a) \<Rightarrow> Set('a)" ("\<mu>")
-  where "\<mu> \<equiv> \<Inter> \<circ> (\<subseteq>)-preFP"
+  where "\<mu> \<equiv> (\<subseteq>)-preFP \<ggreater> \<Inter>"
 definition setNu :: "SetEOp('a) \<Rightarrow> Set('a)" ("\<nu>") 
-  where "\<nu> \<equiv> \<Union> \<circ> (\<subseteq>)-postFP"
+  where "\<nu> \<equiv> (\<subseteq>)-postFP \<ggreater> \<Union>"
 definition relMu :: "(Rel('a,'b) \<Rightarrow> Rel('a,'b)) \<Rightarrow> Rel('a,'b)" ("\<mu>\<^sup>r")
-  where "\<mu>\<^sup>r \<equiv> \<Inter>\<^sup>r \<circ> (\<subseteq>\<^sup>r)-preFP"
+  where "\<mu>\<^sup>r \<equiv> (\<subseteq>\<^sup>r)-preFP \<ggreater> \<Inter>\<^sup>r"
 definition relNu :: "(Rel('a,'b) \<Rightarrow> Rel('a,'b)) \<Rightarrow> Rel('a,'b)" ("\<nu>\<^sup>r")
-  where "\<nu>\<^sup>r \<equiv> \<Union>\<^sup>r \<circ> (\<subseteq>\<^sup>r)-postFP"
+  where "\<nu>\<^sup>r \<equiv> (\<subseteq>\<^sup>r)-postFP \<ggreater> \<Union>\<^sup>r"
 
 declare setMu_def[ind_defs] setNu_def[ind_defs] 
         relMu_def[ind_defs] relNu_def[ind_defs]
@@ -295,13 +296,13 @@ lemma relMu_singleton: "singleton ((\<subseteq>\<^sup>r)-\<mu> R)" using mu_sing
 lemma relNu_singleton: "singleton ((\<subseteq>\<^sup>r)-\<nu> R)" using nu_singleton partial_order_def subrel_limitComplete subrel_partial_order by auto
 
 text \<open>They are clearly (unique) instances of the general variants.\<close>
-lemma setMu_simp: "\<iota> \<circ> (\<subseteq>)-\<mu> = \<mu> "
+lemma setMu_simp: "(\<subseteq>)-\<mu> \<ggreater> \<iota> = \<mu> "
   using mu_unique partial_order_def subset_partial_order biginter_glb unfolding unique_def ind_defs comb_defs by blast
-lemma setNu_simp: "\<iota> \<circ> (\<subseteq>)-\<nu> = \<nu>"
+lemma setNu_simp: "(\<subseteq>)-\<nu> \<ggreater> \<iota> = \<nu>"
   using nu_unique partial_order_def subset_partial_order bigunion_lub unfolding unique_def ind_defs comb_defs by blast
-lemma relMu_simp: "\<iota> \<circ> (\<subseteq>\<^sup>r)-\<mu> = \<mu>\<^sup>r"
+lemma relMu_simp: "(\<subseteq>\<^sup>r)-\<mu> \<ggreater> \<iota> = \<mu>\<^sup>r"
   using mu_unique partial_order_def subrel_partial_order biginterR_glb unfolding unique_def ind_defs comb_defs by blast
-lemma relNu_simp: "\<iota> \<circ> (\<subseteq>\<^sup>r)-\<nu> = \<nu>\<^sup>r"
+lemma relNu_simp: "(\<subseteq>\<^sup>r)-\<nu> \<ggreater> \<iota>  = \<nu>\<^sup>r"
   using nu_unique partial_order_def subrel_partial_order bigunionR_lub unfolding unique_def ind_defs comb_defs by blast
 
 text \<open>Clearly, \<open>\<mu>\<close> resp. \<open>\<nu>\<close> are the least resp. greatest-fixedpoints for subset/subrel-monotonic set-operations.\<close>
@@ -323,18 +324,18 @@ lemma "(\<nu> X. \<phi>) = \<nu>(\<lambda>X. \<phi>)" ..
 lemma "(\<mu> X. \<phi>) = \<mu>(\<lambda>X. \<phi>)" ..
 
 text \<open>Some useful theorems.\<close>
-lemma preFP_dual1: "(\<subseteq>)-preFP f\<^sup>d = ((\<subseteq>)-postFP f) \<circ> \<midarrow>" 
+lemma preFP_dual1: "(\<subseteq>)-preFP f\<^sup>d = \<midarrow> \<ggreater> ((\<subseteq>)-postFP f)" 
   unfolding func_defs comb_defs by auto
 lemma preFP_dual2: "(\<subseteq>)-preFP f\<^sup>d = image (\<midarrow>) ((\<subseteq>)-postFP f)" 
   by (simp add: C21_comb_def compl_invol invol_image preFP_dual1)
-lemma postFP_dual1:"(\<subseteq>)-postFP f\<^sup>d = ((\<subseteq>)-preFP f) \<circ> \<midarrow>" 
+lemma postFP_dual1:"(\<subseteq>)-postFP f\<^sup>d = \<midarrow> \<ggreater> ((\<subseteq>)-preFP f)" 
   unfolding func_defs comb_defs by auto
 lemma postFP_dual2:"(\<subseteq>)-postFP f\<^sup>d = image (\<midarrow>) ((\<subseteq>)-preFP f)"
   by (simp add: C21_comb_def compl_invol invol_image postFP_dual1)
 
 text \<open>Check theorems\<close>
-lemma setMu_dualdef: "\<mu> = \<midarrow> \<circ> \<nu> \<circ> dualop" unfolding ind_defs comb_defs by (metis compl_bigdeMorgan2 compl_involutive postFP_dual2)
-lemma setNu_dualdef: "\<nu> = \<midarrow> \<circ> \<mu> \<circ> dualop" unfolding ind_defs comb_defs by (metis compl_bigdeMorgan1 compl_involutive preFP_dual2)
+lemma setMu_dualdef: "\<mu> = dualop \<ggreater> \<nu> \<ggreater> \<midarrow>" unfolding ind_defs comb_defs by (metis compl_bigdeMorgan2 compl_involutive postFP_dual2)
+lemma setNu_dualdef: "\<nu> = dualop \<ggreater> \<mu> \<ggreater> \<midarrow>" unfolding ind_defs comb_defs by (metis compl_bigdeMorgan1 compl_involutive preFP_dual2)
 lemma "(\<mu> X. \<phi> X) = \<midarrow>(\<nu> X. \<phi>\<^sup>d X)" unfolding setMu_dualdef comb_defs ..
 lemma "(\<nu> X. \<phi> X) = \<midarrow>(\<mu> X. \<phi>\<^sup>d X)" unfolding setNu_dualdef comb_defs ..
 
@@ -349,14 +350,14 @@ text \<open>Generation-step operators are monotonic wrt. subset relation.\<close
 lemma genStep_MONO: "(\<subseteq>)-MONO (genStep F G)" unfolding ind_defs func_defs rel_defs comb_defs by auto
 
 text \<open>From the previous we obtain alternative definition of inductive sets based on least fixed-points.\<close>
-lemma opGen1_closed_def2: "opGen1_closed = (\<subseteq>)-preFP \<circ>\<^sub>2 genStep" unfolding ind_defs space_defs func_defs comb_defs by blast
-lemma inductiveSetGen1_def2: "inductiveSetGen1 = \<mu> \<circ>\<^sub>2 genStep" unfolding inductiveSetGen1_def setMu_def opGen1_closed_def2 comb_defs ..
-lemma inductiveSetGen1_def3: "inductiveSetGen1 = \<iota> \<circ> (\<subseteq>)-lfp \<circ>\<^sub>2 genStep" by (simp add: B1_comb_def B2_comb_def genStep_MONO inductiveSetGen1_def2 setMu_def2)
+lemma opGen1_closed_def2: "opGen1_closed = genStep \<ggreater>\<^sub>2 (\<subseteq>)-preFP" unfolding ind_defs space_defs func_defs comb_defs by blast
+lemma inductiveSetGen1_def2: "inductiveSetGen1 = genStep \<ggreater>\<^sub>2 \<mu>" unfolding inductiveSetGen1_def setMu_def opGen1_closed_def2 comb_defs ..
+lemma inductiveSetGen1_def3: "inductiveSetGen1 = genStep \<ggreater>\<^sub>2 (\<subseteq>)-lfp \<ggreater> \<iota>" by (simp add: B1_comb_def B2_comb_def genStep_MONO inductiveSetGen1_def2 setMu_def2)
 
 text \<open>As a corollary, the set of function-powers is the least-fixed-point of a generation-step operator.\<close>
-lemma funPower0_def3: "funPower0 f = \<mu>(genStep ((\<circ>) f) {\<^bold>I})"
+lemma funPower0_def3: "funPower0 f = \<mu>(genStep ((\<ggreater>) f) {\<^bold>I})"
   by (simp add: B2_comb_def funPower0_def inductiveSet01_def2 inductiveSetGen1_def2)
-lemma funPower0_def4: "funPower0 f = \<iota>((\<subseteq>)-lfp (genStep ((\<circ>) f) {\<^bold>I}))"
+lemma funPower0_def4: "funPower0 f = \<iota>((\<subseteq>)-lfp (genStep ((\<ggreater>) f) {\<^bold>I}))"
   by (simp add: funPower0_def3 genStep_MONO setMu_def2)
 
 

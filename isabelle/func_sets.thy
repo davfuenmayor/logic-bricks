@@ -16,13 +16,12 @@ text \<open>Functions feature a monoidal structure. The identity function is a n
   operation between functions and corresponds to the \<open>\<^bold>B\<close> combinator.\<close>
 
 \<comment> \<open>Recalling\<close>
-lemma "f \<circ> g \<circ> h = (\<lambda>x. f (g (h x)))" unfolding comb_defs ..
-lemma "f ; g ; h = (\<lambda>x. h( g (f x)))" unfolding comb_defs ..
+lemma "f \<ggreater> g \<ggreater> h = (\<lambda>x. h( g (f x)))" unfolding comb_defs ..
 
 text \<open>Composition and identity satisfy the monoid conditions.\<close>
-lemma "(f \<circ> g) \<circ> h = f \<circ> (g \<circ> h)" unfolding comb_defs ..    \<comment> \<open>associativity\<close>
-lemma "\<^bold>I \<circ> f = f" unfolding comb_defs ..                   \<comment> \<open>identity 1\<close>
-lemma "f \<circ> \<^bold>I = f" unfolding comb_defs ..                   \<comment> \<open>identity 2\<close>
+lemma "(f \<ggreater> g) \<ggreater> h = f \<ggreater> (g \<ggreater> h)" unfolding comb_defs ..    \<comment> \<open>associativity\<close>
+lemma "\<^bold>I \<ggreater> f = f" unfolding comb_defs ..                   \<comment> \<open>identity 1\<close>
+lemma "f \<ggreater> \<^bold>I = f" unfolding comb_defs ..                   \<comment> \<open>identity 2\<close>
 
 
 subsubsection \<open>Fixed-Points\<close>
@@ -69,13 +68,13 @@ lemma nonFixedPoint_defT: "nFP = \<D>-preFP" unfolding func_defs comb_defs by me
 text \<open>An endooperation can be said to be (weakly) expansive resp. contractive wrt an endorelation
  when all of its points are (weak) pre-fixed-points resp. (weak) post-fixed-points.\<close>
 definition expansive::"ERel('a) \<Rightarrow> Set(EOp('a))" ("_-EXPN")
-  where "R-EXPN \<equiv> \<forall> \<circ> R-postFP"
+  where "R-EXPN \<equiv> R-postFP \<ggreater> \<forall>"
 definition contractive::"ERel('a) \<Rightarrow> Set(EOp('a))" ("_-CNTR")
-  where "R-CNTR \<equiv> \<forall> \<circ> R-preFP"
+  where "R-CNTR \<equiv> R-preFP \<ggreater> \<forall>"
 definition weaklyExpansive::"ERel('a) \<Rightarrow> Set(EOp('a))" ("_-wEXPN")
-  where "R-wEXPN \<equiv> \<forall> \<circ> R-wPostFP"
+  where "R-wEXPN \<equiv> R-wPostFP \<ggreater> \<forall>"
 definition weaklyContractive::"ERel('a) \<Rightarrow> Set(EOp('a))" ("_-wCNTR")
-  where "R-wCNTR \<equiv> \<forall> \<circ> R-wPreFP"
+  where "R-wCNTR \<equiv> R-wPreFP \<ggreater> \<forall>"
 
 declare expansive_def[func_defs] contractive_def[func_defs] 
         weaklyExpansive_def[func_defs] weaklyContractive_def[func_defs]
@@ -99,9 +98,9 @@ term "\<^bold>\<Phi>\<^sub>2\<^sub>1 (R :: Rel('a,'b)) :: 'e-Env('a) \<Rightarro
 
 text \<open>We introduce two convenient ways to lift a given relation to obtain its "indexed" counterpart.\<close>
 definition relLiftEx :: "Rel('a,'b) \<Rightarrow> Rel('c-Env('a),'c-Env('b))" ("\<^bold>\<Phi>\<^sub>\<exists>")  \<comment> \<open>existential lifting\<close>
-  where "\<^bold>\<Phi>\<^sub>\<exists> \<equiv> \<exists> \<circ>\<^sub>3 \<^bold>\<Phi>\<^sub>2\<^sub>1" 
+  where "\<^bold>\<Phi>\<^sub>\<exists> \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 \<ggreater>\<^sub>3 \<exists>" 
 definition relLiftAll :: "Rel('a,'b) \<Rightarrow> Rel('c-Env('a),'c-Env('b))" ("\<^bold>\<Phi>\<^sub>\<forall>") \<comment> \<open>universal lifting\<close>
-  where "\<^bold>\<Phi>\<^sub>\<forall> \<equiv> \<forall> \<circ>\<^sub>3 \<^bold>\<Phi>\<^sub>2\<^sub>1"
+  where "\<^bold>\<Phi>\<^sub>\<forall> \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 \<ggreater>\<^sub>3 \<forall>"
 
 declare relLiftEx_def[func_defs] relLiftAll_def[func_defs]
 
@@ -158,7 +157,7 @@ text \<open>Double-check some well known properties.\<close>
 lemma compl_involutive: "\<midarrow>(\<midarrow>S) = S" unfolding func_defs comb_defs by simp
 lemma compl_deMorgan1: "\<midarrow>(\<midarrow>A \<union> \<midarrow>B) = (A \<inter> B)" unfolding func_defs comb_defs by simp
 lemma compl_deMorgan2: "\<midarrow>(\<midarrow>A \<inter> \<midarrow>B) = (A \<union> B)" unfolding func_defs comb_defs by simp
-lemma compl_fixedpoint: "nFP = \<midarrow> \<circ> FP" unfolding func_defs comb_defs ..
+lemma compl_fixedpoint: "nFP = FP \<ggreater> \<midarrow>" unfolding func_defs comb_defs ..
 lemma "nFP f = \<midarrow>(FP f)" unfolding func_defs comb_defs ..
 
 lemma distr1: "A \<inter> (B \<union> C) = (A \<inter> B) \<union> (A \<inter> C)" unfolding func_defs comb_defs by auto 
@@ -169,29 +168,22 @@ subsubsection \<open>Dual and composition of Unary Set-Operations\<close>
 
 text \<open>Unary set-operations have "duals".\<close>
 definition dualop::"SetOp('a,'b) \<Rightarrow> SetOp('a,'b)"
-  where "dualop \<phi> \<equiv> \<midarrow> \<circ> \<phi> \<circ> \<midarrow>"
+  where "dualop \<phi> \<equiv> \<midarrow> \<ggreater> \<phi> \<ggreater> \<midarrow>"
 
 notation(input) dualop ("(_)\<^sup>d") notation(output) dualop ("'(_')\<^sup>d")
 declare dualop_def[func_defs]
 
 text \<open>Clearly, functional composition can be seamlessly applied to set-operations too.\<close>
-lemma fixes F::"Set('b) \<Rightarrow> Set('c)" and G::"Set('a) \<Rightarrow> Set('b)"
-  shows "F \<circ> G = (\<lambda>x. F (G x))" unfolding comb_defs ..
+lemma fixes F::"Set('a) \<Rightarrow> Set('b)" and G::"Set('b) \<Rightarrow> Set('c)"
+  shows "F \<ggreater> G = (\<lambda>x. G (F x))" unfolding comb_defs ..
 
 text \<open>Moreover, we can conveniently introduce a dual for the (functional) composition of set-operations.\<close>
-definition compDual::"SetOp('a,'b) \<Rightarrow> SetOp('c,'a) \<Rightarrow> SetOp('c,'b)" (infixl "\<bullet>" 55)
-  where "(\<bullet>) \<equiv> \<lambda>f g. \<lambda>x. f (\<midarrow>(g x))"
-abbreviation(input) compDual_t (infixr ":" 55)
-  where "f : g \<equiv> g \<bullet> f"
+abbreviation(input) compDual::"SetOp('a,'b) \<Rightarrow> SetOp('b,'c) \<Rightarrow> SetOp('a,'c)" (infixr "\<ggreater>\<^sup>d" 55)
+  where "f \<ggreater>\<^sup>d g \<equiv> f \<ggreater> \<midarrow> \<ggreater> g"
 
-declare compDual_def[func_defs]
-
-lemma compDuality1: "(f \<bullet> g) = \<midarrow> \<circ> ((\<midarrow> \<circ> f) \<circ> (\<midarrow> \<circ> g))" 
-  unfolding func_defs comb_defs by simp
-lemma compDuality2: "(f \<bullet> g) = (f \<circ> (\<midarrow> \<circ> g))" 
-  unfolding func_defs comb_defs by simp
-lemma compDuality3: "(f \<circ> g) = (f \<bullet> (\<midarrow> \<circ> g))" 
-  unfolding func_defs comb_defs by simp
+text \<open>Above, we talk of duality in the following sense:\<close>
+lemma "f \<ggreater>\<^sup>d g = ((f \<ggreater> \<midarrow>) \<ggreater>  (g \<ggreater> \<midarrow>)) \<ggreater> \<midarrow>" unfolding comb_defs func_defs by simp
+lemma "f \<ggreater> g  = ((f \<ggreater> \<midarrow>) \<ggreater>\<^sup>d (g \<ggreater> \<midarrow>)) \<ggreater> \<midarrow>" unfolding comb_defs func_defs by simp
 
 
 subsubsection \<open>Set Orderings\<close>
@@ -214,7 +206,7 @@ declare subset_def[func_defs]
 lemma "A \<subseteq> B = (\<forall>x. A x \<rightarrow> B x)" unfolding func_defs comb_defs ..
 lemma "A \<subseteq> B = \<forall>(A \<Rightarrow> B)" unfolding func_defs comb_defs ..
 
-lemma subset_setdef:   "(\<subseteq>) = \<forall> \<circ>\<^sub>2 (\<Rightarrow>)" unfolding func_defs comb_defs ..
+lemma subset_setdef: "(\<subseteq>) = (\<Rightarrow>) \<ggreater>\<^sub>2 \<forall>" unfolding func_defs comb_defs ..
 
 abbreviation(input) superset::"ERel(Set('a))" (infixr "\<supseteq>" 51)
   where "B \<supseteq> A \<equiv> A \<subseteq> B"
@@ -226,8 +218,8 @@ abbreviation(input) powerset::"Set('a) \<Rightarrow> Set(Set('a))" ("\<wp>")
 lemma "\<wp>A = (\<lambda>B. B \<subseteq> A)" unfolding func_defs comb_defs by auto
 
 text \<open>Alternative characterizations of the sub/super-set orderings in terms of fixed-points.\<close>
-lemma subset_defFP:   "(\<subseteq>) = FP \<circ> (\<union>)" unfolding func_defs comb_defs by metis
-lemma superset_defFP: "(\<supseteq>) = FP \<circ> (\<inter>)" unfolding func_defs comb_defs by metis
+lemma subset_defFP:   "(\<subseteq>) = (\<union>) \<ggreater> FP" unfolding func_defs comb_defs by metis
+lemma superset_defFP: "(\<supseteq>) = (\<inter>) \<ggreater> FP" unfolding func_defs comb_defs by metis
 lemma "(A \<subseteq> B) = (B = A \<union> B)" unfolding func_defs comb_defs by metis
 lemma "(B \<supseteq> A) = (A = B \<inter> A)" unfolding func_defs comb_defs by metis
 
@@ -247,10 +239,10 @@ declare overlap_def[func_defs] cover_def[func_defs]
 
 text \<open>Convenient notation: Two sets are said to be "incompatible" if they don't overlap.\<close>
 abbreviation(input) incompat::"ERel(Set('a))" (infix "\<bottom>" 52)
-  where "(\<bottom>) \<equiv> (\<not>) \<circ>\<^sub>2 (\<sqinter>)"
+  where "(\<bottom>) \<equiv> (\<sqinter>) \<ggreater>\<^sub>2 (\<not>)"
 
-lemma cover_setdef:   "(\<squnion>) = \<forall> \<circ>\<^sub>2 (\<union>)" unfolding func_defs comb_defs ..
-lemma overlap_setdef: "(\<sqinter>) = \<exists> \<circ>\<^sub>2 (\<inter>)" unfolding func_defs comb_defs ..
+lemma cover_setdef:   "(\<squnion>) = (\<union>) \<ggreater>\<^sub>2 \<forall>" unfolding func_defs comb_defs ..
+lemma overlap_setdef: "(\<sqinter>) = (\<inter>) \<ggreater>\<^sub>2 \<exists>" unfolding func_defs comb_defs ..
 lemma "A \<squnion> B = \<forall>(A \<union> B)" unfolding func_defs comb_defs ..
 lemma "A \<sqinter> B = \<exists>(A \<inter> B)" unfolding func_defs comb_defs ..
 lemma "A \<bottom> B = \<nexists>(A \<inter> B)" unfolding func_defs comb_defs ..
@@ -326,9 +318,9 @@ subsubsection \<open>Infinitary Set-Operations\<close>
 
 text \<open>Union and intersection can be generalized to operate on arbitrary sets of sets (aka. "infinitary" operations).\<close>
 definition biginter::"EOp\<^sub>G(Set('a))" ("\<Inter>")
-  where "\<Inter> \<equiv> \<forall> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<Rightarrow>) \<^bold>I \<^bold>T)"
+  where "\<Inter> \<equiv> (\<^bold>B\<^sub>1\<^sub>1 (\<Rightarrow>) \<^bold>I \<^bold>T) \<ggreater>\<^sub>2 \<forall>"
 definition bigunion::"EOp\<^sub>G(Set('a))" ("\<Union>")
-  where "\<Union> \<equiv> \<exists> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I \<^bold>T)"
+  where "\<Union> \<equiv> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I \<^bold>T) \<ggreater>\<^sub>2 \<exists>"
 
 lemma "\<Inter>S x = (\<forall>A. S A \<rightarrow> A x)" unfolding biginter_def func_defs comb_defs ..
 lemma "\<Union>S x = (\<exists>A. S A \<and> A x)" unfolding bigunion_def func_defs comb_defs ..
@@ -337,10 +329,10 @@ declare biginter_def[func_defs] bigunion_def[func_defs]
 
 text \<open>We say of a set of sets that it "overlaps" (or "intersects") if there exists a shared element.\<close>
 abbreviation(input) bigoverlap::"Set(Set(Set('a)))" ("\<Sqinter>")
-  where "\<Sqinter> \<equiv> \<exists> \<circ> \<Inter>"
+  where "\<Sqinter> \<equiv> \<Inter> \<ggreater> \<exists>"
 text \<open>Dually, a set of sets forms a "cover" if every element is contained in at least one of the sets.\<close>
 abbreviation(input) bigcover::"Set(Set(Set('a)))" ("\<Squnion>")
-  where "\<Squnion> \<equiv> \<forall> \<circ> \<Union>"
+  where "\<Squnion> \<equiv> \<Union> \<ggreater> \<forall>"
 
 lemma "\<Sqinter>S = \<exists>(\<Inter>S)" unfolding func_defs comb_defs ..
 lemma "\<Squnion>S = \<forall>(\<Union>S)" unfolding func_defs comb_defs ..
@@ -366,16 +358,16 @@ text \<open>We introduce some convenient superscript notation.\<close>
 notation(input) inverse ("_\<inverse>")  notation(output) inverse ("'(_')\<inverse>")
 
 text \<open>The related notion of inverse-function of a (bijective) function can be written as:\<close>
-term "(\<iota> \<circ> f\<inverse>) ::('a \<Rightarrow> 'b) \<Rightarrow> ('b \<Rightarrow> 'a)" \<comment> \<open>Beware: well-behaved for bijective functions only!\<close>
+term "(f\<inverse> \<ggreater> \<iota>) ::('a \<Rightarrow> 'b) \<Rightarrow> ('b \<Rightarrow> 'a)" \<comment> \<open>Beware: well-behaved for bijective functions only!\<close>
 
 text \<open>Given a function \<open>f\<close> we can obtain its range as the set of those objects \<open>b\<close> in the codomain that 
  are the image of some object \<open>a\<close> (i.e. have a non-empty preimage) under the function \<open>f\<close>.\<close>
 definition range::"('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
-  where "range \<equiv> \<exists> \<circ>\<^sub>2 inverse"
+  where "range \<equiv> inverse \<ggreater>\<^sub>2 \<exists>"
 
 declare range_def[func_defs]
 
-lemma "range f = \<exists> \<circ> f\<inverse>" unfolding func_defs comb_defs ..
+lemma "range f = f\<inverse> \<ggreater> \<exists>" unfolding func_defs comb_defs ..
 lemma "range f b = (\<exists>a. f a = b)" unfolding func_defs comb_defs ..
 
 
@@ -389,10 +381,10 @@ definition inverse3 :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) 
 \<comment> \<open>... \<open>inverse\<^sub>n \<equiv> \<^bold>B\<^sub>n\<^sub>0 \<Q>\<close>\<close>
 
 definition range2::"('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> Set('c)" ("range\<^sub>2")
-  where "range\<^sub>2 \<equiv> \<exists>\<^sup>2 \<circ>\<^sub>2 inverse\<^sub>2"
+  where "range\<^sub>2 \<equiv> inverse\<^sub>2 \<ggreater>\<^sub>2 \<exists>\<^sup>2"
 definition range3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> Set('d)" ("range\<^sub>3")
-  where "range\<^sub>3 \<equiv> \<exists>\<^sup>3 \<circ>\<^sub>2 inverse\<^sub>3"
-\<comment> \<open>... \<open>range\<^sub>n \<equiv> \<exists>\<^sup>n \<circ>\<^sub>2 inverse\<^sub>n\<close>\<close>
+  where "range\<^sub>3 \<equiv> inverse\<^sub>3 \<ggreater>\<^sub>2 \<exists>\<^sup>3"
+\<comment> \<open>... \<open>range\<^sub>n \<equiv> inverse\<^sub>n \<ggreater>\<^sub>2 \<exists>\<^sup>n\<close>\<close>
 
 declare inverse2_def[func_defs] inverse3_def[func_defs] range2_def[func_defs] range3_def[func_defs]
 
@@ -433,7 +425,7 @@ declare pullback_def[func_defs]
 text \<open>Pullback can be said to be "symmetric" in the following sense.\<close>
 lemma pullback_symm: "pullback = \<^bold>C\<^sub>2\<^sub>1\<^sub>4\<^sub>3 pullback" unfolding func_defs comb_defs by metis
 lemma pullback_symm': "pullback f g x y = pullback g f y x" apply (subst pullback_symm) unfolding comb_defs ..
-lemma "pullback = \<^bold>C \<circ>\<^sub>2 (\<^bold>C pullback)" apply (subst pullback_symm) unfolding comb_defs ..
+lemma "pullback = (\<^bold>C pullback) \<ggreater>\<^sub>2 \<^bold>C" apply (subst pullback_symm) unfolding comb_defs ..
 
 text \<open>Inverse and kernel of a function can be easily stated in terms of pullback.\<close>
 lemma "inverse = pullback \<^bold>I" unfolding func_defs comb_defs by auto
@@ -449,7 +441,7 @@ lemma "equalizer f g = (\<lambda>x. f x = g x)" unfolding equalizer_def comb_def
 declare equalizer_def[func_defs]
 
 text \<open>In fact, the equalizer of two functions can be stated in terms of pullback.\<close>
-lemma "equalizer = \<^bold>W \<circ>\<^sub>2 pullback" unfolding func_defs comb_defs ..
+lemma "equalizer = pullback \<ggreater>\<^sub>2 \<^bold>W" unfolding func_defs comb_defs ..
 
 text \<open>Note that we can swap the roles of "points" and "functions" in the above definitions using permutators.\<close>
 lemma "\<^bold>R equalizer x = (\<lambda>f g. f x = g x)" unfolding func_defs comb_defs ..
@@ -470,7 +462,7 @@ declare pushout_def[func_defs]
 text \<open>Pushout can be said to be "symmetric" in the following sense.\<close>
 lemma pushout_symm: "pushout = \<^bold>C\<^sub>2\<^sub>1\<^sub>4\<^sub>3 pushout" unfolding func_defs comb_defs by metis
 lemma pushout_symm': "pushout f g x y = pushout g f y x" apply (subst pushout_symm) unfolding comb_defs ..
-lemma "pushout = \<^bold>C \<circ>\<^sub>2 (\<^bold>C pushout)" apply (subst pushout_symm) unfolding comb_defs ..
+lemma "pushout = (\<^bold>C pushout) \<ggreater>\<^sub>2 \<^bold>C" apply (subst pushout_symm) unfolding comb_defs ..
 
 text \<open>The equations below don't work as definitions since they unduly restrict types ("inverse" appears only once).\<close>
 lemma "pushout = \<^bold>W (\<^bold>B\<^sub>2\<^sub>2 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
@@ -479,7 +471,7 @@ lemma "pushout = \<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>))
 text \<open>The coequalizer of two functions \<open>f\<close> and \<open>g\<close> (sharing the same domain and codomain) is the set of 
  elements in their (common) codomain whose preimage under \<open>f\<close> resp. \<open>g\<close> intersect.\<close>
 definition coequalizer :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
-  where "coequalizer \<equiv> \<^bold>W \<circ>\<^sub>2 (\<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse)" 
+  where "coequalizer \<equiv> (\<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse) \<ggreater>\<^sub>2 \<^bold>W" 
 
 lemma "coequalizer f g = \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<sqinter>) (f\<inverse>) (g\<inverse>)" unfolding coequalizer_def comb_defs ..
 lemma "coequalizer f g = (\<lambda>x. (f\<inverse>) x \<sqinter> (g\<inverse>) x)" unfolding coequalizer_def comb_defs ..
@@ -487,7 +479,7 @@ lemma "coequalizer f g = (\<lambda>x. (f\<inverse>) x \<sqinter> (g\<inverse>) x
 declare coequalizer_def[func_defs]
 
 text \<open>The coequalizer of two functions can be stated in terms of pushout.\<close>
-lemma "coequalizer = \<^bold>W \<circ>\<^sub>2 pushout" unfolding func_defs comb_defs ..
+lemma "coequalizer = pushout \<ggreater>\<^sub>2 \<^bold>W" unfolding func_defs comb_defs ..
 
 
 subsubsection \<open>Image and Preimage\<close>
@@ -503,9 +495,8 @@ lemma "image f A b = (\<exists>x. f\<inverse> b x \<and> A x)" unfolding image_d
 text \<open>Analogously, the term \<open>preimage f\<close> denotes a set-operation that takes a set \<open>B\<close> and returns the 
   set of those elements which \<open>f\<close> maps to some element in \<open>B\<close>.\<close>
 abbreviation(input) preimage::"('a \<Rightarrow> 'b) \<Rightarrow> SetOp('b,'a)"
-  where "preimage \<equiv> (;)" \<comment> \<open>i.e. \<open>\<^bold>C \<^bold>B\<close>\<close>
+  where "preimage \<equiv> (\<ggreater>)"
 
-lemma "preimage f B = f ; B" unfolding comb_defs ..
 lemma "preimage f B = (\<lambda>a. B (f a))" unfolding comb_defs ..
 
 declare image_def[func_defs] 
@@ -521,31 +512,31 @@ text \<open>Range can be defined in terms of image as expected.\<close>
 lemma range_def2: "range = \<^bold>C image \<UU>"
   unfolding comb_defs func_defs by simp
 
-term "preimage (f::'a\<Rightarrow>'b) \<circ> image f" 
-term "image (f::'a\<Rightarrow>'b) \<circ> preimage f"
+term "image f \<ggreater> preimage (f::'a\<Rightarrow>'b)" 
+term "preimage f \<ggreater> image (f::'a\<Rightarrow>'b)"
 
 (* TODO: make definitions out of these? *)
-lemma "preimage f \<circ> image f = (\<lambda>A. \<lambda>a. f\<^sup>= a \<sqinter> A)"
+lemma "image f \<ggreater> preimage f = (\<lambda>A. \<lambda>a. f\<^sup>= a \<sqinter> A)"
   unfolding func_defs comb_defs by metis
-lemma "image f \<circ> preimage f = (\<lambda>B. \<lambda>b. f\<inverse> b \<sqinter> preimage f B)" 
+lemma "preimage f \<ggreater> image f = (\<lambda>B. \<lambda>b. f\<inverse> b \<sqinter> preimage f B)" 
   unfolding func_defs comb_defs by metis
 
 text \<open>Preservation/reversal of monoidal structure under set-operations.\<close>
-lemma image_morph1: "image (f \<circ> g) = image f \<circ> image g"
+lemma image_morph1: "image (f \<ggreater> g) = image f \<ggreater> image g"
   unfolding func_defs comb_defs by auto
 lemma image_morph2: "image \<^bold>I = \<^bold>I" 
   unfolding func_defs comb_defs by simp
-lemma preimage_morph1: "preimage (f \<circ> g) = preimage g \<circ> preimage f" (*note reversal*)
+lemma preimage_morph1: "preimage (f \<ggreater> g) = preimage g \<ggreater> preimage f" (*note reversal*)
   unfolding func_defs comb_defs ..
 lemma preimage_morph2: "preimage \<^bold>I = \<^bold>I" 
   unfolding func_defs comb_defs ..
 
 text \<open>Residuation conditions.\<close>
 lemma image_resid: "(image f A \<subseteq> B) = (A \<subseteq> preimage f B)" unfolding func_defs comb_defs by auto
-lemma image_resid_gen: "((image \<circ> X) f A \<subseteq> B) = (A \<subseteq> (preimage \<circ> X) f B)" unfolding func_defs comb_defs by auto
+lemma image_resid_gen: "((X \<ggreater> image) f A \<subseteq> B) = (A \<subseteq> (X \<ggreater> preimage) f B)" unfolding func_defs comb_defs by auto
 
 text \<open>Random-looking simplification(?) rule that becomes useful later on.\<close> (*TODO: interpret*)
-lemma image_simp1: "image (F a) \<circ> image (\<^bold>T a) = image (\<^bold>T a) \<circ> image (\<^bold>S F)"
+lemma image_simp1: "image (\<^bold>T a) \<ggreater> image (F a) = image (\<^bold>S F) \<ggreater> image (\<^bold>T a)"
   apply(rule ext) unfolding comb_defs func_defs by fastforce
 
 text \<open>Finally, we introduce a notion dual to image.\<close>
@@ -556,8 +547,8 @@ declare dualimage_def[func_defs]
 
 lemma "dualimage f A = (\<lambda>b. f\<inverse> b \<subseteq> A)" unfolding func_defs comb_defs ..
 lemma "dualimage f A = (\<lambda>b. \<forall>a. f a = b \<rightarrow> A a)" unfolding func_defs comb_defs ..
-lemma image_dual1: "image f = \<midarrow> \<circ> (dualimage f) \<circ> \<midarrow>"  unfolding func_defs comb_defs by simp
-lemma image_dual2: "dualimage f = \<midarrow> \<circ> (image f) \<circ> \<midarrow>"  unfolding func_defs comb_defs by simp
+lemma image_dual1: "image f = \<midarrow> \<ggreater> dualimage f \<ggreater> \<midarrow>"  unfolding func_defs comb_defs by simp
+lemma image_dual2: "dualimage f = \<midarrow> \<ggreater> image f \<ggreater> \<midarrow>"  unfolding func_defs comb_defs by simp
 
 
 subsection \<open>Miscellaneous\<close>

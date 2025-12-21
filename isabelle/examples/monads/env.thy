@@ -65,17 +65,17 @@ lemma "ap3 = fmap4 \<^bold>I" unfolding comb_defs ..
 
 text \<open>Applicative's classic "ap" corresponds to the unary case.\<close>
 abbreviation "ap \<equiv> ap1"
-abbreviation(input) apr :: "'e-Env('a) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"(infixl "\<ggreater>" 54)
-  where "a \<ggreater> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
+abbreviation(input) apr :: "'e-Env('a) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"(infixl "*>" 54)
+  where "a *> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
 
 text \<open>Indeed, we have:\<close>
 lemma "ap = \<^bold>S" unfolding comb_defs ..
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
-lemma ap_identity:    "x \<ggreater> (unit \<^bold>I) = x" unfolding comb_defs ..
-lemma ap_composition: "w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B))) = (w \<ggreater> v) \<ggreater> u" unfolding comb_defs ..
-lemma ap_homomorphism: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
-lemma ap_interchange: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
+lemma ap_identity:    "x *> (unit \<^bold>I) = x" unfolding comb_defs ..
+lemma ap_composition: "w *> (v *> (u *> (unit \<^bold>B))) = (w *> v) *> u" unfolding comb_defs ..
+lemma ap_homomorphism: "(unit x) *> (unit f) = unit (f x)" unfolding comb_defs ..
+lemma ap_interchange: "(unit x) *> f = f *> unit (\<^bold>T x)" unfolding comb_defs ..
 
 
 subsection \<open>Monad\<close>
@@ -96,10 +96,10 @@ abbreviation(input) bind::"'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'e-Env('b)
 
 text \<open>In fact, we have that\<close>
 lemma "bindr = \<^bold>\<Sigma>" unfolding comb_defs ..
-lemma "bindr = \<^bold>W \<circ>\<^sub>2 \<^bold>B" unfolding comb_defs ..
+lemma "bindr = \<^bold>B \<ggreater>\<^sub>2 \<^bold>W" unfolding comb_defs ..
 
 text \<open>fmap can be stated in terms of (reversed) bind and unit...\<close>
-lemma "fmap = (bindr \<circ>\<^sub>2 \<^bold>B) unit"   unfolding comb_defs ..
+lemma "fmap = (\<^bold>B \<ggreater>\<^sub>2 bindr) unit"   unfolding comb_defs ..
 text \<open>... and ap in terms of bind and fmap\<close>
 lemma "ap = \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap)" unfolding comb_defs ..
 
@@ -117,21 +117,20 @@ text \<open>Recalling that\<close>
 lemma "join = bindr \<^bold>I" unfolding comb_defs ..
 
 text \<open>We extrapolate to obtain some interesting interrelations, for different arities\<close>
-lemma "join \<circ> ap0 = bindr1 \<^bold>I" unfolding comb_defs ..
-lemma "join \<circ>\<^sub>2 ap1 = bindr2 \<^bold>I" unfolding comb_defs ..
-lemma "join \<circ>\<^sub>3 ap2 = bindr3 \<^bold>I" unfolding comb_defs ..
+lemma "ap0 \<ggreater> join = bindr1 \<^bold>I" unfolding comb_defs ..
+lemma "ap1 \<ggreater>\<^sub>2 join = bindr2 \<^bold>I" unfolding comb_defs ..
+lemma "ap2 \<ggreater>\<^sub>3 join = bindr3 \<^bold>I" unfolding comb_defs ..
 
 text \<open>Similarly, we can define bindr in terms of join and fmap, for different arities\<close>
-lemma "bindr  = join \<circ>\<^sub>2 fmap" unfolding comb_defs ..
-lemma "bindr1 = join \<circ>\<^sub>2 fmap1" unfolding comb_defs ..
-lemma "bindr2 = join \<circ>\<^sub>3 fmap2" unfolding comb_defs ..
-lemma "bindr3 = join \<circ>\<^sub>4 fmap3" unfolding comb_defs ..
+lemma "bindr1 = fmap1 \<ggreater>\<^sub>2 join" unfolding comb_defs ..
+lemma "bindr2 = fmap2 \<ggreater>\<^sub>3 join" unfolding comb_defs ..
+lemma "bindr3 = fmap3 \<ggreater>\<^sub>4 join" unfolding comb_defs ..
 
 text \<open>Moreover, recalling that\<close>
 lemma "ap F A = join (fmap (\<lambda>f. fmap f A) F)"  unfolding comb_defs ..
 
 text \<open>We can extrapolate to define ap in terms of join and fmap\<close> (*TODO: for different arities*)
-lemma "ap1 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap fmap)"  unfolding comb_defs ..
+lemma "ap1 = ((\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap fmap) \<ggreater>\<^sub>2 join"  unfolding comb_defs ..
 
 
 subsection \<open>Pipelines\<close>
@@ -155,28 +154,23 @@ abbreviation(input) intoArrowA::"('a \<Rightarrow> 'e-Env('b)) \<Rightarrow> 'e-
   where "intoArrowA \<equiv> \<^bold>C"
 
 text \<open>Note that\<close>
-lemma "ap = bindr \<circ> intoArrowM" unfolding comb_defs ..
+lemma "ap = intoArrowM \<ggreater> bindr" unfolding comb_defs ..
 
 
 subsubsection \<open>Functional composition\<close>
 
 text \<open>Recall that for the case of plain functions, we have the following types:\<close>
-term "(@) :: ('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b"                   \<comment> \<open>application\<close>
-term "(\<circ>) :: ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('a) \<Rightarrow> 'e-Env('b)"   \<comment> \<open>composition\<close>
-
-text \<open>Alternatively, by using their reversed versions for a more convenient "pipeline notation":\<close>
-term "(|>) :: 'a \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b"                  \<comment> \<open>reversed application\<close>
-term "(;)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
+term "(|>) :: 'a \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b"                  \<comment> \<open>(reversed) application\<close>
+term "(\<ggreater>)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>(reversed) composition\<close>
 
 text \<open>Composition is associative and suitably interrelates with application to build pipelines.\<close>
-lemma "f ; (g ; h) = (f ; g) ; h" unfolding comb_defs ..
-lemma "(x |> f |> g |> h) = (x |> f ; g ; h)" unfolding comb_defs ..
+lemma "f \<ggreater> (g \<ggreater> h) = (f \<ggreater> g) \<ggreater> h" unfolding comb_defs ..
+lemma "(x |> f |> g |> h) = (x |> f \<ggreater> g \<ggreater> h)" unfolding comb_defs ..
 
 text \<open>Interrelation between application and composition.\<close>
-lemma "f ; g = (\<lambda>x. f x |> g)" unfolding comb_defs ..
-lemma "(\<circ>) = (\<lambda>g f x. g @ f @ x)" unfolding comb_defs ..
-lemma "(@) = (\<circ>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<circ>) = \<^bold>D (@)" unfolding comb_defs ..
+lemma "(\<ggreater>) = (\<lambda>f g x. x |> f |> g)" unfolding comb_defs ..
+lemma "\<^bold>A = \<^bold>B \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>B = \<^bold>D \<^bold>A" unfolding comb_defs ..
 
 
 subsubsection \<open>Monadic composition\<close>
@@ -199,34 +193,32 @@ lemma "(x \<bind> f \<bind> g \<bind> h) = (x \<bind> f \<Zfinj> g \<Zfinj> h)" 
 
 text \<open>Bind in terms of monadic composition\<close>
 lemma "bindr = (\<Zfinj>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<bind>) = (\<^bold>C \<circ> (\<Zfinj>)) \<^bold>I" unfolding comb_defs ..
+lemma "(\<bind>) = ((\<Zfinj>) \<ggreater> \<^bold>C) \<^bold>I" unfolding comb_defs ..
 
 
 subsubsection \<open>Applicative composition\<close>
 
 text \<open>Analogously, we can introduce applicative composition.\<close>
 abbreviation(input) acomp::"'e-Env('b \<Rightarrow> 'c) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('a \<Rightarrow> 'c)" 
-  where "acomp \<equiv> intoArrowA \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 (\<circ>\<^sub>2) ap intoArrowM)"
+  where "acomp \<equiv> (\<^bold>D (\<ggreater>\<^sub>2) intoArrowM ap) \<ggreater>\<^sub>2 intoArrowA"
 abbreviation(input) acomp' (infixr "\<Zinj>" 56) \<comment> \<open>reversed applicative composition\<close>
   where "f \<Zinj> g \<equiv> acomp g f"
 
-lemma "f \<Zinj> g = intoArrowA (intoArrowM f ; ap g)" unfolding comb_defs ..
-lemma "f \<Zinj> g = intoArrowA (\<lambda>x. (intoArrowM f x) \<ggreater> g)" unfolding comb_defs ..
-lemma "f \<Zinj> g = (\<lambda>e\<^sub>1. \<lambda>x. ((\<lambda>e\<^sub>2. f e\<^sub>2 x) \<ggreater> g) e\<^sub>1)" unfolding comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (intoArrowM f \<ggreater> ap g)" unfolding comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (\<lambda>x. (intoArrowM f x) *> g)" unfolding comb_defs ..
+lemma "f \<Zinj> g = (\<lambda>e\<^sub>1. \<lambda>x. ((\<lambda>e\<^sub>2. f e\<^sub>2 x) *> g) e\<^sub>1)" unfolding comb_defs ..
 
 text \<open>Note the corresponding types:\<close>
-term "(\<ggreater>) :: 'e-Env('a) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"
+term "(*>) :: 'e-Env('a) \<Rightarrow> 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"
 term "(\<Zinj>) :: 'e-Env('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b \<Rightarrow> 'c) \<Rightarrow>  'e-Env('a \<Rightarrow> 'c)"
 
 text \<open>Applicative composition is associative and suitably interrelates with ap to build pipelines:\<close>
 lemma "f \<Zinj> (g \<Zinj> h) = (f \<Zinj> g) \<Zinj> h" unfolding comb_defs ..
-lemma "(x \<ggreater> f \<ggreater> g \<ggreater> h) = (x \<ggreater> f \<Zinj> g \<Zinj> h)" unfolding comb_defs ..
+lemma "(x *> f *> g *> h) = (x *> f \<Zinj> g \<Zinj> h)" unfolding comb_defs ..
 
-text \<open>Some interrelations:\<close>
-lemma "acomp g f = ap (fmap (\<circ>) g) f" unfolding comb_defs ..
-lemma "acomp g f = ap (ap (unit (\<circ>)) g) f" unfolding comb_defs ..
-
-text \<open>The following holds in the current (environment) monad only:\<close>
-lemma "(acomp) = fmap2 (\<circ>)" unfolding comb_defs ..
+text \<open>The following interrelations hold in the current (environment) monad only:\<close>
+lemma "f \<Zinj> g = ap (fmap (\<ggreater>) f) g" unfolding comb_defs ..
+lemma "f \<Zinj> g = ap (ap (unit (\<ggreater>)) f) g" unfolding comb_defs ..
+lemma "(\<Zinj>) = fmap2 (\<ggreater>)" unfolding comb_defs ..
 
 end

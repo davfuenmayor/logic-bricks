@@ -104,7 +104,7 @@ lemma transitive_compl_corresp:  "transitive (R\<^sup>\<midarrow>) \<longleftrig
   apply(subst leftBound_embedding)
   apply(subst leftBound_hom_comp)
   apply(subst subrel_setdef)
-  apply(subst compDual_def) ..
+  apply(unfold comb_defs) ..
 
 (*...and so on*)
 

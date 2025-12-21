@@ -69,7 +69,7 @@ definition swap::"EOp(EPair('a))"
 
 declare swap_def[endopair_defs]
 
-lemma "swap p = p \<circ> (\<not>)" unfolding endopair_defs comb_defs ..
+lemma "swap p = (\<not>) \<ggreater> p" unfolding endopair_defs comb_defs ..
 lemma "swap p = (\<lambda>b. p (\<not>b))" unfolding endopair_defs comb_defs ..
 
 text \<open>We conveniently prove and add some useful simplification rules.\<close>

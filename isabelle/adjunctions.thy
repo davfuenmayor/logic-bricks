@@ -118,9 +118,9 @@ lemma galois_def2: " \<sqdot> \<leftarrow>g\<midarrow> \<sqdot>
   unfolding adj_defs rel_defs func_defs comb_defs by metis
 
 text \<open>An alternative definition:\<close>
-lemma galois_altdef: "galois = \<^bold>C (\<^bold>B\<^sub>2\<^sub>2 \<Q> (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I) (\<^bold>C \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I)))" unfolding galois_def2 comb_defs by metis
-lemma "R\<^sub>1,R\<^sub>2-GAL f g = ((\<^bold>B\<^sub>1\<^sub>1 \<^bold>I) R\<^sub>2 f = (\<^bold>C \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I)) R\<^sub>1 g)" unfolding galois_altdef comb_defs ..
-lemma "R\<^sub>1,R\<^sub>2-GAL f g = (\<forall>a b. (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I) R\<^sub>2 f a b \<leftrightarrow> (\<^bold>C \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I)) R\<^sub>1 g a b)" unfolding galois_altdef comb_defs by metis
+lemma galois_altdef: "galois = \<^bold>C (\<^bold>B\<^sub>2\<^sub>2 \<Q> (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I) (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I \<ggreater>\<^sub>2 \<^bold>C))" unfolding galois_def2 comb_defs by metis
+lemma "R\<^sub>1,R\<^sub>2-GAL f g = ((\<^bold>B\<^sub>1\<^sub>1 \<^bold>I) R\<^sub>2 f = ((\<^bold>B\<^sub>1\<^sub>1 \<^bold>I) \<ggreater>\<^sub>2 \<^bold>C) R\<^sub>1 g)" unfolding galois_altdef comb_defs ..
+lemma "R\<^sub>1,R\<^sub>2-GAL f g = (\<forall>a b. (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I) R\<^sub>2 f a b \<leftrightarrow> (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I \<ggreater>\<^sub>2 \<^bold>C) R\<^sub>1 g a b)" unfolding galois_altdef comb_defs by metis
 lemma "R\<^sub>1,R\<^sub>2-GAL f g = (relPullback R\<^sub>2 (asRel f) = relPullback (asRel g) R\<^sub>1)" unfolding galois_altdef relGalois_altdef comb_defs rel_defs func_defs comb_defs by simp
 
 text \<open>Again, Galois-connections are "symmetric" in the following sense:\<close>
@@ -130,7 +130,7 @@ text \<open>For the (very common) particular case where \<open>R\<^sub>1\<close>
  we can introduce the following operation (parameterized with \<open>R\<^sub>1\<close> and \<open>R\<^sub>2\<close>) that given a function \<open>f\<close> 
  returns another relation g, its "adjoint", so that \<open>f\<close> and \<open>g\<close> form a Galois-connection (wrt. \<open>R\<^sub>1\<close> and \<open>R\<^sub>2\<close>).\<close>
 definition adjoint::"ERel('a) \<Rightarrow> ERel('b) \<Rightarrow> Op('a,'b) \<Rightarrow> Op('b,'a)" ("_,_-adj")
-  where "adjoint \<equiv> (\<^bold>B\<^sub>3 \<iota>) \<circ> ((\<^bold>B\<^sub>1\<^sub>3 \<^bold>I lub) (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I)) "
+  where "adjoint \<equiv> ((\<^bold>B\<^sub>1\<^sub>3 \<^bold>I lub) (\<^bold>B\<^sub>1\<^sub>1 \<^bold>I)) \<ggreater> (\<^bold>B\<^sub>3 \<iota>)"
 
 declare adjoint_def[adj_defs]
 

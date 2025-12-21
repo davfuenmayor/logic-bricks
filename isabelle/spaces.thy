@@ -31,7 +31,7 @@ lemma singleton_def3: "\<exists>!A = (\<exists>a. A = {a})" unfolding singleton_
 
 text \<open>Further convenient instances of spaces.\<close>
 definition upair::"Space('a)" ("\<exists>\<^sub>\<le>\<^sub>2") \<comment> \<open>\<open>\<exists>\<^sub>\<le>\<^sub>2\<close> contains the unordered pairs (sets with one or two elements)\<close>
-  where \<open>\<exists>\<^sub>\<le>\<^sub>2 \<equiv> \<exists>\<^sup>2 \<circ> (\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<inter>\<^sup>r) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<union>) \<Q>) (\<subseteq>)))\<close>
+  where \<open>\<exists>\<^sub>\<le>\<^sub>2 \<equiv> (\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<inter>\<^sup>r) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<union>) \<Q>) (\<subseteq>))) \<ggreater> \<exists>\<^sup>2\<close>
 definition doubleton::"Space('a)" ("\<exists>!\<^sub>2") \<comment> \<open>\<open>\<exists>!\<^sub>2\<close> contains the doubletons (sets with two (different) elements)\<close>
   where \<open>\<exists>!\<^sub>2 \<equiv> \<exists>\<^sub>\<le>\<^sub>2 \<setminus> \<exists>!\<close>
 
@@ -79,26 +79,26 @@ lemma "c-closed\<^sub>0 S = S c" unfolding comb_defs ..
 
 text \<open>Things get more interesting with closure under unary endooperations.\<close>
 definition op1_closed::"EOp('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>1")
-  where "op1_closed \<equiv> (\<subseteq>)-preFP \<circ> image"
+  where "op1_closed \<equiv> image \<ggreater> (\<subseteq>)-preFP"
 
 declare op1_closed_def[space_defs]
 
 lemma "f-closed\<^sub>1 S = (image f S \<subseteq> S)" unfolding space_defs func_defs comb_defs ..
 
 text \<open>Recalling that image and preimage are residuated, we have in fact that:\<close>
-lemma op1_closed_def2: "op1_closed = (\<subseteq>)-postFP \<circ> preimage" unfolding space_defs func_defs comb_defs by auto
+lemma op1_closed_def2: "op1_closed = preimage \<ggreater> (\<subseteq>)-postFP" unfolding space_defs func_defs comb_defs by auto
 lemma "f-closed\<^sub>1 S = (S \<subseteq> preimage f S)" unfolding op1_closed_def2 func_defs comb_defs ..
-lemma "f-closed\<^sub>1 S = (S \<subseteq> S \<circ> f)" unfolding op1_closed_def2 func_defs comb_defs ..
+lemma "f-closed\<^sub>1 S = (S \<subseteq> f \<ggreater> S)" unfolding op1_closed_def2 func_defs comb_defs ..
 lemma op1_closed_def3: "f-closed\<^sub>1 S = (\<forall>x. S x \<rightarrow> S(f x))" unfolding op1_closed_def2 func_defs comb_defs ..
 
 text \<open>Note also that we have:\<close>
-lemma "op1_closed = ((\<^bold>S (\<subseteq>)) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op0_closed" unfolding space_defs func_defs comb_defs by auto
+lemma "op1_closed = (\<^bold>B\<^sub>1\<^sub>0 \<ggreater>\<^sub>2 \<^bold>S (\<subseteq>)) op0_closed" unfolding space_defs func_defs comb_defs by auto
 
 text \<open>In fact, we can define "closure under an n-ary endooperation" inductively on n, as follows.\<close>
 definition op2_closed::"EOp\<^sub>2('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>2")
-  where "op2_closed \<equiv> ((\<^bold>S (\<subseteq>)) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op1_closed"
+  where "op2_closed \<equiv> (\<^bold>B\<^sub>1\<^sub>0 \<ggreater>\<^sub>2 \<^bold>S (\<subseteq>)) op1_closed"
 definition op3_closed::"('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'a) \<Rightarrow> Space('a)" ("_-closed\<^sub>3")
-  where "op3_closed \<equiv> ((\<^bold>S (\<subseteq>)) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op2_closed"
+  where "op3_closed \<equiv> (\<^bold>B\<^sub>1\<^sub>0 \<ggreater>\<^sub>2 \<^bold>S (\<subseteq>)) op2_closed"
 \<comment> \<open>... and so on\<close>
 
 declare op2_closed_def[space_defs] op3_closed_def[space_defs]
@@ -123,7 +123,7 @@ lemma "G-closed\<^sub>S\<^sub>2 = (\<lambda>S. \<forall>X Y. X \<subseteq> S \<a
 
 text \<open>Moreover, a set S can also be closed under generalized endooperations (unary in this case).\<close>
 definition opG_closed::"EOp\<^sub>G('a) \<Rightarrow> Space('a)" ("_-closed\<^sub>G")
-  where "opG_closed \<equiv> ((\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) \<wp>) \<circ>\<^sub>2 \<^bold>B\<^sub>1\<^sub>0) op0_closed"
+  where "opG_closed \<equiv> (\<^bold>B\<^sub>1\<^sub>0 \<ggreater>\<^sub>2 \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) \<wp>) op0_closed"
 
 declare opG_closed_def[space_defs]
 
@@ -189,32 +189,34 @@ proposition "F (\<Union> S) = \<Union> (image F S)" nitpick \<comment> \<open>co
 proposition "F (\<Inter> S) = \<Inter> (image F S)" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>Distribution over arbitrary unions and intersections holds if the set-operation is a preimage.\<close>
-lemma preimage_distr_bigunion: "preimage f (\<Union> S) = \<Union> ((image \<circ> preimage) f S)"
+lemma preimage_distr_bigunion: "preimage f (\<Union> S) = \<Union> ((preimage \<ggreater> image) f S)"
   unfolding comb_defs func_defs apply rule by (smt (verit, best))
-lemma preimage_distr_biginter: "preimage F (\<Inter> S) = \<Inter> ((image \<circ> preimage) F S)" 
+lemma preimage_distr_biginter: "preimage F (\<Inter> S) = \<Inter> ((preimage \<ggreater> image) F S)" 
   unfolding comb_defs func_defs apply rule by (smt (verit, best))
 
 text \<open>If the set-operation is an image, distribution over arbitrary unions also obtains.\<close>
-lemma image_distr_bigunion: "image f (\<Union> S) = \<Union> ((image \<circ> image) f S)"
+lemma image_distr_bigunion: "image f (\<Union> S) = \<Union> ((image \<ggreater> image) f S)"
   unfolding comb_defs func_defs apply rule by (smt (verit, best))
 text \<open>However, distribution over arbitrary intersections requires that the space is a closure system.\<close>
-lemma image_distr_biginter: "closureSystem S \<Longrightarrow> image F (\<Inter> S) = \<Inter> ((image \<circ> image) F S)"
+lemma image_distr_biginter: "closureSystem S \<Longrightarrow> image F (\<Inter> S) = \<Inter> ((image \<ggreater> image) F S)"
   unfolding comb_defs space_defs func_defs apply rule by (smt (verit, best))
 
 
 text \<open>Another convenient lemma: closure under a function (wrt one generator) can be conveniently 
  stated in terms of closure under composition with that function (wrt the identity function \<open>\<^bold>I\<close>).\<close>
-lemma funClosure_prop: "z,f-closed\<^sub>0\<^sub>1 = (image \<circ> image) (\<^bold>T z) (\<^bold>I,((\<circ>) f)-closed\<^sub>0\<^sub>1)"
+lemma funClosure_prop: "z,f-closed\<^sub>0\<^sub>1 = (image \<ggreater> image) (\<^bold>T z) (\<^bold>I,((\<ggreater>) f)-closed\<^sub>0\<^sub>1)"
   unfolding comb_defs func_defs apply (rule ext) apply (rule iffI) defer apply auto sorry (*TODO: kernel reconstruction*) 
 
 text \<open>Also note that:\<close>
-lemma "\<Inter>((\<circ>)-closed\<^sub>2)  = \<Inter> ((\<circ>) f)-closed\<^sub>1" for f::"'a \<Rightarrow> 'a" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((\<circ>)-closed\<^sub>2)  = \<Inter>((\<circ>\<^sup>r) f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((\<circ>\<^sup>r)-closed\<^sub>2) = \<Inter> ((\<circ>) f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((\<circ>\<^sup>r)-closed\<^sub>2) = \<Inter>((\<circ>\<^sup>r) f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((\<ggreater>)-closed\<^sub>2)  = \<Inter> ((\<ggreater>) f)-closed\<^sub>1" for f::"'a \<Rightarrow> 'a" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> ((\<ggreater>) f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> ((;\<^sup>r) f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((\<ggreater>)-closed\<^sub>2) = \<Inter> (\<lambda>x. x ;\<^sup>r f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> (\<lambda>x. x \<ggreater> f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> (\<lambda>x. x ;\<^sup>r f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
 text \<open>However:\<close>
-proposition "((\<circ>)-closed\<^sub>2)  = ((\<circ>) f-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
-proposition "((\<circ>\<^sup>r)-closed\<^sub>2) = ((\<circ>\<^sup>r) f-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
+proposition "((\<ggreater>)-closed\<^sub>2)  = ((\<ggreater>) f-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
+proposition "((;\<^sup>r)-closed\<^sub>2) = ((\<lambda>x. x ;\<^sup>r f)-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
 
 
 subsection \<open>Spaces from Endorelations\<close>
@@ -318,9 +320,9 @@ subsubsection \<open>Existence of Greatest- and Least-Elements\<close>
 
 text \<open>Another interesting property is existence of greatest resp. least elements.\<close>
 definition greatestExist::"ERel('a) \<Rightarrow> Space('a)" ("_-greatestExist")
-  where "R-greatestExist \<equiv> \<exists> \<circ> R-greatest"
+  where "R-greatestExist \<equiv> R-greatest \<ggreater> \<exists>"
 definition leastExist::"ERel('a) \<Rightarrow> Space('a)" ("_-leastExist")
-  where "R-leastExist \<equiv> \<exists> \<circ> R-least"
+  where "R-leastExist \<equiv> R-least \<ggreater> \<exists>"
 
 declare greatestExist_def[space_defs] leastExist_def[space_defs]
 
@@ -545,9 +547,9 @@ subsubsection \<open>Well-Founded- and Well-Ordered-Sets\<close>
 
 text \<open>Well-foundedness of sets wrt. a given relation (as in "Nat is well-founded wrt. \<open><\<close> ").\<close>
 definition wellFoundedSet::"ERel('a) \<Rightarrow> Space('a)" ("_-wellFoundedSet")
-  where "wellFoundedSet \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<supseteq>) (\<exists> \<circ>\<^sub>2 min) (((\<inter>) \<exists>) \<circ> (\<supseteq>))"
+  where "wellFoundedSet \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<supseteq>) (min \<ggreater>\<^sub>2 \<exists>) ((\<supseteq>) \<ggreater> (\<inter>) \<exists>)"
 definition wellOrderedSet::"ERel('a) \<Rightarrow> Space('a)" ("_-wellOrderedSet")
-  where "wellOrderedSet \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<supseteq>) (\<exists> \<circ>\<^sub>2 least) (((\<inter>) \<exists>) \<circ> (\<supseteq>))" 
+  where "wellOrderedSet \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<supseteq>) (least \<ggreater>\<^sub>2  \<exists>) ((\<supseteq>) \<ggreater> (\<inter>) \<exists>)" 
 
 declare wellFoundedSet_def[endorel_defs] wellOrderedSet_def[endorel_defs]
 
@@ -575,9 +577,9 @@ lemma "\<not> (\<subseteq>)-wellOrderedSet {{1::nat},{2},{1,2}}"
 subsubsection \<open>Chain and Antichain\<close>
 
 definition chain :: "ERel('a) \<Rightarrow> Space('a)" ("_-chain")
-  where "R-chain \<equiv> (\<wp>\<^sup>r (symmetricClosure R)) \<circ> (\<^bold>W (\<times>))"
+  where "R-chain \<equiv> \<^bold>W (\<times>) \<ggreater> \<wp>\<^sup>r (symmetricClosure R)"
 definition antichain::"ERel('a) \<Rightarrow> Space('a)" ("_-antichain")
-  where "R-antichain \<equiv> (\<wp>\<^sup>r (connectedExpansion R)) \<circ> (\<^bold>W (\<times>))"
+  where "R-antichain \<equiv> \<^bold>W (\<times>) \<ggreater> \<wp>\<^sup>r (connectedExpansion R)"
 
 declare chain_def[space_defs] antichain_def[space_defs]
 
@@ -589,8 +591,8 @@ lemma "R-antichain S = (S \<times> S) \<subseteq>\<^sup>r connectedExpansion R" 
 lemma "R-antichain S = (S \<times> S) \<subseteq>\<^sup>r (R \<union>\<^sup>r (R\<^sup>\<sim>))" unfolding space_defs endorel_defs comb_defs ..
 lemma "R-antichain S = (\<forall>x y. (S x \<and> S y) \<rightarrow> (R x y \<or> \<not>R y x))" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
 
-lemma "chain = (((;) \<circ> \<^bold>W) (\<times>)) \<circ> \<wp>\<^sup>r \<circ> symmetricClosure" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
-lemma "antichain = (((;) \<circ> \<^bold>W) (\<times>)) \<circ> \<wp>\<^sup>r \<circ> connectedExpansion" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
+lemma "chain = symmetricClosure \<ggreater> \<wp>\<^sup>r \<ggreater> (\<^bold>W \<ggreater> (\<ggreater>)) (\<times>)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
+lemma "antichain = connectedExpansion \<ggreater> \<wp>\<^sup>r \<ggreater> (\<^bold>W \<ggreater> (\<ggreater>)) (\<times>)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
 
 lemma chain_def2: "R-chain S = (S \<times> S \<bottom>\<^sup>r symmetricInterior (R\<^sup>\<midarrow>))" unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast
 lemma antichain_def2: "R-antichain S = (S \<times> S \<bottom>\<^sup>r asymmetricContraction R)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast

@@ -12,10 +12,10 @@ subsubsection \<open>For Functions\<close>
 
 text \<open>A commutative triangle states that a function "factorizes" as a composition of two given functions.\<close>
 definition triangle :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'c) \<Rightarrow> ('c \<Rightarrow> 'b) \<Rightarrow> o" ("_-FACTOR") 
-  where "triangle \<equiv> \<^bold>B\<^sub>1\<^sub>2 \<Q> \<^bold>I (;)"
+  where "triangle \<equiv> \<^bold>B\<^sub>1\<^sub>2 \<Q> \<^bold>I (\<ggreater>)"
 
 text \<open>Commutative triangles are often read as "h factors through f and g", and diagrammatically represented as:\<close>
-lemma "h-FACTOR f g = (h = f ; g)" unfolding triangle_def comb_defs ..
+lemma "h-FACTOR f g = (h = f \<ggreater> g)" unfolding triangle_def comb_defs ..
 abbreviation(input) triangleDiagram (" \<sqdot> \<midarrow>_\<rightarrow> \<sqdot> // \<setminus> \<down>_ // _\<rightarrow> \<sqdot>")
   where "\<sqdot> \<midarrow>f\<rightarrow> \<sqdot> 
           \<setminus>     \<down>g
@@ -35,13 +35,13 @@ lemma "idempotent f =  \<sqdot> \<midarrow>f\<rightarrow> \<sqdot>
                           f\<rightarrow> \<sqdot>  " unfolding func_defs comb_defs ..
 
 lemma "idempotent f = (\<forall>x. f x = f (f x))" unfolding func_defs comb_defs by metis
-lemma "idempotent f = (f = (f ; f))" unfolding func_defs comb_defs ..
-lemma idempotent_def2: "idempotent = \<^bold>W (\<Q> \<circ> (\<^bold>W \<^bold>B))" unfolding func_defs comb_defs by auto
+lemma "idempotent f = (f = (f \<ggreater> f))" unfolding func_defs comb_defs ..
+lemma idempotent_def2: "idempotent = \<^bold>W (\<^bold>W \<^bold>B \<ggreater> \<Q>)" unfolding func_defs comb_defs by auto
 lemma idempotent_def3: "idempotent = \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) range FP" unfolding func_defs comb_defs by metis
 lemma "idempotent f = (range f \<subseteq> FP f)" unfolding idempotent_def3 comb_defs ..
 
 definition square :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'c) \<Rightarrow> ('b \<Rightarrow> 'd) \<Rightarrow> ('c \<Rightarrow> 'd) \<Rightarrow> o"
-  where "square \<equiv> \<^bold>B\<^sub>2\<^sub>2 \<Q> (;) (;)"
+  where "square \<equiv> \<^bold>B\<^sub>2\<^sub>2 \<Q> (\<ggreater>) (\<ggreater>)"
 
 abbreviation(input) squareDiagram (" \<sqdot> \<midarrow>_\<rightarrow> \<sqdot> // _\<down> \<down>_ // \<sqdot> \<midarrow>_\<rightarrow> \<sqdot>") 
   where " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot> 
@@ -52,13 +52,13 @@ declare square_def[func_defs]
 
 lemma " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot> 
        i\<down>      \<down>l
-        \<sqdot> \<midarrow>k\<rightarrow> \<sqdot>   = (i ; k = j ; l)" unfolding func_defs comb_defs ..
+        \<sqdot> \<midarrow>k\<rightarrow> \<sqdot>   = (i \<ggreater> k = j \<ggreater> l)" unfolding func_defs comb_defs ..
 
 lemma " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot> 
        i\<down>      \<down>l
         \<sqdot> \<midarrow>k\<rightarrow> \<sqdot>   =  \<sqdot> \<midarrow> j \<rightarrow> \<sqdot> 
                       \<setminus>       \<down>l
-                        i;k\<rightarrow> \<sqdot>  " unfolding func_defs comb_defs ..
+                        i\<ggreater>k\<rightarrow> \<sqdot>  " unfolding func_defs comb_defs ..
 
 
 subsubsection \<open>For Relations\<close>
@@ -95,7 +95,7 @@ lemma "relIdempotent R =  \<sqdot> \<midarrow>R\<rightarrow> \<sqdot>
 
 lemma "relIdempotent R = (\<forall>a c. R a c \<leftrightarrow> (\<exists>b. R a b \<and> R b c))" unfolding rel_defs func_defs comb_defs by metis
 lemma "relIdempotent R = (R = (R ;\<^sup>r R))" unfolding rel_defs comb_defs ..
-lemma "relIdempotent = \<^bold>W (\<Q> \<circ> (\<^bold>W (\<circ>\<^sup>r)))" unfolding rel_defs comb_defs by fastforce
+lemma "relIdempotent = \<^bold>W ((\<^bold>W (;\<^sup>r)) \<ggreater> \<Q>)" unfolding rel_defs comb_defs by fastforce
 
 text \<open>The relational notions correspond to their functional counterparts as expected.\<close>
 lemma idempotent_funRel: "idempotent f = relIdempotent (asRel f)" 
@@ -131,7 +131,7 @@ proposition "relSquare i j k l \<Longrightarrow> ((i\<^sup>\<smile>) ;\<^sup>r j
 proposition "relSquare i j k l \<Longrightarrow> ((j\<^sup>\<smile>) ;\<^sup>r i = l ;\<^sup>r (k\<^sup>\<smile>))" nitpick \<comment> \<open>countermodel: wrong diagonal!\<close> oops
 
 text \<open>An alternative definition in terms of pullbacks.\<close>
-lemma relSquare_def2: "relSquare = \<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2 (\<^bold>B\<^sub>2\<^sub>2 \<Q> (relPullback \<circ> transpose) (relPullback \<circ> transpose))" 
+lemma relSquare_def2: "relSquare = \<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2 (\<^bold>B\<^sub>2\<^sub>2 \<Q> (transpose \<ggreater> relPullback) (transpose \<ggreater> relPullback))" 
   unfolding rel_defs comb_defs unfolding func_defs comb_defs apply (rule ext)+ by meson
 
 text \<open>Relational and functional squares correspond as expected.\<close>
@@ -164,8 +164,8 @@ definition involutive::"Set('a \<Rightarrow> 'a)"
 declare involutive_def[func_defs] 
 
 lemma "involutive f = (\<forall>x. x = f (f x))" unfolding func_defs comb_defs by metis
-lemma "involutive f = (\<^bold>I = f ; f)" unfolding func_defs comb_defs ..
-lemma "involutive = (\<Q> \<^bold>I) \<circ> (\<^bold>W \<^bold>B)" unfolding func_defs comb_defs ..
+lemma "involutive f = (\<^bold>I = f \<ggreater> f)" unfolding func_defs comb_defs ..
+lemma "involutive = \<^bold>W \<^bold>B \<ggreater> \<Q> \<^bold>I" unfolding func_defs comb_defs ..
 
 text \<open>Identity is the only function which is both involutive and idempotent.\<close>
 lemma "(involutive f \<and> idempotent f) = (f = \<^bold>I)"
@@ -223,7 +223,7 @@ declare relInvolutive_def[rel_defs]
 
 lemma "relInvolutive R = (\<forall>a c. (a = c) \<leftrightarrow> (\<exists>b. R a b \<and> R b c))" unfolding rel_defs func_defs comb_defs by metis
 lemma "relInvolutive R = (\<Q> = R ;\<^sup>r R)" unfolding rel_defs comb_defs ..
-lemma "relInvolutive = (\<Q> \<Q>) \<circ> (\<^bold>W (\<circ>\<^sup>r))" unfolding rel_defs comb_defs ..
+lemma "relInvolutive = \<^bold>W (;\<^sup>r) \<ggreater> \<Q> \<Q>" unfolding rel_defs comb_defs ..
 
 text \<open>Equality is the only relation which is both involutive and idempotent.\<close>
 lemma "(relInvolutive R \<and> relIdempotent R) = (R = \<Q>)"
@@ -260,7 +260,7 @@ definition relDual::"Rel('a\<^sub>1,'a\<^sub>2) \<Rightarrow> Rel('b\<^sub>1,'b\
 
 declare  relDual_def[rel_defs]
 
-lemma "n\<^sub>1,n\<^sub>2-DUAL  f g = (n\<^sub>1 ; g = f ; n\<^sub>2)" unfolding func_defs comb_defs ..
+lemma "n\<^sub>1,n\<^sub>2-DUAL  f g = (n\<^sub>1 \<ggreater> g = f \<ggreater> n\<^sub>2)" unfolding func_defs comb_defs ..
 lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T = (n\<^sub>1 ;\<^sup>r T = R ;\<^sup>r n\<^sub>2)" unfolding rel_defs func_defs comb_defs ..
 
 
@@ -278,7 +278,7 @@ lemma "relSplitting n\<^sub>1 m \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup
 lemma "relSplitting m n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r (n\<^sub>1 ;\<^sup>r T ;\<^sup>r m) T" 
   unfolding rel_defs func_defs comb_defs by metis
 lemma "\<exists>m. relSplitting m n\<^sub>1 \<Longrightarrow> unique(n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R)" 
-  unfolding relDual_def by (smt (verit, del_insts) B12_comb_def B22_comb_def I_comb_def relComp_assoc relComp_id2 relSplitting_def relSquare_def relTriangle_def unique_def)
+  unfolding relDual_def unfolding rel_defs func_defs comb_defs apply auto apply (rule ext)+ by (smt (verit, best))
 lemma "\<exists>m. relSplitting n\<^sub>2 m \<Longrightarrow> unique((n\<^sub>1,n\<^sub>2-DUAL\<^sup>r)\<^sup>\<smile> T)"
   unfolding rel_defs func_defs comb_defs apply auto apply (rule ext)+ by (smt (verit, best))
 

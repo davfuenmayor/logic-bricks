@@ -38,7 +38,7 @@ lemma "\<langle>a,b\<rangle> = (\<lambda>x y. a = x \<and> b = y)" unfolding rel
 lemma "\<lblot>a,b\<rblot> = (\<lambda>x y. a \<noteq> x \<or> b \<noteq> y)" unfolding rel_defs comb_defs ..
 
 text\<open>Recalling that\<close>
-lemma "\<^bold>B\<^sub>2\<^sub>2 = \<^bold>B\<^sub>1\<^sub>1 \<circ> \<^bold>B\<^sub>1\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>B\<^sub>2\<^sub>2 = \<^bold>B\<^sub>1\<^sub>1 \<ggreater> \<^bold>B\<^sub>1\<^sub>1" unfolding comb_defs ..
 
 text \<open>We have that pair and copair can be defined in terms of \<open>(\<times>)\<close> and \<open>(\<uplus>)\<close> directly.\<close>
 lemma "pair   = \<^bold>B\<^sub>1\<^sub>1 (\<times>) \<Q> \<Q>" unfolding rel_defs comb_defs ..
@@ -133,7 +133,7 @@ declare prodSum_simp1 [rel_simps] prodSum_simp2 [rel_simps]
 
 text \<open>Unary relation-operations also have "duals".\<close>
 definition dualopR:: "(Rel('a,'b) \<Rightarrow> Rel('c,'d)) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('c,'d)"
-  where "dualopR \<phi> \<equiv> \<midarrow>\<^sup>r \<circ> \<phi> \<circ> \<midarrow>\<^sup>r"
+  where "dualopR \<phi> \<equiv> \<midarrow>\<^sup>r \<ggreater> \<phi> \<ggreater> \<midarrow>\<^sup>r"
 
 notation(input) dualopR ("(_)\<^sup>d") notation(output) dualopR ("'(_')\<^sup>d")
 declare dualopR_def[rel_defs]
@@ -159,8 +159,8 @@ declare subrel_def[rel_defs]
 lemma subrel_setdef:   "R \<subseteq>\<^sup>r T = (\<forall>x. R x \<subseteq> T x)" unfolding rel_defs func_defs comb_defs ..
 lemma "R \<subseteq>\<^sup>r T = (\<forall>x y. R x y \<rightarrow> T x y)" unfolding rel_defs func_defs comb_defs ..
 lemma "R \<subseteq>\<^sup>r T = \<forall>\<^sup>2(R \<Rightarrow>\<^sup>r T)" unfolding rel_defs func_defs comb_defs ..
-lemma subrel_def2: "(\<subseteq>\<^sup>r) = \<forall> \<circ>\<^sub>2 (\<sqsubseteq>)" unfolding rel_defs func_defs comb_defs ..
-lemma subrel_reldef:   "(\<subseteq>\<^sup>r) = \<forall>\<^sup>2 \<circ>\<^sub>2 (\<Rightarrow>\<^sup>r)" unfolding rel_defs func_defs comb_defs ..
+lemma subrel_def2:   "(\<subseteq>\<^sup>r) = (\<sqsubseteq>)  \<ggreater>\<^sub>2 \<forall>" unfolding rel_defs func_defs comb_defs ..
+lemma subrel_reldef: "(\<subseteq>\<^sup>r) = (\<Rightarrow>\<^sup>r) \<ggreater>\<^sub>2 \<forall>\<^sup>2" unfolding rel_defs func_defs comb_defs ..
 
 abbreviation(input) superrel::"ERel(Rel('a,'b))" (infixr "\<supseteq>\<^sup>r" 51) 
    where "B \<supseteq>\<^sup>r A \<equiv> A \<subseteq>\<^sup>r B"
@@ -172,8 +172,8 @@ abbreviation(input) powerrel::"Rel('a,'b) \<Rightarrow> Set(Rel('a,'b))" ("\<wp>
 lemma "\<wp>\<^sup>rA = (\<lambda>B. B \<subseteq>\<^sup>r A)" unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Alternative characterizations of the sub/super-rel orderings in terms of fixed-points.\<close>
-lemma subrel_defFP:   "(\<subseteq>\<^sup>r) = FP \<circ> (\<union>\<^sup>r)" unfolding rel_defs func_defs comb_defs by metis
-lemma superrel_defFP: "(\<supseteq>\<^sup>r) = FP \<circ> (\<inter>\<^sup>r)" unfolding rel_defs func_defs comb_defs by metis
+lemma subrel_defFP:   "(\<subseteq>\<^sup>r) = (\<union>\<^sup>r) \<ggreater> FP" unfolding rel_defs func_defs comb_defs by metis
+lemma superrel_defFP: "(\<supseteq>\<^sup>r) = (\<inter>\<^sup>r) \<ggreater> FP" unfolding rel_defs func_defs comb_defs by metis
 lemma "(R \<subseteq>\<^sup>r T) = (T = R \<union>\<^sup>r T)" unfolding rel_defs func_defs comb_defs by metis
 lemma "(T \<supseteq>\<^sup>r R) = (R = T \<inter>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by metis
 
@@ -191,10 +191,10 @@ declare overlapR_def[rel_defs] coverR_def[rel_defs]
 
 text \<open>Convenient notation: Two relations can also be said to be "incompatible" analogously to sets.\<close>
 abbreviation(input) incompatR::"ERel(Rel('a,'b))" (infix "\<bottom>\<^sup>r" 52)
-  where "(\<bottom>\<^sup>r) \<equiv> \<nexists>\<^sup>2 \<circ>\<^sub>2 (\<inter>\<^sup>r)"
+  where "(\<bottom>\<^sup>r) \<equiv> (\<inter>\<^sup>r) \<ggreater>\<^sub>2 \<nexists>\<^sup>2"
 
-lemma coverR_reldef:  "(\<squnion>\<^sup>r) = \<forall>\<^sup>2 \<circ>\<^sub>2 (\<union>\<^sup>r)" unfolding rel_defs func_defs comb_defs ..
-lemma overlapR_reldef:  "(\<sqinter>\<^sup>r) = \<exists>\<^sup>2 \<circ>\<^sub>2 (\<inter>\<^sup>r)"  unfolding rel_defs func_defs comb_defs ..
+lemma coverR_reldef:    "(\<squnion>\<^sup>r) = (\<union>\<^sup>r) \<ggreater>\<^sub>2 \<forall>\<^sup>2" unfolding rel_defs func_defs comb_defs ..
+lemma overlapR_reldef:  "(\<sqinter>\<^sup>r) = (\<inter>\<^sup>r) \<ggreater>\<^sub>2 \<exists>\<^sup>2"  unfolding rel_defs func_defs comb_defs ..
 lemma "A \<squnion>\<^sup>r B = \<forall>\<^sup>2(A \<union>\<^sup>r B)" unfolding rel_defs func_defs comb_defs ..
 lemma "A \<sqinter>\<^sup>r B = \<exists>\<^sup>2(A \<inter>\<^sup>r B)" unfolding rel_defs func_defs comb_defs ..
 lemma "A \<bottom>\<^sup>r B = \<nexists>\<^sup>2(A \<inter>\<^sup>r B)" unfolding rel_defs comb_defs ..
@@ -204,9 +204,9 @@ subsubsection \<open>Infinitary Operations\<close>
 
 text \<open>We can also generalize union and intersection to the infinitary case.\<close>
 definition biginterR::"EOp\<^sub>G(Rel('a,'b))" ("\<Inter>\<^sup>r") 
-  where "\<Inter>\<^sup>r \<equiv> \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 image \<^bold>T)"
+  where "\<Inter>\<^sup>r \<equiv> (\<^bold>B\<^sub>1\<^sub>0 image \<^bold>T) \<ggreater>\<^sub>2 \<Inter>"
 definition bigunionR::"EOp\<^sub>G(Rel('a,'b))" ("\<Union>\<^sup>r")
-  where "\<Union>\<^sup>r \<equiv> \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 image \<^bold>T)"
+  where "\<Union>\<^sup>r \<equiv> (\<^bold>B\<^sub>1\<^sub>0 image \<^bold>T) \<ggreater>\<^sub>2 \<Union>"
 
 declare biginterR_def[rel_defs] bigunionR_def[rel_defs]
 
@@ -222,10 +222,10 @@ lemma bigunionR_def2: "\<Union>\<^sup>rS = (\<lambda>a b. \<exists>R. S R \<and>
 
 text \<open>We say of a set of relations that it "overlaps" (or "intersects") if there exists a shared pair.\<close>
 abbreviation(input) bigoverlapR::"Set(Set(Rel('a,'b)))" ("\<Sqinter>\<^sup>r")
-  where "\<Sqinter>\<^sup>r \<equiv> \<exists>\<^sup>2 \<circ> \<Inter>\<^sup>r"
+  where "\<Sqinter>\<^sup>r \<equiv> \<Inter>\<^sup>r \<ggreater> \<exists>\<^sup>2"
 text \<open>Dually, a set of relations forms a "cover" if every pair is contained in at least one of the relations.\<close>
 abbreviation(input) bigcoverR::"Set(Set(Rel('a,'b)))" ("\<Squnion>\<^sup>r")
-  where "\<Squnion>\<^sup>r \<equiv> \<forall>\<^sup>2 \<circ> \<Union>\<^sup>r"
+  where "\<Squnion>\<^sup>r \<equiv> \<Union>\<^sup>r \<ggreater> \<forall>\<^sup>2"
 
 lemma "\<Sqinter>\<^sup>rS = \<exists>\<^sup>2(\<Inter>\<^sup>rS)" unfolding comb_defs ..
 lemma "\<Squnion>\<^sup>rS = \<forall>\<^sup>2(\<Union>\<^sup>rS)" unfolding comb_defs ..
@@ -247,9 +247,9 @@ text \<open>We define the left- (right-) range of a relation as the set of those
  domain that reach to (are reached by) some element in the target (source) domain.\<close>
 
 definition leftRange::"Rel('a,'b) \<Rightarrow> Set('a)"
-  where "leftRange \<equiv> \<exists> \<circ>\<^sub>2 \<^bold>A"
+  where "leftRange  \<equiv> \<^bold>A \<ggreater>\<^sub>2 \<exists>"
 definition rightRange::"Rel('a,'b) \<Rightarrow> Set('b)"
-  where "rightRange \<equiv> \<exists> \<circ>\<^sub>2 \<^bold>C"
+  where "rightRange \<equiv> \<^bold>C \<ggreater>\<^sub>2 \<exists>"
 
 lemma "leftRange R a = (\<exists>x. R a x)" unfolding leftRange_def comb_defs ..
 lemma "rightRange R b = (\<exists>x. R x b)" unfolding rightRange_def comb_defs ..
@@ -258,9 +258,9 @@ lemma "rightRange R b = (\<exists>x. R x b)" unfolding rightRange_def comb_defs 
 text \<open>Dually, the left- (right-) dual-range of a relation is the set of those objects in the source (target)
  domain that reach to (are reached by) all elements in the target (source) domain.\<close>
 definition leftDualRange::"Rel('a,'b) \<Rightarrow> Set('a)"
-  where "leftDualRange \<equiv> \<forall> \<circ>\<^sub>2 \<^bold>A"
+  where "leftDualRange \<equiv>  \<^bold>A \<ggreater>\<^sub>2 \<forall>"
 definition rightDualRange::"Rel('a,'b) \<Rightarrow> Set('b)"
-  where "rightDualRange \<equiv> \<forall> \<circ>\<^sub>2 \<^bold>C"
+  where "rightDualRange \<equiv> \<^bold>C \<ggreater>\<^sub>2 \<forall>"
 
 lemma "leftDualRange R a = (\<forall>x. R a x)" unfolding leftDualRange_def comb_defs ..
 lemma "rightDualRange R b = (\<forall>x. R x b)" unfolding rightDualRange_def comb_defs ..
@@ -317,6 +317,7 @@ lemma "B\<downharpoonright>R = (\<lambda>a b. B b \<and> R a b)" unfolding rel_d
 
 subsubsection \<open>Uniqueness and Determinism\<close>
 
+(* TODO: deterministic/unique/univalent- left- resp right-range *)
 text \<open>By composition with \<open>unique\<close>, we obtain the set of deterministic (or "univalent") elements.
  They get assigned at most one value under the relation (which then behaves deterministically on them)\<close>
 definition deterministic::"Rel('a,'b) \<Rightarrow> Set('a)"
@@ -334,9 +335,9 @@ lemma totalDeterministic_def2: "totalDeterministic R = deterministic R \<inter> 
 
 text \<open>Right- resp. left-unique relations; aka. univalent/(partial-)functional resp. injective relations.\<close>
 definition rightUnique::"Set(Rel('a,'b))" 
-  where "rightUnique \<equiv> \<forall> \<circ> deterministic"
+  where "rightUnique \<equiv> deterministic \<ggreater> \<forall>"
 definition leftUnique::"Set(Rel('a,'b))"
-  where "leftUnique \<equiv> \<forall> \<circ> deterministic \<circ> \<^bold>C"
+  where "leftUnique \<equiv>  \<^bold>C \<ggreater> deterministic \<ggreater> \<forall>"
 
 declare rightUnique_def [rel_defs] leftUnique_def [rel_defs]
 
@@ -361,9 +362,9 @@ subsubsection \<open>Totality\<close>
 
 text \<open>Right- resp. left-unique relations; aka. surjective resp. total/serial/multi-functional relations.\<close>
 definition rightTotal::"Set(Rel('a,'b))"
-  where "rightTotal \<equiv> \<forall> \<circ> rightRange"
+  where "rightTotal \<equiv> rightRange \<ggreater> \<forall>"
 definition leftTotal::"Set(Rel('a,'b))"
-  where "leftTotal \<equiv> \<forall> \<circ> leftRange"
+  where "leftTotal \<equiv> leftRange \<ggreater> \<forall>"
 
 declare rightTotal_def[rel_defs] leftTotal_def[rel_defs]
 
@@ -371,7 +372,7 @@ text \<open>A relation that relates each element in its source to precisely one 
  corresponds to a (total) function. They can also be characterized as being both total and functional
  (i.e. left-total and right-unique) relations.\<close>
 definition totalFunction::"Set(Rel('a,'b))"
-  where "totalFunction \<equiv> \<forall> \<circ> totalDeterministic"
+  where "totalFunction \<equiv> totalDeterministic \<ggreater> \<forall>"
 
 declare totalFunction_def[rel_defs]
 
@@ -393,13 +394,13 @@ definition asRel::"('a \<Rightarrow> 'b) \<Rightarrow> Rel('a,'b)" ("asRel")
 
 declare asRel_def[rel_defs]
 
-lemma "asRel f = \<Q> \<circ> f" unfolding rel_defs ..
+lemma "asRel f = f \<ggreater> \<Q>" unfolding rel_defs ..
 lemma "asRel f = (\<lambda>a. \<Q> (f a))" unfolding rel_defs comb_defs ..
 lemma "asRel f = (\<lambda>a. (\<lambda>b. \<Q> (f a) b))" unfolding rel_defs comb_defs ..
 lemma "asRel f = (\<lambda>a b. f a = b)" unfolding rel_defs comb_defs ..
 
 text \<open>Alternative characterization:\<close>
-lemma asRel_def2: "asRel = \<^bold>C \<circ> inverse" unfolding rel_defs func_defs comb_defs ..
+lemma asRel_def2: "asRel = inverse \<ggreater> \<^bold>C" unfolding rel_defs func_defs comb_defs ..
 lemma "asRel f = \<^bold>C (f\<inverse>)" unfolding asRel_def2 comb_defs ..
 
 text \<open>Relations corresponding to lifted functions are always left-total and right-unique (i.e. functions).\<close>
@@ -408,7 +409,7 @@ lemma "totalFunction (asRel f)" unfolding rel_defs func_defs comb_defs by simp
 
 text \<open>A given set of functions can be transformed (or "aggregated") into a relation.\<close>
 definition intoRel::"Set('a \<Rightarrow> 'b) \<Rightarrow> Rel('a,'b)" ("intoRel")
-  where "intoRel \<equiv> \<^bold>C (image \<circ> \<^bold>T)"
+  where "intoRel \<equiv> \<^bold>C (\<^bold>T \<ggreater> image)"
 
 declare intoRel_def[rel_defs]
 
@@ -416,7 +417,7 @@ lemma "intoRel = (\<lambda>S a. \<lparr>(\<^bold>T a) S\<rparr>)" unfolding rel_
 lemma "intoRel S a = \<lparr>(\<lambda>f. f a) S\<rparr>" unfolding rel_defs comb_defs ..
 
 text \<open>Alternative characterization (in terms of relational bigunion):\<close>
-lemma intoRel_def2: "intoRel = \<Union>\<^sup>r \<circ> (image asRel)" unfolding rel_defs func_defs comb_defs by blast
+lemma intoRel_def2: "intoRel = image asRel \<ggreater> \<Union>\<^sup>r" unfolding rel_defs func_defs comb_defs by blast
 lemma "intoRel S = \<Union>\<^sup>r\<lparr>asRel S\<rparr>" unfolding intoRel_def2 comb_defs ..
 
 
@@ -428,17 +429,17 @@ definition asFun::"Rel('a,'b) \<Rightarrow> ('a \<Rightarrow> 'b)" ("asFun")
 
 declare asFun_def[rel_defs] 
 
-lemma "asFun R = \<epsilon> \<circ> R" unfolding rel_defs ..
+lemma "asFun R = R \<ggreater> \<epsilon>" unfolding rel_defs ..
 lemma "asFun R = (\<lambda>a. \<epsilon>(R a))" unfolding rel_defs comb_defs ..
 lemma "asFun R = (\<lambda>a. \<epsilon> b. R a b)" unfolding rel_defs comb_defs ..
 
-lemma asFun_def2: "totalFunction R \<Longrightarrow> asFun R = \<iota> \<circ> R" \<comment> \<open>alternative definition for total functions\<close>
+lemma asFun_def2: "totalFunction R \<Longrightarrow> asFun R = R \<ggreater> \<iota>" \<comment> \<open>alternative definition for total functions\<close>
   unfolding rel_defs func_defs comb_defs apply (rule ext)+ by (metis Uniq_I someI the1_equality')
 
 
 text \<open>Transforming (or 'decomposing') a given relation into a set of functions.\<close>
 definition intoFunSet::"Rel('a,'b) \<Rightarrow> Set('a \<Rightarrow> 'b)" ("intoFunSet")
-  where "intoFunSet \<equiv> \<^bold>C ((\<subseteq>\<^sup>r) \<circ> asRel)"
+  where "intoFunSet \<equiv> \<^bold>C (asRel \<ggreater> (\<subseteq>\<^sup>r))"
 
 declare intoFunSet_def[rel_defs] 
 
@@ -500,7 +501,7 @@ text \<open>Relations come with two further idiosyncratic unary operations.
 definition transpose::"Rel('a,'b) \<Rightarrow> Rel('b,'a)" ("\<smile>")
   where "\<smile> \<equiv> \<^bold>C"
 definition cotranspose::"Rel('a,'b) \<Rightarrow> Rel('b,'a)" ("\<sim>")
-  where "\<sim> \<equiv> \<midarrow>\<^sup>r \<circ> \<^bold>C"
+  where "\<sim> \<equiv> \<^bold>C \<ggreater> \<midarrow>\<^sup>r"
 
 declare transpose_def[rel_defs] cotranspose_def[rel_defs]
 
@@ -595,9 +596,10 @@ subsection \<open>Function-like Structure II\<close>
 
 subsubsection \<open>Monoidal Structure (composition and its dual)\<close>
 
+(* TODO: define in terms of (dual)interpolants? *)
 text \<open>In analogy to functions, relations can also be composed, as follows:\<close>
 definition relComp::"Rel('a,'b) \<Rightarrow> Rel('b,'c) \<Rightarrow>  Rel('a,'c)" (infixr ";\<^sup>r" 55)
-  where "(;\<^sup>r) =  \<^bold>B\<^sub>2\<^sub>2 (\<sqinter>) \<^bold>A \<smile> "
+  where "(;\<^sup>r) =  \<^bold>B\<^sub>2\<^sub>2 (\<sqinter>) \<^bold>A \<smile>"
 text \<open>Again, we can in fact define an operator that acts as a "dual" to relation-composition:\<close>
 definition relDualComp::"Rel('c,'a) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('c,'b)" (infixr "\<dagger>\<^sup>r" 55)
   where "(\<dagger>\<^sup>r) \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<squnion>) \<^bold>A \<smile>"
@@ -610,44 +612,38 @@ lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<lambda>a b. \<exists>c. R\<^sub>1 a c 
 lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = (\<lambda>a b. \<forall>c. R\<^sub>1 a c \<or> R\<^sub>2 c b)" unfolding rel_defs func_defs comb_defs ..
 lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<lambda>a b. \<exists>(interpolants R\<^sub>1 R\<^sub>2 a b))" unfolding rel_defs func_defs comb_defs ..
 lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = (\<lambda>a b. \<forall>(dualInterpolants R\<^sub>1 R\<^sub>2 a b))" unfolding rel_defs func_defs comb_defs ..
-lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<exists> \<circ>\<^sub>2 (interpolants R\<^sub>1 R\<^sub>2))" unfolding rel_defs func_defs comb_defs ..
-lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = (\<forall> \<circ>\<^sub>2 (dualInterpolants R\<^sub>1 R\<^sub>2))" unfolding rel_defs func_defs comb_defs ..
-lemma relComp_def2:     "(;\<^sup>r) = \<exists> \<circ>\<^sub>4 interpolants" unfolding rel_defs func_defs comb_defs ..
-lemma relDualComp_def2: "(\<dagger>\<^sup>r) = \<forall> \<circ>\<^sub>4 dualInterpolants" unfolding rel_defs func_defs comb_defs ..
-
-text \<open>We introduce convenient "flipped" notations for (dual-)composition (analogous to those for functions).\<close>
-abbreviation(input) relComp_t::"Rel('b,'c) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('a,'c)" (infixl "\<circ>\<^sup>r" 55)
-  where "R \<circ>\<^sup>r T \<equiv> T ;\<^sup>r R"
-abbreviation(input) relDualComp_t::"Rel('c,'b) \<Rightarrow> Rel('a,'c) \<Rightarrow> Rel('a,'b)" (infixl "\<bullet>\<^sup>r" 55)
-  where "R \<bullet>\<^sup>r T \<equiv> T \<dagger>\<^sup>r R"
+lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = interpolants R\<^sub>1 R\<^sub>2 \<ggreater>\<^sub>2 \<exists>" unfolding rel_defs func_defs comb_defs ..
+lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = dualInterpolants R\<^sub>1 R\<^sub>2 \<ggreater>\<^sub>2 \<forall>" unfolding rel_defs func_defs comb_defs ..
+lemma relComp_def2:     "(;\<^sup>r) = interpolants \<ggreater>\<^sub>4 \<exists>" unfolding rel_defs func_defs comb_defs ..
+lemma relDualComp_def2: "(\<dagger>\<^sup>r) = dualInterpolants \<ggreater>\<^sub>4 \<forall>" unfolding rel_defs func_defs comb_defs ..
 
 text \<open>Unsurprisingly, (relational) composition and dual-composition are dual wrt. (relational) complement.\<close>
-lemma relCompDuality1: "R \<bullet>\<^sup>r T = ((R\<^sup>\<midarrow>) \<circ>\<^sup>r (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
+lemma relCompDuality1: "R \<dagger>\<^sup>r T = ((R\<^sup>\<midarrow>) ;\<^sup>r (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma relCompDuality2: "R \<circ>\<^sup>r T = ((R\<^sup>\<midarrow>) \<bullet>\<^sup>r (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
+lemma relCompDuality2: "R ;\<^sup>r T = ((R\<^sup>\<midarrow>) \<dagger>\<^sup>r (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Moreover, relation (dual)composition and (dis)equality satisfy the monoid conditions\<close>
-lemma relComp_assoc: "(R \<circ>\<^sup>r T) \<circ>\<^sup>r V = R \<circ>\<^sup>r (T \<circ>\<^sup>r V)" \<comment> \<open>associativity\<close>
+lemma relComp_assoc: "(R ;\<^sup>r T) ;\<^sup>r V = R ;\<^sup>r (T ;\<^sup>r V)" \<comment> \<open>associativity\<close>
   unfolding rel_defs func_defs comb_defs by auto                   
-lemma relComp_id1: "\<Q> \<circ>\<^sup>r R = R"                     \<comment> \<open>identity 1\<close>
+lemma relComp_id1: "\<Q> ;\<^sup>r R = R"                     \<comment> \<open>identity 1\<close>
   unfolding rel_defs func_defs comb_defs by simp                   
-lemma relComp_id2: "R \<circ>\<^sup>r \<Q> = R"                     \<comment> \<open>identity 2\<close>
+lemma relComp_id2: "R ;\<^sup>r \<Q> = R"                     \<comment> \<open>identity 2\<close>
   unfolding rel_defs func_defs comb_defs by simp   
-lemma relCompDual_assoc: "(R \<bullet>\<^sup>r T) \<bullet>\<^sup>r V = R \<bullet>\<^sup>r (T \<bullet>\<^sup>r V)" \<comment> \<open>associativity\<close>
+lemma relCompDual_assoc: "(R \<dagger>\<^sup>r T) \<dagger>\<^sup>r V = R \<dagger>\<^sup>r (T \<dagger>\<^sup>r V)" \<comment> \<open>associativity\<close>
   unfolding rel_defs func_defs comb_defs by auto                   
-lemma relCompDual_id1: "\<D> \<bullet>\<^sup>r R = R"                     \<comment> \<open>identity 1\<close>
-  unfolding rel_defs func_defs comb_defs by auto                   
-lemma relCompDual_id2: "R \<bullet>\<^sup>r \<D> = R"                     \<comment> \<open>identity 2\<close>
-  unfolding rel_defs func_defs comb_defs by simp 
+lemma relCompDual_id1: "\<D> \<dagger>\<^sup>r R = R"                     \<comment> \<open>identity 1\<close>
+  unfolding rel_defs func_defs comb_defs by simp                   
+lemma relCompDual_id2: "R \<dagger>\<^sup>r \<D> = R"                     \<comment> \<open>identity 2\<close>
+  unfolding rel_defs func_defs comb_defs by auto 
 
 text \<open>Transpose acts as an "antihomomorphism" wrt. composition as well as its dual.\<close>
-lemma relComp_antihom:     "(R \<circ>\<^sup>r T)\<^sup>\<smile> = ((T\<^sup>\<smile>) \<circ>\<^sup>r (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
-lemma relCompDual_antihom: "(R \<bullet>\<^sup>r T)\<^sup>\<smile> = ((T\<^sup>\<smile>) \<bullet>\<^sup>r (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
+lemma relComp_antihom:     "(R ;\<^sup>r T)\<^sup>\<smile> = ((T\<^sup>\<smile>) ;\<^sup>r (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
+lemma relCompDual_antihom: "(R \<dagger>\<^sup>r T)\<^sup>\<smile> = ((T\<^sup>\<smile>) \<dagger>\<^sup>r (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>In a similar spirit, we have:\<close>
-lemma "(R \<circ>\<^sup>r T)\<^sup>\<sim> = ((T\<^sup>\<sim>) \<bullet>\<^sup>r (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
-lemma "(R \<bullet>\<^sup>r T)\<^sup>\<sim> = ((T\<^sup>\<sim>) \<circ>\<^sup>r (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
+lemma "(R ;\<^sup>r T)\<^sup>\<sim> = ((T\<^sup>\<sim>) \<dagger>\<^sup>r (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
+lemma "(R \<dagger>\<^sup>r T)\<^sup>\<sim> = ((T\<^sup>\<sim>) ;\<^sup>r (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
 
 
 subsubsection \<open>Residuals\<close>
@@ -668,19 +664,11 @@ text \<open>We verify that they work as residuals wrt. \<open>(;\<^sup>r)\<close
 lemma residual_simp1: "(R ;\<^sup>r S \<subseteq>\<^sup>r T) = (S \<subseteq>\<^sup>r R \<Zrres>\<^sup>r T)" unfolding rel_defs func_defs comb_defs by auto
 lemma residual_simp2: "(R ;\<^sup>r S \<subseteq>\<^sup>r T) = (R \<subseteq>\<^sup>r T \<Zndres>\<^sup>r S)" unfolding rel_defs func_defs comb_defs by auto
 
-text \<open>Introduce some convenient reversed notation for the corresponding residuals wrt. \<open>(\<circ>\<^sup>r)\<close>.\<close>
+text \<open>Introduce some convenient reversed notation.\<close>
 abbreviation(input) residualOnRight_t (infix "\<Zdres>\<^sup>r" 99)
   where "R \<Zdres>\<^sup>r S \<equiv> S \<Zrres>\<^sup>r R"
 abbreviation(input) residualOnLeft_t (infix "\<Znrres>\<^sup>r" 99)
   where "R \<Znrres>\<^sup>r S \<equiv> S \<Zndres>\<^sup>r R"
-
-text \<open>Check alternative characterization.\<close>
-lemma "R \<Znrres>\<^sup>r S = ((R\<^sup>\<smile>) \<circ>\<^sup>r (S\<^sup>\<midarrow>))\<^sup>\<midarrow>" unfolding rel_defs func_defs comb_defs by simp
-lemma "R \<Zdres>\<^sup>r S = ((R\<^sup>\<midarrow>) \<circ>\<^sup>r (S\<^sup>\<smile>))\<^sup>\<midarrow>" unfolding rel_defs func_defs comb_defs by simp
-
-text \<open>Verify that they work as residuals wrt. \<open>(\<circ>\<^sup>r)\<close> in the expected way.\<close>
-lemma "(R \<circ>\<^sup>r S \<subseteq>\<^sup>r T) = (S \<subseteq>\<^sup>r R \<Znrres>\<^sup>r T)" unfolding rel_defs func_defs comb_defs by auto
-lemma "(R \<circ>\<^sup>r S \<subseteq>\<^sup>r T) = (R \<subseteq>\<^sup>r T \<Zdres>\<^sup>r S)" unfolding rel_defs func_defs comb_defs by auto
 
 
 subsubsection \<open>Ideal Elements\<close>
@@ -689,7 +677,7 @@ text \<open>A related property of relations is that of (generating a) left- resp
 definition leftIdeal::"Set(Rel('a,'b))"
   where "leftIdeal \<equiv> FP ((;\<^sup>r) \<UU>\<^sup>r)"
 definition rightIdeal::"Set(Rel('a,'b))"
-  where "rightIdeal \<equiv> FP ((\<circ>\<^sup>r) \<UU>\<^sup>r)"
+  where "rightIdeal \<equiv> FP (\<^bold>C (;\<^sup>r) \<UU>\<^sup>r)"
 
 declare leftIdeal_def[rel_defs] rightIdeal_def[rel_defs]
 
@@ -697,7 +685,7 @@ lemma "leftIdeal  R = (R = \<UU>\<^sup>r ;\<^sup>r R)" unfolding rel_defs func_d
 lemma "rightIdeal R = (R = R  ;\<^sup>r \<UU>\<^sup>r)" unfolding rel_defs func_defs comb_defs ..
 
 text \<open>An alternative, equivalent definition also common in the literature (e.g. on semirings).\<close>
-lemma leftIdeal_def2:  "leftIdeal  R = (\<forall>T. R \<circ>\<^sup>r T \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
+lemma leftIdeal_def2:  "leftIdeal  R = (\<forall>T. T ;\<^sup>r R \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
 lemma rightIdeal_def2: "rightIdeal R = (\<forall>T. R ;\<^sup>r T \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
 
 text \<open>In fact, the left/right-cylindrification operations discussed previously return left/right-ideal 
@@ -736,7 +724,7 @@ lemma "relPullback R T = (\<lambda>x y. R x \<sqinter> T y)" unfolding relPullba
 text \<open>Pullback can be said to be "symmetric" in the following sense.\<close>
 lemma relPullback_symm: "relPullback = \<^bold>C\<^sub>2\<^sub>1\<^sub>4\<^sub>3 relPullback" unfolding relPullback_def func_defs comb_defs by metis
 lemma relPullback_symm': "relPullback R T x y = relPullback T R y x" apply (subst relPullback_symm) unfolding comb_defs ..
-lemma "relPullback = \<^bold>C \<circ>\<^sub>2 (\<^bold>C relPullback)" apply (subst relPullback_symm) unfolding comb_defs ..
+lemma "relPullback = \<^bold>C relPullback \<ggreater>\<^sub>2 \<^bold>C" apply (subst relPullback_symm) unfolding comb_defs ..
 
 text \<open>The notion of pullback for relations corresponds to (and generalizes) the functional counterpart.\<close>
 lemma "relPullback (asRel f) (asRel g) = pullback f g" 
@@ -759,7 +747,7 @@ declare relEqualizer_def[rel_defs]
 lemma "relEqualizer R T = (\<lambda>x. R x \<sqinter> T x)" unfolding rel_defs comb_defs ..
 
 text \<open>In fact, the equalizer of two relations can be stated in terms of their pullback.\<close>
-lemma "relEqualizer = \<^bold>W \<circ>\<^sub>2 relPullback" unfolding rel_defs comb_defs ..
+lemma "relEqualizer = relPullback \<ggreater>\<^sub>2 \<^bold>W" unfolding rel_defs comb_defs ..
 
 text \<open>Note that we can swap the roles of "points" and "functions" in the above definitions using permutators.\<close>
 lemma "\<^bold>R relEqualizer x = (\<lambda>R T. R x \<sqinter> T x)" unfolding rel_defs comb_defs ..
@@ -795,7 +783,7 @@ abbreviation relCoequalizer :: "Rel('a,'b) \<Rightarrow> Rel('a,'b) \<Rightarrow
 lemma "relCoequalizer R T = (\<lambda>x. R\<^sup>\<smile> x \<sqinter> T\<^sup>\<smile> x)" unfolding rel_defs comb_defs ..
 
 text \<open>The coequalizer of two relations can be stated in terms of pushout.\<close>
-lemma "relCoequalizer = \<^bold>W \<circ>\<^sub>2 relPushout" unfolding rel_defs comb_defs ..
+lemma "relCoequalizer = relPushout \<ggreater>\<^sub>2 \<^bold>W" unfolding rel_defs comb_defs ..
 
 text \<open>The notion of coequalizer for relations corresponds to (and generalizes) the functional counterpart.\<close>
 lemma "relCoequalizer (asRel f) (asRel g) = coequalizer f g" 
@@ -821,9 +809,9 @@ lemma "totalFunction R \<Longrightarrow> FP (asFun R) = \<Delta> R"
 text \<open>Analogously, the notion of anti-diagonal (aka. irreflexive) elements of an endorelation 
  (notation: \<open>\<Delta>\<^sup>\<midarrow>\<close>) is the relational counterpart to the notion of non-fixed-points of an endofunction.\<close>
 lemma "\<Delta>\<^sup>\<midarrow> = \<midarrow>\<^sup>r\<Delta>" unfolding rel_defs comb_defs ..
-lemma "\<Delta>\<^sup>\<midarrow> = \<Delta> \<circ> \<midarrow>\<^sup>r" unfolding rel_defs func_defs comb_defs ..
+lemma "\<Delta>\<^sup>\<midarrow> = \<midarrow>\<^sup>r \<ggreater> \<Delta>" unfolding rel_defs func_defs comb_defs ..
 lemma "\<Delta>\<^sup>\<midarrow> R x = (\<not>R x x)" unfolding rel_defs func_defs comb_defs ..
-lemma "\<Delta>\<^sup>\<midarrow> = \<midarrow> \<circ> \<Delta>" unfolding rel_defs func_defs comb_defs ..
+lemma "\<Delta>\<^sup>\<midarrow> = \<Delta> \<ggreater> \<midarrow>" unfolding rel_defs func_defs comb_defs ..
 lemma "\<Delta>\<^sup>\<midarrow> R = \<midarrow>(\<Delta> R)" unfolding rel_defs func_defs comb_defs ..
 
 lemma "\<Delta>\<^sup>\<midarrow> (asRel f) = nFP f" 
@@ -861,13 +849,13 @@ lemma "R-rightDualImage A b = (\<forall>a. R a b \<rightarrow> A a)" unfolding r
 lemma "R-leftDualImage B a = (\<forall>b. R a b \<rightarrow> B b)" unfolding rel_defs func_defs comb_defs ..
 
 text \<open>Convenient characterizations in terms of big-union and big-intersection.\<close>
-lemma rightImage_def2: "rightImage = \<Union> \<circ>\<^sub>2 image"
+lemma rightImage_def2: "rightImage = image \<ggreater>\<^sub>2 \<Union>"
   unfolding rel_defs func_defs comb_defs by fastforce
-lemma leftImage_def2: "leftImage = \<Union> \<circ>\<^sub>2 image \<circ> \<smile>"
+lemma leftImage_def2: "leftImage = \<smile> \<ggreater> image \<ggreater>\<^sub>2 \<Union>"
   unfolding rel_defs func_defs comb_defs by fastforce
-lemma rightDualImage_def2: "rightDualImage = \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>)"
+lemma rightDualImage_def2: "rightDualImage = (\<^bold>B\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>) \<ggreater>\<^sub>2 \<Inter>"
   unfolding rel_defs func_defs comb_defs by fastforce
-lemma leftDualImage_def2: "leftDualImage = \<Inter> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<sim> \<midarrow>)"
+lemma leftDualImage_def2: "leftDualImage = (\<^bold>B\<^sub>1\<^sub>1 image \<sim> \<midarrow>) \<ggreater>\<^sub>2 \<Inter>"
   unfolding rel_defs func_defs comb_defs by fastforce
 
 lemma "R-rightImage A = \<Union>\<lparr>R A\<rparr>" unfolding rightImage_def2 comb_defs ..
@@ -921,21 +909,21 @@ lemma "R-leftCodualBound  B = (\<lambda>a. \<forall>b. \<not>B b \<rightarrow> R
 
 text \<open>We convenienty introduce the duals of the bound operators too, by negating the co(mplemented)dual.\<close>
 definition rightDualBound::"Rel('a,'b) \<Rightarrow> SetOp('a,'b)"
-  where  "rightDualBound \<equiv> \<midarrow>\<^sup>r \<circ> rightCodualBound"
+  where  "rightDualBound \<equiv> rightCodualBound \<ggreater> \<midarrow>\<^sup>r"
 definition leftDualBound::"Rel('a,'b) \<Rightarrow> SetOp('b,'a)"
-  where  "leftDualBound \<equiv> \<midarrow>\<^sup>r \<circ> leftCodualBound"
+  where  "leftDualBound \<equiv> leftCodualBound \<ggreater> \<midarrow>\<^sup>r"
 
 notation(input) rightDualBound ("_-rightDualBound") and  leftDualBound ("_-leftDualBound")
 declare rightDualBound_def[rel_defs] leftDualBound_def[rel_defs]
 
 text \<open>Convenient characterizations in terms of big-union and big-intersection.\<close>
-lemma rightBound_def2: "rightBound = \<Inter> \<circ>\<^sub>2 image"
+lemma rightBound_def2: "rightBound = image \<ggreater>\<^sub>2 \<Inter>"
   unfolding rel_defs func_defs comb_defs by fastforce
-lemma leftBound_def2: "leftBound = \<Inter> \<circ>\<^sub>2 image \<circ> \<smile>"
+lemma leftBound_def2: "leftBound = \<smile> \<ggreater> image \<ggreater>\<^sub>2 \<Inter>"
   unfolding rel_defs func_defs comb_defs by fastforce
-lemma rightDualBound_def2: "rightDualBound = \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>)"
+lemma rightDualBound_def2: "rightDualBound = (\<^bold>B\<^sub>1\<^sub>1 image \<midarrow>\<^sup>r \<midarrow>) \<ggreater>\<^sub>2 \<Union>"
   unfolding rel_defs func_defs comb_defs by fastforce
-lemma leftDualBound_def2: "leftDualBound = \<Union> \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 image \<sim> \<midarrow>)"
+lemma leftDualBound_def2: "leftDualBound   = (\<^bold>B\<^sub>1\<^sub>1 image \<sim> \<midarrow>)  \<ggreater>\<^sub>2 \<Union>"
   unfolding rel_defs func_defs comb_defs by fastforce
 
 lemma "R-rightBound A = \<Inter>\<lparr>R A\<rparr>" unfolding rightBound_def2 comb_defs ..
@@ -1004,7 +992,7 @@ subsubsection \<open>From Relations to Binary Set-Operations\<close>
 
 text \<open>The border of A relative to B is the set of elements in A that see some element in B.\<close>
 definition relativeBorder :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('a)"
-  where "relativeBorder \<equiv> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I) \<circ> leftImage"
+  where "relativeBorder \<equiv> leftImage \<ggreater> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I)"
 
 lemma "relativeBorder R A B = A \<inter> R-leftImage B" unfolding relativeBorder_def comb_defs ..
 lemma "relativeBorder R A B = A \<inter> (\<lambda>a. R a \<sqinter> B)" unfolding relativeBorder_def rel_defs comb_defs ..
@@ -1012,19 +1000,19 @@ lemma "relativeBorder R A B a = (A a \<and> (\<exists>b. R a b \<and> B b))" unf
 
 text \<open>Similarly, the coborder of A relative to B is the set of elements in B seen by some element in A.\<close>
 abbreviation(input) relativeCoborder :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('b)"
-  where "relativeCoborder \<equiv> \<^bold>C \<circ> relativeBorder \<circ> \<smile>"
+  where "relativeCoborder \<equiv> \<smile> \<ggreater> relativeBorder \<ggreater> \<^bold>C"
 
 lemma "relativeCoborder R A B = B \<inter> R-rightImage A" unfolding relativeBorder_def rel_defs comb_defs ..
 lemma "relativeCoborder R A B = B \<inter> (\<lambda>b. R\<^sup>\<smile> b \<sqinter> A)" unfolding relativeBorder_def rel_defs comb_defs ..
 lemma "relativeCoborder R A B b = (B b \<and> (\<exists>a. R a b \<and> A a))" unfolding relativeBorder_def rel_defs func_defs comb_defs ..
 
 text \<open>Following alternative point-free definition of coborder exploits commutativity of \<open>(\<inter>)\<close>.\<close>
-lemma relativeCoborder_def2: "relativeCoborder = (\<inter>) \<circ>\<^sub>2 rightImage" unfolding relativeBorder_def rel_defs func_defs comb_defs by auto
+lemma relativeCoborder_def2: "relativeCoborder = rightImage \<ggreater>\<^sub>2 (\<inter>)" unfolding relativeBorder_def rel_defs func_defs comb_defs by auto
 
 
 text \<open>The interior of A relative to B is the set of elements in A that see no element in B.\<close>
 definition relativeInterior :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('a)"
-  where "relativeInterior \<equiv> (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I) \<circ> leftImage"
+  where "relativeInterior \<equiv> leftImage \<ggreater> (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I)"
 
 lemma "relativeInterior R A B = A \<setminus> R-leftImage B" unfolding relativeInterior_def comb_defs ..
 lemma "relativeInterior R A B = A \<setminus> (\<lambda>a. R a \<sqinter> B)" unfolding relativeInterior_def rel_defs comb_defs ..
@@ -1033,7 +1021,7 @@ lemma "relativeInterior R A B a = (A a \<and> \<not>(\<exists>b. R a b \<and> B 
 
 text \<open>Similarly, the exterior of A relative to B is the set of elements in B seen by no element in A.\<close>
 abbreviation(input) relativeExterior :: "Rel('a,'b) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('b)"
-  where "relativeExterior \<equiv> \<^bold>C \<circ> relativeInterior \<circ> \<smile>"
+  where "relativeExterior \<equiv> \<smile> \<ggreater> relativeInterior \<ggreater> \<^bold>C"
 
 lemma "relativeExterior R A B = B \<setminus> R-rightImage A" unfolding relativeInterior_def rel_defs comb_defs ..
 lemma "relativeExterior R A B = B \<setminus> (\<lambda>b. R\<^sup>\<smile> b \<sqinter> A)" unfolding relativeInterior_def rel_defs comb_defs ..
@@ -1051,20 +1039,20 @@ lemma "relativeCoborder R A B = B \<setminus> relativeExterior R A B" unfolding 
 text \<open>We can use the previous definitions to encode other binary functions on sets (via relation-complement)\<close>
 
 text \<open>The elements in A that see every element in B.\<close>
-lemma "relativeInterior \<circ> \<midarrow>\<^sup>r = (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I) \<circ> leftBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "\<midarrow>\<^sup>r \<ggreater> relativeInterior = leftBound \<ggreater> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I)" unfolding rel_defs func_defs comb_defs by metis
 lemma "relativeInterior (R\<^sup>\<midarrow>) A B = A \<inter> leftBound R B" unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>The elements in B that are seen by every element in A.\<close>
-lemma "relativeExterior \<circ> \<midarrow>\<^sup>r = \<^bold>C \<circ> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I) \<circ> rightBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "\<midarrow>\<^sup>r \<ggreater> relativeExterior = rightBound \<ggreater> (\<^bold>B\<^sub>1\<^sub>1 (\<inter>) \<^bold>I) \<ggreater> \<^bold>C" unfolding rel_defs func_defs comb_defs by metis
 lemma "relativeExterior (R\<^sup>\<midarrow>) A B = B \<inter> rightBound R A" unfolding rel_defs func_defs comb_defs by auto
-lemma "relativeExterior \<circ> \<midarrow>\<^sup>r = (\<inter>) \<circ>\<^sub>2 rightBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "\<midarrow>\<^sup>r \<ggreater> relativeExterior = rightBound \<ggreater>\<^sub>2 (\<inter>)" unfolding rel_defs func_defs comb_defs by metis
 
 text \<open>The elements in A that don't see some element in B.\<close>
-lemma "relativeBorder \<circ> \<midarrow>\<^sup>r = (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I) \<circ> leftBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "\<midarrow>\<^sup>r \<ggreater> relativeBorder = leftBound \<ggreater> (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I)" unfolding rel_defs func_defs comb_defs by metis
 lemma "relativeBorder (R\<^sup>\<midarrow>) A B = A \<setminus> leftBound R B" unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>The elements in B that aren't seen by some element in A.\<close>
-lemma "relativeCoborder \<circ> \<midarrow>\<^sup>r = \<^bold>C \<circ> (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I) \<circ> rightBound" unfolding rel_defs func_defs comb_defs by metis
+lemma "\<midarrow>\<^sup>r \<ggreater> relativeCoborder = rightBound \<ggreater> (\<^bold>B\<^sub>1\<^sub>1 (\<setminus>) \<^bold>I) \<ggreater> \<^bold>C" unfolding rel_defs func_defs comb_defs by metis
 lemma "relativeCoborder (R\<^sup>\<midarrow>) A B = B \<setminus> rightBound R A" unfolding rel_defs func_defs comb_defs by auto
 
 
@@ -1072,11 +1060,11 @@ subsubsection \<open>From Relations on Points to Relations on Sets\<close>
 
 text \<open>"Some element in A sees an element in B", or equivalently, "some element in B is seen by an element in A".\<close>
 definition relLiftEE :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
-  where "relLiftEE \<equiv> \<exists> \<circ>\<^sub>3 relativeBorder"
+  where "relLiftEE \<equiv> relativeBorder \<ggreater>\<^sub>3 \<exists>"
 
 declare relLiftEE_def[rel_defs]
 
-lemma relLiftEE_def2: "relLiftEE = \<exists> \<circ>\<^sub>3 relativeCoborder" unfolding rel_defs func_defs comb_defs by metis
+lemma relLiftEE_def2: "relLiftEE = relativeCoborder \<ggreater>\<^sub>3 \<exists>" unfolding rel_defs func_defs comb_defs by metis
 
 lemma "relLiftEE R A B = A \<sqinter> leftImage R B" unfolding rel_defs func_defs comb_defs ..
 lemma "relLiftEE R A B = B \<sqinter> rightImage R A" unfolding relLiftEE_def2 rel_defs func_defs comb_defs ..
@@ -1085,9 +1073,9 @@ lemma "relLiftEE R A B = (\<exists>a.\<exists>b. A a \<and> B b \<and> R a b)" u
 
 text \<open>"Some element in A sees every element in B" resp. "some element in B is seen by every element in A".\<close>
 definition relLiftEA_left :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
-  where "relLiftEA_left  \<equiv> \<exists> \<circ>\<^sub>3 relativeInterior \<circ> \<midarrow>\<^sup>r"
+  where "relLiftEA_left  \<equiv> \<midarrow>\<^sup>r \<ggreater> relativeInterior \<ggreater>\<^sub>3 \<exists>"
 definition relLiftEA_right :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
-  where "relLiftEA_right \<equiv> \<exists> \<circ>\<^sub>3 relativeExterior \<circ> \<midarrow>\<^sup>r"
+  where "relLiftEA_right \<equiv> \<midarrow>\<^sup>r \<ggreater> relativeExterior \<ggreater>\<^sub>3 \<exists>"
 
 declare relLiftEA_left_def[rel_defs] relLiftEA_right_def[rel_defs]
 
@@ -1099,9 +1087,9 @@ lemma "relLiftEA_right R A B = (\<exists>b. B b \<and> (\<forall>a. A a \<righta
 
 text \<open>"Every element in A sees some element in B" resp. "every element in B is seen by some element in A".\<close>
 definition relLiftAE_left :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
-  where "relLiftAE_left  \<equiv> \<nexists> \<circ>\<^sub>3 relativeInterior"
+  where "relLiftAE_left  \<equiv> relativeInterior \<ggreater>\<^sub>3 \<nexists>"
 definition relLiftAE_right :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
-  where "relLiftAE_right \<equiv> \<nexists> \<circ>\<^sub>3 relativeExterior"
+  where "relLiftAE_right \<equiv> relativeExterior \<ggreater>\<^sub>3 \<nexists>"
 
 declare relLiftAE_left_def[rel_defs] relLiftAE_right_def[rel_defs]
 
@@ -1113,21 +1101,21 @@ lemma "relLiftAE_right R A B = (\<forall>b. B b \<rightarrow> (\<exists>a. R a b
 
 text \<open>"Every element in A sees every element in B", or equivalently, "every element in B is seen by every element in A".\<close>
 definition relLiftAA :: "Rel('a,'b) \<Rightarrow> Rel(Set('a),Set('b))"
-  where "relLiftAA  \<equiv> \<nexists> \<circ>\<^sub>3 relativeBorder \<circ> \<midarrow>\<^sup>r"
+  where "relLiftAA  \<equiv> \<midarrow>\<^sup>r \<ggreater> relativeBorder \<ggreater>\<^sub>3 \<nexists>"
 
 declare relLiftAA_def[rel_defs]
 
-lemma relLiftAA_def2: "relLiftAA = \<nexists> \<circ>\<^sub>3 relativeCoborder \<circ> \<midarrow>\<^sup>r" unfolding rel_defs func_defs comb_defs by metis
+lemma relLiftAA_def2: "relLiftAA = \<midarrow>\<^sup>r \<ggreater> relativeCoborder \<ggreater>\<^sub>3 \<nexists>" unfolding rel_defs func_defs comb_defs by metis
 
 lemma "relLiftAA R A B = A \<subseteq> leftBound  R B" unfolding rel_defs func_defs comb_defs by auto
 lemma "relLiftAA R A B = B \<subseteq> rightBound R A" unfolding relLiftAA_def2 rel_defs func_defs comb_defs by auto
 lemma "relLiftAA R A B = (\<forall>a.\<forall>b. A a \<and> B b \<rightarrow> R a b)" unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Finally, we show how to recover unary set operations from the previous relations\<close>
-lemma rightImage_def3: "rightImage = \<Union> \<circ>\<^sub>2 relLiftAE_right"  unfolding rel_defs func_defs comb_defs by metis
-lemma rightBound_def3: "rightBound = \<Union> \<circ>\<^sub>2 relLiftAA" unfolding rel_defs func_defs comb_defs apply (rule ext)+ sorry (*TODO: reconstruct in kernel*) 
-lemma leftImage_def3:  "leftImage  = \<Union> \<circ>\<^sub>2 relLiftAE_right \<circ> \<smile>"  unfolding rel_defs func_defs comb_defs apply (rule ext) by fastforce
-lemma leftBound_def3:  "leftBound  = \<Union> \<circ>\<^sub>2 relLiftAA \<circ> \<smile>"  unfolding rel_defs func_defs comb_defs apply (rule ext)+ sorry  (*TODO: reconstruct in kernel*)
+lemma rightImage_def3: "rightImage = relLiftAE_right \<ggreater>\<^sub>2 \<Union>"  unfolding rel_defs func_defs comb_defs by metis
+lemma rightBound_def3: "rightBound = relLiftAA \<ggreater>\<^sub>2 \<Union>" unfolding rel_defs func_defs comb_defs apply (rule ext)+ sorry (*TODO: reconstruct in kernel*) 
+lemma leftImage_def3:  "leftImage  = \<smile> \<ggreater> relLiftAE_right \<ggreater>\<^sub>2 \<Union>"  unfolding rel_defs func_defs comb_defs apply (rule ext) by fastforce
+lemma leftBound_def3:  "leftBound  = \<smile> \<ggreater> relLiftAA \<ggreater>\<^sub>2 \<Union>"  unfolding rel_defs func_defs comb_defs apply (rule ext)+ sorry (*TODO: reconstruct in kernel*)
 
 
 subsection \<open>Extension to higher-arities\<close>
@@ -1190,10 +1178,10 @@ lemma "image\<^sub>3 f A B C = (\<lambda>d. \<exists>a b c. f a b c = d \<and> A
 
 text \<open>The same move can be done for the notion of preimage.\<close>
 definition preimage2 :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> Set('c) \<Rightarrow> Rel('a,'b)" ("preimage\<^sub>2")
-  where "preimage\<^sub>2 f C \<equiv> f ;\<^sub>2 C"
+  where "preimage\<^sub>2 f C \<equiv> f \<ggreater>\<^sub>2 C"
 definition preimage3 :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> Set('d) \<Rightarrow> Rel\<^sub>3('a,'b,'c)" ("preimage\<^sub>3")
-  where "preimage\<^sub>3 f D \<equiv> f ;\<^sub>3 D"
-\<comment> \<open>... \<open>preimage\<^sub>n f X \<equiv> f ;\<^sub>n X\<close>\<close>
+  where "preimage\<^sub>3 f D \<equiv> f \<ggreater>\<^sub>3 D"
+\<comment> \<open>... \<open>preimage\<^sub>n f X \<equiv> f \<ggreater>\<^sub>n X\<close>\<close>
 
 declare preimage2_def[func_defs] preimage3_def[func_defs]
 
@@ -1224,14 +1212,14 @@ subsubsection \<open>Images and Bounds of n-ary Relations\<close>
 
 text \<open>Recall that by seeing binary relations as generalized (partial and non-deterministic) functions, the 
 notions of function's (direct) image becomes generalized as relation's right-image, which corresponds to.\<close>
-lemma "rightImage = \<Union> \<circ>\<^sub>2 image" unfolding rightImage_def2 ..
+lemma "rightImage = image \<ggreater>\<^sub>2 \<Union>" unfolding rightImage_def2 ..
 
 text \<open>We extend this notion of direct (i.e. right) image to n+1-ary relations, thus obtaining n-ary set-operations.\<close>
 definition rightImage2 ::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)"  ("rightImage\<^sub>2")
-  where "rightImage\<^sub>2 \<equiv> \<Union> \<circ>\<^sub>3 image\<^sub>2"
+  where "rightImage\<^sub>2 \<equiv> image\<^sub>2 \<ggreater>\<^sub>3 \<Union>"
 definition rightImage3 ::"Rel\<^sub>4('a,'b,'c,'d) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('d)"  ("rightImage\<^sub>3")
-  where "rightImage\<^sub>3 \<equiv> \<Union> \<circ>\<^sub>4 image\<^sub>3"
-\<comment> \<open>... \<open>rightImage\<^sub>n \<equiv> \<Union> \<circ>\<^sub>n\<^sub>+\<^sub>1 image\<^sub>n\<close>\<close>
+  where "rightImage\<^sub>3 \<equiv> image\<^sub>3 \<ggreater>\<^sub>4 \<Union>"
+\<comment> \<open>... \<open>rightImage\<^sub>n \<equiv> image\<^sub>n \<ggreater>\<^sub>n\<^sub>+\<^sub>1 \<Union>\<close>\<close>
 
 declare rightImage2_def[rel_defs] rightImage3_def[rel_defs]
 
@@ -1243,14 +1231,14 @@ lemma rightImage2_def3: "rightImage\<^sub>3 R A B C = (\<lambda>d. \<^bold>C\<^s
 \<comment>                 \<open>... \<open>rightImage\<^sub>n R A\<^sub>1 ...A\<^sub>n = (\<lambda>x. \<^bold>C\<^sub>2\<^sub>3\<^sub>\<dots>\<^sub>1 R x \<sqinter>\<^sup>n (A\<^sub>1 \<times> \<dots> \<times> A\<^sub>n))\<close>\<close>
 
 text \<open>Now, recall that for binary relations we also have that:\<close>
-lemma "rightBound = \<Inter> \<circ>\<^sub>2 image" unfolding rightBound_def2 ..
+lemma "rightBound = image \<ggreater>\<^sub>2 \<Inter>" unfolding rightBound_def2 ..
 
 text \<open>Again, we extend this notion towards n+1-ary relations to obtain n-ary set-operations\<close>
 definition rightBound2 ::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)"  ("rightBound\<^sub>2")
-  where "rightBound\<^sub>2 \<equiv> \<Inter> \<circ>\<^sub>3 image\<^sub>2"
+  where "rightBound\<^sub>2 \<equiv> image\<^sub>2 \<ggreater>\<^sub>3 \<Inter>"
 definition rightBound3 ::"Rel\<^sub>4('a,'b,'c,'d) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('d)"  ("rightBound\<^sub>3")
-  where "rightBound\<^sub>3 \<equiv> \<Inter> \<circ>\<^sub>4 image\<^sub>3"
-\<comment> \<open>... \<open>rightBound\<^sub>n \<equiv> \<Inter> \<circ>\<^sub>n\<^sub>+\<^sub>1 image\<^sub>n\<close>\<close>
+  where "rightBound\<^sub>3 \<equiv> image\<^sub>3 \<ggreater>\<^sub>4 \<Inter>"
+\<comment> \<open>... \<open>rightBound\<^sub>n \<equiv> image\<^sub>n \<ggreater>\<^sub>n\<^sub>+\<^sub>1 \<Inter>\<close>\<close>
 
 declare rightBound2_def[rel_defs] rightBound3_def[rel_defs]
 
@@ -1262,7 +1250,7 @@ lemma rightBound2_def3: "rightBound\<^sub>3 R A B C = (\<lambda>d. A \<times> B 
 
 text \<open>As for dual-images we have:\<close>
 definition rightDualImage2::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)"  ("rightDualImage\<^sub>2")
-  where "rightDualImage\<^sub>2 R \<equiv> \<lambda>A B. \<lambda>c. \<^bold>C\<^sub>2\<^sub>3\<^sub>1 R c \<subseteq>\<^sup>r (A \<uplus> B)"
+  where "rightDualImage\<^sub>2 R \<equiv> \<lambda>A B. \<lambda>c. \<^bold>C\<^sub>2\<^sub>3\<^sub>1 R c \<subseteq>\<^sup>r (A \<uplus> B)"  (*TODO: rotation*)
 definition rightDualImage3::"Rel\<^sub>4('a,'b,'c,'d) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('d)"  ("rightDualImage\<^sub>3")
   where "rightDualImage\<^sub>3 R \<equiv> \<lambda>A B C. \<lambda>d. \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1 R d \<subseteq>\<^sup>3 (A \<uplus> B \<uplus> C)"
 \<comment> \<open>... \<open>rightDualImage\<^sub>n R \<equiv> (\<lambda>A\<^sub>1 ...A\<^sub>n. \<lambda>x. \<^bold>C\<^sub>2\<^sub>3\<^sub>\<dots>\<^sub>1 R x \<subseteq>\<^sup>n (A\<^sub>1 \<times> \<dots> \<times> A\<^sub>n))\<close>\<close>
@@ -1282,7 +1270,7 @@ lemma rightImage3_dual2: "rightDualImage\<^sub>3 R A B C = \<midarrow>(rightImag
 
 text \<open>Similarly, for the codual-bounds we have:\<close>
 definition rightCodualBound2::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)" ("rightCodualBound\<^sub>2")
-  where "rightCodualBound\<^sub>2 R  \<equiv> \<lambda>A B. \<lambda>c. \<^bold>C\<^sub>2\<^sub>3\<^sub>1 R c \<squnion>\<^sup>r (A \<uplus> B)"
+  where "rightCodualBound\<^sub>2 R  \<equiv> \<lambda>A B. \<lambda>c. \<^bold>C\<^sub>2\<^sub>3\<^sub>1 R c \<squnion>\<^sup>r (A \<uplus> B)" (*TODO: rotation*)
 definition rightCodualBound3::"Rel\<^sub>4('a,'b,'c,'d) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('d)"  ("rightCodualBound\<^sub>3")
   where "rightCodualBound\<^sub>3 R  \<equiv> \<lambda>A B C. \<lambda>d. \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1 R d \<squnion>\<^sup>3 (A \<uplus> B \<uplus> C)"
 \<comment> \<open>... \<open>rightCodualBound\<^sub>n R \<equiv> (\<lambda>A\<^sub>1 ...A\<^sub>n. \<lambda>x. \<^bold>C\<^sub>2\<^sub>3\<^sub>\<dots>\<^sub>1 R x \<squnion>\<^sup>n (A\<^sub>1 \<uplus> \<dots> \<uplus> A\<^sub>n))\<close>\<close>
@@ -1295,10 +1283,10 @@ lemma "rightCodualBound\<^sub>3 R A B C = (\<lambda>d. \<forall>a b c. \<not>(A 
 
 text \<open>Similarly, we define dual-bounds by negating the co(mplemented)duals:\<close>
 definition rightDualBound2::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)" ("rightDualBound\<^sub>2")
-  where "rightDualBound\<^sub>2 \<equiv> \<midarrow>\<^sup>r \<circ>\<^sub>2 rightCodualBound\<^sub>2"
+  where "rightDualBound\<^sub>2 \<equiv> rightCodualBound\<^sub>2 \<ggreater>\<^sub>2 \<midarrow>\<^sup>r"
 definition rightDualBound3::"Rel\<^sub>4('a,'b,'c,'d) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('d)"  ("rightDualBound\<^sub>3")
-  where "rightDualBound\<^sub>3 \<equiv> \<midarrow>\<^sup>r \<circ>\<^sub>3 rightCodualBound\<^sub>3"
-\<comment> \<open>... \<open>rightDualBound\<^sub>n \<equiv> \<midarrow>\<^sup>r \<circ>\<^sub>n rightCodualBound\<^sub>n\<close>\<close>
+  where "rightDualBound\<^sub>3 \<equiv> rightCodualBound\<^sub>3 \<ggreater>\<^sub>3 \<midarrow>\<^sup>r"
+\<comment> \<open>... \<open>rightDualBound\<^sub>n \<equiv> rightCodualBound\<^sub>n \<ggreater>\<^sub>n \<midarrow>\<^sup>r\<close>\<close>
 
 declare rightDualBound2_def[rel_defs] rightDualBound3_def[rel_defs]
 

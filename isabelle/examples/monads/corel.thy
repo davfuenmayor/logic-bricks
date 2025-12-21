@@ -4,11 +4,11 @@ begin
 
 (*Disambiguate notation*)
 no_notation
-  env.apr  (infixl "\<ggreater>" 54) and env.bind  (infixl "\<bind>" 54) and env.mcomp' (infixr "\<Zfinj>" 56) and env.acomp' (infixr "\<Zinj>" 56) and
-  coset.apr  (infixl "\<ggreater>" 54) and coset.bind  (infixl "\<bind>" 54) and coset.mcomp' (infixr "\<Zfinj>" 56) and coset.acomp' (infixr "\<Zinj>" 56)
+  env.apr  (infixl "*>" 54) and env.bind  (infixl "\<bind>" 54) and env.mcomp' (infixr "\<Zfinj>" 56) and env.acomp' (infixr "\<Zinj>" 56) and
+  coset.apr  (infixl "*>" 54) and coset.bind  (infixl "\<bind>" 54) and coset.mcomp' (infixr "\<Zfinj>" 56) and coset.acomp' (infixr "\<Zinj>" 56)
 notation
-  env.apr  (infixl "\<ggreater>\<^sup>e" 54) and env.bind  (infixl "\<bind>\<^sup>e" 54) and env.mcomp' (infixr "\<Zfinj>\<^sup>e" 56) and env.acomp' (infixr "\<Zinj>\<^sup>e" 56) and
-  coset.apr  (infixl "\<ggreater>\<^sup>s" 54) and coset.bind  (infixl "\<bind>\<^sup>s" 54) and coset.mcomp' (infixr "\<Zfinj>\<^sup>s" 56) and coset.acomp' (infixr "\<Zinj>\<^sup>s" 56)
+  env.apr  (infixl "*>\<^sup>e" 54) and env.bind  (infixl "\<bind>\<^sup>e" 54) and env.mcomp' (infixr "\<Zfinj>\<^sup>e" 56) and env.acomp' (infixr "\<Zinj>\<^sup>e" 56) and
+  coset.apr  (infixl "*>\<^sup>s" 54) and coset.bind  (infixl "\<bind>\<^sup>s" 54) and coset.mcomp' (infixr "\<Zfinj>\<^sup>s" 56) and coset.acomp' (infixr "\<Zinj>\<^sup>s" 56)
 
 
 section \<open>Co-Relation Monad\<close>
@@ -23,13 +23,18 @@ declare comb_defs[all_defs] func_defs[all_defs] rel_defs[all_defs]
 subsection \<open>Functor\<close>
 
 abbreviation(input) fmap0::"'a \<Rightarrow>  Rel('b,'a)"
-  where "fmap0 \<equiv> env.fmap0 \<circ> coset.fmap0"
+  where "fmap0 \<equiv> coset.fmap0 \<ggreater> env.fmap0"
 abbreviation(input) fmap1::"('a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
-  where "fmap1 \<equiv> env.fmap1 \<circ> coset.fmap1"
+  where "fmap1 \<equiv> coset.fmap1 \<ggreater> env.fmap1"
 abbreviation(input) fmap2::"('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> (Rel('d,'a) \<Rightarrow> Rel('d,'b) \<Rightarrow> Rel('d,'c))"
-  where "fmap2 \<equiv> env.fmap2 \<circ> coset.fmap2"
+  where "fmap2 \<equiv> coset.fmap2 \<ggreater> env.fmap2"
 abbreviation(input) fmap3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> (Rel('e,'a) \<Rightarrow> Rel('e,'b) \<Rightarrow> Rel('e,'c) \<Rightarrow> Rel('e,'d))"
-  where "fmap3 \<equiv> env.fmap3 \<circ> coset.fmap3"
+  where "fmap3 \<equiv> coset.fmap3 \<ggreater> env.fmap3"
+\<comment> \<open>...and so on\<close>
+
+lemma "fmap0 f A = \<lbrace>f\<rbrace>" unfolding all_defs ..
+lemma "fmap1 f A = (\<lambda>x y. \<forall>a. f a = y \<rightarrow> A x a)" unfolding all_defs ..
+lemma "fmap2 f A B = (\<lambda>y z. \<forall>a b. f a b = z \<rightarrow> A y a \<or> B y b)" unfolding all_defs ..
 \<comment> \<open>...and so on\<close>
 
 text \<open>Functor's "unit" (monad's "return" resp. applicative's "pure") corresponds to the nullary case.\<close>
@@ -50,8 +55,8 @@ abbreviation(input) ap2::"Rel('d,'a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightar
 
 text \<open>Applicative's classic "ap" corresponds to the unary case.\<close>
 notation ap1 ("ap")
-abbreviation(input) apr :: "Rel('c,'a) \<Rightarrow> Rel('c,'a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'b)"(infixl "\<ggreater>" 54)
-  where "a \<ggreater> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
+abbreviation(input) apr :: "Rel('c,'a) \<Rightarrow> Rel('c,'a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'b)"(infixl "*>" 54)
+  where "a *> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
 
 text \<open>Indeed, we have:\<close>
 lemma "ap0 = fmap1 \<^bold>I" unfolding all_defs ..
@@ -60,20 +65,20 @@ lemma "ap2 = fmap3 \<^bold>I" unfolding all_defs ..
 \<comment> \<open>...and so on\<close>
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
-lemma ap_identity:    "x \<ggreater> (unit \<^bold>I) = x" unfolding all_defs by simp
-lemma ap_composition: "w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B))) = (w \<ggreater> v) \<ggreater> u" unfolding all_defs by fastforce
-lemma ap_homomorphism: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding all_defs by auto
-lemma ap_interchange: "(unit x) \<ggreater> f = f \<ggreater> (unit (\<^bold>T x))" unfolding all_defs by auto
+lemma ap_identity:    "x *> (unit \<^bold>I) = x" unfolding all_defs by simp
+lemma ap_composition: "w *> (v *> (u *> (unit \<^bold>B))) = (w *> v) *> u" unfolding all_defs by fast
+lemma ap_homomorphism: "(unit x) *> (unit f) = unit (f x)" unfolding all_defs by auto
+lemma ap_interchange: "(unit x) *> f = f *> unit (\<^bold>T x)" unfolding all_defs by auto
 
 
 subsection \<open>Monad\<close>
 
 abbreviation(input) bindr1::"('a \<Rightarrow> Rel('c,'b)) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
-  where "bindr1 \<equiv> (env.fmap2 coset.bindr1) \<circ> \<^bold>C" \<comment> \<open>bind-reversed\<close>
+  where "bindr1 \<equiv> \<^bold>C \<ggreater> env.fmap2 coset.bindr1" \<comment> \<open>bind-reversed\<close>
 abbreviation(input) bindr2::"('a \<Rightarrow> 'b \<Rightarrow> Rel('d,'c)) \<Rightarrow> Rel('d,'a) \<Rightarrow> Rel('d,'b) \<Rightarrow> Rel('d,'c)"
-  where "bindr2 \<equiv> (env.fmap3 coset.bindr2) \<circ> \<^bold>R"
+  where "bindr2 \<equiv> \<^bold>R \<ggreater> env.fmap3 coset.bindr2"
 abbreviation(input) bindr3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> Rel('e,'d)) \<Rightarrow> Rel('e,'a) \<Rightarrow> Rel('e,'b) \<Rightarrow> Rel('e,'c) \<Rightarrow> Rel('e,'d)"
-  where "bindr3 \<equiv> (env.fmap4 coset.bindr3) \<circ> \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1" 
+  where "bindr3 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1 \<ggreater> env.fmap4 coset.bindr3" 
 \<comment> \<open>...and so on\<close>
 
 text \<open>Monad's usual "bind" corresponds to the (reversed) unary case, and gets its customary notation.\<close>
@@ -82,7 +87,7 @@ abbreviation(input) bind::"Rel('c,'a) \<Rightarrow> ('a \<Rightarrow> Rel('c,'b)
   where "a \<bind> f \<equiv> bindr f a"
 
 text \<open>fmap can be stated in terms of (reversed) bind and unit...\<close>
-lemma "fmap = (bindr \<circ>\<^sub>2 \<^bold>B) unit" unfolding all_defs by simp
+lemma "fmap = (\<^bold>B \<ggreater>\<^sub>2 bindr) unit" unfolding all_defs by simp
 text \<open>... and ap in terms of bind and fmap\<close>
 lemma "ap = \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap)" unfolding all_defs by blast
 
@@ -93,26 +98,26 @@ lemma monad_assoc: "((x \<bind> f) \<bind> g) = (x \<bind> (\<lambda>z. (f z) \<
 
 
 abbreviation(input) join::"Rel('c,Rel('c,'a)) \<Rightarrow> Rel('c,'a)"
-  where "join \<equiv>  env.join \<circ> (env.fmap (coset.join \<circ>\<^sub>2 coset.intoArrowM))"
+  where "join \<equiv> env.fmap (coset.intoArrowM \<ggreater>\<^sub>2 coset.join) \<ggreater> env.join"
 
 text \<open>Recalling that\<close>
 lemma "join = bindr \<^bold>I" unfolding all_defs by metis
 
 text \<open>We extrapolate to obtain some interesting interrelations, for different arities\<close>
-lemma "join \<circ> ap0 = bindr1 \<^bold>I"  unfolding all_defs by metis
-lemma "join \<circ>\<^sub>2 ap1 = bindr2 \<^bold>I" unfolding all_defs by metis
-lemma "join \<circ>\<^sub>3 ap2 = bindr3 \<^bold>I" unfolding all_defs by fast
+lemma "ap0 \<ggreater> join = bindr1 \<^bold>I" unfolding all_defs by metis
+lemma "ap1 \<ggreater>\<^sub>2 join = bindr2 \<^bold>I" unfolding all_defs by metis
+lemma "ap2 \<ggreater>\<^sub>3 join = bindr3 \<^bold>I" unfolding all_defs by fast
 
 text \<open>Similarly, we can define bindr in terms of join and fmap, for different arities\<close>
-lemma "bindr1 = join \<circ>\<^sub>2 fmap1" unfolding all_defs by metis
-lemma "bindr2 = join \<circ>\<^sub>3 fmap2" unfolding all_defs by metis
-lemma "bindr3 = join \<circ>\<^sub>4 fmap3" unfolding all_defs by metis
+lemma "bindr1 = fmap1 \<ggreater>\<^sub>2 join" unfolding all_defs by metis
+lemma "bindr2 = fmap2 \<ggreater>\<^sub>3 join" unfolding all_defs by metis
+lemma "bindr3 = fmap3 \<ggreater>\<^sub>4 join" unfolding all_defs by metis
 
 text \<open>Moreover, recalling that\<close>
 lemma "ap F A = join (fmap (\<lambda>f. fmap f A) F)" unfolding all_defs by blast 
 
 text \<open>We can extrapolate to define ap in terms of join and fmap\<close> (*TODO: for different arities*)
-lemma "ap1 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap fmap)" unfolding all_defs by blast
+lemma "ap1 = ((\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap fmap) \<ggreater>\<^sub>2 join" unfolding all_defs by blast
 
 
 subsection \<open>Pipelines\<close>
@@ -126,34 +131,33 @@ term "a :: Rel('b,'a \<Rightarrow> 'c)"
 
 text \<open>Takes a plain function and disguises it as a monadic arrow.\<close>
 abbreviation(input) asArrowM::"('a \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> Rel('b,'c))"
-  where "asArrowM \<equiv> env.asArrowM \<circ> coset.asArrowM"
+  where "asArrowM \<equiv> coset.asArrowM \<ggreater> env.asArrowM"
 
 text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
 abbreviation(input) intoArrowM::"Rel('b,'a \<Rightarrow> 'c) \<Rightarrow> ('a \<Rightarrow> Rel('b,'c))"
-  where "intoArrowM \<equiv> (env.intoArrowM \<circ>\<^sub>2 env.fmap) coset.intoArrowM"
+  where "intoArrowM \<equiv> (env.fmap \<ggreater>\<^sub>2 env.intoArrowM) coset.intoArrowM"
 text \<open>Takes a monadic arrow and transforms it into an applicative arrow.\<close>
 abbreviation(input) intoArrowA::"('a \<Rightarrow> Rel('b,'c)) \<Rightarrow> Rel('b,'a \<Rightarrow> 'c)"
-  where "intoArrowA \<equiv> coset.intoArrowA \<circ>\<^sub>2 env.intoArrowA"
+  where "intoArrowA \<equiv> env.intoArrowA \<ggreater>\<^sub>2 coset.intoArrowA"
 
 text \<open>Note that\<close>
-lemma "ap = bindr \<circ> intoArrowM" unfolding all_defs by fast
+lemma "ap = intoArrowM \<ggreater> bindr" unfolding all_defs by fast
 
 
 subsubsection \<open>Functional composition\<close>
 
 text \<open>Quickly recall, again, that for the case of plain functions, we have:\<close>
 term "(|>) :: 'a \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b"                  \<comment> \<open>reversed application\<close>
-term "(;)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
+term "(\<ggreater>)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
 
 text \<open>Composition is associative and suitably interrelates with application to build pipelines.\<close>
-lemma "f ; (g ; h) = (f ; g) ; h" unfolding comb_defs ..
-lemma "(x |> f |> g |> h) = (x |> f ; g ; h)" unfolding comb_defs ..
+lemma "f \<ggreater> (g \<ggreater> h) = (f \<ggreater> g) \<ggreater> h" unfolding comb_defs ..
+lemma "(x |> f |> g |> h) = (x |> f \<ggreater> g \<ggreater> h)" unfolding comb_defs ..
 
 text \<open>Interrelation between application and composition.\<close>
-lemma "f ; g = (\<lambda>x. f x |> g)" unfolding comb_defs ..
-lemma "(\<circ>) = (\<lambda>g f x. g @ f @ x)" unfolding comb_defs ..
-lemma "(@) = (\<circ>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<circ>) = \<^bold>D (@)" unfolding comb_defs ..
+lemma "(\<ggreater>) = (\<lambda>f g x. x |> f |> g)" unfolding comb_defs ..
+lemma "\<^bold>A = \<^bold>B \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>B = \<^bold>D \<^bold>A" unfolding comb_defs ..
 
 
 subsubsection \<open>Monadic composition\<close>
@@ -179,27 +183,27 @@ lemma "(x \<bind> f \<bind> g \<bind> h) = (x \<bind> f \<Zfinj> g \<Zfinj> h)" 
 
 text \<open>Bind in terms of monadic composition\<close>
 lemma "bindr = (\<Zfinj>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<bind>) = (\<^bold>C \<circ> (\<Zfinj>)) \<^bold>I" unfolding comb_defs ..
+lemma "(\<bind>) = ((\<Zfinj>) \<ggreater> \<^bold>C) \<^bold>I" unfolding comb_defs ..
 
 
 subsubsection \<open>Applicative composition\<close>
 
 text \<open>Analogously, we can introduce applicative composition.\<close>
 abbreviation(input) acomp::"Rel('w, 'b \<Rightarrow> 'c) \<Rightarrow> Rel('w, 'a \<Rightarrow> 'b) \<Rightarrow> Rel('w, 'a \<Rightarrow> 'c)" 
-  where "acomp \<equiv> intoArrowA \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 (\<circ>\<^sub>2) ap intoArrowM)"
+  where "acomp \<equiv> (\<^bold>D (\<ggreater>\<^sub>2) intoArrowM ap) \<ggreater>\<^sub>2 intoArrowA"
 abbreviation(input) acomp' (infixr "\<Zinj>" 56) \<comment> \<open>reversed applicative composition\<close>
   where "f \<Zinj> g \<equiv> acomp g f"
 
-lemma "f \<Zinj> g = intoArrowA (intoArrowM f ; ap g)" unfolding comb_defs ..
-lemma "f \<Zinj> g = intoArrowA (\<lambda>x. (intoArrowM f x) \<ggreater> g)" unfolding rel_defs  comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (intoArrowM f \<ggreater> ap g)" unfolding comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (\<lambda>x. (intoArrowM f x) *> g)" unfolding rel_defs  comb_defs ..
 
 text \<open>Note the corresponding types:\<close>
-term "(\<ggreater>) :: Rel('c,'a) \<Rightarrow> Rel('c,'a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'b)"
+term "(*>) :: Rel('c,'a) \<Rightarrow> Rel('c,'a \<Rightarrow> 'b) \<Rightarrow> Rel('c,'b)"
 term "(\<Zinj>) :: Rel('w,'a \<Rightarrow> 'b) \<Rightarrow> Rel('w,'b \<Rightarrow> 'c) \<Rightarrow> Rel('w,'a \<Rightarrow> 'c)"
 
 text \<open>Applicative composition is associative and suitably interrelates with ap to build pipelines:\<close>
 lemma "f \<Zinj> (g \<Zinj> h) = (f \<Zinj> g) \<Zinj> h" unfolding all_defs apply (rule ext)+ apply auto apply (metis B1_comb_def) by (metis o_apply)
-lemma "(x \<ggreater> f \<ggreater> g \<ggreater> h) = (x \<ggreater> f \<Zinj> g \<Zinj> h)" unfolding all_defs apply (rule ext)+ apply auto by (fastforce | metis)+
+lemma "(x *> f *> g *> h) = (x *> f \<Zinj> g \<Zinj> h)" unfolding all_defs apply (rule ext)+ apply auto by (fastforce | metis)+
 
 
 end

@@ -8,36 +8,29 @@ section \<open>Continuation Monad\<close>
 subsection \<open>Functor\<close>
 
 abbreviation(input) fmap0 :: "'a \<Rightarrow> ('r\<^sub>1 \<Rightarrow> 'r\<^sub>2) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a)"
-  where "fmap0 \<equiv> \<^bold>L (\<^bold>T \<circ>\<^sub>2 \<^bold>B\<^sub>0)"
+  where "fmap0 \<equiv> \<^bold>L (\<^bold>B\<^sub>0 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap1::"('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b)"
-  where "fmap1 \<equiv> \<^bold>L (\<^bold>T \<circ>\<^sub>2 \<^bold>B\<^sub>1)"
+  where "fmap1 \<equiv> \<^bold>L (\<^bold>B\<^sub>1 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap2::"('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>2('a,'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('c)"
-  where "fmap2 \<equiv> \<^bold>L (\<^bold>T \<circ>\<^sub>2 \<^bold>B\<^sub>2)"
+  where "fmap2 \<equiv> \<^bold>L (\<^bold>B\<^sub>2 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>3('a,'b,'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('d)"
-  where "fmap3 \<equiv> \<^bold>L (\<^bold>T \<circ>\<^sub>2 \<^bold>B\<^sub>3)"
+  where "fmap3 \<equiv> \<^bold>L (\<^bold>B\<^sub>3 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap4::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>4('a,'b,'c,'d) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('e)"
-  where "fmap4 \<equiv> \<^bold>L (\<^bold>T \<circ>\<^sub>2 \<^bold>B\<^sub>4)"
+  where "fmap4 \<equiv> \<^bold>L (\<^bold>B\<^sub>4 \<ggreater>\<^sub>2 \<^bold>T)"
 \<comment> \<open>and so on...\<close>
 
-lemma "fmap0 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>0)) \<^bold>T" unfolding comb_defs ..
-lemma "fmap1 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>1)) \<^bold>T" unfolding comb_defs ..
-lemma "fmap2 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>2)) \<^bold>T" unfolding comb_defs ..
-lemma "fmap3 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>3)) \<^bold>T" unfolding comb_defs ..
-lemma "fmap4 = (\<^bold>L \<circ> (\<^bold>C\<^bold>B\<^sub>2 \<^bold>B\<^sub>4)) \<^bold>T" unfolding comb_defs ..
+lemma "fmap0 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>0 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
+lemma "fmap1 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>1 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
+lemma "fmap2 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>2 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
+lemma "fmap3 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>3 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
+lemma "fmap4 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>4 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
 \<comment> \<open>and so on...\<close>
 
-lemma "fmap0 = (\<lambda>f k g. k (g f))" unfolding comb_defs ..
-lemma "fmap1 = (\<lambda>f k g. k (g \<circ> f))" unfolding comb_defs ..
-lemma "fmap2 = (\<lambda>f k g. k (g \<circ>\<^sub>2 f))" unfolding comb_defs ..
-lemma "fmap3 = (\<lambda>f k g. k (g \<circ>\<^sub>3 f))" unfolding comb_defs ..
-lemma "fmap4 = (\<lambda>f k g. k (g \<circ>\<^sub>4 f))" unfolding comb_defs ..
-\<comment> \<open>and so on...\<close>
-
-lemma "fmap0 f = (\<lambda>k g. (f |> g) |> k)" unfolding comb_defs ..
-lemma "fmap1 f = (\<lambda>k g. (f ; g)  |> k)" unfolding comb_defs ..
-lemma "fmap2 f = (\<lambda>k g. (f ;\<^sub>2 g) |> k)" unfolding comb_defs ..
-lemma "fmap3 f = (\<lambda>k g. (f ;\<^sub>3 g) |> k)" unfolding comb_defs ..
-lemma "fmap4 f = (\<lambda>k g. (f ;\<^sub>4 g) |> k)" unfolding comb_defs ..
+lemma "fmap0 = (\<lambda>f k g. k (f |> g))" unfolding comb_defs ..
+lemma "fmap1 = (\<lambda>f k g. k (f \<ggreater> g))" unfolding comb_defs ..
+lemma "fmap2 = (\<lambda>f k g. k (f \<ggreater>\<^sub>2 g))" unfolding comb_defs ..
+lemma "fmap3 = (\<lambda>f k g. k (f \<ggreater>\<^sub>3 g))" unfolding comb_defs ..
+lemma "fmap4 = (\<lambda>f k g. k (f \<ggreater>\<^sub>4 g))" unfolding comb_defs ..
 \<comment> \<open>and so on...\<close>
 
 text \<open>Functor's classic "fmap" corresponds to the unary case.\<close>
@@ -64,32 +57,32 @@ lemma "unit2 = \<^bold>V" unfolding comb_defs ..
 subsection \<open>Applicative\<close>
 
 abbreviation(input) ap0::"'r\<^sub>2,'r\<^sub>3-Cont('a) \<Rightarrow> ('r\<^sub>1 \<Rightarrow> 'r\<^sub>2) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('a)"
-  where "ap0 \<equiv> ((\<^bold>C\<^bold>B\<^sub>2) \<circ> (\<^bold>C\<^bold>B\<^sub>2)) \<^bold>B\<^sub>0"
+  where "ap0 \<equiv> ((\<ggreater>\<^sub>2) \<ggreater> (\<ggreater>\<^sub>2)) \<^bold>B\<^sub>0"
 abbreviation(input) ap1::"'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)"
-  where "ap1 \<equiv> ((\<^bold>C\<^bold>B\<^sub>2) \<circ> (\<^bold>C\<^bold>B\<^sub>2)) \<^bold>B\<^sub>1"
+  where "ap1 \<equiv> ((\<ggreater>\<^sub>2) \<ggreater> (\<ggreater>\<^sub>2)) \<^bold>B\<^sub>1"
 abbreviation(input) ap2::"'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>2('a,'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('c)"
-  where "ap2 \<equiv> ((\<^bold>C\<^bold>B\<^sub>2) \<circ> (\<^bold>C\<^bold>B\<^sub>2)) \<^bold>B\<^sub>2"
+  where "ap2 \<equiv> ((\<ggreater>\<^sub>2) \<ggreater> (\<ggreater>\<^sub>2)) \<^bold>B\<^sub>2"
 abbreviation(input) ap3::"'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>3('a,'b,'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('d)"
-  where "ap3 \<equiv> ((\<^bold>C\<^bold>B\<^sub>2) \<circ> (\<^bold>C\<^bold>B\<^sub>2)) \<^bold>B\<^sub>3"
+  where "ap3 \<equiv> ((\<ggreater>\<^sub>2) \<ggreater> (\<ggreater>\<^sub>2)) \<^bold>B\<^sub>3"
 abbreviation(input) ap4::"'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>4('a,'b,'c,'d) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('e)"
-  where "ap4 \<equiv> ((\<^bold>C\<^bold>B\<^sub>2) \<circ> (\<^bold>C\<^bold>B\<^sub>2)) \<^bold>B\<^sub>4"
+  where "ap4 \<equiv> ((\<ggreater>\<^sub>2) \<ggreater> (\<ggreater>\<^sub>2)) \<^bold>B\<^sub>4"
 
-lemma "ap0 = (\<lambda>f k g. f (\<lambda>x. k (g  x)))" unfolding comb_defs ..
-lemma "ap1 = (\<lambda>f k g. f (\<lambda>x. k (g \<circ> x)))" unfolding comb_defs ..
-lemma "ap2 = (\<lambda>f k g. f (\<lambda>x. k (g \<circ>\<^sub>2 x)))" unfolding comb_defs ..
-lemma "ap3 = (\<lambda>f k g. f (\<lambda>x. k (g \<circ>\<^sub>3 x)))" unfolding comb_defs ..
-lemma "ap4 = (\<lambda>f k g. f (\<lambda>x. k (g \<circ>\<^sub>4 x)))" unfolding comb_defs ..
+lemma "ap0 = (\<lambda>f k g. f (\<lambda>h. k (h |> g)))" unfolding comb_defs ..
+lemma "ap1 = (\<lambda>f k g. f (\<lambda>h. k (h \<ggreater> g)))" unfolding comb_defs ..
+lemma "ap2 = (\<lambda>f k g. f (\<lambda>h. k (h \<ggreater>\<^sub>2 g)))" unfolding comb_defs ..
+lemma "ap3 = (\<lambda>f k g. f (\<lambda>h. k (h \<ggreater>\<^sub>3 g)))" unfolding comb_defs ..
+lemma "ap4 = (\<lambda>f k g. f (\<lambda>h. k (h \<ggreater>\<^sub>4 g)))" unfolding comb_defs ..
 
 text \<open>Applicative's classic "ap" corresponds to the unary case.\<close>
 abbreviation "ap \<equiv> ap1"
-abbreviation(input) apr :: "'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)" (infixl "\<ggreater>" 54)
-  where "a \<ggreater> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
+abbreviation(input) apr :: "'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)" (infixl "*>" 54)
+  where "a *> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
-lemma ap_identity:    "x \<ggreater> (unit \<^bold>I) = x" unfolding comb_defs ..
-lemma ap_composition: "w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B))) = (w \<ggreater> v) \<ggreater> u" unfolding comb_defs ..
-lemma ap_homomorphism: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding comb_defs ..
-lemma ap_interchange: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding comb_defs ..
+lemma ap_identity:    "x *> (unit \<^bold>I) = x" unfolding comb_defs ..
+lemma ap_composition: "w *> (v *> (u *> (unit \<^bold>B))) = (w *> v) *> u" unfolding comb_defs ..
+lemma ap_homomorphism: "(unit x) *> (unit f) = unit (f x)" unfolding comb_defs ..
+lemma ap_interchange: "(unit x) *> f = f *> unit (\<^bold>T x)" unfolding comb_defs ..
 
 
 subsection \<open>Monad\<close>
@@ -110,12 +103,12 @@ abbreviation "bindr \<equiv> bindr1"
 abbreviation(input) bind::"'r\<^sub>2,'r\<^sub>3-Cont('a) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b)) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)" (infixl "\<bind>" 54)
   where "a \<bind> f \<equiv> bindr f a"
 
-lemma "bindr = (\<lambda>f k. k \<circ> (\<^bold>C f))" unfolding comb_defs ..
-lemma "bindr = \<^bold>L (\<^bold>T \<circ>\<^sub>2 (\<^bold>L\<^bold>V))" unfolding comb_defs ..
-lemma "bindr2 = (\<lambda>f k. k \<circ> (\<^bold>R f))" unfolding comb_defs ..
+lemma "bindr = (\<lambda>f k. \<^bold>C f \<ggreater> k)" unfolding comb_defs ..
+lemma "bindr = \<^bold>L (\<^bold>L\<^bold>V \<ggreater>\<^sub>2 \<^bold>T)" unfolding comb_defs ..
+lemma "bindr2 = (\<lambda>f k. \<^bold>R f \<ggreater> k)" unfolding comb_defs ..
 
 text \<open>Note that\<close>
-lemma "\<^bold>D\<^bold>C\<^bold>B = \<^bold>B (\<^bold>C\<^bold>B)" unfolding comb_defs ..
+lemma "\<^bold>D\<^bold>C\<^bold>B = \<^bold>B (\<ggreater>)" unfolding comb_defs ..
 lemma "\<^bold>D\<^bold>C\<^bold>B = \<^bold>C\<^sub>3\<^sub>1\<^sub>2\<^sub>4 \<^bold>B\<^sub>2" unfolding comb_defs ..
 lemma "\<^bold>D\<^bold>C\<^bold>B = (\<lambda>g x f z. f (g x z))" unfolding comb_defs ..
 
@@ -126,23 +119,23 @@ lemma monad_assoc: "((x \<bind> f) \<bind> g) = (x \<bind> (\<lambda>z. f z \<bi
 
 
 abbreviation join::"'r\<^sub>2,'r\<^sub>3-Cont('r\<^sub>1,'r\<^sub>2-Cont('a)) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('a)"
-  where "join \<equiv> \<^bold>C\<^bold>B \<^bold>T" (* preImage (;) wrt. \<^bold>T (|>) *)
+  where "join \<equiv> \<^bold>C\<^bold>B \<^bold>T"
 
 text \<open>In fact, the term corresponding to join could have been given a more general type:\<close>
 term "\<^bold>C\<^bold>B \<^bold>T :: ((('a \<Rightarrow> 'b) \<Rightarrow> 'b) \<Rightarrow> 'c) \<Rightarrow> 'a \<Rightarrow> 'c"
 
-lemma "join = (\<lambda>k. \<lambda>g. k (\<lambda>y. y g))" unfolding comb_defs ..
-lemma "join = (\<lambda>k. \<lambda>g. k (\<^bold>T g))" unfolding comb_defs ..
+lemma "join = (\<ggreater>) \<^bold>T" unfolding comb_defs ..
+lemma "join = (\<ggreater>) (|>)" unfolding comb_defs ..
 lemma "join = (\<lambda>k. \<lambda>g. \<^bold>B k \<^bold>T g)" unfolding comb_defs ..
-lemma "join = (;) \<^bold>T" unfolding comb_defs ..
-lemma "join = (;) (|>)" unfolding comb_defs ..
+lemma "join = (\<lambda>k. \<lambda>g. k (\<^bold>T g))" unfolding comb_defs ..
+lemma "join = (\<lambda>k. \<lambda>g. k (\<lambda>y. y g))" unfolding comb_defs ..
 
 
 subsection \<open>Interrelations\<close>
 
 text \<open>We can define bindr in terms of join and fmap\<close>
 lemma "join = bindr \<^bold>I" unfolding comb_defs ..
-lemma "bindr  = join \<circ>\<^sub>2 fmap" unfolding comb_defs ..
+lemma "bindr = fmap \<ggreater>\<^sub>2 join" unfolding comb_defs ..
 
 text \<open>Moreover, we can define ap in terms of join and fmap\<close>
 lemma "ap0 F A = join (fmap (\<lambda>f. fmap0 f A) F)"  unfolding comb_defs ..
@@ -151,15 +144,15 @@ lemma "ap2 F A = join (fmap (\<lambda>f. fmap2 f A) F)"  unfolding comb_defs ..
 lemma "ap3 F A = join (fmap (\<lambda>f. fmap3 f A) F)"  unfolding comb_defs ..
 lemma "ap4 F A = join (fmap (\<lambda>f. fmap4 f A) F)"  unfolding comb_defs ..
 
-lemma "ap0 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap0 fmap)"  unfolding comb_defs ..
-lemma "ap1 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap1 fmap)"  unfolding comb_defs ..
-lemma "ap2 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap2 fmap)"  unfolding comb_defs ..
-lemma "ap3 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap3 fmap)"  unfolding comb_defs ..
-lemma "ap4 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap4 fmap)"  unfolding comb_defs ..
+lemma "ap0 = (\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap0 fmap \<ggreater>\<^sub>2 join" unfolding comb_defs ..
+lemma "ap1 = (\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap1 fmap \<ggreater>\<^sub>2 join"  unfolding comb_defs ..
+lemma "ap2 = (\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap2 fmap \<ggreater>\<^sub>2 join"  unfolding comb_defs ..
+lemma "ap3 = (\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap3 fmap \<ggreater>\<^sub>2 join"  unfolding comb_defs ..
+lemma "ap4 = (\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap4 fmap \<ggreater>\<^sub>2 join"  unfolding comb_defs ..
 
 
 text \<open>fmap can be stated in terms of (reversed) bind and unit...\<close>
-lemma "fmap = (bindr \<circ>\<^sub>2 \<^bold>B) unit"   unfolding comb_defs ..
+lemma "fmap = (\<^bold>B \<ggreater>\<^sub>2 bindr) unit"   unfolding comb_defs ..
 text \<open>... and ap in terms of bind and fmap\<close>
 lemma "ap0 =  \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap0)" unfolding comb_defs ..
 lemma "ap1 =  \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap1)" unfolding comb_defs ..
@@ -183,7 +176,7 @@ abbreviation(input) asArrowM::"('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightar
 
 text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
 abbreviation(input) intoArrowM::"'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b))"
-  where "intoArrowM \<equiv> \<^bold>C\<^bold>B\<^sub>2 (\<^bold>R \<^bold>B)"
+  where "intoArrowM \<equiv> (\<ggreater>\<^sub>2) (\<^bold>R \<^bold>B)"
 
 (***TODO***)
 text \<open>Takes a monadic arrow and transforms it into an applicative arrow (wrt. a given transformation function).\<close>
@@ -195,17 +188,16 @@ subsubsection \<open>Functional composition\<close>
 
 text \<open>Quickly recall, again, that for the case of plain functions, we have:\<close>
 term "(|>) :: 'a \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b"                  \<comment> \<open>reversed application\<close>
-term "(;)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
+term "(\<ggreater>) :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
 
 text \<open>Composition is associative and suitably interrelates with application to build pipelines.\<close>
-lemma "f ; (g ; h) = (f ; g) ; h" unfolding comb_defs ..
-lemma "(x |> f |> g |> h) = (x |> f ; g ; h)" unfolding comb_defs ..
+lemma "f \<ggreater> (g \<ggreater> h) = (f \<ggreater> g) \<ggreater> h" unfolding comb_defs ..
+lemma "(x |> f |> g |> h) = (x |> f \<ggreater> g \<ggreater> h)" unfolding comb_defs ..
 
 text \<open>Interrelation between application and composition.\<close>
-lemma "f ; g = (\<lambda>x. f x |> g)" unfolding comb_defs ..
-lemma "(\<circ>) = (\<lambda>g f x. g @ f @ x)" unfolding comb_defs ..
-lemma "(@) = (\<circ>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<circ>) = \<^bold>D (@)" unfolding comb_defs ..
+lemma "(\<ggreater>) = (\<lambda>f g x. x |> f |> g)" unfolding comb_defs ..
+lemma "\<^bold>A = \<^bold>B \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>B = \<^bold>D \<^bold>A" unfolding comb_defs ..
 
 
 subsubsection \<open>Monadic composition\<close>
@@ -228,7 +220,7 @@ lemma "(x \<bind> f \<bind> g \<bind> h) = (x \<bind> f \<Zfinj> g \<Zfinj> h)" 
 
 text \<open>Bind in terms of monadic composition\<close>
 lemma "bindr = (\<Zfinj>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<bind>) = (\<^bold>C \<circ> (\<Zfinj>)) \<^bold>I" unfolding comb_defs ..
+lemma "(\<bind>) = ((\<Zfinj>) \<ggreater> \<^bold>C) \<^bold>I" unfolding comb_defs ..
 
 
 subsubsection \<open>Applicative composition\<close>
@@ -236,25 +228,25 @@ subsubsection \<open>Applicative composition\<close>
 text \<open>Analogously, we can introduce applicative composition.\<close>
 
 abbreviation(input) acomp  :: "'r\<^sub>2,'r\<^sub>3-Cont('b \<Rightarrow> 'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('a \<Rightarrow> 'c)"
-  where "acomp \<equiv> \<^bold>C\<^bold>B\<^sub>2 ap"
+  where "acomp \<equiv> (\<ggreater>\<^sub>2) ap"
 abbreviation(input) acomp' (infixr "\<Zinj>" 56) \<comment> \<open>reversed applicative composition\<close>
   where "f \<Zinj> g \<equiv> acomp g f"
 
-lemma "acomp = (\<lambda>g f k. g (k \<ggreater> f))" unfolding comb_defs ..
-lemma "acomp = (\<lambda>g f k. (k \<ggreater> f) |> g)" unfolding comb_defs ..
-lemma "acomp = (\<lambda>g f k. g (\<lambda>h. f (\<lambda>x. k (h \<circ> x))))" unfolding comb_defs ..
+lemma "acomp = (\<lambda>g f k. g (k *> f))" unfolding comb_defs ..
+lemma "acomp = (\<lambda>g f k. (k *> f) |> g)" unfolding comb_defs ..
+lemma "acomp = (\<lambda>g f k. g (\<lambda>h. f (\<lambda>x. k (x \<ggreater> h))))" unfolding comb_defs ..
 
 text \<open>Note the corresponding types:\<close>
-term "(\<Zfinj>)  :: ('a \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('b)) \<Rightarrow> ('b \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('c)) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('c))"
+term "(*>) :: 'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)"
 term "(\<Zinj>) :: 'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('b \<Rightarrow> 'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('a \<Rightarrow> 'c)"
 
 text \<open>Applicative composition is associative and suitably interrelates with ap to build pipelines:\<close>
 lemma "f \<Zinj> (g \<Zinj> h) = (f \<Zinj> g) \<Zinj> h" unfolding comb_defs ..
-lemma "(x \<ggreater> f \<ggreater> g \<ggreater> h) = (x \<ggreater> f \<Zinj> g \<Zinj> h)" unfolding comb_defs ..
+lemma "(x *> f *> g *> h) = (x *> f \<Zinj> g \<Zinj> h)" unfolding comb_defs ..
 
-text \<open>Some interrelations:\<close>
-lemma "acomp g f = ap (fmap (\<circ>) g) f" unfolding comb_defs ..
-lemma "acomp g f = ap (ap (unit (\<circ>)) g) f" unfolding comb_defs ..
+text \<open>The following interrelations hold in the current (continuation) monad only:\<close>
+lemma "f \<Zinj> g = ap (fmap \<^bold>B g) f" unfolding comb_defs ..
+lemma "f \<Zinj> g = ap (ap (unit \<^bold>B) g) f" unfolding comb_defs ..
 
 
 subsection \<open>Special functions for manipulating (delimited) continuations\<close>
@@ -269,14 +261,14 @@ lemma "eval m = m (\<lambda>x. x)" unfolding comb_defs ..
 text \<open>Reset (aka. "prompt") delimits the start of the continuation.
  The type is the principal (i.e. most general) type assigned by the HM type inference algorithm.\<close>
 abbreviation(input) reset :: "'a,'r-Cont('a) \<Rightarrow> 'o,'o-Cont('r)"
-  where "reset \<equiv> \<^bold>T \<circ> eval"
+  where "reset \<equiv> eval \<ggreater> \<^bold>T"
 
 notation reset ("prompt") (*another common wording*)
 
 lemma "reset = \<^bold>B \<^bold>T (\<^bold>T \<^bold>I)" unfolding comb_defs ..
 lemma "reset = \<^bold>B \<^bold>B \<^bold>B \<^bold>T \<^bold>T \<^bold>I" unfolding comb_defs ..
-lemma "reset = (\<^bold>T \<circ>\<^sub>2 \<^bold>T) \<^bold>I" unfolding comb_defs ..
-lemma "reset = eval (\<^bold>T \<circ>\<^sub>2 \<^bold>T)" unfolding comb_defs ..
+lemma "reset = (\<^bold>T \<ggreater>\<^sub>2 \<^bold>T) \<^bold>I" unfolding comb_defs ..
+lemma "reset = eval (\<^bold>T \<ggreater>\<^sub>2 \<^bold>T)" unfolding comb_defs ..
 
 lemma "reset m = (\<lambda>k. k (m \<^bold>I))" unfolding comb_defs ..
 lemma "reset m = (\<lambda>k. k (m (\<lambda>x. x)))" unfolding comb_defs ..
@@ -289,14 +281,14 @@ text \<open>Captures the current continuation up to the nearest \<open>reset\<cl
   as a reified function, which, when called, "jumps" back to the captured point (reinstalling the delimiter).
   The type given is the principal (i.e. most general) type assigned by the HM type-inference algorithm.\<close>
 abbreviation(input) shift::"(('a \<Rightarrow> 'o,'o-Cont('p)) \<Rightarrow> 'r,'q-Cont('r)) \<Rightarrow> 'p,'q-Cont('a)"
-  where  "shift \<equiv> eval \<circ>\<^sub>2 (\<^bold>C\<^bold>B (\<^bold>B\<^bold>T))"
+  where  "shift \<equiv> \<^bold>C\<^bold>B (\<^bold>B\<^bold>T) \<ggreater>\<^sub>2 eval"
 
 lemma "shift = (\<lambda>f k. eval (f (\<^bold>B\<^bold>T k)))" unfolding comb_defs ..
 lemma "shift = (\<lambda>f k. f (\<^bold>B\<^bold>T k) \<^bold>I)" unfolding comb_defs ..
 lemma "shift = (\<lambda>f k. f (\<lambda>a c. c (k a)) \<^bold>I)" unfolding comb_defs ..
 
-lemma "shift = \<^bold>B\<^sub>1\<^sub>1 (eval \<circ>\<^sub>2 \<^bold>A) \<^bold>I (\<^bold>B\<^bold>T)" unfolding comb_defs ..
-lemma "shift = (\<^bold>C\<^bold>B (\<^bold>B\<^bold>T)) \<circ> (\<^bold>C\<^bold>C \<^bold>I)" unfolding comb_defs ..
+lemma "shift = \<^bold>B\<^sub>1\<^sub>1 (\<^bold>A \<ggreater>\<^sub>2 eval) \<^bold>I (\<^bold>B\<^bold>T)" unfolding comb_defs ..
+lemma "shift = \<^bold>C\<^bold>C \<^bold>I \<ggreater> \<^bold>C\<^bold>B (\<^bold>B\<^bold>T)" unfolding comb_defs ..
 
 text \<open>An alternative (but unduly constrained) type often used in the literature:\<close>
 term "shift :: (('a \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('a)"
@@ -304,14 +296,14 @@ term "shift :: (('a \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('r)) \<Ri
 
 text \<open>Control is analogous to shift (but without reinstalling the delimiter)\<close>
 abbreviation(input) control:: "(('a \<Rightarrow> 'x,'o-Cont('p)) \<Rightarrow> 'r,'q-Cont('r)) \<Rightarrow> 'o,'q-Cont('a)"
-  where "control \<equiv> eval \<circ>\<^sub>2 (\<^bold>C\<^bold>B (\<^bold>B\<^bold>K))"
+  where "control \<equiv> \<^bold>C\<^bold>B (\<^bold>B\<^bold>K) \<ggreater>\<^sub>2 eval"
 
 lemma "control = (\<lambda>f k. eval (f (\<^bold>B\<^bold>K k)))" unfolding comb_defs ..
 lemma "control = (\<lambda>f k. f (\<^bold>B\<^bold>K k) \<^bold>I)" unfolding comb_defs ..
 lemma "control = (\<lambda>f k. f (\<lambda>a c. k a) \<^bold>I)" unfolding comb_defs ..
 
-lemma "control = \<^bold>B\<^sub>1\<^sub>1 (eval \<circ>\<^sub>2 \<^bold>A) \<^bold>I (\<^bold>B\<^bold>K)" unfolding comb_defs ..
-lemma "control = ((\<^bold>C\<^bold>B (\<^bold>B\<^bold>K)) \<circ> (\<^bold>C\<^bold>C \<^bold>I))" unfolding comb_defs ..
+lemma "control = \<^bold>B\<^sub>1\<^sub>1 (\<^bold>A \<ggreater>\<^sub>2 eval) \<^bold>I (\<^bold>B\<^bold>K)" unfolding comb_defs ..
+lemma "control = \<^bold>C\<^bold>C \<^bold>I \<ggreater> \<^bold>C\<^bold>B (\<^bold>B\<^bold>K)" unfolding comb_defs ..
 
 text \<open>Alternative (but unduly constrained) types found in the literature:\<close>
 term "control :: (('a \<Rightarrow> 'r-ECont('b)) \<Rightarrow> 'r-ECont('r)) \<Rightarrow> 'r-ECont('a)"

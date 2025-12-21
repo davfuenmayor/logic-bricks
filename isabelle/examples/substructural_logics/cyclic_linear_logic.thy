@@ -39,7 +39,7 @@ lemma "(R ;\<^sup>r S)\<^sup>\<sim> = (S\<^sup>\<sim>) \<dagger>\<^sup>r (R\<^su
 lemma "(R \<dagger>\<^sup>r S)\<^sup>\<sim> = (S\<^sup>\<sim>) ;\<^sup>r (R\<^sup>\<sim>)" by them
 
 text \<open>Cotransposition also acts as a negation wrt residuals.\<close>
-lemma "(A \<Zrres>\<^sup>r B)\<^sup>\<sim> = (A \<circ>\<^sup>r (B\<^sup>\<sim>))" by them
+lemma "(A \<Zrres>\<^sup>r B)\<^sup>\<sim> = (B\<^sup>\<sim> ;\<^sup>r A)" by them
 lemma "(A \<Znrres>\<^sup>r B)\<^sup>\<sim> = (A ;\<^sup>r (B\<^sup>\<sim>))" by them
 
 text \<open>The strong-identity-interior and weak-difference-closure operators are dual wrt. cotransposition.\<close>

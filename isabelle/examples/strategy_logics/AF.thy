@@ -75,14 +75,14 @@ subsection \<open>Extensions\<close>
 
 text \<open>A set S is "conflict-free" when it does not contain a pair of arguments a and b such that a attacks b.\<close>
 definition conflictfreeness :: \<open>ERel('a) \<Rightarrow> Space('a)\<close> ("_-conflictfree")
-  where \<open>conflictfreeness = FP \<circ> \<^bold>W \<circ> relativeInterior\<close>
+  where \<open>conflictfreeness = relativeInterior \<ggreater> \<^bold>W \<ggreater> FP\<close>
 
 declare conflictfreeness_def[af_defs]
 
 lemma "R-conflictfree S = (S = relativeInterior R S S)" by them
 lemma cf_simp: \<open>R-conflictfree S = (\<forall>a b. S a \<and> S b \<longrightarrow> \<not>R a b)\<close> by them
 
-lemma conflictfreeness_def2: "conflictfreeness = \<nexists> \<circ>\<^sub>2 \<^bold>W \<circ> relativeBorder" by them
+lemma conflictfreeness_def2: "conflictfreeness =  relativeBorder \<ggreater> \<^bold>W \<ggreater>\<^sub>2 \<nexists>" by them
 lemma "R-conflictfree S = (relativeBorder R S S = \<emptyset>)" by them
 
 
@@ -125,14 +125,14 @@ text \<open>The grounded extension is conflict-free.\<close>
 lemma grounded_cf: "R-conflictfree (R-groundedExt)" oops (*TODO: check*)
 
 text \<open>The grounded extension is a (unique) subset-minimal complete extension.\<close>
-lemma \<open>groundedExtension R = \<iota>(((\<subseteq>)-least \<circ> completeExtension) R)\<close> oops (*TODO: check*)
-lemma \<open>(((\<subseteq>)-least \<circ> completeExtension) R) (groundedExtension R)\<close> oops (*TODO: check*)
+lemma \<open>groundedExtension R = \<iota> ((completeExtension \<ggreater> (\<subseteq>)-least) R)\<close> oops (*TODO: check*)
+lemma \<open>(completeExtension \<ggreater> (\<subseteq>)-least) R (groundedExtension R)\<close> oops (*TODO: check*)
 
 text \<open>A preferred extension is a subset-maximal complete extension.\<close>
 definition preferredExtension :: \<open>ERel('a) \<Rightarrow> Space('a)\<close> ("_-groundedExt")
-  where \<open>preferredExtension \<equiv> (\<subseteq>)-max \<circ> completeExtension\<close>
+  where \<open>preferredExtension \<equiv> completeExtension \<ggreater> (\<subseteq>)-max\<close>
 
 text \<open>Alternatively, preferred extensions can be defined as subset-maximal admissible sets ([Dung 1995] Def. 7)\<close>
-lemma "preferredExtension = (\<subseteq>)-max \<circ> admissibility" oops (*TODO: check*)
+lemma "preferredExtension = admissibility \<ggreater> (\<subseteq>)-max" oops (*TODO: check*)
 
 end

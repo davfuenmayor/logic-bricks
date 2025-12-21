@@ -31,7 +31,7 @@ lemma "(\<not>) = \<Q>(\<Q>(\<Q>(\<Q> \<Q> \<Q>))(\<^bold>K(\<Q> \<Q> \<Q>)))" u
 
 subsubsection \<open>Disequality\<close>
 text \<open>Using negation we can define disequality for any type (not only boolean).\<close>
-lemma diseq_defQ: "\<D> = (\<not>) \<circ>\<^sub>2 \<Q>" unfolding comb_defs by simp
+lemma diseq_defQ: "\<D> = \<Q> \<ggreater>\<^sub>2 (\<not>)" unfolding comb_defs by simp
 lemma "\<D> = (\<lambda>A B. \<not>(A = B))" by simp
 
 named_theorems eq_defs

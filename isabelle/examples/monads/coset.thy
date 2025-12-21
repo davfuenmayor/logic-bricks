@@ -7,7 +7,10 @@ section \<open>Co-Set Monad\<close>
 text \<open>As it happens, the Set functor comes with a "dual" monad structure too.\<close>
 
 named_theorems all_defs
-declare comb_defs[all_defs] func_defs[all_defs] rel_defs[all_defs]
+
+declare comb_defs[all_defs] 
+        func_defs[all_defs] 
+        rel_defs[all_defs]
 
 
 subsection \<open>Functor\<close>
@@ -40,20 +43,20 @@ abbreviation(input) ap2::"Set('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow
 
 text \<open>Applicative's classic "ap" corresponds to the unary case.\<close>
 abbreviation "ap \<equiv> ap1"
-abbreviation(input) apr :: "Set('a) \<Rightarrow> Set('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"(infixl "\<ggreater>" 54)
-  where "a \<ggreater> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
+abbreviation(input) apr :: "Set('a) \<Rightarrow> Set('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"(infixl "*>" 54)
+  where "a *> f \<equiv> ap f a"  \<comment> \<open>convenient "pipeline notation"\<close>
 
 text \<open>Indeed, we have:\<close>
 lemma "ap0 = \<^bold>A" unfolding all_defs by simp
-lemma "ap = rightDualImage \<circ> intoRel \<circ> \<midarrow>"  unfolding all_defs by blast
-lemma "ap = \<Inter>\<^sup>r \<circ> (image dualimage) \<circ> \<midarrow>" unfolding all_defs by blast
+lemma "ap = \<midarrow> \<ggreater> intoRel \<ggreater> rightDualImage"  unfolding all_defs by blast
+lemma "ap = \<midarrow> \<ggreater> (image dualimage) \<ggreater> \<Inter>\<^sup>r" unfolding all_defs by blast
 \<comment> \<open>...and so on\<close>
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
-lemma ap_identity:    "x \<ggreater> (unit \<^bold>I) = x" unfolding all_defs by simp
-lemma ap_composition: "w \<ggreater> (v \<ggreater> (u \<ggreater> (unit \<^bold>B))) = (w \<ggreater> v) \<ggreater> u" unfolding all_defs by fastforce
-lemma ap_homomorphism: "(unit x) \<ggreater> (unit f) = unit (f x)" unfolding all_defs by auto
-lemma ap_interchange: "(unit x) \<ggreater> f = f \<ggreater> unit (\<^bold>T x)" unfolding all_defs by auto
+lemma ap_identity:    "x *> (unit \<^bold>I) = x" unfolding all_defs by simp
+lemma ap_composition: "w *> (v *> (u *> (unit \<^bold>B))) = (w *> v) *> u" unfolding all_defs by fast
+lemma ap_homomorphism: "(unit x) *> (unit f) = unit (f x)" unfolding all_defs by auto
+lemma ap_interchange: "(unit x) *> f = f *> unit (\<^bold>T x)" unfolding all_defs by auto
 
 
 subsection \<open>Monad\<close>
@@ -73,7 +76,7 @@ abbreviation(input) bind::"Set('a) \<Rightarrow> ('a \<Rightarrow> Set('b)) \<Ri
   where "a \<bind> f \<equiv> bindr f a"
 
 text \<open>fmap can be stated in terms of (reversed) bind and unit...\<close>
-lemma "fmap = (bindr \<circ>\<^sub>2 \<^bold>B) unit" unfolding all_defs by simp
+lemma "fmap = (\<^bold>B \<ggreater>\<^sub>2 bindr) unit" unfolding all_defs by simp
 text \<open>... and ap in terms of bind and fmap\<close>
 lemma "ap = \<^bold>B\<^sub>1\<^sub>1 bind \<^bold>I (\<^bold>C fmap)" unfolding all_defs by blast
 
@@ -85,26 +88,26 @@ lemma monad_assoc: "((x \<bind> f) \<bind> g) = (x \<bind> (\<lambda>z. f z \<bi
 
 text \<open>Monad's "join" corresponds in fact to the meet of the complement (of the space).\<close>
 abbreviation(input) join::"Set(Set('a)) \<Rightarrow> Set('a)"
-  where "join  \<equiv> \<Inter> \<circ> \<midarrow>"
+  where "join  \<equiv> \<midarrow> \<ggreater> \<Inter>"
 
 text \<open>Recalling that\<close>
 lemma "join = bindr \<^bold>I" unfolding all_defs by metis
 
 text \<open>We extrapolate to obtain some interesting interrelations, for different arities\<close>
-lemma "join \<circ> ap0 = bindr1 \<^bold>I"  unfolding all_defs by metis
-lemma "join \<circ>\<^sub>2 ap1 = bindr2 \<^bold>I" unfolding all_defs by metis
-lemma "join \<circ>\<^sub>3 ap2 = bindr3 \<^bold>I" unfolding all_defs by metis
+lemma "ap0 \<ggreater> join = bindr1 \<^bold>I" unfolding all_defs by metis
+lemma "ap1 \<ggreater>\<^sub>2 join = bindr2 \<^bold>I" unfolding all_defs by metis
+lemma "ap2 \<ggreater>\<^sub>3 join = bindr3 \<^bold>I" unfolding all_defs by metis
 
 text \<open>Similarly, we can define bindr in terms of join and fmap, for different arities\<close>
-lemma "bindr1 = join \<circ>\<^sub>2 fmap1" unfolding all_defs by metis
-lemma "bindr2 = join \<circ>\<^sub>3 fmap2" unfolding all_defs by metis 
-lemma "bindr3 = join \<circ>\<^sub>4 fmap3" unfolding all_defs by metis
+lemma "bindr1 = fmap1 \<ggreater>\<^sub>2 join" unfolding all_defs by metis
+lemma "bindr2 = fmap2 \<ggreater>\<^sub>3 join" unfolding all_defs by metis
+lemma "bindr3 = fmap3 \<ggreater>\<^sub>4 join" unfolding all_defs by metis
 
 text \<open>Moreover, recalling that\<close>
 lemma "ap F A = join (fmap (\<lambda>f. fmap f A) F)" unfolding all_defs by blast 
 
 text \<open>We can extrapolate to define ap in terms of join and fmap\<close> (*TODO: for different arities*)
-lemma "ap1 = join \<circ>\<^sub>2 ((\<^bold>C \<circ>\<^sub>2 (;) \<circ> \<^bold>C) fmap fmap)" unfolding all_defs by blast
+lemma "ap1 = ((\<^bold>C \<ggreater> (\<ggreater>) \<ggreater>\<^sub>2 \<^bold>C) fmap fmap) \<ggreater>\<^sub>2 join" unfolding all_defs by blast
 
 
 subsection \<open>Pipelines\<close>
@@ -118,34 +121,33 @@ term "a :: Set('a \<Rightarrow> 'b)"
 
 text \<open>Takes a plain function and disguises it as a monadic arrow.\<close>
 abbreviation(input) asArrowM::"('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> Set('b))"
-  where "asArrowM \<equiv> \<midarrow>\<^sup>r \<circ> asRel"
+  where "asArrowM \<equiv> asRel \<ggreater> \<midarrow>\<^sup>r"
 
 text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
 abbreviation(input) intoArrowM::"Set('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> Set('b))"
-  where "intoArrowM \<equiv> \<midarrow>\<^sup>r \<circ> intoRel \<circ> \<midarrow>"
+  where "intoArrowM \<equiv> \<midarrow> \<ggreater> intoRel \<ggreater> \<midarrow>\<^sup>r"
 text \<open>Takes a monadic arrow and transforms it into an applicative arrow.\<close>
 abbreviation(input) intoArrowA::"('a \<Rightarrow> Set('b)) \<Rightarrow> Set('a \<Rightarrow> 'b)"
-  where "intoArrowA \<equiv> \<midarrow> \<circ> intoFunSet \<circ> \<midarrow>\<^sup>r"
+  where "intoArrowA \<equiv> \<midarrow>\<^sup>r \<ggreater> intoFunSet \<ggreater> \<midarrow>"
 
 text \<open>Note that\<close>
-lemma "ap = bindr \<circ> intoArrowM" unfolding all_defs by fast
+lemma "ap = intoArrowM \<ggreater> bindr" unfolding all_defs by fast
 
 
 subsubsection \<open>Functional composition\<close>
 
 text \<open>Quickly recall, again, that for the case of plain functions, we have:\<close>
 term "(|>) :: 'a \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'b"                  \<comment> \<open>reversed application\<close>
-term "(;)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
+term "(\<ggreater>)  :: 'e-Env('a) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> 'e-Env('b)"  \<comment> \<open>reversed composition\<close>
 
 text \<open>Composition is associative and suitably interrelates with application to build pipelines.\<close>
-lemma "f ; (g ; h) = (f ; g) ; h" unfolding comb_defs ..
-lemma "(x |> f |> g |> h) = (x |> f ; g ; h)" unfolding comb_defs ..
+lemma "f \<ggreater> (g \<ggreater> h) = (f \<ggreater> g) \<ggreater> h" unfolding comb_defs ..
+lemma "(x |> f |> g |> h) = (x |> f \<ggreater> g \<ggreater> h)" unfolding comb_defs ..
 
 text \<open>Interrelation between application and composition.\<close>
-lemma "f ; g = (\<lambda>x. f x |> g)" unfolding comb_defs ..
-lemma "(\<circ>) = (\<lambda>g f x. g @ f @ x)" unfolding comb_defs ..
-lemma "(@) = (\<circ>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<circ>) = \<^bold>D (@)" unfolding comb_defs ..
+lemma "(\<ggreater>) = (\<lambda>f g x. x |> f |> g)" unfolding comb_defs ..
+lemma "\<^bold>A = \<^bold>B \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>B = \<^bold>D \<^bold>A" unfolding comb_defs ..
 
 
 subsubsection \<open>Monadic composition\<close>
@@ -159,7 +161,6 @@ abbreviation(input) mcomp' (infixr "\<Zfinj>" 56) \<comment> \<open>reversed mon
 lemma "f \<Zfinj> g = (\<lambda>x. f x \<bind> g)" unfolding comb_defs ..
 
 text \<open>In the case of Co-Set monad, Kleisli composition correspond to relational dual-composition.\<close>
-lemma "mcomp = (\<bullet>\<^sup>r)"   unfolding all_defs by metis
 lemma "(\<Zfinj>) = (\<dagger>\<^sup>r)"   unfolding all_defs by metis
 
 text \<open>Note the corresponding types:\<close>
@@ -172,26 +173,26 @@ lemma "(x \<bind> f \<bind> g \<bind> h) = (x \<bind> f \<Zfinj> g \<Zfinj> h)" 
 
 text \<open>Bind in terms of monadic composition\<close>
 lemma "bindr = (\<Zfinj>) \<^bold>I" unfolding comb_defs ..
-lemma "(\<bind>) = (\<^bold>C \<circ> (\<Zfinj>)) \<^bold>I" unfolding comb_defs ..
+lemma "(\<bind>) = ((\<Zfinj>) \<ggreater> \<^bold>C) \<^bold>I" unfolding comb_defs ..
 
 
 subsubsection \<open>Applicative composition\<close>
 
 text \<open>Analogously, we can introduce applicative composition.\<close>
 abbreviation(input) acomp::"Set('b \<Rightarrow> 'c) \<Rightarrow> Set('a \<Rightarrow> 'b) \<Rightarrow> Set('a \<Rightarrow> 'c)" 
-  where "acomp \<equiv> intoArrowA \<circ>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>0 (\<circ>\<^sub>2) ap intoArrowM)"
+  where "acomp \<equiv> (\<^bold>D (\<ggreater>\<^sub>2) intoArrowM ap) \<ggreater>\<^sub>2 intoArrowA"
 abbreviation(input) acomp' (infixr "\<Zinj>" 56) \<comment> \<open>reversed applicative composition\<close>
   where "f \<Zinj> g \<equiv> acomp g f"
 
-lemma "f \<Zinj> g = intoArrowA (intoArrowM f ; ap g)" unfolding comb_defs ..
-lemma "f \<Zinj> g = intoArrowA (\<lambda>x. (intoArrowM f x) \<ggreater> g)" unfolding rel_defs  comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (intoArrowM f \<ggreater> ap g)" unfolding comb_defs ..
+lemma "f \<Zinj> g = intoArrowA (\<lambda>x. (intoArrowM f x) *> g)" unfolding rel_defs  comb_defs ..
 
 text \<open>Note the corresponding types:\<close>
-term "(\<ggreater>) :: Set('a) \<Rightarrow> Set('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
+term "(*>) :: Set('a) \<Rightarrow> Set('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
 term "(\<Zinj>) :: Set('a \<Rightarrow> 'b) \<Rightarrow> Set('b \<Rightarrow> 'c) \<Rightarrow> Set('a \<Rightarrow> 'c)"
 
 text \<open>Applicative composition is associative and suitably interrelates with ap to build pipelines:\<close>
 lemma "f \<Zinj> (g \<Zinj> h) = (f \<Zinj> g) \<Zinj> h" unfolding all_defs apply simp apply (rule ext)+ apply safe apply (metis B1_comb_def) by (metis o_apply)
-lemma "(x \<ggreater> f \<ggreater> g \<ggreater> h) = (x \<ggreater> f \<Zinj> g \<Zinj> h)" unfolding all_defs apply (rule ext)+ apply auto apply metis by fast
+lemma "(x *> f *> g *> h) = (x *> f \<Zinj> g \<Zinj> h)" unfolding all_defs apply (rule ext)+ apply auto apply metis by fast
 
 end

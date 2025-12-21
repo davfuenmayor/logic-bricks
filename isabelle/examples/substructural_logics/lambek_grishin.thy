@@ -41,13 +41,13 @@ abbreviation(input) fusion::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Right
 abbreviation(input) fission::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('b) \<Rightarrow> Set('c)" ("\<^bold>\<oplus>")
   where "\<^bold>\<oplus> R \<equiv> \<box>\<^sub>1\<^sub>2\<^sub>3 R"
 abbreviation(input) rDivision::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('c) \<Rightarrow> Set('b)" ("\<^bold>\<triangleright>")
-  where "\<^bold>\<triangleright> R \<equiv> (\<box>\<^sub>1\<^sub>3\<^sub>2 R) \<circ> \<midarrow>" (* often denoted with symbol "\" *)
+  where "\<^bold>\<triangleright> R \<equiv> \<midarrow> \<ggreater> \<box>\<^sub>1\<^sub>3\<^sub>2 R" (* often denoted with symbol "\" *)
 abbreviation(input) lDivision::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)"  ("\<^bold>\<triangleleft>")
-  where "\<^bold>\<triangleleft> R \<equiv> (\<box>\<^sub>2\<^sub>3\<^sub>1 R) \<circ> \<midarrow>" (* often denoted with symbol "/" *)
+  where "\<^bold>\<triangleleft> R \<equiv> \<midarrow> \<ggreater> \<box>\<^sub>2\<^sub>3\<^sub>1 R" (* often denoted with symbol "/" *)
 abbreviation(input) rDifference::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rightarrow> Set('c) \<Rightarrow> Set('b)" ("\<^bold>\<guillemotright>")
-  where "\<^bold>\<guillemotright> R \<equiv> (\<diamond>\<^sub>1\<^sub>3\<^sub>2 R) \<circ> \<midarrow>" (* often denoted with symbol "reversed-\<oslash>" *)
+  where "\<^bold>\<guillemotright> R \<equiv> \<midarrow> \<ggreater> \<diamond>\<^sub>1\<^sub>3\<^sub>2 R" (* often denoted with symbol "reversed-\<oslash>" *)
 abbreviation(input) lDifference::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)"  ("\<^bold>\<guillemotleft>")
-  where "\<^bold>\<guillemotleft> R \<equiv> (\<diamond>\<^sub>2\<^sub>3\<^sub>1 R) \<circ> \<midarrow>" (* often denoted with symbol "\<oslash>" *)
+  where "\<^bold>\<guillemotleft> R \<equiv> \<midarrow> \<ggreater> \<diamond>\<^sub>2\<^sub>3\<^sub>1 R" (* often denoted with symbol "\<oslash>" *)
 
 text \<open>We add some convenient "parameterized infix" syntactic sugar.\<close>
 syntax "lg_fusion"::"any \<Rightarrow> any \<Rightarrow> any \<Rightarrow> logic"  ("_ \<^bold>\<otimes>\<^sup>_ _")

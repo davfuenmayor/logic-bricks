@@ -46,8 +46,8 @@ lemma reflexive_compl:     "reflexive R\<^sup>\<midarrow> = irreflexive R" unfol
 lemma irreflexive_compl: "irreflexive R\<^sup>\<midarrow> = reflexive R" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
 text \<open>An alternative pair of definitions.\<close>
-lemma reflexive_def2:     "reflexive = \<forall> \<circ> \<Delta>" unfolding endorel_defs rel_defs func_defs comb_defs by simp
-lemma irreflexive_def2: "irreflexive = \<nexists> \<circ> \<Delta>" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma reflexive_def2:     "reflexive = \<Delta> \<ggreater> \<forall>" unfolding endorel_defs rel_defs func_defs comb_defs by simp
+lemma irreflexive_def2: "irreflexive = \<Delta> \<ggreater> \<nexists>" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 lemma "reflexive   R = (\<forall>a. R a a)" unfolding reflexive_def2 comb_defs ..
 lemma "irreflexive R = (\<forall>a. \<not>R a a)" unfolding irreflexive_def2 comb_defs by simp
 
@@ -141,25 +141,25 @@ lemma "R\<^sup>? = \<Inter>\<^sup>r(\<lambda>T. R \<subseteq>\<^sup>r T \<and> w
 
 text \<open>A convenient way of disguising sets as endorelations (cf. dynamic logics and program algebras).\<close>
 definition test::"Set('a) \<Rightarrow> ERel('a)" (*the customary question mark (?) notation omitted to avoid confusions*)
-  where "test \<equiv> strongIdentityInterior \<circ> \<^bold>K"
+  where "test \<equiv> \<^bold>K \<ggreater> strongIdentityInterior"
 definition dualtest::"Set('a) \<Rightarrow> ERel('a)"
-  where "dualtest \<equiv> weakDifferenceClosure \<circ> \<^bold>K"
+  where "dualtest \<equiv> \<^bold>K \<ggreater> weakDifferenceClosure"
 
 declare test_def[endorel_defs] dualtest_def[endorel_defs]
 
-lemma test_def2: "test = strongIdentityInterior \<circ> (\<^bold>W (\<times>))" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma test_def2: "test = \<^bold>W (\<times>) \<ggreater> strongIdentityInterior" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 lemma "test A = (A \<times> A)\<^sup>!" unfolding test_def2 comb_defs ..
 lemma "test A = \<Q> \<inter>\<^sup>r (A \<times> A)" unfolding test_def2 endorel_defs comb_defs ..  (* equality (\<Q>) restricted to A*)
 
-lemma dualtest_def2: "dualtest = weakDifferenceClosure \<circ> (\<^bold>W (\<times>))" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma dualtest_def2: "dualtest = \<^bold>W (\<times>) \<ggreater> weakDifferenceClosure" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 lemma "dualtest A = (A \<times> A)\<^sup>?" unfolding dualtest_def2 comb_defs ..
 lemma "dualtest A = \<D> \<union>\<^sup>r (A \<times> A)" unfolding dualtest_def2 endorel_defs comb_defs ..
 
-lemma test_def3: "test = strongIdentityInterior \<circ> leftCylinder" unfolding leftCylinder_def test_def ..
-lemma dualtest_def3: "dualtest = weakDifferenceClosure \<circ> leftCylinder" unfolding leftCylinder_def dualtest_def ..
+lemma test_def3: "test = leftCylinder \<ggreater> strongIdentityInterior" unfolding leftCylinder_def test_def ..
+lemma dualtest_def3: "dualtest = leftCylinder \<ggreater> weakDifferenceClosure" unfolding leftCylinder_def dualtest_def ..
 
-lemma test_def4: "test = strongIdentityInterior \<circ> rightCylinder" unfolding endorel_defs rel_defs func_defs comb_defs by auto
-lemma dualtest_def4: "dualtest = weakDifferenceClosure \<circ> rightCylinder" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma test_def4: "test = rightCylinder \<ggreater> strongIdentityInterior" unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma dualtest_def4: "dualtest = rightCylinder \<ggreater> weakDifferenceClosure" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
 text \<open>Both are duals wrt relation/set complement, as expected.\<close>
 lemma test_dual1: "(test A)\<^sup>\<midarrow> = dualtest (\<midarrow>A)" unfolding endorel_defs rel_defs func_defs comb_defs by simp
@@ -196,11 +196,11 @@ lemma reflexive_def5: "reflexive R = (serial R \<and> quasireflexive R)" unfoldi
 
 text \<open>The quasireflexive closure of a relation: elements related to someone else become related to themselves.\<close>
 definition quasireflexiveClosure::"ERel('a) \<Rightarrow> ERel('a)"
-  where "quasireflexiveClosure \<equiv> \<^bold>W ((\<union>\<^sup>r) \<circ> ((\<inter>\<^sup>r) \<Q>) \<circ> ((\<times>) \<UU>) \<circ> leftRange)"
+  where "quasireflexiveClosure \<equiv> \<^bold>W (leftRange \<ggreater> (\<times>) \<UU> \<ggreater> (\<inter>\<^sup>r) \<Q> \<ggreater> (\<union>\<^sup>r))"
 
 text \<open>The serial extension of a relation: elements not related to anyone else become related to themselves.\<close>
 definition serialExtension::"ERel('a) \<Rightarrow> ERel('a)"
-  where "serialExtension \<equiv> \<^bold>W ((\<union>\<^sup>r) \<circ> ((\<inter>\<^sup>r) \<Q>) \<circ> ((\<times>) \<UU>) \<circ> \<midarrow> \<circ> leftRange)"
+  where "serialExtension \<equiv> \<^bold>W (leftRange \<ggreater> \<midarrow> \<ggreater> (\<times>) \<UU> \<ggreater> (\<inter>\<^sup>r) \<Q> \<ggreater> (\<union>\<^sup>r))"
 
 declare serialExtension_def[endorel_defs] quasireflexiveClosure_def[endorel_defs]
 
@@ -231,8 +231,8 @@ lemma "symmetricClosure R = R \<union>\<^sup>r (R\<^sup>\<smile>)" unfolding end
 lemma "symmetricInterior R = (\<lambda>x y. R x y \<and> R y x)" unfolding endorel_defs rel_defs func_defs comb_defs ..
 lemma "symmetricClosure R  = (\<lambda>x y. R x y \<or> R y x)" unfolding endorel_defs rel_defs func_defs comb_defs ..
 
-lemma symmetricInterior_def2: "symmetricInterior = \<^bold>W \<circ> interval" unfolding endorel_defs rel_defs func_defs comb_defs ..
-lemma symmetricClosure_def2:  "symmetricClosure  = \<^bold>W \<circ> dualInterval" unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma symmetricInterior_def2: "symmetricInterior = interval \<ggreater> \<^bold>W" unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma symmetricClosure_def2:  "symmetricClosure  = dualInterval \<ggreater> \<^bold>W" unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 lemma "symmetricInterior R a = (\<lambda>x. R-interval a a x)" unfolding endorel_defs rel_defs func_defs comb_defs ..
 lemma "symmetricClosure R a = (\<lambda>x. R-dualInterval a a x)" unfolding endorel_defs rel_defs func_defs comb_defs ..
@@ -334,9 +334,9 @@ lemma "R\<^sup>#\<^sup>\<midarrow> = R\<^sup>\<midarrow>\<^sup>\<flat>" unfoldin
 subsubsection \<open>Antisymmetry, Semiconnectedness, and co.\<close>
 
 definition antisymmetric::"Set(ERel('a))"
-  where "antisymmetric \<equiv> strongIdentity \<circ> symmetricInterior"
+  where "antisymmetric \<equiv> symmetricInterior \<ggreater> strongIdentity"
 definition semiconnected::"Set(ERel('a))"
-  where "semiconnected \<equiv> weakDifference \<circ> symmetricClosure"
+  where "semiconnected \<equiv> symmetricClosure \<ggreater> weakDifference"
 
 declare antisymmetric_def[endorel_defs] semiconnected_def[endorel_defs]
 
@@ -359,9 +359,9 @@ lemma asymmetric_def5: "asymmetric R = (irreflexive R \<and> antisymmetric R)" u
 text \<open>A relation is called (co)skeletal when its symmetric interior (closure) is the (dis)equality relation,
  inspired by category theory where categories are skeletal when isomorphic objects are identical.\<close>
 definition skeletal::"Set(ERel('a))"
-  where \<open>skeletal   \<equiv> (\<Q> \<Q>) \<circ> symmetricInterior\<close>  
+  where \<open>skeletal   \<equiv> symmetricInterior \<ggreater> \<Q> \<Q>\<close>  
 definition coskeletal::"Set(ERel('a))"
-  where \<open>coskeletal \<equiv> (\<Q> \<D>) \<circ> symmetricClosure\<close> 
+  where \<open>coskeletal \<equiv> symmetricClosure  \<ggreater> \<Q> \<D>\<close> 
 
 declare skeletal_def[endorel_defs] coskeletal_def[endorel_defs]
 
@@ -378,19 +378,18 @@ lemma coskeletal_def2:  "coskeletal R = (semiconnected R \<and> irreflexive R)"
   using irreflexive_sc by (smt (verit, ccfv_threshold) B1_comb_def S11_comb_def W21_comb_def coskeletal_def irreflexive_def irreflexive_def2 semiconnected_reldef subrel_antisym symmetricClosure_def)
 
 
-
 subsubsection \<open>Transitivity, Denseness, Quasitransitivity, and co.\<close>
 
 text \<open>Every pair of elements x and y that can be connected by an element z in between are (un)related.\<close>
 definition transitive::"Set(ERel('a))"
-  where \<open>transitive \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>W (\<circ>\<^sup>r))\<close>
+  where \<open>transitive \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>W (;\<^sup>r))\<close>
 definition antitransitive::"Set(ERel('a))"
-  where \<open>antitransitive \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<supseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (\<circ>\<^sup>r))\<close>
+  where \<open>antitransitive \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<supseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (;\<^sup>r))\<close>
 
 declare transitive_def[endorel_defs] antitransitive_def[endorel_defs]
 
-lemma transitive_reldef: \<open>transitive R = (R \<circ>\<^sup>r R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
-lemma antitransitive_reldef: \<open>antitransitive R = (R \<circ>\<^sup>r R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma transitive_reldef: \<open>transitive R = (R ;\<^sup>r R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma antitransitive_reldef: \<open>antitransitive R = (R ;\<^sup>r R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 text \<open>Alternative convenient definitions.\<close>
 lemma transitive_def2: \<open>transitive R = (\<forall>a b c. R a c \<and> R c b \<rightarrow> R a b)\<close>
@@ -404,16 +403,16 @@ lemma "antitransitive R \<Longrightarrow> irreflexive R"
 lemma "leftUnique R \<or> rightUnique R \<Longrightarrow> antitransitive R = irreflexive R"
   unfolding endorel_defs rel_defs func_defs comb_defs by metis
 
-text \<open>Every pair of (un)related elements x and y can be connected by an element z in between.\<close>
+text \<open>Every pair of (un)related elements x and y can be connected via an element z in between.\<close>
 definition dense::"Set(ERel('a))"
-  where \<open>dense \<equiv> \<^bold>S (\<subseteq>\<^sup>r) (\<^bold>W (\<circ>\<^sup>r))\<close>
+  where \<open>dense \<equiv> \<^bold>S (\<subseteq>\<^sup>r) (\<^bold>W (;\<^sup>r))\<close>
 definition pseudoClique::"Set(ERel('a))" \<comment> \<open>i.e. a graph with diameter 2 (where cliques have diameter 1)\<close>
-  where \<open>pseudoClique \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (\<circ>\<^sup>r))\<close>
+  where \<open>pseudoClique \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (;\<^sup>r))\<close>
 
 declare dense_def[endorel_defs] pseudoClique_def[endorel_defs]
 
-lemma dense_reldef: \<open>dense R = R \<subseteq>\<^sup>r (R \<circ>\<^sup>r R)\<close> unfolding endorel_defs comb_defs ..
-lemma pseudoClique_reldef: \<open>pseudoClique R = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R \<circ>\<^sup>r R)\<close> unfolding endorel_defs comb_defs ..
+lemma dense_reldef: \<open>dense R = R \<subseteq>\<^sup>r (R ;\<^sup>r R)\<close> unfolding endorel_defs comb_defs ..
+lemma pseudoClique_reldef: \<open>pseudoClique R = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R ;\<^sup>r R)\<close> unfolding endorel_defs comb_defs ..
 
 text \<open>The above properties are preserved by transposition:\<close>
 lemma transitive_defT: "transitive R = transitive (R\<^sup>\<smile>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
@@ -422,10 +421,10 @@ lemma quasiDense_defT: "dense R = dense (R\<^sup>\<smile>)" unfolding endorel_de
 lemma quasiClique_defT: "pseudoClique R = pseudoClique (R\<^sup>\<smile>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
 text \<open>The above properties can be stated for the complemented relations in an analogous fashion.\<close>
-lemma transitive_compl_reldef: \<open>transitive R\<^sup>\<midarrow> = R  \<subseteq>\<^sup>r (R \<bullet>\<^sup>r R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
-lemma dense_compl_reldef:     \<open>dense R\<^sup>\<midarrow> = (R \<bullet>\<^sup>r R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
-lemma antitransitive_compl_reldef:  \<open>antitransitive R\<^sup>\<midarrow> = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R \<bullet>\<^sup>r R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
-lemma pseudoClique_compl_reldef: \<open>pseudoClique R\<^sup>\<midarrow> = (R \<bullet>\<^sup>r R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma transitive_compl_reldef: \<open>transitive R\<^sup>\<midarrow> = R  \<subseteq>\<^sup>r (R \<dagger>\<^sup>r R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma dense_compl_reldef:     \<open>dense R\<^sup>\<midarrow> = (R \<dagger>\<^sup>r R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma antitransitive_compl_reldef:  \<open>antitransitive R\<^sup>\<midarrow> = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R \<dagger>\<^sup>r R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma pseudoClique_compl_reldef: \<open>pseudoClique R\<^sup>\<midarrow> = (R \<dagger>\<^sup>r R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
 text \<open>We can provide alternative definitions for the above relational properties in terms of intervals.\<close>
 lemma \<open>transitive R     = (\<forall>a b. \<exists>(R-interval a b) \<rightarrow> R a b)\<close>  unfolding endorel_defs rel_defs func_defs comb_defs ..
@@ -434,8 +433,8 @@ lemma \<open>dense R        = (\<forall>a b. R a b  \<rightarrow> \<exists>(R-in
 lemma \<open>pseudoClique R = (\<forall>a b. R\<^sup>\<midarrow> a b \<rightarrow> \<exists>(R-interval a b))\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 text \<open>The following notions are often discussed in the literature (applied to strict relations/orderings).\<close>
-abbreviation(input) \<open>quasiTransitive \<equiv> transitive \<circ> asymmetricContraction\<close>
-abbreviation(input) \<open>quasiAntitransitive \<equiv> antitransitive \<circ> asymmetricContraction\<close>
+abbreviation(input) \<open>quasiTransitive \<equiv> asymmetricContraction \<ggreater> transitive\<close>
+abbreviation(input) \<open>quasiAntitransitive \<equiv> asymmetricContraction \<ggreater> antitransitive\<close>
 
 lemma \<open>quasiTransitive R = (\<forall>a b. \<exists>(R\<^sup>#-interval a b) \<rightarrow> R\<^sup># a b)\<close>
   unfolding endorel_defs rel_defs func_defs comb_defs ..
@@ -463,13 +462,13 @@ lemma "symmetric R \<Longrightarrow> quasiAntitransitive R" unfolding endorel_de
 subsubsection \<open>Euclideanness and co.\<close>
 
 text \<open>The relational properties of left-/right- euclideanness. \<close>
-definition \<open>rightEuclidean \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>S (\<circ>\<^sup>r) \<smile>)\<close>
-definition \<open>leftEuclidean  \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>\<Sigma> (\<circ>\<^sup>r) \<smile>)\<close>
-
-lemma rightEuclidean_reldef: "rightEuclidean R = R \<circ>\<^sup>r (R\<^sup>\<smile>) \<subseteq>\<^sup>r R" unfolding rightEuclidean_def rel_defs func_defs comb_defs ..
-lemma leftEuclidean_reldef:  "leftEuclidean  R = (R\<^sup>\<smile>) \<circ>\<^sup>r R \<subseteq>\<^sup>r R" unfolding leftEuclidean_def rel_defs func_defs comb_defs ..
+definition \<open>rightEuclidean \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>\<Sigma> (;\<^sup>r) \<smile>)\<close>
+definition \<open>leftEuclidean  \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>S (;\<^sup>r) \<smile>)\<close>
 
 declare rightEuclidean_def[endorel_defs] leftEuclidean_def[endorel_defs]
+
+lemma rightEuclidean_reldef: "rightEuclidean R = (R\<^sup>\<smile>) ;\<^sup>r R \<subseteq>\<^sup>r R" unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma leftEuclidean_reldef: "leftEuclidean R   = R ;\<^sup>r (R\<^sup>\<smile>) \<subseteq>\<^sup>r R" unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 lemma "rightEuclidean R = (\<forall>a b. (\<exists>c. R c a \<and> R c b) \<rightarrow> R a b)" 
   unfolding endorel_defs rel_defs func_defs comb_defs ..
@@ -599,9 +598,9 @@ subsubsection \<open>Least and Greatest Elements\<close>
 
 text \<open>The set of least (leftmost) resp. greatest (rightmost) elements of a set wrt. an endorelation.\<close>
 definition least::"ERel('a) \<Rightarrow> SetEOp('a)"
-  where \<open>least \<equiv> (\<^bold>S (\<inter>)) \<circ> lowerBound\<close>
+  where \<open>least \<equiv> lowerBound \<ggreater> \<^bold>S (\<inter>)\<close>
 definition greatest::"ERel('a) \<Rightarrow> SetEOp('a)"
-  where \<open>greatest \<equiv> (\<^bold>S (\<inter>)) \<circ> upperBound\<close>
+  where \<open>greatest \<equiv> upperBound \<ggreater> \<^bold>S (\<inter>)\<close>
 
 notation(input) least ("_-least") and greatest ("_-greatest") (*convenient input notation*)
 
@@ -618,9 +617,9 @@ subsubsection \<open>Maximal and Minimal Elements\<close>
 
 text \<open>The set of minimal (resp. maximal) elements of a set A wrt. a relation R.\<close>
 definition min::"ERel('a) \<Rightarrow> SetEOp('a)"
-  where \<open>min \<equiv> least \<circ> connectedExpansion\<close>
+  where \<open>min \<equiv> connectedExpansion \<ggreater> least\<close>
 definition max::"ERel('a) \<Rightarrow> SetEOp('a)"
-  where \<open>max \<equiv> greatest \<circ> connectedExpansion\<close>
+  where \<open>max \<equiv> connectedExpansion \<ggreater> greatest\<close>
 
 notation(input) min ("_-min") and  max ("_-max") (*convenient input notation*)
 
@@ -652,8 +651,8 @@ definition glb::"ERel('a) \<Rightarrow> SetEOp('a)"
 
 notation(input) lub ("_-lub") and  glb ("_-glb") (*convenient input notation*)
 
-lemma "R-lub =    (R-least) \<circ> (R-upperBound)" unfolding lub_def comb_defs ..
-lemma "R-glb = (R-greatest) \<circ> (R-lowerBound)" unfolding glb_def endorel_defs comb_defs ..
+lemma "R-lub = R-upperBound \<ggreater> R-least" unfolding lub_def comb_defs ..
+lemma "R-glb = R-lowerBound \<ggreater> R-greatest" unfolding glb_def endorel_defs comb_defs ..
 
 declare lub_def[endorel_defs] glb_def[endorel_defs]
 
@@ -717,9 +716,9 @@ subsubsection \<open>Well-ordering and Well-foundedness\<close>
 
 text \<open>The property of being a well-founded/ordered relation.\<close>
 definition wellOrdered::"Set(ERel('a))" ("wellOrdered")
-  where "wellOrdered \<equiv> ((\<subseteq>) \<exists>) \<circ> (\<^bold>B \<exists>) \<circ> least"
+  where "wellOrdered \<equiv> least \<ggreater> \<^bold>B \<exists> \<ggreater> (\<subseteq>) \<exists>"
 definition wellFounded::"Set(ERel('a))" ("wellFounded")
-  where "wellFounded \<equiv> ((\<subseteq>) \<exists>) \<circ> (\<^bold>B \<exists>) \<circ> min"
+  where "wellFounded \<equiv> min \<ggreater> \<^bold>B \<exists> \<ggreater> (\<subseteq>) \<exists>"
 
 declare wellFounded_def[endorel_defs] wellOrdered_def[endorel_defs]
 
@@ -742,14 +741,14 @@ lemma "\<forall>S. \<exists>(R-glb S) \<Longrightarrow> \<forall>S. \<exists>(R-
 text \<open>The above results motivate the following definition: An endorelation R is called limit-complete
  when lubs/glbs (wrt R) exist for every set S (note that they must not be necessarily contained in S).\<close>
 definition limitComplete::"Set(ERel('a))"
-  where "limitComplete \<equiv> \<forall> \<circ> (\<exists> \<circ>\<^sub>2 lub)" 
+  where "limitComplete \<equiv> (lub \<ggreater>\<^sub>2 \<exists>) \<ggreater> \<forall>" 
 
 lemma "limitComplete R = (\<forall>S. \<exists>(R-lub S))" unfolding limitComplete_def comb_defs ..
 
 proposition "limitComplete R \<Longrightarrow> (R-lub S) \<subseteq> S" nitpick \<comment> \<open>countermodel found\<close> oops
 
 text \<open>Transpose/converse definitions.\<close>
-lemma limitComplete_def2: "limitComplete =  \<forall> \<circ> (\<exists> \<circ>\<^sub>2 glb)" unfolding limitComplete_def comb_defs by (metis glb_def3 lub_def3)
+lemma limitComplete_def2: "limitComplete = (glb \<ggreater>\<^sub>2 \<exists>) \<ggreater> \<forall>" unfolding limitComplete_def comb_defs by (metis glb_def3 lub_def3)
 lemma "limitComplete R = (\<forall>S. \<exists>(R-glb S))" unfolding limitComplete_def2 comb_defs ..
 
 lemma limitComplete_defT: "limitComplete R\<^sup>\<smile> =  limitComplete R"
