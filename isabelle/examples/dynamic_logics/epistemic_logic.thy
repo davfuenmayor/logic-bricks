@@ -6,7 +6,7 @@ section \<open>Shallow Embedding of an Epistemic Dynamic Logic\<close>   (*Bewar
 
 (* \<Sigma>\<^sup>+ G is the accessibility relation corresponding to the common knowledge of a group G of agents*)
 definition commonAccessRel ("\<Sigma>\<^sup>+")
-  where "\<Sigma>\<^sup>+ G \<equiv> (\<Union>\<^sup>rG)\<^sup>+"
+  where "\<Sigma>\<^sup>+ G \<equiv> (\<Union>\<^sup>2G)\<^sup>+"
 
 lemma commonAccessRel_equiv: "\<exists>G \<Longrightarrow> (\<forall>r. G r \<longrightarrow> equivalence r) \<Longrightarrow> equivalence (\<Sigma>\<^sup>+ G)"
   unfolding equivalence_char commonAccessRel_def
