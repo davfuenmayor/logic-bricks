@@ -22,8 +22,8 @@ text \<open>Literature on relational algebra informally classifies relational co
  the latter comes from their generalized (i.e. partial and non-deterministic) functional structure.\<close>
 
 text \<open>Remember that these relational binary operations (composition and its dual) are associative.\<close>
-lemma "A ;\<^sup>r (B ;\<^sup>r C) = (A ;\<^sup>r B) ;\<^sup>r C" by them
-lemma "A \<dagger>\<^sup>r (B \<dagger>\<^sup>r C) = (A \<dagger>\<^sup>r B) \<dagger>\<^sup>r C" by them
+lemma "A ; (B ; C) = (A ; B) ; C" by them
+lemma "A \<dagger> (B \<dagger> C) = (A \<dagger> B) \<dagger> C" by them
 
 text \<open>Also note that the operation of cotransposition can act as a negation wrt. some relational operations.\<close>
 lemma "R\<^sup>\<sim>\<^sup>\<sim> = R" by them     \<comment> \<open>involutivity: double-negation\<close>
@@ -35,20 +35,20 @@ lemma "(R \<inter>\<^sup>r S)\<^sup>\<sim> = (R\<^sup>\<sim>) \<union>\<^sup>r (
 lemma "(R \<union>\<^sup>r S)\<^sup>\<sim> = (R\<^sup>\<sim>) \<inter>\<^sup>r (S\<^sup>\<sim>)" by them
 
 text \<open>Cotransposition validates "flipped" De Morgan-like laws wrt composition and its dual.\<close>
-lemma "(R ;\<^sup>r S)\<^sup>\<sim> = (S\<^sup>\<sim>) \<dagger>\<^sup>r (R\<^sup>\<sim>)" by them
-lemma "(R \<dagger>\<^sup>r S)\<^sup>\<sim> = (S\<^sup>\<sim>) ;\<^sup>r (R\<^sup>\<sim>)" by them
+lemma "(R ; S)\<^sup>\<sim> = (S\<^sup>\<sim>) \<dagger> (R\<^sup>\<sim>)" by them
+lemma "(R \<dagger> S)\<^sup>\<sim> = (S\<^sup>\<sim>) ; (R\<^sup>\<sim>)" by them
 
 text \<open>Cotransposition also acts as a negation wrt residuals.\<close>
-lemma "(A \<Zrres>\<^sup>r B)\<^sup>\<sim> = (B\<^sup>\<sim> ;\<^sup>r A)" by them
-lemma "(A \<Znrres>\<^sup>r B)\<^sup>\<sim> = (A ;\<^sup>r (B\<^sup>\<sim>))" by them
+lemma "(A \<Zrres> B)\<^sup>\<sim> = (B\<^sup>\<sim> ; A)" by them
+lemma "(A \<Znrres> B)\<^sup>\<sim> = (A ; (B\<^sup>\<sim>))" by them
 
 text \<open>The strong-identity-interior and weak-difference-closure operators are dual wrt. cotransposition.\<close>
 lemma "R\<^sup>!\<^sup>\<sim> = R\<^sup>\<sim>\<^sup>?" by them
 lemma "R\<^sup>?\<^sup>\<sim> = R\<^sup>\<sim>\<^sup>!" by them
 
 text \<open>Cotransposition validates "excluded middle" and "ex contradictio" with \<open>\<Q>\<close> resp. \<open>\<D>\<close> as top resp. bottom.\<close>
-lemma "\<Q> \<subseteq>\<^sup>r (R \<dagger>\<^sup>r (R\<^sup>\<sim>))" by them
-lemma "(R ;\<^sup>r (R\<^sup>\<sim>)) \<subseteq>\<^sup>r \<D>" by them
+lemma "\<Q> \<subseteq>\<^sup>r (R \<dagger> (R\<^sup>\<sim>))" by them
+lemma "(R ; (R\<^sup>\<sim>)) \<subseteq>\<^sup>r \<D>" by them
 
 
 subsection \<open>Cyclic Linear Logic\<close>
@@ -72,12 +72,12 @@ abbreviation(input) ll_plus::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<oplus>" 9
 abbreviation(input) ll_with::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>&" 99) where "(\<^bold>&) \<equiv> (\<inter>\<^sup>r)"
 
 text \<open>The "multiplicative" binary connectives are interpreted with "Peircean" binary operations.\<close>
-abbreviation(input) ll_tensor::"EOp\<^sub>2(ERel('a))" (infixr "\<^bold>\<otimes>" 99) where "(\<^bold>\<otimes>) \<equiv> (;\<^sup>r)"
-abbreviation(input) ll_par::"EOp\<^sub>2(ERel('a))" (infixl "\<^bold>\<section>" 99) where "(\<^bold>\<section>) \<equiv> (\<dagger>\<^sup>r)" (* \<section> as in par-agraph ;*)
+abbreviation(input) ll_tensor::"EOp\<^sub>2(ERel('a))" (infixr "\<^bold>\<otimes>" 99) where "(\<^bold>\<otimes>) \<equiv> (;)"
+abbreviation(input) ll_par::"EOp\<^sub>2(ERel('a))" (infixl "\<^bold>\<section>" 99) where "(\<^bold>\<section>) \<equiv> (\<dagger>)" (* \<section> as in par-agraph ;*)
 
 text \<open>Linear implication and its dual correspond to residuals.\<close>
-abbreviation(input) ll_impl::"EOp\<^sub>2(ERel('a))" (infix "-\<^bold>\<circ>" 99) where "(-\<^bold>\<circ>) \<equiv> (\<Zrres>\<^sup>r)"
-abbreviation(input) ll_lpmi::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<bullet>-" 99) where "(\<^bold>\<bullet>-) \<equiv> (\<Zndres>\<^sup>r)"
+abbreviation(input) ll_impl::"EOp\<^sub>2(ERel('a))" (infix "-\<^bold>\<circ>" 99) where "(-\<^bold>\<circ>) \<equiv> (\<Zrres>)"
+abbreviation(input) ll_lpmi::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<bullet>-" 99) where "(\<^bold>\<bullet>-) \<equiv> (\<Zndres>)"
 
 text \<open>Exponentials are interpreted with special unary operations that give strong-identities and weak-differences.\<close>
 abbreviation(input) ll_ofcourse::"EOp(ERel('a))"  ("\<^bold>!_") where "\<^bold>!r \<equiv> r\<^sup>!"

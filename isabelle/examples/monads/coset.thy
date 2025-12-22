@@ -161,7 +161,7 @@ abbreviation(input) mcomp' (infixr "\<Zfinj>" 56) \<comment> \<open>reversed mon
 lemma "f \<Zfinj> g = (\<lambda>x. f x \<bind> g)" unfolding comb_defs ..
 
 text \<open>In the case of Co-Set monad, Kleisli composition correspond to relational dual-composition.\<close>
-lemma "(\<Zfinj>) = (\<dagger>\<^sup>r)"   unfolding all_defs by metis
+lemma "(\<Zfinj>) = (\<dagger>)"   unfolding all_defs by metis
 
 text \<open>Note the corresponding types:\<close>
 term "(\<bind>) :: Set('a) \<Rightarrow> ('a \<Rightarrow> Set('b)) \<Rightarrow> Set('b)"

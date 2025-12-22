@@ -70,21 +70,21 @@ lemma leftDualBound_hom_id: "\<D>-\<ominus>\<^sub>\<leftarrow> = \<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Moreover, they map the relational composition \<open>\<circ>\<^sup>r\<close> (resp. its dual \<open>\<bullet>\<^sup>r\<close>) to their functional counterparts.\<close>
-lemma rightImage_hom_comp: "(A ;\<^sup>r B)-\<diamond>\<^sub>\<rightarrow> = (A-\<diamond>\<^sub>\<rightarrow>) \<ggreater> (B-\<diamond>\<^sub>\<rightarrow>)" 
+lemma rightImage_hom_comp: "(A ; B)-\<diamond>\<^sub>\<rightarrow> = (A-\<diamond>\<^sub>\<rightarrow>) \<ggreater> (B-\<diamond>\<^sub>\<rightarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftImage_hom_comp: "(A ;\<^sup>r B)-\<diamond>\<^sub>\<leftarrow> = (B-\<diamond>\<^sub>\<leftarrow>) \<ggreater> (A-\<diamond>\<^sub>\<leftarrow>)"
+lemma leftImage_hom_comp: "(A ; B)-\<diamond>\<^sub>\<leftarrow> = (B-\<diamond>\<^sub>\<leftarrow>) \<ggreater> (A-\<diamond>\<^sub>\<leftarrow>)"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualImage_hom_comp:  "(A ;\<^sup>r B)-\<box>\<^sub>\<rightarrow> = (A-\<box>\<^sub>\<rightarrow>) \<ggreater> (B-\<box>\<^sub>\<rightarrow>)" 
+lemma rightDualImage_hom_comp:  "(A ; B)-\<box>\<^sub>\<rightarrow> = (A-\<box>\<^sub>\<rightarrow>) \<ggreater> (B-\<box>\<^sub>\<rightarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualImage_hom_comp: "(A ;\<^sup>r B)-\<box>\<^sub>\<leftarrow> = (B-\<box>\<^sub>\<leftarrow>) \<ggreater> (A-\<box>\<^sub>\<leftarrow>)"
+lemma leftDualImage_hom_comp: "(A ; B)-\<box>\<^sub>\<leftarrow> = (B-\<box>\<^sub>\<leftarrow>) \<ggreater> (A-\<box>\<^sub>\<leftarrow>)"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightBound_hom_comp: "(A \<dagger>\<^sup>r B)-\<odot>\<^sub>\<rightarrow> = (A-\<odot>\<^sub>\<rightarrow>) \<ggreater>\<^sup>d (B-\<odot>\<^sub>\<rightarrow>)" 
+lemma rightBound_hom_comp: "(A \<dagger> B)-\<odot>\<^sub>\<rightarrow> = (A-\<odot>\<^sub>\<rightarrow>) \<ggreater>\<^sup>d (B-\<odot>\<^sub>\<rightarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftBound_hom_comp: "(A \<dagger>\<^sup>r B)-\<odot>\<^sub>\<leftarrow> = (B-\<odot>\<^sub>\<leftarrow>) \<ggreater>\<^sup>d (A-\<odot>\<^sub>\<leftarrow>)" 
+lemma leftBound_hom_comp: "(A \<dagger> B)-\<odot>\<^sub>\<leftarrow> = (B-\<odot>\<^sub>\<leftarrow>) \<ggreater>\<^sup>d (A-\<odot>\<^sub>\<leftarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualBound_hom_comp: "(A \<dagger>\<^sup>r B)-\<ominus>\<^sub>\<rightarrow> = (A-\<ominus>\<^sub>\<rightarrow>) \<ggreater>\<^sup>d (B-\<ominus>\<^sub>\<rightarrow>)" 
+lemma rightDualBound_hom_comp: "(A \<dagger> B)-\<ominus>\<^sub>\<rightarrow> = (A-\<ominus>\<^sub>\<rightarrow>) \<ggreater>\<^sup>d (B-\<ominus>\<^sub>\<rightarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualBound_hom_comp: "(A \<dagger>\<^sup>r B)-\<ominus>\<^sub>\<leftarrow> = (B-\<ominus>\<^sub>\<leftarrow>) \<ggreater>\<^sup>d (A-\<ominus>\<^sub>\<leftarrow>)" 
+lemma leftDualBound_hom_comp: "(A \<dagger> B)-\<ominus>\<^sub>\<leftarrow> = (B-\<ominus>\<^sub>\<leftarrow>) \<ggreater>\<^sup>d (A-\<ominus>\<^sub>\<leftarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Operators are also (dual) lattice homomorphisms from the BA of relations to the BA of set-operators.\<close>

@@ -209,14 +209,14 @@ lemma funClosure_prop: "z,f-closed\<^sub>0\<^sub>1 = (image \<ggreater> image) (
 
 text \<open>Also note that:\<close>
 lemma "\<Inter>((\<ggreater>)-closed\<^sub>2)  = \<Inter> ((\<ggreater>) f)-closed\<^sub>1" for f::"'a \<Rightarrow> 'a" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> ((\<ggreater>) f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> ((;\<^sup>r) f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((\<ggreater>)-closed\<^sub>2) = \<Inter> (\<lambda>x. x ;\<^sup>r f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> (\<lambda>x. x \<ggreater> f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding space_defs func_defs comb_defs by fast
-lemma "\<Inter>((;\<^sup>r)-closed\<^sub>2) = \<Inter> (\<lambda>x. x ;\<^sup>r f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;)-closed\<^sub>2) = \<Inter> ((\<ggreater>) f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;)-closed\<^sub>2) = \<Inter> ((;) f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((\<ggreater>)-closed\<^sub>2) = \<Inter> (\<lambda>x. x ; f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;)-closed\<^sub>2) = \<Inter> (\<lambda>x. x \<ggreater> f)-closed\<^sub>1" for f::"SetEOp('a)" unfolding space_defs func_defs comb_defs by fast
+lemma "\<Inter>((;)-closed\<^sub>2) = \<Inter> (\<lambda>x. x ; f)-closed\<^sub>1" for f::"ERel('a)" unfolding space_defs func_defs comb_defs by fast
 text \<open>However:\<close>
 proposition "((\<ggreater>)-closed\<^sub>2)  = ((\<ggreater>) f-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
-proposition "((;\<^sup>r)-closed\<^sub>2) = ((\<lambda>x. x ;\<^sup>r f)-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
+proposition "((;)-closed\<^sub>2) = ((\<lambda>x. x ; f)-closed\<^sub>1)" nitpick \<comment> \<open>counterexample found\<close> oops
 
 
 subsection \<open>Spaces from Endorelations\<close>

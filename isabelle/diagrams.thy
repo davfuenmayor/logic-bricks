@@ -65,10 +65,10 @@ subsubsection \<open>For Relations\<close>
 
 text \<open>A commutative triangle states that a relation "factorizes" as a composition of two given relations.\<close>
 definition relTriangle::"Rel('a,'b) \<Rightarrow> Rel('a,'c) \<Rightarrow> Rel('c,'b) \<Rightarrow> o" ("_-FACTOR\<^sup>r") 
-  where "relTriangle \<equiv> \<^bold>B\<^sub>1\<^sub>2 \<Q> \<^bold>I (;\<^sup>r)"
+  where "relTriangle \<equiv> \<^bold>B\<^sub>1\<^sub>2 \<Q> \<^bold>I (;)"
 
 text \<open>Analogously to functions, we can represent this as a diagram (read as "H factors through F and G".)\<close>
-lemma "H-FACTOR\<^sup>r F G = (H = F ;\<^sup>r G)" unfolding relTriangle_def comb_defs ..
+lemma "H-FACTOR\<^sup>r F G = (H = F ; G)" unfolding relTriangle_def comb_defs ..
 abbreviation(input) relTriangleDiagram (" \<sqdot> \<midarrow>_\<rightarrow> \<sqdot> // \<setminus> \<down>_ // _\<rightarrow> \<sqdot>") 
   where "\<sqdot> \<midarrow>F\<rightarrow> \<sqdot> 
           \<setminus>     \<down>G
@@ -94,8 +94,8 @@ lemma "relIdempotent R =  \<sqdot> \<midarrow>R\<rightarrow> \<sqdot>
                              R\<rightarrow> \<sqdot>  " unfolding rel_defs comb_defs ..
 
 lemma "relIdempotent R = (\<forall>a c. R a c \<leftrightarrow> (\<exists>b. R a b \<and> R b c))" unfolding rel_defs func_defs comb_defs by metis
-lemma "relIdempotent R = (R = (R ;\<^sup>r R))" unfolding rel_defs comb_defs ..
-lemma "relIdempotent = \<^bold>W ((\<^bold>W (;\<^sup>r)) \<ggreater> \<Q>)" unfolding rel_defs comb_defs by fastforce
+lemma "relIdempotent R = (R = (R ; R))" unfolding rel_defs comb_defs ..
+lemma "relIdempotent = \<^bold>W ((\<^bold>W (;)) \<ggreater> \<Q>)" unfolding rel_defs comb_defs by fastforce
 
 text \<open>The relational notions correspond to their functional counterparts as expected.\<close>
 lemma idempotent_funRel: "idempotent f = relIdempotent (asRel f)" 
@@ -105,7 +105,7 @@ lemma idempotent_relFun: "totalFunction R \<Longrightarrow> relIdempotent R = id
 
 
 definition relSquare::"Rel('a,'b) \<Rightarrow> Rel('a,'c) \<Rightarrow> Rel('b,'d) \<Rightarrow> Rel('c,'d) \<Rightarrow> o"
-  where "relSquare \<equiv> \<^bold>B\<^sub>2\<^sub>2 \<Q> (;\<^sup>r) (;\<^sup>r)"
+  where "relSquare \<equiv> \<^bold>B\<^sub>2\<^sub>2 \<Q> (;) (;)"
 
 abbreviation(input) relSquareDiagram (" \<sqdot> \<midarrow>_\<rightarrow> \<sqdot> // _\<down> \<down>_ // \<sqdot> \<midarrow>_\<rightarrow> \<sqdot>") 
   where " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot> 
@@ -116,19 +116,19 @@ declare relSquare_def[rel_defs]
 
 lemma " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot> 
        i\<down>      \<down>l
-        \<sqdot> \<midarrow>k\<rightarrow> \<sqdot>   = (i ;\<^sup>r k = j ;\<^sup>r l)" unfolding rel_defs comb_defs ..
+        \<sqdot> \<midarrow>k\<rightarrow> \<sqdot>   = (i ; k = j ; l)" unfolding rel_defs comb_defs ..
 
 lemma " \<sqdot> \<midarrow>j\<rightarrow> \<sqdot> 
        i\<down>      \<down>l
         \<sqdot> \<midarrow>k\<rightarrow> \<sqdot>   =  \<sqdot> \<midarrow> j  \<rightarrow> \<sqdot> 
                       \<setminus>        \<down>l
-                       i ;\<^sup>r k\<rightarrow> \<sqdot>  " unfolding rel_defs comb_defs ..
+                       i ; k\<rightarrow> \<sqdot>  " unfolding rel_defs comb_defs ..
 
 text \<open>Beware: Composition in relational squares must always be read along the principal (NW–SE) diagonal!\<close>
-lemma "relSquare i j k l = (i ;\<^sup>r k = j ;\<^sup>r l)" unfolding rel_defs comb_defs by meson
-lemma "relSquare i j k l = ((k\<^sup>\<smile>) ;\<^sup>r (i\<^sup>\<smile>) = (l\<^sup>\<smile>) ;\<^sup>r (j\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by meson
-proposition "relSquare i j k l \<Longrightarrow> ((i\<^sup>\<smile>) ;\<^sup>r j = k ;\<^sup>r (l\<^sup>\<smile>))" nitpick \<comment> \<open>countermodel: wrong diagonal!\<close> oops
-proposition "relSquare i j k l \<Longrightarrow> ((j\<^sup>\<smile>) ;\<^sup>r i = l ;\<^sup>r (k\<^sup>\<smile>))" nitpick \<comment> \<open>countermodel: wrong diagonal!\<close> oops
+lemma "relSquare i j k l = (i ; k = j ; l)" unfolding rel_defs comb_defs by meson
+lemma "relSquare i j k l = ((k\<^sup>\<smile>) ; (i\<^sup>\<smile>) = (l\<^sup>\<smile>) ; (j\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by meson
+proposition "relSquare i j k l \<Longrightarrow> ((i\<^sup>\<smile>) ; j = k ; (l\<^sup>\<smile>))" nitpick \<comment> \<open>countermodel: wrong diagonal!\<close> oops
+proposition "relSquare i j k l \<Longrightarrow> ((j\<^sup>\<smile>) ; i = l ; (k\<^sup>\<smile>))" nitpick \<comment> \<open>countermodel: wrong diagonal!\<close> oops
 
 text \<open>An alternative definition in terms of pullbacks.\<close>
 lemma relSquare_def2: "relSquare = \<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2 (\<^bold>B\<^sub>2\<^sub>2 \<Q> (transpose \<ggreater> relPullback) (transpose \<ggreater> relPullback))" 
@@ -222,8 +222,8 @@ definition relInvolutive::"Set(ERel('a))"
 declare relInvolutive_def[rel_defs] 
 
 lemma "relInvolutive R = (\<forall>a c. (a = c) \<leftrightarrow> (\<exists>b. R a b \<and> R b c))" unfolding rel_defs func_defs comb_defs by metis
-lemma "relInvolutive R = (\<Q> = R ;\<^sup>r R)" unfolding rel_defs comb_defs ..
-lemma "relInvolutive = \<^bold>W (;\<^sup>r) \<ggreater> \<Q> \<Q>" unfolding rel_defs comb_defs ..
+lemma "relInvolutive R = (\<Q> = R ; R)" unfolding rel_defs comb_defs ..
+lemma "relInvolutive = \<^bold>W (;) \<ggreater> \<Q> \<Q>" unfolding rel_defs comb_defs ..
 
 text \<open>Equality is the only relation which is both involutive and idempotent.\<close>
 lemma "(relInvolutive R \<and> relIdempotent R) = (R = \<Q>)"
@@ -261,7 +261,7 @@ definition relDual::"Rel('a\<^sub>1,'a\<^sub>2) \<Rightarrow> Rel('b\<^sub>1,'b\
 declare  relDual_def[rel_defs]
 
 lemma "n\<^sub>1,n\<^sub>2-DUAL  f g = (n\<^sub>1 \<ggreater> g = f \<ggreater> n\<^sub>2)" unfolding func_defs comb_defs ..
-lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T = (n\<^sub>1 ;\<^sup>r T = R ;\<^sup>r n\<^sub>2)" unfolding rel_defs func_defs comb_defs ..
+lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T = (n\<^sub>1 ; T = R ; n\<^sub>2)" unfolding rel_defs func_defs comb_defs ..
 
 
 text \<open>The notion of dual for relations corresponds to the counterpart notion for functions.\<close>
@@ -273,9 +273,9 @@ lemma "totalFunction n\<^sub>1 \<Longrightarrow> totalFunction n\<^sub>2 \<Longr
 
 text \<open>Existence of sections and retractions influences existence and uniqueness of duals. As a corollary, 
   if \<open>n\<^sub>1\<close> (resp. \<open>n\<^sub>2\<close>) is involutive, then the dual relation is well-defined (exists and is unique).\<close>
-lemma "relSplitting n\<^sub>1 m \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R (m ;\<^sup>r R ;\<^sup>r n\<^sub>2)" 
+lemma "relSplitting n\<^sub>1 m \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R (m ; R ; n\<^sub>2)" 
   unfolding rel_defs func_defs comb_defs by metis
-lemma "relSplitting m n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r (n\<^sub>1 ;\<^sup>r T ;\<^sup>r m) T" 
+lemma "relSplitting m n\<^sub>2 \<Longrightarrow> n\<^sub>1,n\<^sub>2-DUAL\<^sup>r (n\<^sub>1 ; T ; m) T" 
   unfolding rel_defs func_defs comb_defs by metis
 lemma "\<exists>m. relSplitting m n\<^sub>1 \<Longrightarrow> unique(n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R)" 
   unfolding relDual_def unfolding rel_defs func_defs comb_defs apply auto apply (rule ext)+ by (smt (verit, best))

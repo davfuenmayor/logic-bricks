@@ -112,17 +112,17 @@ lemma "inductiveSet01 = \<^bold>B\<^sub>1\<^sub>1 image \<^bold>T funPower0" unf
 subsection \<open>Relation Powers\<close>
 
 text \<open>The set of all powers (via iterated composition) for a given endorelation \<open>R\<close> can also be defined 
- in two ways. First, by taking composition \<open>(;\<^sup>r)\<close> as a binary constructor (with \<open>R\<close> as the generator).
- Second, by taking \<open>(;\<^sup>r) R\<close> as a unary constructor (with \<open>\<Q>\<close> as the generator).\<close>
+ in two ways. First, by taking composition \<open>(;)\<close> as a binary constructor (with \<open>R\<close> as the generator).
+ Second, by taking \<open>(;) R\<close> as a unary constructor (with \<open>\<Q>\<close> as the generator).\<close>
 definition relPower :: "ERel(ERel('a))"
-  where "relPower R \<equiv> R,(;\<^sup>r)-indSet\<^sub>0\<^sub>2"
+  where "relPower R \<equiv> R,(;)-indSet\<^sub>0\<^sub>2"
 definition relPower0::"ERel(ERel('a))"
-  where "relPower0 R \<equiv> \<Q>,((;\<^sup>r) R)-indSet\<^sub>0\<^sub>1"
+  where "relPower0 R \<equiv> \<Q>,((;) R)-indSet\<^sub>0\<^sub>1"
 
 declare relPower_def[ind_defs] relPower0_def[ind_defs]
 
-text \<open>The first variant can also be defined with \<open>(;\<^sup>r) R\<close> as a unary constructor and \<open>R\<close> as generator.\<close>
-lemma "relPower R = R,((;\<^sup>r) R)-indSet\<^sub>0\<^sub>1" unfolding rel_defs ind_defs space_defs func_defs comb_defs 
+text \<open>The first variant can also be defined with \<open>(;) R\<close> as a unary constructor and \<open>R\<close> as generator.\<close>
+lemma "relPower R = R,((;) R)-indSet\<^sub>0\<^sub>1" unfolding rel_defs ind_defs space_defs func_defs comb_defs 
   apply (rule ext)+ apply safe defer apply (metis (no_types, lifting) ext) oops (*TODO: check*)
 
 text \<open>Extensionally, both variants differ on whether the "zero-power" (i.e. \<open>R\<^sup>0 = \<Q>\<close>) is included.\<close>
@@ -131,17 +131,17 @@ lemma "relPower0 R = relPower R \<union> {\<Q>}" oops (*TODO: check*)
 text \<open>Definitions work as expected:\<close>
 proposition "relPower R \<Q>" nitpick \<comment> \<open>countermodel found\<close> oops
 lemma "relPower R R" unfolding ind_defs space_defs func_defs comb_defs by simp
-lemma "relPower R (R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma "relPower R (R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma "relPower R (R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "relPower R (R ; R)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "relPower R (R ; R ; R)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma "relPower R (R ; R ; R ; R ; R ; R ; R ; R ; R ; R ; R ; R)" unfolding ind_defs space_defs func_defs comb_defs by metis
 lemma "relPower0 R \<Q>" unfolding ind_defs space_defs func_defs comb_defs by simp
 lemma "relPower0 R R" unfolding ind_defs space_defs rel_defs func_defs comb_defs by auto
-lemma "relPower0 R (R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs using relComp_id2 by blast
-lemma "relPower0 R (R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by (metis relComp_assoc relComp_id2)
-lemma "relPower0 R (R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R ;\<^sup>r R)" unfolding ind_defs space_defs func_defs comb_defs by (metis (no_types, lifting) relComp_assoc relComp_id2)
+lemma "relPower0 R (R ; R)" unfolding ind_defs space_defs func_defs comb_defs using relComp_id2 by blast
+lemma "relPower0 R (R ; R ; R)" unfolding ind_defs space_defs func_defs comb_defs by (metis relComp_assoc relComp_id2)
+lemma "relPower0 R (R ; R ; R ; R ; R ; R ; R ; R ; R ; R ; R ; R)" unfolding ind_defs space_defs func_defs comb_defs by (metis (no_types, lifting) relComp_assoc relComp_id2)
 
-lemma relPower_ind: "relPower R T \<Longrightarrow> relPower R (R ;\<^sup>r T)" unfolding ind_defs space_defs func_defs comb_defs by metis
-lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R ;\<^sup>r T)" unfolding ind_defs space_defs func_defs comb_defs by blast
+lemma relPower_ind: "relPower R T \<Longrightarrow> relPower R (R ; T)" unfolding ind_defs space_defs func_defs comb_defs by metis
+lemma relPower0_ind: "relPower0 R T \<Longrightarrow> relPower0 R (R ; T)" unfolding ind_defs space_defs func_defs comb_defs by blast
 
 text \<open>We can relate both functional and relational power to each other.\<close>
 lemma "funPower f = image asFun (relPower (asRel f))" oops (*TODO: check*)
@@ -197,7 +197,7 @@ lemma relPower_preorder: "preorder relPower" oops (*TODO: check*)
 lemma relPower0_preorder: "preorder relPower0" oops (*TODO: check*)
 
 text \<open>However, relational-power is not antisymmetric (and thus not partially ordered), because we have:\<close>
-proposition "R = T ;\<^sup>r T \<Longrightarrow> T = R ;\<^sup>r R \<Longrightarrow> R = T" nitpick[card 'a=3] \<comment> \<open>countermodel found\<close> oops 
+proposition "R = T ; T \<Longrightarrow> T = R ; R \<Longrightarrow> R = T" nitpick[card 'a=3] \<comment> \<open>countermodel found\<close> oops 
 
 text \<open>Iterative-closure is a preorder\<close>
 lemma "preorder (iterativeClosure f)" unfolding ind_defs space_defs endorel_defs rel_defs func_defs comb_defs by metis

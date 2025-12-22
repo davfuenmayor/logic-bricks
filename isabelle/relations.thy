@@ -598,95 +598,95 @@ subsubsection \<open>Monoidal Structure (composition and its dual)\<close>
 
 (* TODO: define in terms of (dual)interpolants? *)
 text \<open>In analogy to functions, relations can also be composed, as follows:\<close>
-definition relComp::"Rel('a,'b) \<Rightarrow> Rel('b,'c) \<Rightarrow>  Rel('a,'c)" (infixr ";\<^sup>r" 55)
-  where "(;\<^sup>r) =  \<^bold>B\<^sub>2\<^sub>2 (\<sqinter>) \<^bold>A \<smile>"
+definition relComp::"Rel('a,'b) \<Rightarrow> Rel('b,'c) \<Rightarrow>  Rel('a,'c)" (infixr ";" 55)
+  where "(;) =  \<^bold>B\<^sub>2\<^sub>2 (\<sqinter>) \<^bold>A \<smile>"
 text \<open>Again, we can in fact define an operator that acts as a "dual" to relation-composition:\<close>
-definition relDualComp::"Rel('c,'a) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('c,'b)" (infixr "\<dagger>\<^sup>r" 55)
-  where "(\<dagger>\<^sup>r) \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<squnion>) \<^bold>A \<smile>"
+definition relDualComp::"Rel('c,'a) \<Rightarrow> Rel('a,'b) \<Rightarrow> Rel('c,'b)" (infixr "\<dagger>" 55)
+  where "(\<dagger>) \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<squnion>) \<^bold>A \<smile>"
 
 declare relDualComp_def[rel_defs] relComp_def[rel_defs]
 
-lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<lambda>a b. R\<^sub>1 a \<sqinter> R\<^sub>2\<^sup>\<smile> b)" unfolding rel_defs comb_defs ..
-lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = (\<lambda>a b. R\<^sub>1 a \<squnion> R\<^sub>2\<^sup>\<smile> b)" unfolding rel_defs comb_defs ..
-lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<lambda>a b. \<exists>c. R\<^sub>1 a c \<and> R\<^sub>2 c b)" unfolding rel_defs func_defs comb_defs ..
-lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = (\<lambda>a b. \<forall>c. R\<^sub>1 a c \<or> R\<^sub>2 c b)" unfolding rel_defs func_defs comb_defs ..
-lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = (\<lambda>a b. \<exists>(interpolants R\<^sub>1 R\<^sub>2 a b))" unfolding rel_defs func_defs comb_defs ..
-lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = (\<lambda>a b. \<forall>(dualInterpolants R\<^sub>1 R\<^sub>2 a b))" unfolding rel_defs func_defs comb_defs ..
-lemma "R\<^sub>1 ;\<^sup>r R\<^sub>2 = interpolants R\<^sub>1 R\<^sub>2 \<ggreater>\<^sub>2 \<exists>" unfolding rel_defs func_defs comb_defs ..
-lemma "R\<^sub>1 \<dagger>\<^sup>r R\<^sub>2 = dualInterpolants R\<^sub>1 R\<^sub>2 \<ggreater>\<^sub>2 \<forall>" unfolding rel_defs func_defs comb_defs ..
-lemma relComp_def2:     "(;\<^sup>r) = interpolants \<ggreater>\<^sub>4 \<exists>" unfolding rel_defs func_defs comb_defs ..
-lemma relDualComp_def2: "(\<dagger>\<^sup>r) = dualInterpolants \<ggreater>\<^sub>4 \<forall>" unfolding rel_defs func_defs comb_defs ..
+lemma "R\<^sub>1 ; R\<^sub>2 = (\<lambda>a b. R\<^sub>1 a \<sqinter> R\<^sub>2\<^sup>\<smile> b)" unfolding rel_defs comb_defs ..
+lemma "R\<^sub>1 \<dagger> R\<^sub>2 = (\<lambda>a b. R\<^sub>1 a \<squnion> R\<^sub>2\<^sup>\<smile> b)" unfolding rel_defs comb_defs ..
+lemma "R\<^sub>1 ; R\<^sub>2 = (\<lambda>a b. \<exists>c. R\<^sub>1 a c \<and> R\<^sub>2 c b)" unfolding rel_defs func_defs comb_defs ..
+lemma "R\<^sub>1 \<dagger> R\<^sub>2 = (\<lambda>a b. \<forall>c. R\<^sub>1 a c \<or> R\<^sub>2 c b)" unfolding rel_defs func_defs comb_defs ..
+lemma "R\<^sub>1 ; R\<^sub>2 = (\<lambda>a b. \<exists>(interpolants R\<^sub>1 R\<^sub>2 a b))" unfolding rel_defs func_defs comb_defs ..
+lemma "R\<^sub>1 \<dagger> R\<^sub>2 = (\<lambda>a b. \<forall>(dualInterpolants R\<^sub>1 R\<^sub>2 a b))" unfolding rel_defs func_defs comb_defs ..
+lemma "R\<^sub>1 ; R\<^sub>2 = interpolants R\<^sub>1 R\<^sub>2 \<ggreater>\<^sub>2 \<exists>" unfolding rel_defs func_defs comb_defs ..
+lemma "R\<^sub>1 \<dagger> R\<^sub>2 = dualInterpolants R\<^sub>1 R\<^sub>2 \<ggreater>\<^sub>2 \<forall>" unfolding rel_defs func_defs comb_defs ..
+lemma relComp_def2:     "(;) = interpolants \<ggreater>\<^sub>4 \<exists>" unfolding rel_defs func_defs comb_defs ..
+lemma relDualComp_def2: "(\<dagger>) = dualInterpolants \<ggreater>\<^sub>4 \<forall>" unfolding rel_defs func_defs comb_defs ..
 
 text \<open>Unsurprisingly, (relational) composition and dual-composition are dual wrt. (relational) complement.\<close>
-lemma relCompDuality1: "R \<dagger>\<^sup>r T = ((R\<^sup>\<midarrow>) ;\<^sup>r (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
+lemma relCompDuality1: "R \<dagger> T = ((R\<^sup>\<midarrow>) ; (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
   unfolding rel_defs func_defs comb_defs by auto
-lemma relCompDuality2: "R ;\<^sup>r T = ((R\<^sup>\<midarrow>) \<dagger>\<^sup>r (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
+lemma relCompDuality2: "R ; T = ((R\<^sup>\<midarrow>) \<dagger> (T\<^sup>\<midarrow>))\<^sup>\<midarrow>" 
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Moreover, relation (dual)composition and (dis)equality satisfy the monoid conditions\<close>
-lemma relComp_assoc: "(R ;\<^sup>r T) ;\<^sup>r V = R ;\<^sup>r (T ;\<^sup>r V)" \<comment> \<open>associativity\<close>
+lemma relComp_assoc: "(R ; T) ; V = R ; (T ; V)" \<comment> \<open>associativity\<close>
   unfolding rel_defs func_defs comb_defs by auto                   
-lemma relComp_id1: "\<Q> ;\<^sup>r R = R"                     \<comment> \<open>identity 1\<close>
+lemma relComp_id1: "\<Q> ; R = R"                     \<comment> \<open>identity 1\<close>
   unfolding rel_defs func_defs comb_defs by simp                   
-lemma relComp_id2: "R ;\<^sup>r \<Q> = R"                     \<comment> \<open>identity 2\<close>
+lemma relComp_id2: "R ; \<Q> = R"                     \<comment> \<open>identity 2\<close>
   unfolding rel_defs func_defs comb_defs by simp   
-lemma relCompDual_assoc: "(R \<dagger>\<^sup>r T) \<dagger>\<^sup>r V = R \<dagger>\<^sup>r (T \<dagger>\<^sup>r V)" \<comment> \<open>associativity\<close>
+lemma relCompDual_assoc: "(R \<dagger> T) \<dagger> V = R \<dagger> (T \<dagger> V)" \<comment> \<open>associativity\<close>
   unfolding rel_defs func_defs comb_defs by auto                   
-lemma relCompDual_id1: "\<D> \<dagger>\<^sup>r R = R"                     \<comment> \<open>identity 1\<close>
+lemma relCompDual_id1: "\<D> \<dagger> R = R"                     \<comment> \<open>identity 1\<close>
   unfolding rel_defs func_defs comb_defs by simp                   
-lemma relCompDual_id2: "R \<dagger>\<^sup>r \<D> = R"                     \<comment> \<open>identity 2\<close>
+lemma relCompDual_id2: "R \<dagger> \<D> = R"                     \<comment> \<open>identity 2\<close>
   unfolding rel_defs func_defs comb_defs by auto 
 
 text \<open>Transpose acts as an "antihomomorphism" wrt. composition as well as its dual.\<close>
-lemma relComp_antihom:     "(R ;\<^sup>r T)\<^sup>\<smile> = ((T\<^sup>\<smile>) ;\<^sup>r (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
-lemma relCompDual_antihom: "(R \<dagger>\<^sup>r T)\<^sup>\<smile> = ((T\<^sup>\<smile>) \<dagger>\<^sup>r (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
+lemma relComp_antihom:     "(R ; T)\<^sup>\<smile> = ((T\<^sup>\<smile>) ; (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
+lemma relCompDual_antihom: "(R \<dagger> T)\<^sup>\<smile> = ((T\<^sup>\<smile>) \<dagger> (R\<^sup>\<smile>))" unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>In a similar spirit, we have:\<close>
-lemma "(R ;\<^sup>r T)\<^sup>\<sim> = ((T\<^sup>\<sim>) \<dagger>\<^sup>r (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
-lemma "(R \<dagger>\<^sup>r T)\<^sup>\<sim> = ((T\<^sup>\<sim>) ;\<^sup>r (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
+lemma "(R ; T)\<^sup>\<sim> = ((T\<^sup>\<sim>) \<dagger> (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
+lemma "(R \<dagger> T)\<^sup>\<sim> = ((T\<^sup>\<sim>) ; (R\<^sup>\<sim>))" unfolding rel_defs func_defs comb_defs by auto
 
 
 subsubsection \<open>Residuals\<close>
 
-text \<open>Introduce residuals (on the left resp. right) wrt. composition taken as \<open>(;\<^sup>r)\<close>.\<close>
-definition residualOnRight::"Rel('c,'a) \<Rightarrow> Rel('c,'b) \<Rightarrow> Rel('a,'b)" (infix "\<Zrres>\<^sup>r" 99)
-  where "R \<Zrres>\<^sup>r S \<equiv> (R\<^sup>\<sim>) \<dagger>\<^sup>r S"
-definition residualOnLeft::"Rel('a,'c) \<Rightarrow> Rel('b,'c) \<Rightarrow> Rel('a,'b)" (infix "\<Zndres>\<^sup>r" 99)
-  where "R \<Zndres>\<^sup>r S \<equiv>  R  \<dagger>\<^sup>r (S\<^sup>\<sim>)"
+text \<open>Introduce residuals (on the left resp. right) wrt. composition taken as \<open>(;)\<close>.\<close>
+definition residualOnRight::"Rel('c,'a) \<Rightarrow> Rel('c,'b) \<Rightarrow> Rel('a,'b)" (infix "\<Zrres>" 99)
+  where "R \<Zrres> S \<equiv> (R\<^sup>\<sim>) \<dagger> S"
+definition residualOnLeft::"Rel('a,'c) \<Rightarrow> Rel('b,'c) \<Rightarrow> Rel('a,'b)" (infix "\<Zndres>" 99)
+  where "R \<Zndres> S \<equiv>  R  \<dagger> (S\<^sup>\<sim>)"
 
 declare residualOnRight_def[rel_defs] residualOnLeft_def[rel_defs]
 
 text \<open>Residuals can alternatively be defined using converse and complement.\<close>
-lemma residualOnRight_def2: "R \<Zrres>\<^sup>r S = ((R\<^sup>\<smile>) ;\<^sup>r (S\<^sup>\<midarrow>))\<^sup>\<midarrow>" unfolding rel_defs func_defs comb_defs by simp
-lemma residualOnLeft_def2:  "R \<Zndres>\<^sup>r S = ((R\<^sup>\<midarrow>) ;\<^sup>r (S\<^sup>\<smile>))\<^sup>\<midarrow>" unfolding rel_defs func_defs comb_defs by simp
+lemma residualOnRight_def2: "R \<Zrres> S = ((R\<^sup>\<smile>) ; (S\<^sup>\<midarrow>))\<^sup>\<midarrow>" unfolding rel_defs func_defs comb_defs by simp
+lemma residualOnLeft_def2:  "R \<Zndres> S = ((R\<^sup>\<midarrow>) ; (S\<^sup>\<smile>))\<^sup>\<midarrow>" unfolding rel_defs func_defs comb_defs by simp
 
-text \<open>We verify that they work as residuals wrt. \<open>(;\<^sup>r)\<close> in the expected way.\<close>
-lemma residual_simp1: "(R ;\<^sup>r S \<subseteq>\<^sup>r T) = (S \<subseteq>\<^sup>r R \<Zrres>\<^sup>r T)" unfolding rel_defs func_defs comb_defs by auto
-lemma residual_simp2: "(R ;\<^sup>r S \<subseteq>\<^sup>r T) = (R \<subseteq>\<^sup>r T \<Zndres>\<^sup>r S)" unfolding rel_defs func_defs comb_defs by auto
+text \<open>We verify that they work as residuals wrt. \<open>(;)\<close> in the expected way.\<close>
+lemma residual_simp1: "(R ; S \<subseteq>\<^sup>r T) = (S \<subseteq>\<^sup>r R \<Zrres> T)" unfolding rel_defs func_defs comb_defs by auto
+lemma residual_simp2: "(R ; S \<subseteq>\<^sup>r T) = (R \<subseteq>\<^sup>r T \<Zndres> S)" unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Introduce some convenient reversed notation.\<close>
-abbreviation(input) residualOnRight_t (infix "\<Zdres>\<^sup>r" 99)
-  where "R \<Zdres>\<^sup>r S \<equiv> S \<Zrres>\<^sup>r R"
-abbreviation(input) residualOnLeft_t (infix "\<Znrres>\<^sup>r" 99)
-  where "R \<Znrres>\<^sup>r S \<equiv> S \<Zndres>\<^sup>r R"
+abbreviation(input) residualOnRight_t (infix "\<Zdres>" 99)
+  where "R \<Zdres> S \<equiv> S \<Zrres> R"
+abbreviation(input) residualOnLeft_t (infix "\<Znrres>" 99)
+  where "R \<Znrres> S \<equiv> S \<Zndres> R"
 
 
 subsubsection \<open>Ideal Elements\<close>
 
 text \<open>A related property of relations is that of (generating a) left- resp. right ideal.\<close>
 definition leftIdeal::"Set(Rel('a,'b))"
-  where "leftIdeal \<equiv> FP ((;\<^sup>r) \<UU>\<^sup>r)"
+  where "leftIdeal \<equiv> FP ((;) \<UU>\<^sup>r)"
 definition rightIdeal::"Set(Rel('a,'b))"
-  where "rightIdeal \<equiv> FP (\<^bold>C (;\<^sup>r) \<UU>\<^sup>r)"
+  where "rightIdeal \<equiv> FP (\<^bold>C (;) \<UU>\<^sup>r)"
 
 declare leftIdeal_def[rel_defs] rightIdeal_def[rel_defs]
 
-lemma "leftIdeal  R = (R = \<UU>\<^sup>r ;\<^sup>r R)" unfolding rel_defs func_defs comb_defs ..
-lemma "rightIdeal R = (R = R  ;\<^sup>r \<UU>\<^sup>r)" unfolding rel_defs func_defs comb_defs ..
+lemma "leftIdeal  R = (R = \<UU>\<^sup>r ; R)" unfolding rel_defs func_defs comb_defs ..
+lemma "rightIdeal R = (R = R  ; \<UU>\<^sup>r)" unfolding rel_defs func_defs comb_defs ..
 
 text \<open>An alternative, equivalent definition also common in the literature (e.g. on semirings).\<close>
-lemma leftIdeal_def2:  "leftIdeal  R = (\<forall>T. T ;\<^sup>r R \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
-lemma rightIdeal_def2: "rightIdeal R = (\<forall>T. R ;\<^sup>r T \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
+lemma leftIdeal_def2:  "leftIdeal  R = (\<forall>T. T ; R \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
+lemma rightIdeal_def2: "rightIdeal R = (\<forall>T. R ; T \<subseteq>\<^sup>r R)" unfolding rel_defs func_defs comb_defs by meson
 
 text \<open>In fact, the left/right-cylindrification operations discussed previously return left/right-ideal 
  (generating) relations. Moreover, all left/right-ideal relations can be generated this way.\<close>

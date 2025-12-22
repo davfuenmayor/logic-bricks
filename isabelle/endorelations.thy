@@ -382,14 +382,14 @@ subsubsection \<open>Transitivity, Denseness, Quasitransitivity, and co.\<close>
 
 text \<open>Every pair of elements x and y that can be connected by an element z in between are (un)related.\<close>
 definition transitive::"Set(ERel('a))"
-  where \<open>transitive \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>W (;\<^sup>r))\<close>
+  where \<open>transitive \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>W (;))\<close>
 definition antitransitive::"Set(ERel('a))"
-  where \<open>antitransitive \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<supseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (;\<^sup>r))\<close>
+  where \<open>antitransitive \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<supseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (;))\<close>
 
 declare transitive_def[endorel_defs] antitransitive_def[endorel_defs]
 
-lemma transitive_reldef: \<open>transitive R = (R ;\<^sup>r R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
-lemma antitransitive_reldef: \<open>antitransitive R = (R ;\<^sup>r R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma transitive_reldef: \<open>transitive R = (R ; R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma antitransitive_reldef: \<open>antitransitive R = (R ; R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 text \<open>Alternative convenient definitions.\<close>
 lemma transitive_def2: \<open>transitive R = (\<forall>a b c. R a c \<and> R c b \<rightarrow> R a b)\<close>
@@ -405,14 +405,14 @@ lemma "leftUnique R \<or> rightUnique R \<Longrightarrow> antitransitive R = irr
 
 text \<open>Every pair of (un)related elements x and y can be connected via an element z in between.\<close>
 definition dense::"Set(ERel('a))"
-  where \<open>dense \<equiv> \<^bold>S (\<subseteq>\<^sup>r) (\<^bold>W (;\<^sup>r))\<close>
+  where \<open>dense \<equiv> \<^bold>S (\<subseteq>\<^sup>r) (\<^bold>W (;))\<close>
 definition pseudoClique::"Set(ERel('a))" \<comment> \<open>i.e. a graph with diameter 2 (where cliques have diameter 1)\<close>
-  where \<open>pseudoClique \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (;\<^sup>r))\<close>
+  where \<open>pseudoClique \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) \<midarrow>\<^sup>r (\<^bold>W (;))\<close>
 
 declare dense_def[endorel_defs] pseudoClique_def[endorel_defs]
 
-lemma dense_reldef: \<open>dense R = R \<subseteq>\<^sup>r (R ;\<^sup>r R)\<close> unfolding endorel_defs comb_defs ..
-lemma pseudoClique_reldef: \<open>pseudoClique R = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R ;\<^sup>r R)\<close> unfolding endorel_defs comb_defs ..
+lemma dense_reldef: \<open>dense R = R \<subseteq>\<^sup>r (R ; R)\<close> unfolding endorel_defs comb_defs ..
+lemma pseudoClique_reldef: \<open>pseudoClique R = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R ; R)\<close> unfolding endorel_defs comb_defs ..
 
 text \<open>The above properties are preserved by transposition:\<close>
 lemma transitive_defT: "transitive R = transitive (R\<^sup>\<smile>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
@@ -421,10 +421,10 @@ lemma quasiDense_defT: "dense R = dense (R\<^sup>\<smile>)" unfolding endorel_de
 lemma quasiClique_defT: "pseudoClique R = pseudoClique (R\<^sup>\<smile>)" unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
 text \<open>The above properties can be stated for the complemented relations in an analogous fashion.\<close>
-lemma transitive_compl_reldef: \<open>transitive R\<^sup>\<midarrow> = R  \<subseteq>\<^sup>r (R \<dagger>\<^sup>r R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
-lemma dense_compl_reldef:     \<open>dense R\<^sup>\<midarrow> = (R \<dagger>\<^sup>r R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
-lemma antitransitive_compl_reldef:  \<open>antitransitive R\<^sup>\<midarrow> = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R \<dagger>\<^sup>r R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
-lemma pseudoClique_compl_reldef: \<open>pseudoClique R\<^sup>\<midarrow> = (R \<dagger>\<^sup>r R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma transitive_compl_reldef: \<open>transitive R\<^sup>\<midarrow> = R  \<subseteq>\<^sup>r (R \<dagger> R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma dense_compl_reldef:     \<open>dense R\<^sup>\<midarrow> = (R \<dagger> R) \<subseteq>\<^sup>r R\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma antitransitive_compl_reldef:  \<open>antitransitive R\<^sup>\<midarrow> = R\<^sup>\<midarrow> \<subseteq>\<^sup>r (R \<dagger> R)\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
+lemma pseudoClique_compl_reldef: \<open>pseudoClique R\<^sup>\<midarrow> = (R \<dagger> R) \<subseteq>\<^sup>r R\<^sup>\<midarrow>\<close> unfolding endorel_defs rel_defs func_defs comb_defs by auto
 
 text \<open>We can provide alternative definitions for the above relational properties in terms of intervals.\<close>
 lemma \<open>transitive R     = (\<forall>a b. \<exists>(R-interval a b) \<rightarrow> R a b)\<close>  unfolding endorel_defs rel_defs func_defs comb_defs ..
@@ -462,13 +462,13 @@ lemma "symmetric R \<Longrightarrow> quasiAntitransitive R" unfolding endorel_de
 subsubsection \<open>Euclideanness and co.\<close>
 
 text \<open>The relational properties of left-/right- euclideanness. \<close>
-definition \<open>rightEuclidean \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>\<Sigma> (;\<^sup>r) \<smile>)\<close>
-definition \<open>leftEuclidean  \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>S (;\<^sup>r) \<smile>)\<close>
+definition \<open>rightEuclidean \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>\<Sigma> (;) \<smile>)\<close>
+definition \<open>leftEuclidean  \<equiv> \<^bold>S (\<supseteq>\<^sup>r) (\<^bold>S (;) \<smile>)\<close>
 
 declare rightEuclidean_def[endorel_defs] leftEuclidean_def[endorel_defs]
 
-lemma rightEuclidean_reldef: "rightEuclidean R = (R\<^sup>\<smile>) ;\<^sup>r R \<subseteq>\<^sup>r R" unfolding endorel_defs rel_defs func_defs comb_defs ..
-lemma leftEuclidean_reldef: "leftEuclidean R   = R ;\<^sup>r (R\<^sup>\<smile>) \<subseteq>\<^sup>r R" unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma rightEuclidean_reldef: "rightEuclidean R = (R\<^sup>\<smile>) ; R \<subseteq>\<^sup>r R" unfolding endorel_defs rel_defs func_defs comb_defs ..
+lemma leftEuclidean_reldef: "leftEuclidean R   = R ; (R\<^sup>\<smile>) \<subseteq>\<^sup>r R" unfolding endorel_defs rel_defs func_defs comb_defs ..
 
 lemma "rightEuclidean R = (\<forall>a b. (\<exists>c. R c a \<and> R c b) \<rightarrow> R a b)" 
   unfolding endorel_defs rel_defs func_defs comb_defs ..

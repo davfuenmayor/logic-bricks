@@ -36,7 +36,7 @@ abbreviation(input) relGaloisDiagram (" \<sqdot> \<leftarrow>_\<midarrow> \<sqdo
 
 lemma relGalois_def2:  " \<sqdot> \<leftarrow>G\<midarrow> \<sqdot> 
                        R\<^sub>1\<up>      \<down>R\<^sub>2
-                         \<sqdot> \<midarrow>F\<rightarrow> \<sqdot>   = (F ;\<^sup>r (R\<^sub>2\<^sup>\<smile>) = R\<^sub>1 ;\<^sup>r (G\<^sup>\<smile>))"
+                         \<sqdot> \<midarrow>F\<rightarrow> \<sqdot>   = (F ; (R\<^sub>2\<^sup>\<smile>) = R\<^sub>1 ; (G\<^sup>\<smile>))"
   unfolding adj_defs rel_defs func_defs comb_defs by meson
 
 text \<open>An alternative definition:\<close>
@@ -58,9 +58,9 @@ lemma "n\<^sub>1,n\<^sub>2-DUAL\<^sup>r R T =  R,T\<^sup>\<smile>-GAL\<^sup>r  n
 
 text \<open>Drawing upon the above, we can sketch solutions to the problem of finding a right resp. left adjoint
  to a given relation, for those particular cases where \<open>R\<^sub>1\<close> resp. \<open>R\<^sub>2\<close> have sections or retractions.\<close>
-lemma "relSplitting R\<^sub>1 m \<Longrightarrow> R\<^sub>1,R\<^sub>2-GAL\<^sup>r F (R\<^sub>2 ;\<^sup>r (F\<^sup>\<smile>) ;\<^sup>r (m\<^sup>\<smile>))"
+lemma "relSplitting R\<^sub>1 m \<Longrightarrow> R\<^sub>1,R\<^sub>2-GAL\<^sup>r F (R\<^sub>2 ; (F\<^sup>\<smile>) ; (m\<^sup>\<smile>))"
   unfolding adj_defs rel_defs comb_defs func_defs by metis
-lemma "relSplitting R\<^sub>2 m \<Longrightarrow> R\<^sub>1,R\<^sub>2-GAL\<^sup>r (R\<^sub>1 ;\<^sup>r (G\<^sup>\<smile>) ;\<^sup>r (m\<^sup>\<smile>)) G"
+lemma "relSplitting R\<^sub>2 m \<Longrightarrow> R\<^sub>1,R\<^sub>2-GAL\<^sup>r (R\<^sub>1 ; (G\<^sup>\<smile>) ; (m\<^sup>\<smile>)) G"
   unfolding adj_defs rel_defs comb_defs func_defs by metis
 
 text \<open>For the (very common) particular case where \<open>R\<^sub>1\<close> and \<open>R\<^sub>2\<close> are endorelations (possibly on different types),
