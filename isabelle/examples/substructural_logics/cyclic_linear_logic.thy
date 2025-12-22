@@ -27,12 +27,12 @@ lemma "A \<dagger> (B \<dagger> C) = (A \<dagger> B) \<dagger> C" by them
 
 text \<open>Also note that the operation of cotransposition can act as a negation wrt. some relational operations.\<close>
 lemma "R\<^sup>\<sim>\<^sup>\<sim> = R" by them     \<comment> \<open>involutivity: double-negation\<close>
-lemma "\<UU>\<^sup>r\<^sup>\<sim> = \<emptyset>\<^sup>r" by them    \<comment> \<open>swapping top and bottom\<close>
+lemma "\<UU>\<^sup>2\<^sup>\<sim> = \<emptyset>\<^sup>2" by them    \<comment> \<open>swapping top and bottom\<close>
 lemma "\<Q>\<^sup>\<sim> = \<D>" by them     \<comment> \<open>swapping identity and anti-identity (difference)\<close>
 
 text \<open>Cotransposition validates De Morgan laws wrt union and intersection.\<close>
-lemma "(R \<inter>\<^sup>r S)\<^sup>\<sim> = (R\<^sup>\<sim>) \<union>\<^sup>r (S\<^sup>\<sim>)" by them
-lemma "(R \<union>\<^sup>r S)\<^sup>\<sim> = (R\<^sup>\<sim>) \<inter>\<^sup>r (S\<^sup>\<sim>)" by them
+lemma "(R \<inter>\<^sup>2 S)\<^sup>\<sim> = (R\<^sup>\<sim>) \<union>\<^sup>2 (S\<^sup>\<sim>)" by them
+lemma "(R \<union>\<^sup>2 S)\<^sup>\<sim> = (R\<^sup>\<sim>) \<inter>\<^sup>2 (S\<^sup>\<sim>)" by them
 
 text \<open>Cotransposition validates "flipped" De Morgan-like laws wrt composition and its dual.\<close>
 lemma "(R ; S)\<^sup>\<sim> = (S\<^sup>\<sim>) \<dagger> (R\<^sup>\<sim>)" by them
@@ -47,8 +47,8 @@ lemma "R\<^sup>!\<^sup>\<sim> = R\<^sup>\<sim>\<^sup>?" by them
 lemma "R\<^sup>?\<^sup>\<sim> = R\<^sup>\<sim>\<^sup>!" by them
 
 text \<open>Cotransposition validates "excluded middle" and "ex contradictio" with \<open>\<Q>\<close> resp. \<open>\<D>\<close> as top resp. bottom.\<close>
-lemma "\<Q> \<subseteq>\<^sup>r (R \<dagger> (R\<^sup>\<sim>))" by them
-lemma "(R ; (R\<^sup>\<sim>)) \<subseteq>\<^sup>r \<D>" by them
+lemma "\<Q> \<subseteq>\<^sup>2 (R \<dagger> (R\<^sup>\<sim>))" by them
+lemma "(R ; (R\<^sup>\<sim>)) \<subseteq>\<^sup>2 \<D>" by them
 
 
 subsection \<open>Cyclic Linear Logic\<close>
@@ -61,15 +61,15 @@ text \<open>We show how relations can interpret a non-commutative, cyclic varian
 text \<open>Nullary connectives are interpreted as relational constants.\<close>
 abbreviation(input) ll_one::"ERel('a)"  ("\<^bold>1") where  "\<^bold>1 \<equiv> \<Q>"
 abbreviation(input) ll_bot::"ERel('a)"  ("\<^bold>\<bottom>") where "\<^bold>\<bottom> \<equiv> \<D>"
-abbreviation(input) ll_zero::"ERel('a)" ("\<^bold>0") where  "\<^bold>0 \<equiv> \<emptyset>\<^sup>r"
-abbreviation(input) ll_top::"ERel('a)"  ("\<^bold>\<top>") where "\<^bold>\<top> \<equiv> \<UU>\<^sup>r"
+abbreviation(input) ll_zero::"ERel('a)" ("\<^bold>0") where  "\<^bold>0 \<equiv> \<emptyset>\<^sup>2"
+abbreviation(input) ll_top::"ERel('a)"  ("\<^bold>\<top>") where "\<^bold>\<top> \<equiv> \<UU>\<^sup>2"
 
 text \<open>Negation is interpreted as relational cotransposition (the transposition/converse of the complement).\<close>
 abbreviation(input) ll_neg::"EOp(ERel('a))"  ("(_)\<^sup>\<bottom>") where "r\<^sup>\<bottom> \<equiv> r\<^sup>\<sim>"
 
 text \<open>The "additive" binary connectives are interpreted with "Boolean" binary operations.\<close>
-abbreviation(input) ll_plus::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<oplus>" 99) where "(\<^bold>\<oplus>) \<equiv> (\<union>\<^sup>r)"
-abbreviation(input) ll_with::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>&" 99) where "(\<^bold>&) \<equiv> (\<inter>\<^sup>r)"
+abbreviation(input) ll_plus::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>\<oplus>" 99) where "(\<^bold>\<oplus>) \<equiv> (\<union>\<^sup>2)"
+abbreviation(input) ll_with::"EOp\<^sub>2(ERel('a))" (infix "\<^bold>&" 99) where "(\<^bold>&) \<equiv> (\<inter>\<^sup>2)"
 
 text \<open>The "multiplicative" binary connectives are interpreted with "Peircean" binary operations.\<close>
 abbreviation(input) ll_tensor::"EOp\<^sub>2(ERel('a))" (infixr "\<^bold>\<otimes>" 99) where "(\<^bold>\<otimes>) \<equiv> (;)"
@@ -100,7 +100,7 @@ In fact, the first two can be encoded as special cases of the third, so we start
 to the fact that the notion of entailment employed in linear logic is "degree-preserving" (aka. "local")\<close>
 
 text \<open>Degree-preserving (local) entailment is encoded by using the subrelation ordering.\<close>
-abbreviation(input) ll_entail  ("[_\<turnstile>_]") where "[A \<turnstile> B] \<equiv> A \<subseteq>\<^sup>r B"
+abbreviation(input) ll_entail  ("[_\<turnstile>_]") where "[A \<turnstile> B] \<equiv> A \<subseteq>\<^sup>2 B"
 
 text \<open>We use connectives \<open>\<^bold>\<otimes>\<close> resp. \<open>\<^bold>\<section>\<close> as assumption resp. conclusion aggregators and add syntactic sugar.\<close>
 abbreviation(input) ll_entail12  ("[_\<turnstile>_,_]") where "[A \<turnstile> B,C] \<equiv> [A \<turnstile> B \<^bold>\<section> C]"
@@ -114,14 +114,14 @@ text \<open>Validity: a proposition is valid iff it is entailed by \<open>\<^bol
 abbreviation(input) ll_valid  ("[\<turnstile>_]") where "[\<turnstile> A] \<equiv> [\<^bold>1 \<turnstile> A]"
 
 text \<open>Semantically, this means that tautologies are interpreted by reflexive relations.\<close>
-lemma "[\<turnstile> A] = \<Q> \<subseteq>\<^sup>r A" by them
+lemma "[\<turnstile> A] = \<Q> \<subseteq>\<^sup>2 A" by them
 lemma "[\<turnstile> A] = reflexive A" by them
 
 text \<open>Invalidity: a proposition is invalid iff it entails \<open>\<^bold>\<bottom>\<close>\<close>
 abbreviation(input) ll_invalid  ("[_\<turnstile>]") where "[A \<turnstile>] \<equiv> [A \<turnstile> \<^bold>\<bottom>]"
 
 text \<open>Semantically, this means that inconsistencies are interpreted by irreflexive relations.\<close>
-lemma "[A \<turnstile>] = A \<subseteq>\<^sup>r \<D>" by them
+lemma "[A \<turnstile>] = A \<subseteq>\<^sup>2 \<D>" by them
 lemma "[A \<turnstile>] = irreflexive A" by them
 
 text \<open>We add convenient syntactic sugar:\<close>

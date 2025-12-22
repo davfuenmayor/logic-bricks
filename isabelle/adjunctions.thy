@@ -235,7 +235,7 @@ lemma dimpl_or_adj: "(\<rightarrow>),(\<rightarrow>)-ADJ\<^sub>2 (\<rightharpoon
 
 text \<open>Note that we can use the "adjunction lifting" rule to prove adjunctions on lifted (indexed) operations.\<close>
 lemma "(\<subseteq>),(\<subseteq>)-ADJ\<^sub>2 (\<inter>) (\<Rightarrow>)" by (simp add: adjunction_lift2 and_impl_adj impl_def inter_def subset_def)
-lemma "(\<subseteq>\<^sup>r),(\<subseteq>\<^sup>r)-ADJ\<^sub>2 (\<inter>\<^sup>r) (\<Rightarrow>\<^sup>r)" by (simp add: adjunction_lift2 and_impl_adj implR_def impl_def interR_def inter_def subrel_def subset_def)
+lemma "(\<subseteq>\<^sup>2),(\<subseteq>\<^sup>2)-ADJ\<^sub>2 (\<inter>\<^sup>2) (\<Rightarrow>\<^sup>2)" by (simp add: adjunction_lift2 and_impl_adj implR_def impl_def interR_def inter_def subrel_def subset_def)
 
 
 (*The examples below require importing Complex_Main*)

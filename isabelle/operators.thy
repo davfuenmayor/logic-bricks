@@ -25,26 +25,26 @@ subsubsection \<open>Order Embedding\<close>
 
 text \<open>This is a good moment to recall that unary operations on sets (set-operations) are also relations...\<close>
 term "(F :: SetOp('a,'b)) :: Rel(Set('a),'b)"
-text \<open>... and thus can be ordered as such. Thus read \<open>F \<subseteq>\<^sup>r G\<close> as: "F is a sub-operation of G".\<close>
+text \<open>... and thus can be ordered as such. Thus read \<open>F \<subseteq>\<^sup>2 G\<close> as: "F is a sub-operation of G".\<close>
 lemma fixes F::"SetOp('a,'b)" and G::"SetOp('a,'b)"
-  shows "F \<subseteq>\<^sup>r G = (\<forall>A. F A \<subseteq> G A)" unfolding rel_defs comb_defs func_defs ..
+  shows "F \<subseteq>\<^sup>2 G = (\<forall>A. F A \<subseteq> G A)" unfolding rel_defs comb_defs func_defs ..
 
 text \<open>Operators are (dual) embeddings between the sub-relation and the (converse of) sub-operation ordering.\<close>
-lemma rightImage_embedding: "(\<subseteq>\<^sup>r),(\<subseteq>\<^sup>r)-embedding \<diamond>\<^sub>\<rightarrow>"
+lemma rightImage_embedding: "(\<subseteq>\<^sup>2),(\<subseteq>\<^sup>2)-embedding \<diamond>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs unfolding func_defs comb_defs by fast
-lemma leftImage_embedding: "(\<subseteq>\<^sup>r),(\<subseteq>\<^sup>r)-embedding \<diamond>\<^sub>\<leftarrow>"
+lemma leftImage_embedding: "(\<subseteq>\<^sup>2),(\<subseteq>\<^sup>2)-embedding \<diamond>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma rightDualImage_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<box>\<^sub>\<rightarrow>"
+lemma rightDualImage_embedding: "(\<subseteq>\<^sup>2),(\<supseteq>\<^sup>2)-embedding \<box>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma leftDualImage_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<box>\<^sub>\<leftarrow>"
+lemma leftDualImage_embedding: "(\<subseteq>\<^sup>2),(\<supseteq>\<^sup>2)-embedding \<box>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma rightBound_embedding: "(\<subseteq>\<^sup>r),(\<subseteq>\<^sup>r)-embedding \<odot>\<^sub>\<rightarrow>"
+lemma rightBound_embedding: "(\<subseteq>\<^sup>2),(\<subseteq>\<^sup>2)-embedding \<odot>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma leftBound_embedding: "(\<subseteq>\<^sup>r),(\<subseteq>\<^sup>r)-embedding \<odot>\<^sub>\<leftarrow>"
+lemma leftBound_embedding: "(\<subseteq>\<^sup>2),(\<subseteq>\<^sup>2)-embedding \<odot>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma rightDualBound_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<ominus>\<^sub>\<rightarrow>"
+lemma rightDualBound_embedding: "(\<subseteq>\<^sup>2),(\<supseteq>\<^sup>2)-embedding \<ominus>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by fast
-lemma leftDualBound_embedding: "(\<subseteq>\<^sup>r),(\<supseteq>\<^sup>r)-embedding \<ominus>\<^sub>\<leftarrow>"
+lemma leftDualBound_embedding: "(\<subseteq>\<^sup>2),(\<supseteq>\<^sup>2)-embedding \<ominus>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by fast
 
 
@@ -69,7 +69,7 @@ lemma rightDualBound_hom_id: "\<D>-\<ominus>\<^sub>\<rightarrow> = \<midarrow>"
 lemma leftDualBound_hom_id: "\<D>-\<ominus>\<^sub>\<leftarrow> = \<midarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 
-text \<open>Moreover, they map the relational composition \<open>\<circ>\<^sup>r\<close> (resp. its dual \<open>\<bullet>\<^sup>r\<close>) to their functional counterparts.\<close>
+text \<open>Moreover, they map the relational composition \<open>\<circ>\<^sup>2\<close> (resp. its dual \<open>\<bullet>\<^sup>2\<close>) to their functional counterparts.\<close>
 lemma rightImage_hom_comp: "(A ; B)-\<diamond>\<^sub>\<rightarrow> = (A-\<diamond>\<^sub>\<rightarrow>) \<ggreater> (B-\<diamond>\<^sub>\<rightarrow>)" 
   unfolding rel_defs func_defs comb_defs by auto
 lemma leftImage_hom_comp: "(A ; B)-\<diamond>\<^sub>\<leftarrow> = (B-\<diamond>\<^sub>\<leftarrow>) \<ggreater> (A-\<diamond>\<^sub>\<leftarrow>)"
@@ -88,22 +88,22 @@ lemma leftDualBound_hom_comp: "(A \<dagger> B)-\<ominus>\<^sub>\<leftarrow> = (B
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>Operators are also (dual) lattice homomorphisms from the BA of relations to the BA of set-operators.\<close>
-lemma rightImage_hom_join: "(R\<^sub>1 \<union>\<^sup>r R\<^sub>2)-\<diamond>\<^sub>\<rightarrow> = R\<^sub>1-\<diamond>\<^sub>\<rightarrow> \<union>\<^sup>r R\<^sub>2-\<diamond>\<^sub>\<rightarrow>"
+lemma rightImage_hom_join: "(R\<^sub>1 \<union>\<^sup>2 R\<^sub>2)-\<diamond>\<^sub>\<rightarrow> = R\<^sub>1-\<diamond>\<^sub>\<rightarrow> \<union>\<^sup>2 R\<^sub>2-\<diamond>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftImage_hom_join: "(R\<^sub>1 \<union>\<^sup>r R\<^sub>2)-\<diamond>\<^sub>\<leftarrow> = R\<^sub>1-\<diamond>\<^sub>\<leftarrow> \<union>\<^sup>r R\<^sub>2-\<diamond>\<^sub>\<leftarrow>"
+lemma leftImage_hom_join: "(R\<^sub>1 \<union>\<^sup>2 R\<^sub>2)-\<diamond>\<^sub>\<leftarrow> = R\<^sub>1-\<diamond>\<^sub>\<leftarrow> \<union>\<^sup>2 R\<^sub>2-\<diamond>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<odot>\<^sub>\<rightarrow> = R\<^sub>1-\<odot>\<^sub>\<rightarrow> \<inter>\<^sup>r R\<^sub>2-\<odot>\<^sub>\<rightarrow>"
+lemma rightBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>2 R\<^sub>2)-\<odot>\<^sub>\<rightarrow> = R\<^sub>1-\<odot>\<^sub>\<rightarrow> \<inter>\<^sup>2 R\<^sub>2-\<odot>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<odot>\<^sub>\<leftarrow> = R\<^sub>1-\<odot>\<^sub>\<leftarrow> \<inter>\<^sup>r R\<^sub>2-\<odot>\<^sub>\<leftarrow>"
+lemma leftBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>2 R\<^sub>2)-\<odot>\<^sub>\<leftarrow> = R\<^sub>1-\<odot>\<^sub>\<leftarrow> \<inter>\<^sup>2 R\<^sub>2-\<odot>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 \<comment> \<open> dual ('anti') homomorphisms\<close>
-lemma rightDualImage_hom_join: "(R\<^sub>1 \<union>\<^sup>r R\<^sub>2)-\<box>\<^sub>\<rightarrow> = R\<^sub>1-\<box>\<^sub>\<rightarrow> \<inter>\<^sup>r R\<^sub>2-\<box>\<^sub>\<rightarrow>"
+lemma rightDualImage_hom_join: "(R\<^sub>1 \<union>\<^sup>2 R\<^sub>2)-\<box>\<^sub>\<rightarrow> = R\<^sub>1-\<box>\<^sub>\<rightarrow> \<inter>\<^sup>2 R\<^sub>2-\<box>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualImage_hom_join: "(R\<^sub>1 \<union>\<^sup>r R\<^sub>2)-\<box>\<^sub>\<leftarrow> = R\<^sub>1-\<box>\<^sub>\<leftarrow> \<inter>\<^sup>r R\<^sub>2-\<box>\<^sub>\<leftarrow>"
+lemma leftDualImage_hom_join: "(R\<^sub>1 \<union>\<^sup>2 R\<^sub>2)-\<box>\<^sub>\<leftarrow> = R\<^sub>1-\<box>\<^sub>\<leftarrow> \<inter>\<^sup>2 R\<^sub>2-\<box>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma rightDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<ominus>\<^sub>\<rightarrow> = R\<^sub>1-\<ominus>\<^sub>\<rightarrow> \<union>\<^sup>r R\<^sub>2-\<ominus>\<^sub>\<rightarrow>"
+lemma rightDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>2 R\<^sub>2)-\<ominus>\<^sub>\<rightarrow> = R\<^sub>1-\<ominus>\<^sub>\<rightarrow> \<union>\<^sup>2 R\<^sub>2-\<ominus>\<^sub>\<rightarrow>"
   unfolding rel_defs func_defs comb_defs by auto
-lemma leftDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>r R\<^sub>2)-\<ominus>\<^sub>\<leftarrow> = R\<^sub>1-\<ominus>\<^sub>\<leftarrow> \<union>\<^sup>r R\<^sub>2-\<ominus>\<^sub>\<leftarrow>"
+lemma leftDualBound_hom_meet: "(R\<^sub>1 \<inter>\<^sup>2 R\<^sub>2)-\<ominus>\<^sub>\<leftarrow> = R\<^sub>1-\<ominus>\<^sub>\<leftarrow> \<union>\<^sup>2 R\<^sub>2-\<ominus>\<^sub>\<leftarrow>"
   unfolding rel_defs func_defs comb_defs by auto
 
 text \<open>As for complement, we have a particular morphism property between images and bounds (cf. dualities below).\<close>
@@ -148,22 +148,22 @@ lemma "  \<sqdot> \<midarrow>R-\<odot>\<^sub>\<rightarrow> \<rightarrow> \<sqdot
 
 text \<open>Recall that set-operators are also relations (and thus can be ordered as such). We thus have following
   dualities between the transformations themselves (cf. morphisms wrt. complement discussed above).\<close>
-lemma leftImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<diamond>\<^sub>\<leftarrow> \<odot>\<^sub>\<leftarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
+lemma leftImageBound_dual: "\<midarrow>\<^sup>2,\<midarrow>\<^sup>2-DUAL \<diamond>\<^sub>\<leftarrow> \<odot>\<^sub>\<leftarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
 lemma "  \<sqdot> \<midarrow>\<diamond>\<^sub>\<leftarrow> \<rightarrow> \<sqdot> 
-       \<midarrow>\<^sup>r\<down>        \<down>\<midarrow>\<^sup>r
+       \<midarrow>\<^sup>2\<down>        \<down>\<midarrow>\<^sup>2
          \<sqdot> \<midarrow>\<odot>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>   " using dual_def leftImageBound_dual by blast
-lemma rightImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<diamond>\<^sub>\<rightarrow> \<odot>\<^sub>\<rightarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
+lemma rightImageBound_dual: "\<midarrow>\<^sup>2,\<midarrow>\<^sup>2-DUAL \<diamond>\<^sub>\<rightarrow> \<odot>\<^sub>\<rightarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
 lemma "  \<sqdot> \<midarrow>\<diamond>\<^sub>\<rightarrow> \<rightarrow> \<sqdot> 
-       \<midarrow>\<^sup>r\<down>         \<down>\<midarrow>\<^sup>r
+       \<midarrow>\<^sup>2\<down>         \<down>\<midarrow>\<^sup>2
          \<sqdot> \<midarrow>\<odot>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightImageBound_dual by blast
 
-lemma leftDualImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<box>\<^sub>\<leftarrow> \<ominus>\<^sub>\<leftarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
+lemma leftDualImageBound_dual: "\<midarrow>\<^sup>2,\<midarrow>\<^sup>2-DUAL \<box>\<^sub>\<leftarrow> \<ominus>\<^sub>\<leftarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
 lemma "  \<sqdot> \<midarrow>\<box>\<^sub>\<leftarrow> \<rightarrow> \<sqdot> 
-       \<midarrow>\<^sup>r\<down>        \<down>\<midarrow>\<^sup>r
+       \<midarrow>\<^sup>2\<down>        \<down>\<midarrow>\<^sup>2
          \<sqdot> \<midarrow>\<ominus>\<^sub>\<leftarrow> \<rightarrow> \<sqdot>   " using dual_def leftDualImageBound_dual by blast
-lemma rightDualImageBound_dual: "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<box>\<^sub>\<rightarrow> \<ominus>\<^sub>\<rightarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
+lemma rightDualImageBound_dual: "\<midarrow>\<^sup>2,\<midarrow>\<^sup>2-DUAL \<box>\<^sub>\<rightarrow> \<ominus>\<^sub>\<rightarrow>" unfolding adj_defs rel_defs func_defs comb_defs by auto
 lemma "  \<sqdot> \<midarrow>\<box>\<^sub>\<rightarrow> \<rightarrow> \<sqdot> 
-       \<midarrow>\<^sup>r\<down>        \<down>\<midarrow>\<^sup>r
+       \<midarrow>\<^sup>2\<down>        \<down>\<midarrow>\<^sup>2
          \<sqdot> \<midarrow>\<ominus>\<^sub>\<rightarrow> \<rightarrow> \<sqdot>   " using dual_def rightDualImageBound_dual by blast
 
 
@@ -214,8 +214,8 @@ lemma   " \<sqdot> \<leftarrow>(R-\<box>\<^sub>\<rightarrow>)\<^sup>\<midarrow> 
 subsubsection \<open>Operators for N-ary Relations\<close>
 
 text \<open>Let us start by recalling that images and bounds are two sides of the same dual coin.\<close>
-lemma "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<diamond>\<^sub>\<leftarrow> \<odot>\<^sub>\<leftarrow>" using leftImageBound_dual by simp
-lemma "\<midarrow>\<^sup>r,\<midarrow>\<^sup>r-DUAL \<diamond>\<^sub>\<rightarrow> \<odot>\<^sub>\<rightarrow>" using rightImageBound_dual by simp
+lemma "\<midarrow>\<^sup>2,\<midarrow>\<^sup>2-DUAL \<diamond>\<^sub>\<leftarrow> \<odot>\<^sub>\<leftarrow>" using leftImageBound_dual by simp
+lemma "\<midarrow>\<^sup>2,\<midarrow>\<^sup>2-DUAL \<diamond>\<^sub>\<rightarrow> \<odot>\<^sub>\<rightarrow>" using rightImageBound_dual by simp
 
 text \<open>Recall that for binary relations the analogous of preimage is the left-image operator, definable as
  the right-image of their converse. We now "lift" this idea to higher arities, noting that we must now

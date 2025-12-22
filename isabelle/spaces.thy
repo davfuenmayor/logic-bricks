@@ -31,13 +31,13 @@ lemma singleton_def3: "\<exists>!A = (\<exists>a. A = {a})" unfolding singleton_
 
 text \<open>Further convenient instances of spaces.\<close>
 definition upair::"Space('a)" ("\<exists>\<^sub>\<le>\<^sub>2") \<comment> \<open>\<open>\<exists>\<^sub>\<le>\<^sub>2\<close> contains the unordered pairs (sets with one or two elements)\<close>
-  where \<open>\<exists>\<^sub>\<le>\<^sub>2 \<equiv> (\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<inter>\<^sup>r) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<union>) \<Q>) (\<subseteq>))) \<ggreater> \<exists>\<^sup>2\<close>
+  where \<open>\<exists>\<^sub>\<le>\<^sub>2 \<equiv> (\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<inter>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<union>) \<Q>) (\<subseteq>))) \<ggreater> \<exists>\<^sup>2\<close>
 definition doubleton::"Space('a)" ("\<exists>!\<^sub>2") \<comment> \<open>\<open>\<exists>!\<^sub>2\<close> contains the doubletons (sets with two (different) elements)\<close>
   where \<open>\<exists>!\<^sub>2 \<equiv> \<exists>\<^sub>\<le>\<^sub>2 \<setminus> \<exists>!\<close>
 
 declare unique_def[space_defs] singleton_def[space_defs] doubleton_def[space_defs] upair_def[space_defs] 
 
-lemma "\<exists>\<^sub>\<le>\<^sub>2A = \<exists>\<^sup>2((A \<times> A) \<inter>\<^sup>r (\<lambda>x y. A \<subseteq> {x,y}))" unfolding space_defs comb_defs ..
+lemma "\<exists>\<^sub>\<le>\<^sub>2A = \<exists>\<^sup>2((A \<times> A) \<inter>\<^sup>2 (\<lambda>x y. A \<subseteq> {x,y}))" unfolding space_defs comb_defs ..
 lemma doubleton_def2: "\<exists>\<^sub>\<le>\<^sub>2A = (\<exists>x y. A x \<and> A y \<and> (\<forall>z. A z \<rightarrow> (z = x \<or> z = y)))" unfolding space_defs rel_defs func_defs comb_defs by auto
 
 lemma \<open>\<exists>!\<^sub>2 A = (\<exists>x y. x \<noteq> y \<and> A x \<and> A y \<and> (\<forall>z. A z \<rightarrow> (z = x \<or> z = y)))\<close> unfolding space_defs rel_defs func_defs comb_defs by blast
@@ -370,18 +370,18 @@ subsubsection \<open>Upwards- and Downwards-Directedness\<close>
 text \<open>The property of a set being "up/downwards directed" wrt. an endorelation:
   Every pair of S-elements has upper/lower-bounds (wrt R) in S.\<close>
 definition upwardsDirected::"ERel('a) \<Rightarrow> Space('a)" ("_-upwardsDirected")
-  where "R-upwardsDirected  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<inter>) R) (\<sqinter>))"
+  where "R-upwardsDirected  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<inter>) R) (\<sqinter>))"
 definition downwardsDirected::"ERel('a) \<Rightarrow> Space('a)" ("_-downwardsDirected")
-  where "R-downwardsDirected \<equiv>  \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<inter>) (\<^bold>C R)) (\<sqinter>))"
+  where "R-downwardsDirected \<equiv>  \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<inter>) (\<^bold>C R)) (\<sqinter>))"
 
 declare upwardsDirected_def[space_defs] downwardsDirected_def[space_defs]
 
-lemma "R-upwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2 (\<inter>) R a b)))" unfolding space_defs comb_defs ..
-lemma "R-upwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<lambda>a b. S \<sqinter> (R a \<inter> R b) ))" unfolding space_defs comb_defs ..
+lemma "R-upwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2 (\<inter>) R a b)))" unfolding space_defs comb_defs ..
+lemma "R-upwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (R a \<inter> R b) ))" unfolding space_defs comb_defs ..
 lemma "R-upwardsDirected = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> (\<exists>c. S c \<and> R a c \<and> R b c))" unfolding space_defs rel_defs func_defs comb_defs ..
 
-lemma "R-downwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2 (\<inter>) (\<^bold>C R) a b)))" unfolding space_defs comb_defs ..
-lemma "R-downwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<lambda>a b. S \<sqinter> (R\<^sup>\<smile> a \<inter> R\<^sup>\<smile> b)))" unfolding space_defs rel_defs func_defs comb_defs ..
+lemma "R-downwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2 (\<inter>) (\<^bold>C R) a b)))" unfolding space_defs comb_defs ..
+lemma "R-downwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (R\<^sup>\<smile> a \<inter> R\<^sup>\<smile> b)))" unfolding space_defs rel_defs func_defs comb_defs ..
 lemma "R-downwardsDirected = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> (\<exists>c. S c \<and> R c a \<and> R c b))" unfolding space_defs rel_defs func_defs comb_defs ..
 
 lemma upwardsDirected_defT: "R-upwardsDirected = R\<^sup>\<smile>-downwardsDirected" unfolding space_defs rel_defs comb_defs ..
@@ -426,18 +426,18 @@ lemma meet_prop2:  "R-upperBound (R-meet a b) b" unfolding endorel_defs rel_defs
 
 text \<open>The following are weaker versions of lub/glb-closure customarily used in the literature.\<close>
 definition joinClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-joinClosed")
-  where "R-joinClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (R-join) \<wp>)"
+  where "R-joinClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (R-join) \<wp>)"
 definition meetClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-meetClosed")
-  where "R-meetClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (R-meet) \<wp>)"
+  where "R-meetClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (R-meet) \<wp>)"
 
 declare joinClosed_def[space_defs] meetClosed_def[space_defs]
 
-lemma "R-joinClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<^bold>R \<^bold>E (R-join) \<wp> S))" unfolding space_defs comb_defs ..
-lemma "R-joinClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<lambda>a b. R-join a b \<subseteq> S))" unfolding space_defs comb_defs ..
+lemma "R-joinClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<^bold>R \<^bold>E (R-join) \<wp> S))" unfolding space_defs comb_defs ..
+lemma "R-joinClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. R-join a b \<subseteq> S))" unfolding space_defs comb_defs ..
 lemma "R-joinClosed = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> R-join a b \<subseteq> S)" unfolding space_defs rel_defs func_defs comb_defs ..
 
-lemma "R-meetClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<^bold>R \<^bold>E (R-meet) \<wp> S))" unfolding space_defs comb_defs ..
-lemma "R-meetClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>r (\<lambda>a b. R-meet a b \<subseteq> S))" unfolding space_defs comb_defs ..
+lemma "R-meetClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<^bold>R \<^bold>E (R-meet) \<wp> S))" unfolding space_defs comb_defs ..
+lemma "R-meetClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. R-meet a b \<subseteq> S))" unfolding space_defs comb_defs ..
 lemma "R-meetClosed = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> R-meet a b \<subseteq> S)" unfolding space_defs rel_defs func_defs comb_defs ..
 
 lemma joinClosed_defT: "R-joinClosed = R\<^sup>\<smile>-meetClosed" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
@@ -476,17 +476,17 @@ lemma upwardsDirected_def4: "limitComplete R \<Longrightarrow> R-downwardsClosed
 subsubsection \<open>Ideals and Filters\<close>
 
 definition pseudoFilter::"ERel('a) \<Rightarrow> Space('a)" ("_-pseudoFilter")
-  where "R-pseudoFilter \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) (\<^bold>R \<^bold>E R-meet \<wp>) (\<^bold>W (\<times>))"
+  where "R-pseudoFilter \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>R \<^bold>E R-meet \<wp>) (\<^bold>W (\<times>))"
 definition pseudoIdeal::"ERel('a) \<Rightarrow> Space('a)" ("_-pseudoIdeal")
-  where "R-pseudoIdeal  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>r) (\<^bold>R \<^bold>E R-join \<wp>) (\<^bold>W (\<times>))"
+  where "R-pseudoIdeal  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>R \<^bold>E R-join \<wp>) (\<^bold>W (\<times>))"
 
 declare pseudoFilter_def[space_defs] pseudoIdeal_def[space_defs]
 
 
-lemma "R-pseudoFilter = (\<lambda>S. (\<^bold>R \<^bold>E R-meet \<wp> S) \<subseteq>\<^sup>r (S \<times> S))" unfolding space_defs comb_defs ..
+lemma "R-pseudoFilter = (\<lambda>S. (\<^bold>R \<^bold>E R-meet \<wp> S) \<subseteq>\<^sup>2 (S \<times> S))" unfolding space_defs comb_defs ..
 lemma "R-pseudoFilter = (\<lambda>S. \<forall>a b. R-meet a b \<subseteq> S \<longrightarrow> (S a \<and> S b))" unfolding space_defs rel_defs func_defs comb_defs ..
 
-lemma "R-pseudoIdeal = (\<lambda>S. (\<^bold>R \<^bold>E R-join \<wp> S) \<subseteq>\<^sup>r (S \<times> S))" unfolding space_defs comb_defs ..
+lemma "R-pseudoIdeal = (\<lambda>S. (\<^bold>R \<^bold>E R-join \<wp> S) \<subseteq>\<^sup>2 (S \<times> S))" unfolding space_defs comb_defs ..
 lemma "R-pseudoIdeal = (\<lambda>S. \<forall>a b. R-join a b \<subseteq> S \<longrightarrow> (S a \<and> S b))" unfolding space_defs rel_defs func_defs comb_defs ..
 
 lemma pseudoFilter_defT: "R-pseudoFilter = R\<^sup>\<smile>-pseudoIdeal" unfolding space_defs endorel_defs rel_defs comb_defs ..
@@ -577,29 +577,29 @@ lemma "\<not> (\<subseteq>)-wellOrderedSet {{1::nat},{2},{1,2}}"
 subsubsection \<open>Chain and Antichain\<close>
 
 definition chain :: "ERel('a) \<Rightarrow> Space('a)" ("_-chain")
-  where "R-chain \<equiv> \<^bold>W (\<times>) \<ggreater> \<wp>\<^sup>r (symmetricClosure R)"
+  where "R-chain \<equiv> \<^bold>W (\<times>) \<ggreater> \<wp>\<^sup>2 (symmetricClosure R)"
 definition antichain::"ERel('a) \<Rightarrow> Space('a)" ("_-antichain")
-  where "R-antichain \<equiv> \<^bold>W (\<times>) \<ggreater> \<wp>\<^sup>r (connectedExpansion R)"
+  where "R-antichain \<equiv> \<^bold>W (\<times>) \<ggreater> \<wp>\<^sup>2 (connectedExpansion R)"
 
 declare chain_def[space_defs] antichain_def[space_defs]
 
-lemma "R-chain S = (S \<times> S) \<subseteq>\<^sup>r symmetricClosure R" unfolding space_defs comb_defs ..
-lemma "R-chain S = (S \<times> S) \<subseteq>\<^sup>r (R \<union>\<^sup>r (R\<^sup>\<smile>))" unfolding space_defs endorel_defs comb_defs ..
+lemma "R-chain S = (S \<times> S) \<subseteq>\<^sup>2 symmetricClosure R" unfolding space_defs comb_defs ..
+lemma "R-chain S = (S \<times> S) \<subseteq>\<^sup>2 (R \<union>\<^sup>2 (R\<^sup>\<smile>))" unfolding space_defs endorel_defs comb_defs ..
 lemma "R-chain S = (\<forall>x y. (S x \<and> S y) \<rightarrow> (R x y \<or> R y x))" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
 
-lemma "R-antichain S = (S \<times> S) \<subseteq>\<^sup>r connectedExpansion R" unfolding space_defs comb_defs ..
-lemma "R-antichain S = (S \<times> S) \<subseteq>\<^sup>r (R \<union>\<^sup>r (R\<^sup>\<sim>))" unfolding space_defs endorel_defs comb_defs ..
+lemma "R-antichain S = (S \<times> S) \<subseteq>\<^sup>2 connectedExpansion R" unfolding space_defs comb_defs ..
+lemma "R-antichain S = (S \<times> S) \<subseteq>\<^sup>2 (R \<union>\<^sup>2 (R\<^sup>\<sim>))" unfolding space_defs endorel_defs comb_defs ..
 lemma "R-antichain S = (\<forall>x y. (S x \<and> S y) \<rightarrow> (R x y \<or> \<not>R y x))" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
 
-lemma "chain = symmetricClosure \<ggreater> \<wp>\<^sup>r \<ggreater> (\<^bold>W \<ggreater> (\<ggreater>)) (\<times>)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
-lemma "antichain = connectedExpansion \<ggreater> \<wp>\<^sup>r \<ggreater> (\<^bold>W \<ggreater> (\<ggreater>)) (\<times>)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
+lemma "chain = symmetricClosure \<ggreater> \<wp>\<^sup>2 \<ggreater> (\<^bold>W \<ggreater> (\<ggreater>)) (\<times>)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
+lemma "antichain = connectedExpansion \<ggreater> \<wp>\<^sup>2 \<ggreater> (\<^bold>W \<ggreater> (\<ggreater>)) (\<times>)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs ..
 
-lemma chain_def2: "R-chain S = (S \<times> S \<bottom>\<^sup>r symmetricInterior (R\<^sup>\<midarrow>))" unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast
-lemma antichain_def2: "R-antichain S = (S \<times> S \<bottom>\<^sup>r asymmetricContraction R)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast
+lemma chain_def2: "R-chain S = (S \<times> S \<bottom>\<^sup>2 symmetricInterior (R\<^sup>\<midarrow>))" unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast
+lemma antichain_def2: "R-antichain S = (S \<times> S \<bottom>\<^sup>2 asymmetricContraction R)" unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast
 
 lemma chain_def3: "semiconnected R \<Longrightarrow> R-chain S = (S \<subseteq> \<Delta> R)"
   unfolding space_defs endorel_defs rel_defs func_defs comb_defs by metis
-lemma antichain_def3: "antisymmetric R \<Longrightarrow> R-antichain S = ((S \<times> S) \<inter>\<^sup>r R \<subseteq>\<^sup>r \<Q>)"
+lemma antichain_def3: "antisymmetric R \<Longrightarrow> R-antichain S = ((S \<times> S) \<inter>\<^sup>2 R \<subseteq>\<^sup>2 \<Q>)"
   unfolding space_defs endorel_defs rel_defs func_defs comb_defs by blast
 
 lemma "R-chain (R-greatest S)"  unfolding space_defs endorel_defs rel_defs func_defs comb_defs by simp

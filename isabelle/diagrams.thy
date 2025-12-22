@@ -181,7 +181,7 @@ lemma invol_resid: "involutive f \<Longrightarrow> (image f A \<subseteq> B) = (
 text \<open>Some famous involutive functions:\<close>
 lemma neg_invol: "involutive (\<not>)" unfolding func_defs comb_defs by simp
 lemma compl_invol: "involutive \<midarrow>" unfolding func_defs comb_defs by simp
-lemma complR_invol: "involutive \<midarrow>\<^sup>r" unfolding func_defs rel_defs comb_defs by simp
+lemma complR_invol: "involutive \<midarrow>\<^sup>2" unfolding func_defs rel_defs comb_defs by simp
 lemma dualop_invol: "involutive dualop" unfolding func_defs rel_defs comb_defs by simp
 
 

@@ -22,20 +22,20 @@ abbreviation(input) skip_expr ("skip")
   where "skip \<equiv> \<^bold>\<top>\<^bold>?"
 
 lemma skip_simp: "skip = \<Q>" by them
-lemma condtest_simp: "[P\<^bold>? \<^bold>; a]Q = P \<Rightarrow> [a]Q" by them
+lemma condtest_simp: "[P\<^bold>? ; a]Q = P \<Rightarrow> [a]Q" by them
 
 abbreviation(input) i_expr ("IF _ THEN _ ELSE") (*use uppercase to distinguish from HOL's "if-then-else"*)
-  where "IF P THEN a ELSE b \<equiv> (P\<^bold>? \<^bold>; a) + (\<^bold>\<not>P\<^bold>? \<^bold>; b)"
+  where "IF P THEN a ELSE b \<equiv> (P\<^bold>? ; a) + (\<^bold>\<not>P\<^bold>? ; b)"
 
 abbreviation(input) while_expr ("WHILE _ DO _")
-  where "WHILE P DO a \<equiv> (P\<^bold>? \<^bold>; a)\<^sup>* \<^bold>; \<^bold>\<not>P\<^bold>?"
+  where "WHILE P DO a \<equiv> (P\<^bold>? ; a)\<^sup>* ; \<^bold>\<not>P\<^bold>?"
 
 abbreviation(input) hoare_expr ("{_} _ {_}")
   where "{P} a {Q} \<equiv> P \<subseteq> [a]Q"
 
 (* Composition rule *)
 lemma "{P} a {Q} \<and> {Q} b {S} 
-      \<Longrightarrow> {P} a\<^bold>;b {S}" by them
+      \<Longrightarrow> {P} a;b {S}" by them
 
 (* Weakening rule *)
 lemma "P' \<subseteq> P \<and> {P} a {Q} \<and> Q \<subseteq> Q'

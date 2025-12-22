@@ -49,7 +49,7 @@ abbreviation(input) apr :: "Set('a) \<Rightarrow> Set('a \<Rightarrow> 'b) \<Rig
 text \<open>Indeed, we have:\<close>
 lemma "ap0 = \<^bold>A" unfolding all_defs by simp
 lemma "ap = intoRel \<ggreater> rightImage"  unfolding all_defs by blast
-lemma "ap = (image image) \<ggreater> \<Union>\<^sup>r" unfolding all_defs by blast
+lemma "ap = (image image) \<ggreater> \<Union>\<^sup>2" unfolding all_defs by blast
 \<comment> \<open>...and so on\<close>
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>

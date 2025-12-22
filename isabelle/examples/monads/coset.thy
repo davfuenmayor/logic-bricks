@@ -49,7 +49,7 @@ abbreviation(input) apr :: "Set('a) \<Rightarrow> Set('a \<Rightarrow> 'b) \<Rig
 text \<open>Indeed, we have:\<close>
 lemma "ap0 = \<^bold>A" unfolding all_defs by simp
 lemma "ap = \<midarrow> \<ggreater> intoRel \<ggreater> rightDualImage"  unfolding all_defs by blast
-lemma "ap = \<midarrow> \<ggreater> (image dualimage) \<ggreater> \<Inter>\<^sup>r" unfolding all_defs by blast
+lemma "ap = \<midarrow> \<ggreater> (image dualimage) \<ggreater> \<Inter>\<^sup>2" unfolding all_defs by blast
 \<comment> \<open>...and so on\<close>
 
 text \<open>Check that applicative operations satisfy the corresponding laws.\<close>
@@ -121,14 +121,14 @@ term "a :: Set('a \<Rightarrow> 'b)"
 
 text \<open>Takes a plain function and disguises it as a monadic arrow.\<close>
 abbreviation(input) asArrowM::"('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> Set('b))"
-  where "asArrowM \<equiv> asRel \<ggreater> \<midarrow>\<^sup>r"
+  where "asArrowM \<equiv> asRel \<ggreater> \<midarrow>\<^sup>2"
 
 text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
 abbreviation(input) intoArrowM::"Set('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> Set('b))"
-  where "intoArrowM \<equiv> \<midarrow> \<ggreater> intoRel \<ggreater> \<midarrow>\<^sup>r"
+  where "intoArrowM \<equiv> \<midarrow> \<ggreater> intoRel \<ggreater> \<midarrow>\<^sup>2"
 text \<open>Takes a monadic arrow and transforms it into an applicative arrow.\<close>
 abbreviation(input) intoArrowA::"('a \<Rightarrow> Set('b)) \<Rightarrow> Set('a \<Rightarrow> 'b)"
-  where "intoArrowA \<equiv> \<midarrow>\<^sup>r \<ggreater> intoFunSet \<ggreater> \<midarrow>"
+  where "intoArrowA \<equiv> \<midarrow>\<^sup>2 \<ggreater> intoFunSet \<ggreater> \<midarrow>"
 
 text \<open>Note that\<close>
 lemma "ap = intoArrowM \<ggreater> bindr" unfolding all_defs by fast

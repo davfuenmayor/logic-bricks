@@ -162,9 +162,9 @@ lemma iterativeClosure_def2: "iterativeClosure f z = image (\<^bold>T z) (funPow
 lemma iterativeClosure2_def2: "iterativeClosure2 g z = image (\<^bold>T z) (funPower0 (g z))" 
   oops (*TODO: check*)
 
-lemma iterativeClosure_bigunion: "\<Union>(iterativeClosure f z) = \<Union>\<^sup>r(funPower0 f) z" 
+lemma iterativeClosure_bigunion: "\<Union>(iterativeClosure f z) = \<Union>\<^sup>2(funPower0 f) z" 
   by (simp add: B10_comb_def B2_comb_def bigunionR_def iterativeClosure_def2)
-lemma iterativeClosure_biginter: "\<Inter>(iterativeClosure f z) = \<Inter>\<^sup>r(funPower0 f) z" 
+lemma iterativeClosure_biginter: "\<Inter>(iterativeClosure f z) = \<Inter>\<^sup>2(funPower0 f) z" 
   by (simp add: B10_comb_def B2_comb_def biginterR_def iterativeClosure_def2)
 
 lemma iterativeClosure_nonEmpty: "\<exists>(iterativeClosure f z)" unfolding ind_defs space_defs func_defs comb_defs by blast
@@ -172,16 +172,16 @@ lemma iterativeClosure_nonEmpty: "\<exists>(iterativeClosure f z)" unfolding ind
 
 text \<open>Natural ways to obtain transitive relations resp. preorders.\<close>
 definition transitiveClosure::"ERel('a) \<Rightarrow> ERel('a)" ("_\<^sup>+")
-  where "transitiveClosure \<equiv> relPower \<ggreater> \<Union>\<^sup>r"
+  where "transitiveClosure \<equiv> relPower \<ggreater> \<Union>\<^sup>2"
 definition preorderClosure::"ERel('a) \<Rightarrow> ERel('a)"  ("_\<^sup>*") \<comment> \<open>aka. reflexive-transitive closure\<close>
-  where "preorderClosure \<equiv>  relPower0 \<ggreater> \<Union>\<^sup>r"
+  where "preorderClosure \<equiv>  relPower0 \<ggreater> \<Union>\<^sup>2"
 
 declare transitiveClosure_def [ind_defs] preorderClosure_def [ind_defs]
 
-lemma "R\<^sup>+ = \<Union>\<^sup>r(relPower R)" unfolding ind_defs comb_defs ..
-lemma "R\<^sup>* = \<Union>\<^sup>r(relPower0 R)" unfolding ind_defs comb_defs ..
+lemma "R\<^sup>+ = \<Union>\<^sup>2(relPower R)" unfolding ind_defs comb_defs ..
+lemma "R\<^sup>* = \<Union>\<^sup>2(relPower0 R)" unfolding ind_defs comb_defs ..
 
-lemma transitiveClosure_char: "R\<^sup>+ = \<Inter>\<^sup>r(\<lambda>T. transitive T \<and> R \<subseteq>\<^sup>r T)" \<comment> \<open>proof by external provers\<close>
+lemma transitiveClosure_char: "R\<^sup>+ = \<Inter>\<^sup>2(\<lambda>T. transitive T \<and> R \<subseteq>\<^sup>2 T)" \<comment> \<open>proof by external provers\<close>
   unfolding transitiveClosure_def relPower_def transitive_def2
   unfolding ind_defs rel_defs func_defs comb_defs 
   apply (rule ext)+ apply (rule iffI) oops (*TODO: prove*)
@@ -275,10 +275,10 @@ definition setMu :: "SetEOp('a) \<Rightarrow> Set('a)" ("\<mu>")
   where "\<mu> \<equiv> (\<subseteq>)-preFP \<ggreater> \<Inter>"
 definition setNu :: "SetEOp('a) \<Rightarrow> Set('a)" ("\<nu>") 
   where "\<nu> \<equiv> (\<subseteq>)-postFP \<ggreater> \<Union>"
-definition relMu :: "(Rel('a,'b) \<Rightarrow> Rel('a,'b)) \<Rightarrow> Rel('a,'b)" ("\<mu>\<^sup>r")
-  where "\<mu>\<^sup>r \<equiv> (\<subseteq>\<^sup>r)-preFP \<ggreater> \<Inter>\<^sup>r"
-definition relNu :: "(Rel('a,'b) \<Rightarrow> Rel('a,'b)) \<Rightarrow> Rel('a,'b)" ("\<nu>\<^sup>r")
-  where "\<nu>\<^sup>r \<equiv> (\<subseteq>\<^sup>r)-postFP \<ggreater> \<Union>\<^sup>r"
+definition relMu :: "(Rel('a,'b) \<Rightarrow> Rel('a,'b)) \<Rightarrow> Rel('a,'b)" ("\<mu>\<^sup>2")
+  where "\<mu>\<^sup>2 \<equiv> (\<subseteq>\<^sup>2)-preFP \<ggreater> \<Inter>\<^sup>2"
+definition relNu :: "(Rel('a,'b) \<Rightarrow> Rel('a,'b)) \<Rightarrow> Rel('a,'b)" ("\<nu>\<^sup>2")
+  where "\<nu>\<^sup>2 \<equiv> (\<subseteq>\<^sup>2)-postFP \<ggreater> \<Union>\<^sup>2"
 
 declare setMu_def[ind_defs] setNu_def[ind_defs] 
         relMu_def[ind_defs] relNu_def[ind_defs]
@@ -292,17 +292,17 @@ lemma "\<nu> = (\<lambda>F x. \<exists>A. (\<forall>b. A b \<rightarrow> F A b) 
 text \<open>As a corollary, in the case of sets and relations, we have that:\<close>
 lemma setMu_singleton: "singleton ((\<subseteq>)-\<mu> f)" using mu_singleton partial_order_def subset_limitComplete subset_partial_order by auto
 lemma setNu_singleton: "singleton ((\<subseteq>)-\<nu> f)" using nu_singleton partial_order_def subset_limitComplete subset_partial_order by auto
-lemma relMu_singleton: "singleton ((\<subseteq>\<^sup>r)-\<mu> R)" using mu_singleton partial_order_def subrel_limitComplete subrel_partial_order by auto
-lemma relNu_singleton: "singleton ((\<subseteq>\<^sup>r)-\<nu> R)" using nu_singleton partial_order_def subrel_limitComplete subrel_partial_order by auto
+lemma relMu_singleton: "singleton ((\<subseteq>\<^sup>2)-\<mu> R)" using mu_singleton partial_order_def subrel_limitComplete subrel_partial_order by auto
+lemma relNu_singleton: "singleton ((\<subseteq>\<^sup>2)-\<nu> R)" using nu_singleton partial_order_def subrel_limitComplete subrel_partial_order by auto
 
 text \<open>They are clearly (unique) instances of the general variants.\<close>
 lemma setMu_simp: "(\<subseteq>)-\<mu> \<ggreater> \<iota> = \<mu> "
   using mu_unique partial_order_def subset_partial_order biginter_glb unfolding unique_def ind_defs comb_defs by blast
 lemma setNu_simp: "(\<subseteq>)-\<nu> \<ggreater> \<iota> = \<nu>"
   using nu_unique partial_order_def subset_partial_order bigunion_lub unfolding unique_def ind_defs comb_defs by blast
-lemma relMu_simp: "(\<subseteq>\<^sup>r)-\<mu> \<ggreater> \<iota> = \<mu>\<^sup>r"
+lemma relMu_simp: "(\<subseteq>\<^sup>2)-\<mu> \<ggreater> \<iota> = \<mu>\<^sup>2"
   using mu_unique partial_order_def subrel_partial_order biginterR_glb unfolding unique_def ind_defs comb_defs by blast
-lemma relNu_simp: "(\<subseteq>\<^sup>r)-\<nu> \<ggreater> \<iota>  = \<nu>\<^sup>r"
+lemma relNu_simp: "(\<subseteq>\<^sup>2)-\<nu> \<ggreater> \<iota>  = \<nu>\<^sup>2"
   using nu_unique partial_order_def subrel_partial_order bigunionR_lub unfolding unique_def ind_defs comb_defs by blast
 
 text \<open>Clearly, \<open>\<mu>\<close> resp. \<open>\<nu>\<close> are the least resp. greatest-fixedpoints for subset/subrel-monotonic set-operations.\<close>
@@ -310,14 +310,14 @@ lemma setMu_def2: "(\<subseteq>)-MONO f \<Longrightarrow> \<mu> f = \<iota>((\<s
   by (simp add: B1_comb_def mu_def2 setMu_simp[symmetric] subset_limitComplete subset_partial_order)
 lemma setNu_def2: "(\<subseteq>)-MONO f \<Longrightarrow> \<nu> f = \<iota>((\<subseteq>)-gfp f)" 
   by (simp add: B1_comb_def nu_def2 setNu_simp[symmetric] subset_limitComplete subset_partial_order)
-lemma relMu_def2: "(\<subseteq>\<^sup>r)-MONO f \<Longrightarrow> \<mu>\<^sup>r f = \<iota>((\<subseteq>\<^sup>r)-lfp f)" 
+lemma relMu_def2: "(\<subseteq>\<^sup>2)-MONO f \<Longrightarrow> \<mu>\<^sup>2 f = \<iota>((\<subseteq>\<^sup>2)-lfp f)" 
   by (simp add: B1_comb_def mu_def2 relMu_simp[symmetric] subrel_limitComplete subrel_partial_order)
-lemma relNu_def2: "(\<subseteq>\<^sup>r)-MONO f \<Longrightarrow> \<nu>\<^sup>r f = \<iota>((\<subseteq>\<^sup>r)-gfp f)" 
+lemma relNu_def2: "(\<subseteq>\<^sup>2)-MONO f \<Longrightarrow> \<nu>\<^sup>2 f = \<iota>((\<subseteq>\<^sup>2)-gfp f)" 
   by (simp add: B1_comb_def nu_def2 relNu_simp[symmetric] subrel_limitComplete subrel_partial_order)
 
 text \<open>We introduce the customary binder notation.\<close>
 notation setMu (binder "\<mu>" 10) and setNu (binder "\<nu>" 10)
-notation relMu (binder "\<mu>\<^sup>r" 10) and relNu (binder "\<nu>\<^sup>r" 10)
+notation relMu (binder "\<mu>\<^sup>2" 10) and relNu (binder "\<nu>\<^sup>2" 10)
 
 text \<open>Check notation\<close>
 lemma "(\<nu> X. \<phi>) = \<nu>(\<lambda>X. \<phi>)" ..
