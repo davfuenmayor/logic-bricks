@@ -37,7 +37,9 @@ definition A2_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'a \
   where "\<^bold>A\<^sub>2 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2. f x\<^sub>1 x\<^sub>2" \<comment> \<open>function application (binary case)\<close>
 definition A3_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd" ("\<^bold>A\<^sub>3")
   where "\<^bold>A\<^sub>3 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3. f x\<^sub>1 x\<^sub>2 x\<^sub>3" \<comment> \<open>function application (ternary case)\<close>
-\<comment> \<open>... and so on\<close>
+definition A4_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e" ("\<^bold>A\<^sub>4")
+  where "\<^bold>A\<^sub>4 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4" \<comment> \<open>function application (quaternary case)\<close>
+    \<comment> \<open>... and so on\<close>
 
 notation A1_comb ("\<^bold>A") (* default notation for unary case *)
 
@@ -45,18 +47,22 @@ text \<open>The identity combinator \<open>\<^bold>I\<close> (suitably typed) ge
 lemma A1_comb_simp: "\<^bold>A\<^sub>1 = \<^bold>I" unfolding A1_comb_def I_comb_def ..
 lemma A2_comb_simp: "\<^bold>A\<^sub>2 = \<^bold>I" unfolding A2_comb_def I_comb_def ..
 lemma A3_comb_simp: "\<^bold>A\<^sub>3 = \<^bold>I" unfolding A3_comb_def I_comb_def ..
+lemma A4_comb_simp: "\<^bold>A\<^sub>4 = \<^bold>I" unfolding A4_comb_def I_comb_def ..
 \<comment> \<open>... and so on\<close>
 
-declare A1_comb_simp [comb_simps] A2_comb_simp [comb_simps] A3_comb_simp [comb_simps]
+declare A1_comb_simp [comb_simps] A2_comb_simp [comb_simps] 
+        A3_comb_simp [comb_simps] A4_comb_def[comb_defs]
 
 
 text \<open>It is convenient to introduce a family \<open>\<^bold>T\<^sub>m\<close> of "reversed appliers" as abbreviations.\<close>
-abbreviation T1_comb::"'b \<Rightarrow> ('b \<Rightarrow> 'a) \<Rightarrow> 'a" ("\<^bold>T\<^sub>1")
+abbreviation T1_comb :: "'b \<Rightarrow> ('b \<Rightarrow> 'a) \<Rightarrow> 'a" ("\<^bold>T\<^sub>1")
   where "\<^bold>T\<^sub>1 x f \<equiv> \<^bold>A\<^sub>1 f x"  \<comment> \<open>unary case\<close>
-abbreviation T2_comb::"'b \<Rightarrow> 'c \<Rightarrow> ('b \<Rightarrow> 'c \<Rightarrow> 'a) \<Rightarrow> 'a" ("\<^bold>T\<^sub>2")
+abbreviation T2_comb :: "'b \<Rightarrow> 'c \<Rightarrow> ('b \<Rightarrow> 'c \<Rightarrow> 'a) \<Rightarrow> 'a" ("\<^bold>T\<^sub>2")
   where "\<^bold>T\<^sub>2 x y f \<equiv> \<^bold>A\<^sub>2 f x y" \<comment> \<open>binary case\<close>
-abbreviation T3_comb ("\<^bold>T\<^sub>3")
+abbreviation T3_comb :: "'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> ('b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'a) \<Rightarrow> 'a" ("\<^bold>T\<^sub>3")
   where "\<^bold>T\<^sub>3 x y z f \<equiv> \<^bold>A\<^sub>3 f x y z" \<comment> \<open>ternary case\<close>
+abbreviation T4_comb :: "'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> ('b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'a) \<Rightarrow> 'a" ("\<^bold>T\<^sub>4")
+  where "\<^bold>T\<^sub>4 x y z u f \<equiv> \<^bold>A\<^sub>4 f x y z u" \<comment> \<open>quaternary case\<close>
 \<comment> \<open>... and so on\<close>
 
 text \<open>Special notation for unary and binary cases.\<close>
@@ -131,6 +137,10 @@ definition B32_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d
 definition B33_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'a) \<Rightarrow> ('g \<Rightarrow> 'h \<Rightarrow> 'i \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'g \<Rightarrow> 'e \<Rightarrow> 'h \<Rightarrow> 'f \<Rightarrow> 'i \<Rightarrow> 'c" ("\<^bold>B\<^sub>3\<^sub>3")
   where "\<^bold>B\<^sub>3\<^sub>3 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>1 x\<^sub>2 y\<^sub>1 y\<^sub>2 z\<^sub>1 z\<^sub>2. f (g\<^sub>1 x\<^sub>1 y\<^sub>1 z\<^sub>1) (g\<^sub>2 x\<^sub>2 y\<^sub>2 z\<^sub>2)"
 \<comment> \<open>... and so on\<close>
+definition B44_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'g \<Rightarrow> 'a) \<Rightarrow> ('h \<Rightarrow> 'i \<Rightarrow> 'j \<Rightarrow> 'k \<Rightarrow> 'b)
+                                         \<Rightarrow> 'd \<Rightarrow> 'h \<Rightarrow> 'e \<Rightarrow> 'i \<Rightarrow> 'f \<Rightarrow> 'j \<Rightarrow> 'g \<Rightarrow> 'k \<Rightarrow> 'c"("\<^bold>B\<^sub>4\<^sub>4")
+  where "\<^bold>B\<^sub>4\<^sub>4 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x\<^sub>1 x\<^sub>2 y\<^sub>1 y\<^sub>2 z\<^sub>1 z\<^sub>2 u\<^sub>1 u\<^sub>2. f (g\<^sub>1 x\<^sub>1 y\<^sub>1 z\<^sub>1 u\<^sub>1) (g\<^sub>2 x\<^sub>2 y\<^sub>2 z\<^sub>2 u\<^sub>2)"
+\<comment> \<open>... and so on\<close>
 abbreviation(input) B000_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd"("\<^bold>B\<^sub>0\<^sub>0\<^sub>0")
   where "\<^bold>B\<^sub>0\<^sub>0\<^sub>0 \<equiv> \<^bold>A\<^sub>3"  \<comment> \<open>composing with three nullary functions corresponds to ternary function application\<close>
 definition B001_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> ('e \<Rightarrow> 'c) \<Rightarrow> 'e \<Rightarrow> 'd"  ("\<^bold>B\<^sub>0\<^sub>0\<^sub>1")
@@ -196,6 +206,7 @@ declare B1_comb_def[comb_defs] B2_comb_def[comb_defs] B3_comb_def[comb_defs] B4_
         B13_comb_def[comb_defs] B20_comb_def[comb_defs] B21_comb_def[comb_defs] 
         B22_comb_def[comb_defs]  B23_comb_def[comb_defs]
         B30_comb_def[comb_defs]  B31_comb_def[comb_defs]  B32_comb_def[comb_defs]  B33_comb_def[comb_defs]
+        B44_comb_def[comb_defs]
         B001_comb_def[comb_defs] B010_comb_def[comb_defs] B011_comb_def[comb_defs] 
         B100_comb_def[comb_defs] B101_comb_def[comb_defs] B110_comb_def[comb_defs] B111_comb_def[comb_defs] 
         B112_comb_def[comb_defs] B222_comb_def[comb_defs] B223_comb_def[comb_defs] 
@@ -235,9 +246,9 @@ abbreviation(input) C213_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Righta
 definition C132_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'a \<Rightarrow> 'c \<Rightarrow> 'b \<Rightarrow> 'd" ("\<^bold>C\<^sub>1\<^sub>3\<^sub>2")
   where "\<^bold>C\<^sub>1\<^sub>3\<^sub>2 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3. f x\<^sub>1 x\<^sub>3 x\<^sub>2"
 definition C231_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'c \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'd" ("\<^bold>C\<^sub>2\<^sub>3\<^sub>1")
-  where "\<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3. f x\<^sub>2 x\<^sub>3 x\<^sub>1"
+  where "\<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3. f x\<^sub>2 x\<^sub>3 x\<^sub>1" (*\<^bold>R\<^sub>3*)
 definition C312_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'a \<Rightarrow> 'd" ("\<^bold>C\<^sub>3\<^sub>1\<^sub>2")
-  where "\<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3. f x\<^sub>3 x\<^sub>1 x\<^sub>2"
+  where "\<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3. f x\<^sub>3 x\<^sub>1 x\<^sub>2" (*\<^bold>L\<^sub>3*)
 definition C321_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'c \<Rightarrow> 'b \<Rightarrow> 'a \<Rightarrow> 'd" ("\<^bold>C\<^sub>3\<^sub>2\<^sub>1")
   where "\<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3. f x\<^sub>3 x\<^sub>2 x\<^sub>1"
 \<comment> \<open>Quaternary permutators (24 in total) we define some below (the rest are added on demand).\<close>
@@ -254,35 +265,69 @@ definition C2143_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd
 definition C2314_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'c \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'd \<Rightarrow> 'e" ("\<^bold>C\<^sub>2\<^sub>3\<^sub>1\<^sub>4")
   where "\<^bold>C\<^sub>2\<^sub>3\<^sub>1\<^sub>4 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>2 x\<^sub>3 x\<^sub>1 x\<^sub>4"
 definition C2341_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'd \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'e"  ("\<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1")
-  where "\<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>2 x\<^sub>3 x\<^sub>4 x\<^sub>1"
+  where "\<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>2 x\<^sub>3 x\<^sub>4 x\<^sub>1" (*\<^bold>R\<^sub>4*)
 definition C3124_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'a \<Rightarrow> 'd \<Rightarrow> 'e"  ("\<^bold>C\<^sub>3\<^sub>1\<^sub>2\<^sub>4")
   where "\<^bold>C\<^sub>3\<^sub>1\<^sub>2\<^sub>4 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>3 x\<^sub>1 x\<^sub>2 x\<^sub>4"
 definition C3142_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'b \<Rightarrow> 'd \<Rightarrow> 'a \<Rightarrow> 'c \<Rightarrow> 'e" ("\<^bold>C\<^sub>3\<^sub>1\<^sub>4\<^sub>2")
   where "\<^bold>C\<^sub>3\<^sub>1\<^sub>4\<^sub>2 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>3 x\<^sub>1 x\<^sub>4 x\<^sub>2"
 definition C3412_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'e" ("\<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2")
   where "\<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>3 x\<^sub>4 x\<^sub>1 x\<^sub>2" \<comment> \<open>note that arguments are flipped pairwise\<close>
+definition C4123_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'a \<Rightarrow> 'e"  ("\<^bold>C\<^sub>4\<^sub>1\<^sub>2\<^sub>3")    (*\<^bold>L\<^sub>4*)
+  where "\<^bold>C\<^sub>4\<^sub>1\<^sub>2\<^sub>3 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>4 x\<^sub>1 x\<^sub>2 x\<^sub>3" (*\<^bold>L\<^sub>4*)
+definition C4321_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'd \<Rightarrow> 'c \<Rightarrow> 'b \<Rightarrow> 'a \<Rightarrow> 'e" ("\<^bold>C\<^sub>4\<^sub>3\<^sub>2\<^sub>1")
+  where "\<^bold>C\<^sub>4\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4. f x\<^sub>4 x\<^sub>3 x\<^sub>2 x\<^sub>1" (*\<^bold>C\<^sub>4*)
 \<comment> \<open>... and so on\<close>
+definition C23451_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f) \<Rightarrow> 'e \<Rightarrow> 'a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'f" ("\<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>5\<^sub>1")
+  where "\<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>5\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4 x\<^sub>5. f x\<^sub>2 x\<^sub>3 x\<^sub>4 x\<^sub>5 x\<^sub>1" (*\<^bold>R\<^sub>5*)
+definition C51234_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f) \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'a \<Rightarrow> 'f"  ("\<^bold>C\<^sub>5\<^sub>1\<^sub>2\<^sub>3\<^sub>4")
+  where "\<^bold>C\<^sub>5\<^sub>1\<^sub>2\<^sub>3\<^sub>4 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4 x\<^sub>5. f x\<^sub>5 x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4" (*\<^bold>L\<^sub>5*)
+definition C54321_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f) \<Rightarrow> 'e \<Rightarrow> 'd \<Rightarrow> 'c \<Rightarrow> 'b \<Rightarrow> 'a \<Rightarrow> 'f" ("\<^bold>C\<^sub>5\<^sub>4\<^sub>3\<^sub>2\<^sub>1")
+  where "\<^bold>C\<^sub>5\<^sub>4\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<lambda>f x\<^sub>1 x\<^sub>2 x\<^sub>3 x\<^sub>4 x\<^sub>5. f x\<^sub>5 x\<^sub>4 x\<^sub>3 x\<^sub>2 x\<^sub>1" (*\<^bold>C\<^sub>5*)
 
-text \<open>Introduce some convenient combinator notations.\<close>
-notation C21_comb ("\<^bold>C") \<comment> \<open>the traditional flip/transposition (\<open>\<^bold>C\<close>) combinator is \<open>\<^bold>C\<^sub>2\<^sub>1\<close>\<close>
-notation C3412_comb ("\<^bold>C\<^sub>2") \<comment> \<open>pairwise flip/transposition of the arguments of a quaternary function\<close>
-notation C231_comb ("\<^bold>R") \<comment> \<open>right (counterclockwise) rotation of a ternary function\<close>
-notation C312_comb ("\<^bold>L") \<comment> \<open>left (counterclockwise) rotation of a ternary function\<close>
-notation C321_comb ("\<^bold>C''") \<comment> \<open>Full reversal of the arguments of a ternary function\<close>
+text \<open>Introduce some convenient combinator notations for the notion of "converse" of a function.\<close>
+notation C21_comb ("\<^bold>C") \<comment> \<open>the traditional \<open>\<^bold>C\<close> combinator swaps first and second argument (of an n-ary function)\<close>
+notation C21_comb ("\<^bold>C\<^sub>2") \<comment> \<open>notation emphasizes that the "converse" of a given binary function is returned\<close>
+notation C321_comb ("\<^bold>C\<^sub>3") \<comment> \<open>returns "converse" of a given ternary function (i.e. reversing order of its arguments)\<close>
+notation C4321_comb ("\<^bold>C\<^sub>4") \<comment> \<open>returns "converse" of a given quaternary function\<close>
+notation C54321_comb ("\<^bold>C\<^sub>5") \<comment> \<open>returns "converse" of a given quinary function\<close>
+
+text \<open>Introduce some notations for rotations (left and right).\<close>
+notation C231_comb   ("\<^bold>R\<^sub>3") \<comment> \<open>right rotation of a ternary function\<close>
+notation C312_comb   ("\<^bold>L\<^sub>3") \<comment> \<open>left rotation of a ternary function\<close>
+notation C2341_comb  ("\<^bold>R\<^sub>4") \<comment> \<open>right rotation of a quaternary function\<close>
+notation C4123_comb  ("\<^bold>L\<^sub>4") \<comment> \<open>left rotation of a ternary function\<close>
+notation C23451_comb ("\<^bold>R\<^sub>5") \<comment> \<open>right rotation of a quinary function\<close>
+notation C51234_comb ("\<^bold>L\<^sub>5") \<comment> \<open>left rotation of a quinary function\<close>
 
 declare C21_comb_def[comb_defs] 
       C132_comb_def[comb_defs] C231_comb_def[comb_defs] C312_comb_def[comb_defs]  
       C321_comb_def[comb_defs] C1243_comb_def[comb_defs] C1324_comb_def[comb_defs] 
-      C1423_comb_def[comb_defs] C2143_comb_def[comb_defs] C2314_comb_def[comb_defs] 
-      C2341_comb_def[comb_defs] C3124_comb_def[comb_defs]
-      C3142_comb_def[comb_defs] C3412_comb_def[comb_defs]
+      C1423_comb_def[comb_defs] C2143_comb_def[comb_defs] C2314_comb_def[comb_defs] C2341_comb_def[comb_defs] 
+      C3124_comb_def[comb_defs] C3142_comb_def[comb_defs] C3412_comb_def[comb_defs]
+      C4123_comb_def[comb_defs] C4321_comb_def[comb_defs]
+      C23451_comb_def[comb_defs] C51234_comb_def[comb_defs] C54321_comb_def[comb_defs]
 
-text \<open>Composing rotation combinators (identity, left and right) works as expected.\<close>
-lemma "\<^bold>R \<ggreater> \<^bold>L = \<^bold>L \<ggreater> \<^bold>R" unfolding comb_defs ..
-lemma "\<^bold>R = \<^bold>L \<ggreater> \<^bold>L" unfolding comb_defs ..
-lemma "\<^bold>L = \<^bold>R \<ggreater> \<^bold>R" unfolding comb_defs ..
-lemma "\<^bold>I = \<^bold>L \<ggreater> \<^bold>L \<ggreater> \<^bold>L" unfolding comb_defs ..
-lemma "\<^bold>I = \<^bold>R \<ggreater> \<^bold>R \<ggreater> \<^bold>R" unfolding comb_defs ..
+text \<open>Left and right rotations are inverse to each other.\<close>
+lemma "\<^bold>R\<^sub>3 \<ggreater> \<^bold>L\<^sub>3 = \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>3 \<ggreater> \<^bold>R\<^sub>3 = \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>R\<^sub>4 \<ggreater> \<^bold>L\<^sub>4 = \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>4 \<ggreater> \<^bold>R\<^sub>4 = \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>R\<^sub>5 \<ggreater> \<^bold>L\<^sub>5 = \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>5 \<ggreater> \<^bold>R\<^sub>5 = \<^bold>I" unfolding comb_defs ..
+
+text \<open>Composing rotations (left and right) n-times returns the same n-ary function.\<close>
+lemma "\<^bold>I = \<^bold>L\<^sub>3 \<ggreater> \<^bold>L\<^sub>3 \<ggreater> \<^bold>L\<^sub>3" unfolding comb_defs ..
+lemma "\<^bold>I = \<^bold>R\<^sub>3 \<ggreater> \<^bold>R\<^sub>3 \<ggreater> \<^bold>R\<^sub>3" unfolding comb_defs ..
+lemma "\<^bold>I = \<^bold>L\<^sub>4 \<ggreater> \<^bold>L\<^sub>4 \<ggreater> \<^bold>L\<^sub>4 \<ggreater> \<^bold>L\<^sub>4" unfolding comb_defs ..
+lemma "\<^bold>I = \<^bold>R\<^sub>4 \<ggreater> \<^bold>R\<^sub>4 \<ggreater> \<^bold>R\<^sub>4 \<ggreater> \<^bold>R\<^sub>4" unfolding comb_defs ..
+lemma "\<^bold>I = \<^bold>L\<^sub>5 \<ggreater> \<^bold>L\<^sub>5 \<ggreater> \<^bold>L\<^sub>5 \<ggreater> \<^bold>L\<^sub>5 \<ggreater> \<^bold>L\<^sub>5" unfolding comb_defs ..
+lemma "\<^bold>I = \<^bold>R\<^sub>5 \<ggreater> \<^bold>R\<^sub>5 \<ggreater> \<^bold>R\<^sub>5 \<ggreater> \<^bold>R\<^sub>5 \<ggreater> \<^bold>R\<^sub>5" unfolding comb_defs ..
+lemma "\<^bold>R\<^sub>3 = \<^bold>L\<^sub>3 \<ggreater> \<^bold>L\<^sub>3" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>3 = \<^bold>R\<^sub>3 \<ggreater> \<^bold>R\<^sub>3" unfolding comb_defs ..
+lemma "\<^bold>R\<^sub>4 = \<^bold>L\<^sub>4 \<ggreater> \<^bold>L\<^sub>4 \<ggreater> \<^bold>L\<^sub>4" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>4 = \<^bold>R\<^sub>4 \<ggreater> \<^bold>R\<^sub>4 \<ggreater> \<^bold>R\<^sub>4" unfolding comb_defs ..
+lemma "\<^bold>R\<^sub>5 = \<^bold>L\<^sub>5 \<ggreater> \<^bold>L\<^sub>5 \<ggreater> \<^bold>L\<^sub>5 \<ggreater> \<^bold>L\<^sub>5" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>5 = \<^bold>R\<^sub>5 \<ggreater> \<^bold>R\<^sub>5 \<ggreater> \<^bold>R\<^sub>5 \<ggreater> \<^bold>R\<^sub>5" unfolding comb_defs ..
 
 
 subsubsection \<open>Cancellators\<close>
@@ -407,27 +452,45 @@ declare S11_comb_def[comb_defs] S12_comb_def[comb_defs] S13_comb_def[comb_defs]
 text \<open>\<open>\<^bold>S/\<^bold>\<Sigma>\<close> can be interdefined\<close>
 lemma "\<^bold>S = \<^bold>B \<^bold>\<Sigma> \<^bold>C" unfolding comb_defs ..
 lemma "\<^bold>\<Sigma> = \<^bold>B \<^bold>S \<^bold>C" unfolding comb_defs ..
-lemma "\<^bold>S\<^sub>1\<^sub>2 = \<^bold>B \<^bold>\<Sigma>\<^sub>1\<^sub>2 \<^bold>R" unfolding comb_defs ..
-lemma "\<^bold>\<Sigma>\<^sub>1\<^sub>2 = \<^bold>B \<^bold>S\<^sub>1\<^sub>2 \<^bold>L" unfolding comb_defs ..
+lemma "\<^bold>S\<^sub>1\<^sub>2 = \<^bold>B \<^bold>\<Sigma>\<^sub>1\<^sub>2 \<^bold>R\<^sub>3" unfolding comb_defs ..
+lemma "\<^bold>\<Sigma>\<^sub>1\<^sub>2 = \<^bold>B \<^bold>S\<^sub>1\<^sub>2 \<^bold>L\<^sub>3" unfolding comb_defs ..
 
 
 subsection \<open>Further Combinators\<close>
 
 subsubsection \<open>Preprocessors\<close>
-text \<open>The family of \<open>\<^bold>\<Psi>\<^sub>m\<close> combinators below are special cases of compositors. They take an m-ary function 
- \<open>f\<close> and prepend to each of its m inputs a given unary function \<open>g\<close> (acting as a "preprocessor").\<close>
+text \<open>The family of \<open>\<^bold>\<Psi>\<^sub>m\<^sub>n\<close> combinators below are special cases of compositors. They take an m-ary function 
+ \<open>f\<close> and prepend a unary function \<open>g\<^sub>i\<close> (acting as a "preprocessor") to each of n inputs.\<close>
 
-abbreviation(input) \<Psi>1_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>1")  
-  where "\<^bold>\<Psi>\<^sub>1 \<equiv> \<^bold>B"            \<comment> \<open>trivial case m = 1 corresponds to the \<open>\<^bold>B\<close> combinator\<close>
-definition \<Psi>2_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>2")
-  where "\<^bold>\<Psi>\<^sub>2 \<equiv> \<lambda>f g x y. f (g x) (g y)" \<comment> \<open>cf. "\<open>\<Psi>\<close>" in \<^cite>\<open>Curry1931\<close>; "on" in Haskell Data.Function\<close>
-definition \<Psi>3_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>3")
-  where "\<^bold>\<Psi>\<^sub>3 \<equiv> \<lambda>f g x y z. f (g x) (g y) (g z)"
-definition \<Psi>4_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>4")
-  where "\<^bold>\<Psi>\<^sub>4 \<equiv> \<lambda>f g x y z u. f (g x) (g y) (g z) (g u)"
+abbreviation(input) \<Psi>10_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>1\<^sub>0")  
+  where "\<^bold>\<Psi>\<^sub>1\<^sub>0 \<equiv> \<^bold>B\<^sub>0"            \<comment> \<open>corresponds to \<open>\<^bold>I\<close> combinator\<close>
+abbreviation(input) \<Psi>11_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>1\<^sub>1")  
+  where "\<^bold>\<Psi>\<^sub>1\<^sub>1 \<equiv> \<^bold>B\<^sub>1"            \<comment> \<open>corresponds to \<open>\<^bold>B\<close> combinator\<close>
+abbreviation(input) \<Psi>12_comb :: "('a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>1\<^sub>2")  
+  where "\<^bold>\<Psi>\<^sub>1\<^sub>2 \<equiv> \<^bold>B\<^sub>2"            \<comment> \<open>generally: \<open>\<^bold>\<Psi>\<^sub>1\<^sub>n\<close> corresponds to \<open>\<^bold>B\<^sub>n\<close> combinator\<close>
+\<comment> \<open>... and so on\<close>
+abbreviation(input) \<Psi>20_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> 'a \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>2\<^sub>0")  
+  where "\<^bold>\<Psi>\<^sub>2\<^sub>0 \<equiv> \<^bold>W\<^sub>2\<^sub>1"            \<comment> \<open>corresponds to \<open>\<^bold>W\<close> combinator\<close>
+definition \<Psi>21_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>2\<^sub>1")
+  where "\<^bold>\<Psi>\<^sub>2\<^sub>1 \<equiv> \<lambda>f g x y. f (g x) (g y)" \<comment> \<open>cf. "\<open>\<Psi>\<close>" in \<^cite>\<open>Curry1931\<close>; "on" in Haskell Data.Function\<close>
+definition \<Psi>22_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'd \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>2\<^sub>2")
+  where "\<^bold>\<Psi>\<^sub>2\<^sub>2 \<equiv> \<lambda>f g x\<^sub>1 x\<^sub>2 y\<^sub>1 y\<^sub>2. f (g x\<^sub>1 y\<^sub>1) (g x\<^sub>2 y\<^sub>2)" 
+definition \<Psi>23_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'e \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>2\<^sub>3") 
+  where "\<^bold>\<Psi>\<^sub>2\<^sub>3 \<equiv> \<lambda>f g x\<^sub>1 x\<^sub>2 y\<^sub>1 y\<^sub>2 z\<^sub>1 z\<^sub>2. f (g x\<^sub>1 y\<^sub>1 z\<^sub>1) (g x\<^sub>2 y\<^sub>2 z\<^sub>2)"
+definition \<Psi>24_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'f \<Rightarrow> 'b"("\<^bold>\<Psi>\<^sub>2\<^sub>4") 
+  where "\<^bold>\<Psi>\<^sub>2\<^sub>4 \<equiv> \<lambda>f g x\<^sub>1 x\<^sub>2 y\<^sub>1 y\<^sub>2 z\<^sub>1 z\<^sub>2 u\<^sub>1 u\<^sub>2. f (g x\<^sub>1 y\<^sub>1 z\<^sub>1 u\<^sub>1) (g x\<^sub>2 y\<^sub>2 z\<^sub>2 u\<^sub>2)"
+\<comment> \<open>... and so on\<close>
+definition \<Psi>31_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>3\<^sub>1")
+  where "\<^bold>\<Psi>\<^sub>3\<^sub>1 \<equiv> \<lambda>f g x y z. f (g x) (g y) (g z)"
+\<comment> \<open>... and so on\<close>
+definition \<Psi>41_comb :: "('a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> 'b) \<Rightarrow> ('c \<Rightarrow> 'a) \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'c \<Rightarrow> 'b" ("\<^bold>\<Psi>\<^sub>4\<^sub>1")
+  where "\<^bold>\<Psi>\<^sub>4\<^sub>1 \<equiv> \<lambda>f g x y z u. f (g x) (g y) (g z) (g u)"
 \<comment> \<open>... and so on\<close>
 
-declare \<Psi>2_comb_def[comb_defs] \<Psi>3_comb_def[comb_defs] \<Psi>4_comb_def[comb_defs]
+declare \<Psi>21_comb_def[comb_defs] \<Psi>22_comb_def[comb_defs] 
+        \<Psi>23_comb_def[comb_defs] \<Psi>24_comb_def[comb_defs]
+        \<Psi>31_comb_def[comb_defs] \<Psi>41_comb_def[comb_defs]
+
 
 (* mappers *)
 subsubsection \<open>Imitators\<close>
@@ -462,6 +525,9 @@ definition \<Phi>22_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow
   where "\<^bold>\<Phi>\<^sub>2\<^sub>2 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x y. f (g\<^sub>1 x y) (g\<^sub>2 x y)" \<comment> \<open>cf. "\<open>\<Phi>\<^sub>2\<close>" in \<^cite>\<open>Curry1931\<close>; "dyadic fork" in APL\<close>
 definition \<Phi>23_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'a) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'b) \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'c" ("\<^bold>\<Phi>\<^sub>2\<^sub>3")
   where "\<^bold>\<Phi>\<^sub>2\<^sub>3 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x y z. f (g\<^sub>1 x y z) (g\<^sub>2 x y z)"
+definition \<Phi>24_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'g \<Rightarrow> 'a) \<Rightarrow> ('d \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'g \<Rightarrow> 'b) 
+                                                                \<Rightarrow> 'd \<Rightarrow> 'e \<Rightarrow> 'f \<Rightarrow> 'g \<Rightarrow> 'c"("\<^bold>\<Phi>\<^sub>2\<^sub>4")
+  where "\<^bold>\<Phi>\<^sub>2\<^sub>4 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 x y z u. f (g\<^sub>1 x y z u) (g\<^sub>2 x y z u)"
 \<comment> \<open>...and so on\<close>
 definition \<Phi>31_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> ('e \<Rightarrow> 'a) \<Rightarrow> ('e \<Rightarrow> 'b) \<Rightarrow> ('e \<Rightarrow> 'c) \<Rightarrow> 'e \<Rightarrow> 'd" ("\<^bold>\<Phi>\<^sub>3\<^sub>1")
   where "\<^bold>\<Phi>\<^sub>3\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 x. f (g\<^sub>1 x) (g\<^sub>2 x) (g\<^sub>3 x)"
@@ -477,7 +543,7 @@ definition \<Phi>41_comb :: "('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow>
   where "\<^bold>\<Phi>\<^sub>4\<^sub>1 \<equiv> \<lambda>f g\<^sub>1 g\<^sub>2 g\<^sub>3 g\<^sub>4 x. f (g\<^sub>1 x) (g\<^sub>2 x) (g\<^sub>3 x) (g\<^sub>4 x)"
 \<comment> \<open>...and so on\<close>
 
-declare \<Phi>21_comb_def[comb_defs] \<Phi>22_comb_def[comb_defs] \<Phi>23_comb_def[comb_defs]
+declare \<Phi>21_comb_def[comb_defs] \<Phi>22_comb_def[comb_defs] \<Phi>23_comb_def[comb_defs] \<Phi>24_comb_def[comb_defs]
         \<Phi>31_comb_def[comb_defs] \<Phi>32_comb_def[comb_defs] \<Phi>33_comb_def[comb_defs] \<Phi>41_comb_def[comb_defs]
 
 
@@ -625,7 +691,7 @@ lemma "\<^bold>B\<^sub>3\<^sub>3 = \<^bold>D \<ggreater> \<^bold>C \<ggreater> \
 lemma "\<^bold>B\<^sub>0\<^sub>0\<^sub>1 = \<^bold>B\<^sub>3 \<^bold>B \<^bold>I" unfolding comb_defs ..
 lemma "\<^bold>B\<^sub>0\<^sub>1\<^sub>0 = \<^bold>B \<^bold>B\<^sub>1\<^sub>0" unfolding comb_defs ..
 lemma "\<^bold>B\<^sub>0\<^sub>1\<^sub>1 = \<^bold>B\<^sub>0\<^sub>0\<^sub>1 \<ggreater> \<^bold>B\<^sub>0\<^sub>1\<^sub>0" unfolding comb_defs ..
-lemma "\<^bold>B\<^sub>1\<^sub>0\<^sub>0 = \<^bold>B\<^sub>2 \<^bold>L \<^bold>B " unfolding comb_defs ..
+lemma "\<^bold>B\<^sub>1\<^sub>0\<^sub>0 = \<^bold>B\<^sub>2 \<^bold>L\<^sub>3 \<^bold>B " unfolding comb_defs ..
 lemma "\<^bold>B\<^sub>1\<^sub>0\<^sub>1 = \<^bold>B\<^sub>0\<^sub>0\<^sub>1 \<ggreater> \<^bold>B\<^sub>1\<^sub>0\<^sub>0" unfolding comb_defs ..
 lemma "\<^bold>B\<^sub>1\<^sub>1\<^sub>0 = \<^bold>B\<^sub>0\<^sub>1\<^sub>0 \<ggreater> \<^bold>B\<^sub>1\<^sub>0\<^sub>0" unfolding comb_defs ..
 lemma "\<^bold>B\<^sub>1\<^sub>1\<^sub>1 = \<^bold>B\<^sub>0\<^sub>0\<^sub>1 \<ggreater> \<^bold>B\<^sub>1\<^sub>1\<^sub>0" unfolding comb_defs ..
@@ -648,20 +714,19 @@ lemma "\<^bold>B\<^sub>1\<^sub>3 \<^bold>I = \<^bold>B\<^sub>1\<^sub>2 \<^bold>B
 \<comment> \<open>... and so on\<close>
 
 
-\<comment> \<open>\<open>\<^bold>\<Phi>\<^sub>m\<^sub>(\<^sub>i\<^sub>+\<^sub>j\<^sub>)\<close> can be defined as: \<open>\<^bold>\<Phi>\<^sub>m\<^sub>i \<ggreater> \<^bold>\<Phi>\<^sub>m\<^sub>j\<close>.\<close>
-lemma "\<^bold>\<Phi>\<^sub>1\<^sub>2 = \<^bold>\<Phi>\<^sub>1\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>1\<^sub>1" unfolding comb_defs ..
-lemma "\<^bold>\<Phi>\<^sub>1\<^sub>3 = \<^bold>\<Phi>\<^sub>1\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>1\<^sub>2" unfolding comb_defs ..
-lemma "\<^bold>\<Phi>\<^sub>2\<^sub>2 = \<^bold>\<Phi>\<^sub>2\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>2\<^sub>1" unfolding comb_defs ..
-lemma "\<^bold>\<Phi>\<^sub>2\<^sub>3 = \<^bold>\<Phi>\<^sub>2\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>2\<^sub>2" unfolding comb_defs ..
-lemma "\<^bold>\<Phi>\<^sub>2\<^sub>3 = \<^bold>\<Phi>\<^sub>2\<^sub>2 \<ggreater> \<^bold>\<Phi>\<^sub>2\<^sub>1" unfolding comb_defs ..
-lemma "\<^bold>\<Phi>\<^sub>3\<^sub>2 = \<^bold>\<Phi>\<^sub>3\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>3\<^sub>1" unfolding comb_defs ..
-lemma "\<^bold>\<Phi>\<^sub>3\<^sub>3 = \<^bold>\<Phi>\<^sub>3\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>3\<^sub>2" unfolding comb_defs ..
-lemma "\<^bold>\<Phi>\<^sub>3\<^sub>3 = \<^bold>\<Phi>\<^sub>3\<^sub>2 \<ggreater> \<^bold>\<Phi>\<^sub>3\<^sub>1" unfolding comb_defs ..
-\<comment> \<open>...and so on\<close>
+text \<open>Preprocessors \<open>\<^bold>\<Psi>\<^sub>m\<^sub>n\<close> are definable via the schema: \<open>\<^bold>\<Psi>\<^sub>m\<^sub>n = \<^bold>B\<^sub>N \<ggreater> \<^bold>W\<^sub>m\<^sub>1\<close> (where N is an m-sized array of ns).\<close>
+lemma "\<^bold>\<Psi>\<^sub>1\<^sub>0 = \<^bold>B\<^sub>0 \<ggreater> \<^bold>W\<^sub>1\<^sub>1"  unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>1\<^sub>1 = \<^bold>B\<^sub>1 \<ggreater> \<^bold>W\<^sub>1\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>1\<^sub>2 = \<^bold>B\<^sub>2 \<ggreater> \<^bold>W\<^sub>1\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>2\<^sub>0 = \<^bold>B\<^sub>0\<^sub>0 \<ggreater> \<^bold>W\<^sub>2\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>2\<^sub>1 = \<^bold>B\<^sub>1\<^sub>1 \<ggreater> \<^bold>W\<^sub>2\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>2\<^sub>2 = \<^bold>B\<^sub>2\<^sub>2 \<ggreater> \<^bold>W\<^sub>2\<^sub>1" oops
+lemma "\<^bold>\<Psi>\<^sub>2\<^sub>3 = \<^bold>B\<^sub>3\<^sub>3 \<ggreater> \<^bold>W\<^sub>2\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>2\<^sub>4 = \<^bold>B\<^sub>4\<^sub>4 \<ggreater> \<^bold>W\<^sub>2\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>3\<^sub>1 = \<^bold>B\<^sub>1\<^sub>1\<^sub>1 \<ggreater> \<^bold>W\<^sub>3\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Psi>\<^sub>4\<^sub>1 = \<^bold>B\<^sub>1\<^sub>1\<^sub>1\<^sub>1 \<ggreater> \<^bold>W\<^sub>4\<^sub>1" unfolding comb_defs ..
 
-
-text \<open>Moreover, \<open>\<^bold>\<Phi>\<^sub>m\<^sub>n\<close> is definable by composing \<open>\<^bold>W\<^sub>m\<^sub>n\<close> and \<open>\<^bold>B\<^sub>N\<close>, via the following schema: \<open>\<^bold>\<Phi>\<^sub>m\<^sub>n = \<^bold>W\<^sub>m\<^sub>n \<circ>\<^sub>m\<^sub>+\<^sub>1 \<^bold>B\<^sub>N\<close> 
- (where N is an m-sized array of ns).\<close>
+text \<open>Similarly, \<open>\<^bold>\<Phi>\<^sub>m\<^sub>n\<close> are definable via schema: \<open>\<^bold>\<Phi>\<^sub>m\<^sub>n = \<^bold>B\<^sub>N \<ggreater>\<^sub>m\<^sub>+\<^sub>1 \<^bold>W\<^sub>m\<^sub>n\<close> (where N is an m-sized array of ns).\<close>
 lemma "\<^bold>\<Phi>\<^sub>1\<^sub>1 = \<^bold>B\<^sub>1 \<ggreater>\<^sub>2 \<^bold>W\<^sub>1\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>\<Phi>\<^sub>1\<^sub>2 = \<^bold>B\<^sub>2 \<ggreater>\<^sub>2 \<^bold>W\<^sub>1\<^sub>2" unfolding comb_defs ..
 lemma "\<^bold>\<Phi>\<^sub>1\<^sub>3 = \<^bold>B\<^sub>3 \<ggreater>\<^sub>2 \<^bold>W\<^sub>1\<^sub>3" unfolding comb_defs ..
@@ -671,6 +736,17 @@ lemma "\<^bold>\<Phi>\<^sub>2\<^sub>3 = \<^bold>B\<^sub>3\<^sub>3 \<ggreater>\<^
 lemma "\<^bold>\<Phi>\<^sub>3\<^sub>1 = \<^bold>B\<^sub>1\<^sub>1\<^sub>1 \<ggreater>\<^sub>4 \<^bold>W\<^sub>3\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>\<Phi>\<^sub>3\<^sub>2 = \<^bold>B\<^sub>2\<^sub>2\<^sub>2 \<ggreater>\<^sub>4 \<^bold>W\<^sub>3\<^sub>2" unfolding comb_defs ..
 lemma "\<^bold>\<Phi>\<^sub>3\<^sub>3 = \<^bold>B\<^sub>3\<^sub>3\<^sub>3 \<ggreater>\<^sub>4 \<^bold>W\<^sub>3\<^sub>3" unfolding comb_defs ..
+\<comment> \<open>...and so on\<close>
+
+\<comment> \<open>\<open>\<^bold>\<Phi>\<^sub>m\<^sub>(\<^sub>i\<^sub>+\<^sub>j\<^sub>)\<close> can be defined as: \<open>\<^bold>\<Phi>\<^sub>m\<^sub>i \<ggreater> \<^bold>\<Phi>\<^sub>m\<^sub>j\<close>.\<close>
+lemma "\<^bold>\<Phi>\<^sub>1\<^sub>2 = \<^bold>\<Phi>\<^sub>1\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>1\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Phi>\<^sub>1\<^sub>3 = \<^bold>\<Phi>\<^sub>1\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>1\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>\<Phi>\<^sub>2\<^sub>2 = \<^bold>\<Phi>\<^sub>2\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>2\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Phi>\<^sub>2\<^sub>3 = \<^bold>\<Phi>\<^sub>2\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>2\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>\<Phi>\<^sub>2\<^sub>3 = \<^bold>\<Phi>\<^sub>2\<^sub>2 \<ggreater> \<^bold>\<Phi>\<^sub>2\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Phi>\<^sub>3\<^sub>2 = \<^bold>\<Phi>\<^sub>3\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>3\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>\<Phi>\<^sub>3\<^sub>3 = \<^bold>\<Phi>\<^sub>3\<^sub>1 \<ggreater> \<^bold>\<Phi>\<^sub>3\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>\<Phi>\<^sub>3\<^sub>3 = \<^bold>\<Phi>\<^sub>3\<^sub>2 \<ggreater> \<^bold>\<Phi>\<^sub>3\<^sub>1" unfolding comb_defs ..
 \<comment> \<open>...and so on\<close>
 
 text \<open>Contractors can be defined as: \<open>\<^bold>W\<^sub>m\<^sub>1 := \<^bold>W \<circ> (m-1 times) \<circ> \<^bold>W\<close> and \<open>\<^bold>W\<^sub>m\<^sub>n := \<^bold>W\<^sub>m\<^sub>1 \<circ>\<^sub>m (n times) \<circ>\<^sub>m \<^bold>W\<^sub>m\<^sub>1\<close> for n > 1:\<close>
@@ -690,16 +766,16 @@ lemma "\<^bold>K\<^sub>2\<^sub>2 = \<^bold>K \<^bold>I" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>2\<^sub>2 = \<^bold>K\<^sub>2\<^sub>1 \<^bold>K\<^sub>1\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>1 = \<^bold>K\<^sub>2\<^sub>1 \<ggreater> \<^bold>K\<^sub>2\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>1 = \<^bold>K \<ggreater> \<^bold>K" unfolding comb_defs ..
-lemma "\<^bold>K\<^sub>3\<^sub>2 = \<^bold>R \<^bold>K\<^sub>3\<^sub>1" unfolding comb_defs ..
+lemma "\<^bold>K\<^sub>3\<^sub>2 = \<^bold>R\<^sub>3 \<^bold>K\<^sub>3\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>2 = \<^bold>K\<^sub>2\<^sub>1 \<^bold>K\<^sub>2\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>2 = \<^bold>K \<^bold>K" unfolding comb_defs ..
-lemma "\<^bold>K\<^sub>3\<^sub>3 = \<^bold>R \<^bold>K\<^sub>3\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>K\<^sub>3\<^sub>3 = \<^bold>R\<^sub>3 \<^bold>K\<^sub>3\<^sub>2" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>3 = \<^bold>K\<^sub>3\<^sub>1 \<^bold>K\<^sub>1\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>3 = \<^bold>K\<^sub>3\<^sub>1 \<^bold>I" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>3 = \<^bold>K\<^sub>2\<^sub>2 \<ggreater> \<^bold>K\<^sub>2\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>3\<^sub>3 = \<^bold>K\<^sub>2\<^sub>1 \<ggreater>\<^sub>2 \<^bold>K\<^sub>2\<^sub>2" unfolding comb_defs ..
-lemma "\<^bold>K\<^sub>3\<^sub>2 = \<^bold>L \<^bold>K\<^sub>3\<^sub>3" unfolding comb_defs ..
-lemma "\<^bold>K\<^sub>3\<^sub>1 = \<^bold>L \<^bold>K\<^sub>3\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>K\<^sub>3\<^sub>2 = \<^bold>L\<^sub>3 \<^bold>K\<^sub>3\<^sub>3" unfolding comb_defs ..
+lemma "\<^bold>K\<^sub>3\<^sub>1 = \<^bold>L\<^sub>3 \<^bold>K\<^sub>3\<^sub>2" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>4\<^sub>1 = \<^bold>K \<ggreater> \<^bold>K\<^sub>3\<^sub>1" unfolding comb_defs ..
 lemma "\<^bold>K\<^sub>4\<^sub>1 = \<^bold>K \<ggreater> \<^bold>K \<ggreater> \<^bold>K" unfolding comb_defs ..
 
@@ -744,15 +820,15 @@ lemma "\<^bold>W f = \<^bold>\<Sigma> f \<^bold>I" unfolding comb_defs ..
 lemma "\<^bold>T = \<^bold>C \<^bold>I" unfolding comb_defs ..
 lemma "\<^bold>T = \<^bold>C \<^bold>A" unfolding comb_defs ..
 
-lemma "\<^bold>V = \<^bold>L \<^bold>A\<^sub>2" unfolding comb_defs ..
-lemma "\<^bold>V = \<^bold>L \<^bold>I" unfolding comb_defs ..
-lemma "\<^bold>I = \<^bold>R \<^bold>V" unfolding comb_defs ..
-lemma "\<^bold>R \<^bold>V = \<^bold>I" unfolding comb_defs ..
-lemma "\<^bold>V = \<^bold>L \<^bold>I" unfolding comb_defs ..
-lemma "\<^bold>L \<^bold>V = \<^bold>R \<^bold>I" unfolding comb_defs ..
-lemma "\<^bold>A\<^sub>2 = \<^bold>L(\<^bold>R \<^bold>I)" unfolding comb_defs ..
-lemma "\<^bold>L (\<^bold>C \<^bold>I) = \<^bold>C (\<^bold>R \<^bold>I)" unfolding comb_defs ..
-lemma "\<^bold>C (\<^bold>L \<^bold>I) = \<^bold>R (\<^bold>C \<^bold>I)" unfolding comb_defs ..
+lemma "\<^bold>V = \<^bold>L\<^sub>3 \<^bold>A\<^sub>2" unfolding comb_defs ..
+lemma "\<^bold>V = \<^bold>L\<^sub>3 \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>I = \<^bold>R\<^sub>3 \<^bold>V" unfolding comb_defs ..
+lemma "\<^bold>R\<^sub>3 \<^bold>V = \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>V = \<^bold>L\<^sub>3 \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>3 \<^bold>V = \<^bold>R\<^sub>3 \<^bold>I" unfolding comb_defs ..
+lemma "\<^bold>A\<^sub>2 = \<^bold>L\<^sub>3(\<^bold>R\<^sub>3 \<^bold>I)" unfolding comb_defs ..
+lemma "\<^bold>L\<^sub>3 (\<^bold>C \<^bold>I) = \<^bold>C (\<^bold>R\<^sub>3 \<^bold>I)" unfolding comb_defs ..
+lemma "\<^bold>C (\<^bold>L\<^sub>3 \<^bold>I) = \<^bold>R\<^sub>3 (\<^bold>C \<^bold>I)" unfolding comb_defs ..
 
 text \<open>Several combinators can be self-applied (and give rise to other combinators).\<close>
 lemma "\<^bold>A \<^bold>A = \<^bold>A" unfolding comb_defs ..
