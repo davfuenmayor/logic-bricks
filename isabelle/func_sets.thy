@@ -40,9 +40,9 @@ lemma "R-postFP f = (\<lambda>A. R A (f A))" unfolding func_defs comb_defs ..
 
 text \<open>The set of weak pre-/post-fixed-points of endooperation wrt. an endorelation.\<close>
 definition weakPreFixedPoint::"ERel('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("_-wPreFP")
-  where "weakPreFixedPoint  \<equiv> \<^bold>L \<^bold>\<Phi>\<^sub>2\<^sub>2 (\<^bold>W \<^bold>B) \<^bold>A"
+  where "weakPreFixedPoint  \<equiv> \<^bold>L\<^sub>3 \<^bold>\<Phi>\<^sub>2\<^sub>2 (\<^bold>W \<^bold>B) \<^bold>A"
 definition weakPostFixedPoint::"ERel('a) \<Rightarrow> EOp('a) \<Rightarrow> Set('a)" ("_-wPostFP")
-  where "weakPostFixedPoint \<equiv> \<^bold>L \<^bold>\<Phi>\<^sub>2\<^sub>2 \<^bold>A (\<^bold>W \<^bold>B)"
+  where "weakPostFixedPoint \<equiv> \<^bold>L\<^sub>3 \<^bold>\<Phi>\<^sub>2\<^sub>2 \<^bold>A (\<^bold>W \<^bold>B)"
 
 declare weakPreFixedPoint_def[func_defs] weakPostFixedPoint_def[func_defs]
 
@@ -401,7 +401,7 @@ subsubsection \<open>Kernel of a Function\<close>
 
 text \<open>The "kernel" of a function relates those elements in its domain that get assigned the same value.\<close>
 definition kernel::"('a \<Rightarrow> 'b) \<Rightarrow> ERel('a)"
-  where "kernel \<equiv> \<^bold>\<Psi>\<^sub>2 \<Q>"
+  where "kernel \<equiv> \<^bold>\<Psi>\<^sub>2\<^sub>1 \<Q>"
 
 lemma "kernel f = (\<lambda>x y. f x = f y)" unfolding kernel_def comb_defs ..
 
@@ -444,8 +444,8 @@ text \<open>In fact, the equalizer of two functions can be stated in terms of pu
 lemma "equalizer = pullback \<ggreater>\<^sub>2 \<^bold>W" unfolding func_defs comb_defs ..
 
 text \<open>Note that we can swap the roles of "points" and "functions" in the above definitions using permutators.\<close>
-lemma "\<^bold>R equalizer x = (\<lambda>f g. f x = g x)" unfolding func_defs comb_defs ..
-lemma "\<^bold>C\<^sub>2 pullback x y = (\<lambda>f g. f x = g y)" unfolding func_defs comb_defs ..
+lemma "\<^bold>R\<^sub>3 equalizer x = (\<lambda>f g. f x = g x)" unfolding func_defs comb_defs ..
+lemma "\<^bold>C\<^sub>3\<^sub>4\<^sub>1\<^sub>2 pullback x y = (\<lambda>f g. f x = g y)" unfolding func_defs comb_defs ..
 
 
 subsubsection \<open>Pushout and Coequalizer of a Pair of Functions\<close>
@@ -466,12 +466,12 @@ lemma "pushout = (\<^bold>C pushout) \<ggreater>\<^sub>2 \<^bold>C" apply (subst
 
 text \<open>The equations below don't work as definitions since they unduly restrict types ("inverse" appears only once).\<close>
 lemma "pushout = \<^bold>W (\<^bold>B\<^sub>2\<^sub>2 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
-lemma "pushout = \<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
+lemma "pushout = \<^bold>\<Psi>\<^sub>2\<^sub>1 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse" unfolding func_defs comb_defs .. 
 
 text \<open>The coequalizer of two functions \<open>f\<close> and \<open>g\<close> (sharing the same domain and codomain) is the set of 
  elements in their (common) codomain whose preimage under \<open>f\<close> resp. \<open>g\<close> intersect.\<close>
 definition coequalizer :: "('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> Set('b)"
-  where "coequalizer \<equiv> (\<^bold>\<Psi>\<^sub>2 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse) \<ggreater>\<^sub>2 \<^bold>W" 
+  where "coequalizer \<equiv> (\<^bold>\<Psi>\<^sub>2\<^sub>1 (\<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)) inverse) \<ggreater>\<^sub>2 \<^bold>W" 
 
 lemma "coequalizer f g = \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<sqinter>) (f\<inverse>) (g\<inverse>)" unfolding coequalizer_def comb_defs ..
 lemma "coequalizer f g = (\<lambda>x. (f\<inverse>) x \<sqinter> (g\<inverse>) x)" unfolding coequalizer_def comb_defs ..

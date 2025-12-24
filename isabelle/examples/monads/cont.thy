@@ -8,22 +8,22 @@ section \<open>Continuation Monad\<close>
 subsection \<open>Functor\<close>
 
 abbreviation(input) fmap0 :: "'a \<Rightarrow> ('r\<^sub>1 \<Rightarrow> 'r\<^sub>2) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a)"
-  where "fmap0 \<equiv> \<^bold>L (\<^bold>B\<^sub>0 \<ggreater>\<^sub>2 \<^bold>T)"
+  where "fmap0 \<equiv> \<^bold>L\<^sub>3 (\<^bold>B\<^sub>0 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap1::"('a \<Rightarrow> 'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('a) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b)"
-  where "fmap1 \<equiv> \<^bold>L (\<^bold>B\<^sub>1 \<ggreater>\<^sub>2 \<^bold>T)"
+  where "fmap1 \<equiv> \<^bold>L\<^sub>3 (\<^bold>B\<^sub>1 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap2::"('a \<Rightarrow> 'b \<Rightarrow> 'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>2('a,'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('c)"
-  where "fmap2 \<equiv> \<^bold>L (\<^bold>B\<^sub>2 \<ggreater>\<^sub>2 \<^bold>T)"
+  where "fmap2 \<equiv> \<^bold>L\<^sub>3 (\<^bold>B\<^sub>2 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>3('a,'b,'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('d)"
-  where "fmap3 \<equiv> \<^bold>L (\<^bold>B\<^sub>3 \<ggreater>\<^sub>2 \<^bold>T)"
+  where "fmap3 \<equiv> \<^bold>L\<^sub>3 (\<^bold>B\<^sub>3 \<ggreater>\<^sub>2 \<^bold>T)"
 abbreviation(input) fmap4::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'd \<Rightarrow> 'e) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont\<^sub>4('a,'b,'c,'d) \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('e)"
-  where "fmap4 \<equiv> \<^bold>L (\<^bold>B\<^sub>4 \<ggreater>\<^sub>2 \<^bold>T)"
+  where "fmap4 \<equiv> \<^bold>L\<^sub>3 (\<^bold>B\<^sub>4 \<ggreater>\<^sub>2 \<^bold>T)"
 \<comment> \<open>and so on...\<close>
 
-lemma "fmap0 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>0 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
-lemma "fmap1 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>1 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
-lemma "fmap2 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>2 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
-lemma "fmap3 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>3 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
-lemma "fmap4 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>4 \<ggreater> \<^bold>L) \<^bold>T" unfolding comb_defs ..
+lemma "fmap0 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>0 \<ggreater> \<^bold>L\<^sub>3) \<^bold>T" unfolding comb_defs ..
+lemma "fmap1 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>1 \<ggreater> \<^bold>L\<^sub>3) \<^bold>T" unfolding comb_defs ..
+lemma "fmap2 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>2 \<ggreater> \<^bold>L\<^sub>3) \<^bold>T" unfolding comb_defs ..
+lemma "fmap3 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>3 \<ggreater> \<^bold>L\<^sub>3) \<^bold>T" unfolding comb_defs ..
+lemma "fmap4 = ((\<ggreater>\<^sub>2) \<^bold>B\<^sub>4 \<ggreater> \<^bold>L\<^sub>3) \<^bold>T" unfolding comb_defs ..
 \<comment> \<open>and so on...\<close>
 
 lemma "fmap0 = (\<lambda>f k g. k (f |> g))" unfolding comb_defs ..
@@ -90,9 +90,9 @@ subsection \<open>Monad\<close>
 abbreviation bindr1::"('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b)) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont('a) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('b)"
   where "bindr1 \<equiv> \<^bold>D\<^bold>C\<^bold>B \<^bold>C"
 abbreviation bindr2::"('a \<Rightarrow> 'b \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('c)) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont\<^sub>2('a,'b) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('c)"
-  where "bindr2 \<equiv> \<^bold>D\<^bold>C\<^bold>B \<^bold>C\<^sub>2\<^sub>3\<^sub>1"
+  where "bindr2 \<equiv> \<^bold>D\<^bold>C\<^bold>B \<^bold>R\<^sub>3"
 abbreviation bindr3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('d)) \<Rightarrow> 'r\<^sub>2,'r\<^sub>3-Cont\<^sub>3('a,'b,'c) \<Rightarrow> 'r\<^sub>1,'r\<^sub>3-Cont('d)"
-  where "bindr3 \<equiv> \<^bold>D\<^bold>C\<^bold>B \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1"
+  where "bindr3 \<equiv> \<^bold>D\<^bold>C\<^bold>B \<^bold>R\<^sub>4"
 \<comment> \<open>...and so on\<close>
 
 text \<open>In fact, the term corresponding to bindr1 could have been given a more general type:\<close>
@@ -104,8 +104,8 @@ abbreviation(input) bind::"'r\<^sub>2,'r\<^sub>3-Cont('a) \<Rightarrow> ('a \<Ri
   where "a \<bind> f \<equiv> bindr f a"
 
 lemma "bindr = (\<lambda>f k. \<^bold>C f \<ggreater> k)" unfolding comb_defs ..
-lemma "bindr = \<^bold>L (\<^bold>L\<^bold>V \<ggreater>\<^sub>2 \<^bold>T)" unfolding comb_defs ..
-lemma "bindr2 = (\<lambda>f k. \<^bold>R f \<ggreater> k)" unfolding comb_defs ..
+lemma "bindr = \<^bold>L\<^sub>3 (\<^bold>L\<^sub>3\<^bold>V \<ggreater>\<^sub>2 \<^bold>T)" unfolding comb_defs ..
+lemma "bindr2 = (\<lambda>f k. \<^bold>R\<^sub>3 f \<ggreater> k)" unfolding comb_defs ..
 
 text \<open>Note that\<close>
 lemma "\<^bold>D\<^bold>C\<^bold>B = \<^bold>B (\<ggreater>)" unfolding comb_defs ..
@@ -172,11 +172,11 @@ term "(a :: 'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b)) :: (('a \<Rightarro
 
 text \<open>Takes a plain function and disguises it as a monadic arrow.\<close>
 abbreviation(input) asArrowM::"('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'r-ECont('b))"
-  where "asArrowM \<equiv> \<^bold>L \<^bold>B"
+  where "asArrowM \<equiv> \<^bold>L\<^sub>3 \<^bold>B"
 
 text \<open>Takes an applicative arrow and transforms it into a monadic arrow.\<close>
 abbreviation(input) intoArrowM::"'r\<^sub>1,'r\<^sub>2-Cont('a \<Rightarrow> 'b) \<Rightarrow> ('a \<Rightarrow> 'r\<^sub>1,'r\<^sub>2-Cont('b))"
-  where "intoArrowM \<equiv> (\<ggreater>\<^sub>2) (\<^bold>R \<^bold>B)"
+  where "intoArrowM \<equiv> (\<ggreater>\<^sub>2) (\<^bold>R\<^sub>3 \<^bold>B)"
 
 (***TODO***)
 text \<open>Takes a monadic arrow and transforms it into an applicative arrow (wrt. a given transformation function).\<close>

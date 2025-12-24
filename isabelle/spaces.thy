@@ -31,7 +31,7 @@ lemma singleton_def3: "\<exists>!A = (\<exists>a. A = {a})" unfolding singleton_
 
 text \<open>Further convenient instances of spaces.\<close>
 definition upair::"Space('a)" ("\<exists>\<^sub>\<le>\<^sub>2") \<comment> \<open>\<open>\<exists>\<^sub>\<le>\<^sub>2\<close> contains the unordered pairs (sets with one or two elements)\<close>
-  where \<open>\<exists>\<^sub>\<le>\<^sub>2 \<equiv> (\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<inter>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<union>) \<Q>) (\<subseteq>))) \<ggreater> \<exists>\<^sup>2\<close>
+  where \<open>\<exists>\<^sub>\<le>\<^sub>2 \<equiv> (\<^bold>\<Phi>\<^sub>2\<^sub>1 (\<inter>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R\<^sub>3 \<^bold>E (\<^bold>\<Psi>\<^sub>2\<^sub>1 (\<union>) \<Q>) (\<subseteq>))) \<ggreater> \<exists>\<^sup>2\<close>
 definition doubleton::"Space('a)" ("\<exists>!\<^sub>2") \<comment> \<open>\<open>\<exists>!\<^sub>2\<close> contains the doubletons (sets with two (different) elements)\<close>
   where \<open>\<exists>!\<^sub>2 \<equiv> \<exists>\<^sub>\<le>\<^sub>2 \<setminus> \<exists>!\<close>
 
@@ -227,18 +227,18 @@ subsubsection \<open>Lub- and Glb-related Definitions\<close>
 
 text \<open>These definitions generalize the "complete join/meet-semilattice" property (existence of suprema resp. infima).\<close>
 definition lubComplete::"ERel('a) \<Rightarrow> Space('a)" ("_-lubComplete")
-  where "R-lubComplete \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) \<wp> ((\<^bold>R \<^bold>D (R-lub)) (\<sqinter>))" 
+  where "R-lubComplete \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) \<wp> ((\<^bold>R\<^sub>3 \<^bold>D (R-lub)) (\<sqinter>))" 
 definition glbComplete::"ERel('a) \<Rightarrow> Space('a)" ("_-glbComplete")
-  where "R-glbComplete \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) \<wp> ((\<^bold>R \<^bold>D (R-glb)) (\<sqinter>))" \<comment> \<open>all of S-subsets have a glb (wrt R) in S\<close>
+  where "R-glbComplete \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>) \<wp> ((\<^bold>R\<^sub>3 \<^bold>D (R-glb)) (\<sqinter>))" \<comment> \<open>all of S-subsets have a glb (wrt R) in S\<close>
 
 declare lubComplete_def[space_defs] glbComplete_def[space_defs]
 
 text \<open>All of S-subsets have a lub (wrt R) in S.\<close>
-lemma "R-lubComplete = (\<lambda>S. \<wp> S \<subseteq> ((\<^bold>R \<^bold>D (R-lub)) (\<sqinter>) S))" unfolding space_defs comb_defs ..
+lemma "R-lubComplete = (\<lambda>S. \<wp> S \<subseteq> ((\<^bold>R\<^sub>3 \<^bold>D (R-lub)) (\<sqinter>) S))" unfolding space_defs comb_defs ..
 lemma lubComplete_def2: "R-lubComplete = (\<lambda>S. \<forall>D. D \<subseteq> S \<longrightarrow> (R-lub D \<sqinter> S))" unfolding space_defs rel_defs func_defs comb_defs by blast
 
 text \<open>All of S-subsets have a glb (wrt R) in S.\<close>
-lemma "R-glbComplete = (\<lambda>S. \<wp> S \<subseteq> ((\<^bold>R \<^bold>D (R-glb)) (\<sqinter>) S))" unfolding space_defs comb_defs ..
+lemma "R-glbComplete = (\<lambda>S. \<wp> S \<subseteq> ((\<^bold>R\<^sub>3 \<^bold>D (R-glb)) (\<sqinter>) S))" unfolding space_defs comb_defs ..
 lemma glbComplete_def2: "R-glbComplete = (\<lambda>S. \<forall>D. D \<subseteq> S \<longrightarrow> (R-glb D \<sqinter> S))" unfolding space_defs rel_defs func_defs comb_defs by blast
 
 lemma lubComplete_defT: "R-lubComplete = R\<^sup>\<smile>-glbComplete" unfolding space_defs endorel_defs rel_defs comb_defs ..
@@ -370,17 +370,17 @@ subsubsection \<open>Upwards- and Downwards-Directedness\<close>
 text \<open>The property of a set being "up/downwards directed" wrt. an endorelation:
   Every pair of S-elements has upper/lower-bounds (wrt R) in S.\<close>
 definition upwardsDirected::"ERel('a) \<Rightarrow> Space('a)" ("_-upwardsDirected")
-  where "R-upwardsDirected  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<inter>) R) (\<sqinter>))"
+  where "R-upwardsDirected  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R\<^sub>3 \<^bold>E (\<^bold>\<Psi>\<^sub>2\<^sub>1 (\<inter>) R) (\<sqinter>))"
 definition downwardsDirected::"ERel('a) \<Rightarrow> Space('a)" ("_-downwardsDirected")
-  where "R-downwardsDirected \<equiv>  \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (\<^bold>\<Psi>\<^sub>2 (\<inter>) (\<^bold>C R)) (\<sqinter>))"
+  where "R-downwardsDirected \<equiv>  \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R\<^sub>3 \<^bold>E (\<^bold>\<Psi>\<^sub>2\<^sub>1 (\<inter>) (\<^bold>C R)) (\<sqinter>))"
 
 declare upwardsDirected_def[space_defs] downwardsDirected_def[space_defs]
 
-lemma "R-upwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2 (\<inter>) R a b)))" unfolding space_defs comb_defs ..
+lemma "R-upwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2\<^sub>1 (\<inter>) R a b)))" unfolding space_defs comb_defs ..
 lemma "R-upwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (R a \<inter> R b) ))" unfolding space_defs comb_defs ..
 lemma "R-upwardsDirected = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> (\<exists>c. S c \<and> R a c \<and> R b c))" unfolding space_defs rel_defs func_defs comb_defs ..
 
-lemma "R-downwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2 (\<inter>) (\<^bold>C R) a b)))" unfolding space_defs comb_defs ..
+lemma "R-downwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (\<^bold>\<Psi>\<^sub>2\<^sub>1 (\<inter>) (\<^bold>C R) a b)))" unfolding space_defs comb_defs ..
 lemma "R-downwardsDirected = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. S \<sqinter> (R\<^sup>\<smile> a \<inter> R\<^sup>\<smile> b)))" unfolding space_defs rel_defs func_defs comb_defs ..
 lemma "R-downwardsDirected = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> (\<exists>c. S c \<and> R c a \<and> R c b))" unfolding space_defs rel_defs func_defs comb_defs ..
 
@@ -426,17 +426,17 @@ lemma meet_prop2:  "R-upperBound (R-meet a b) b" unfolding endorel_defs rel_defs
 
 text \<open>The following are weaker versions of lub/glb-closure customarily used in the literature.\<close>
 definition joinClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-joinClosed")
-  where "R-joinClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (R-join) \<wp>)"
+  where "R-joinClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R\<^sub>3 \<^bold>E (R-join) \<wp>)"
 definition meetClosed::"ERel('a) \<Rightarrow> Space('a)" ("_-meetClosed")
-  where "R-meetClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R \<^bold>E (R-meet) \<wp>)"
+  where "R-meetClosed \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>W (\<times>)) (\<^bold>R\<^sub>3 \<^bold>E (R-meet) \<wp>)"
 
 declare joinClosed_def[space_defs] meetClosed_def[space_defs]
 
-lemma "R-joinClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<^bold>R \<^bold>E (R-join) \<wp> S))" unfolding space_defs comb_defs ..
+lemma "R-joinClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<^bold>R\<^sub>3 \<^bold>E (R-join) \<wp> S))" unfolding space_defs comb_defs ..
 lemma "R-joinClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. R-join a b \<subseteq> S))" unfolding space_defs comb_defs ..
 lemma "R-joinClosed = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> R-join a b \<subseteq> S)" unfolding space_defs rel_defs func_defs comb_defs ..
 
-lemma "R-meetClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<^bold>R \<^bold>E (R-meet) \<wp> S))" unfolding space_defs comb_defs ..
+lemma "R-meetClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<^bold>R\<^sub>3 \<^bold>E (R-meet) \<wp> S))" unfolding space_defs comb_defs ..
 lemma "R-meetClosed = (\<lambda>S. (S \<times> S) \<subseteq>\<^sup>2 (\<lambda>a b. R-meet a b \<subseteq> S))" unfolding space_defs comb_defs ..
 lemma "R-meetClosed = (\<lambda>S. \<forall>a b. S a \<and> S b \<longrightarrow> R-meet a b \<subseteq> S)" unfolding space_defs rel_defs func_defs comb_defs ..
 
@@ -476,17 +476,17 @@ lemma upwardsDirected_def4: "limitComplete R \<Longrightarrow> R-downwardsClosed
 subsubsection \<open>Ideals and Filters\<close>
 
 definition pseudoFilter::"ERel('a) \<Rightarrow> Space('a)" ("_-pseudoFilter")
-  where "R-pseudoFilter \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>R \<^bold>E R-meet \<wp>) (\<^bold>W (\<times>))"
+  where "R-pseudoFilter \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>R\<^sub>3 \<^bold>E R-meet \<wp>) (\<^bold>W (\<times>))"
 definition pseudoIdeal::"ERel('a) \<Rightarrow> Space('a)" ("_-pseudoIdeal")
-  where "R-pseudoIdeal  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>R \<^bold>E R-join \<wp>) (\<^bold>W (\<times>))"
+  where "R-pseudoIdeal  \<equiv> \<^bold>\<Phi>\<^sub>2\<^sub>1 (\<subseteq>\<^sup>2) (\<^bold>R\<^sub>3 \<^bold>E R-join \<wp>) (\<^bold>W (\<times>))"
 
 declare pseudoFilter_def[space_defs] pseudoIdeal_def[space_defs]
 
 
-lemma "R-pseudoFilter = (\<lambda>S. (\<^bold>R \<^bold>E R-meet \<wp> S) \<subseteq>\<^sup>2 (S \<times> S))" unfolding space_defs comb_defs ..
+lemma "R-pseudoFilter = (\<lambda>S. (\<^bold>R\<^sub>3 \<^bold>E R-meet \<wp> S) \<subseteq>\<^sup>2 (S \<times> S))" unfolding space_defs comb_defs ..
 lemma "R-pseudoFilter = (\<lambda>S. \<forall>a b. R-meet a b \<subseteq> S \<longrightarrow> (S a \<and> S b))" unfolding space_defs rel_defs func_defs comb_defs ..
 
-lemma "R-pseudoIdeal = (\<lambda>S. (\<^bold>R \<^bold>E R-join \<wp> S) \<subseteq>\<^sup>2 (S \<times> S))" unfolding space_defs comb_defs ..
+lemma "R-pseudoIdeal = (\<lambda>S. (\<^bold>R\<^sub>3 \<^bold>E R-join \<wp> S) \<subseteq>\<^sup>2 (S \<times> S))" unfolding space_defs comb_defs ..
 lemma "R-pseudoIdeal = (\<lambda>S. \<forall>a b. R-join a b \<subseteq> S \<longrightarrow> (S a \<and> S b))" unfolding space_defs rel_defs func_defs comb_defs ..
 
 lemma pseudoFilter_defT: "R-pseudoFilter = R\<^sup>\<smile>-pseudoIdeal" unfolding space_defs endorel_defs rel_defs comb_defs ..

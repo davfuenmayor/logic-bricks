@@ -76,9 +76,9 @@ subsection \<open>Monad\<close>
 abbreviation(input) bindr1::"('a \<Rightarrow> Rel('c,'b)) \<Rightarrow> Rel('c,'a) \<Rightarrow> Rel('c,'b)"
   where "bindr1 \<equiv> \<^bold>C \<ggreater> env.fmap2 set.bindr1" \<comment> \<open>bind-reversed\<close>
 abbreviation(input) bindr2::"('a \<Rightarrow> 'b \<Rightarrow> Rel('d,'c)) \<Rightarrow> Rel('d,'a) \<Rightarrow> Rel('d,'b) \<Rightarrow> Rel('d,'c)"
-  where "bindr2 \<equiv> \<^bold>R \<ggreater> env.fmap3 set.bindr2"
+  where "bindr2 \<equiv> \<^bold>R\<^sub>3 \<ggreater> env.fmap3 set.bindr2"
 abbreviation(input) bindr3::"('a \<Rightarrow> 'b \<Rightarrow> 'c \<Rightarrow> Rel('e,'d)) \<Rightarrow> Rel('e,'a) \<Rightarrow> Rel('e,'b) \<Rightarrow> Rel('e,'c) \<Rightarrow> Rel('e,'d)"
-  where "bindr3 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>4\<^sub>1 \<ggreater> env.fmap4 set.bindr3" 
+  where "bindr3 \<equiv> \<^bold>R\<^sub>4 \<ggreater> env.fmap4 set.bindr3" 
 \<comment> \<open>...and so on\<close>
 
 text \<open>Monad's usual "bind" corresponds to the (reversed) unary case, and gets its customary notation.\<close>

@@ -10,7 +10,7 @@ subsection \<open>Definitions\<close>
 
 text \<open>Term constructor: making an endopair out of two given objects.\<close>
 definition mkEndopair::"'a \<Rightarrow> 'a \<Rightarrow> EPair('a)" ("<_,_>") 
-  where "mkEndopair \<equiv> \<^bold>L If"
+  where "mkEndopair \<equiv> \<^bold>L\<^sub>3 If"
 
 declare mkEndopair_def[endopair_defs]
 
@@ -65,7 +65,7 @@ declare proj1_simp[endopair_simps] proj2_simp[endopair_simps] mkEndopair_simp[en
 
 text \<open>Let's now add a useful "swap" (endo)operation on endopairs.\<close>
 definition swap::"EOp(EPair('a))" 
-  where "swap \<equiv> \<^bold>C \<^bold>B (\<not>)"
+  where "swap \<equiv> (\<ggreater>) (\<not>)"
 
 declare swap_def[endopair_defs]
 
@@ -85,9 +85,9 @@ subsection \<open>Currying\<close>
 
 text \<open>The morphisms that convert between unary operations on endopairs and (curried) binary operations.\<close>
 definition curry::"Op(EPair('a),'b) \<Rightarrow> Op\<^sub>2('a,'b)" ("\<lfloor>_\<rfloor>")
-  where "curry \<equiv> \<^bold>C \<^bold>B\<^sub>2 mkEndopair"
+  where "curry \<equiv> (\<ggreater>\<^sub>2) mkEndopair"
 definition uncurry::"Op\<^sub>2('a,'b) \<Rightarrow> Op(EPair('a),'b)" ("\<lceil>_\<rceil>")
-  where "uncurry \<equiv> \<^bold>L \<^bold>\<Phi>\<^sub>2\<^sub>1 \<pi>\<^sub>1 \<pi>\<^sub>2"
+  where "uncurry \<equiv> \<^bold>L\<^sub>3 \<^bold>\<Phi>\<^sub>2\<^sub>1 \<pi>\<^sub>1 \<pi>\<^sub>2"
 
 declare curry_def[endopair_defs] uncurry_def[endopair_defs]
 
@@ -96,6 +96,9 @@ lemma "curry f = \<^bold>B\<^sub>2 f mkEndopair" unfolding endopair_defs comb_de
 lemma "curry f = (\<lambda>x y. f <x,y>)" unfolding endopair_defs comb_defs ..
 lemma "uncurry f = \<^bold>\<Phi>\<^sub>2\<^sub>1 f \<pi>\<^sub>1 \<pi>\<^sub>2" unfolding endopair_defs comb_defs ..
 lemma "uncurry f = (\<lambda>P. f (\<pi>\<^sub>1 P) (\<pi>\<^sub>2 P))" unfolding endopair_defs comb_defs ..
+
+text \<open>Note, in particular\<close>
+lemma "mkEndopair = curry \<^bold>I" unfolding endopair_defs comb_defs ..
 
 text \<open>Both morphisms constitute an isomorphism (we add them as simplification rules too)\<close>
 lemma curry_simp1: "\<lfloor>\<lceil>f\<rceil>\<rfloor> = f" 

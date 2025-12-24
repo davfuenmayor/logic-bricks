@@ -228,11 +228,11 @@ abbreviation(input) image132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rig
 abbreviation(input) image213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<diamond>\<^sub>2\<^sub>1\<^sub>3")
   where "\<diamond>\<^sub>2\<^sub>1\<^sub>3 \<equiv> \<^bold>C\<^sub>2\<^sub>1\<^sub>3 \<ggreater> rightImage\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>1\<^sub>3\<close> is its own inverse\<close>
 abbreviation(input) image231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<diamond>\<^sub>2\<^sub>3\<^sub>1")
-  where "\<diamond>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightImage\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close>\<close>
+  where "\<diamond>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightImage\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close>\<close>
 abbreviation(input) image312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<diamond>\<^sub>3\<^sub>1\<^sub>2")
-  where "\<diamond>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightImage\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close>\<close>
+  where "\<diamond>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightImage\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close>\<close>
 abbreviation(input) image321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<diamond>\<^sub>3\<^sub>2\<^sub>1")
-  where "\<diamond>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightImage\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1\<close> is its own inverse\<close>
+  where "\<diamond>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightImage\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1/\<^bold>C\<^sub>3\<close> is its own inverse\<close>
 
 notation(input) image123 ("_-\<diamond>\<^sub>1\<^sub>2\<^sub>3") and image132 ("_-\<diamond>\<^sub>1\<^sub>3\<^sub>2") and
                 image213 ("_-\<diamond>\<^sub>2\<^sub>1\<^sub>3") and image231 ("_-\<diamond>\<^sub>2\<^sub>3\<^sub>1") and 
@@ -278,11 +278,11 @@ abbreviation(input) bound132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \<Rig
 abbreviation(input) bound213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<odot>\<^sub>2\<^sub>1\<^sub>3")
   where "\<odot>\<^sub>2\<^sub>1\<^sub>3 \<equiv> \<^bold>C\<^sub>2\<^sub>1\<^sub>3 \<ggreater> rightBound\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>1\<^sub>3\<close> is its own inverse\<close>
 abbreviation(input) bound231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<odot>\<^sub>2\<^sub>3\<^sub>1")
-  where "\<odot>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightBound\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close>\<close>
+  where "\<odot>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightBound\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close>\<close>
 abbreviation(input) bound312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<odot>\<^sub>3\<^sub>1\<^sub>2")
-  where "\<odot>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightBound\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close> is the inverse of \<open>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close>\<close>
+  where "\<odot>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightBound\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close> is the inverse of \<open>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close>\<close>
 abbreviation(input) bound321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<odot>\<^sub>3\<^sub>2\<^sub>1")
-  where "\<odot>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightBound\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1\<close> is its own inverse\<close>
+  where "\<odot>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightBound\<^sub>2"       \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1/\<^bold>C\<^sub>3\<close> is its own inverse\<close>
 
 notation(input) bound123 ("_-\<odot>\<^sub>1\<^sub>2\<^sub>3") and bound132 ("_-\<odot>\<^sub>1\<^sub>3\<^sub>2") and
                 bound213 ("_-\<odot>\<^sub>2\<^sub>1\<^sub>3") and bound231 ("_-\<odot>\<^sub>2\<^sub>3\<^sub>1") and 
@@ -329,11 +329,11 @@ abbreviation(input) dualImage132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \
 abbreviation(input) dualImage213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<box>\<^sub>2\<^sub>1\<^sub>3")
   where "\<box>\<^sub>2\<^sub>1\<^sub>3 \<equiv> \<^bold>C\<^sub>2\<^sub>1\<^sub>3 \<ggreater> rightDualImage\<^sub>2"     \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>1\<^sub>3\<close> is its own inverse\<close>
 abbreviation(input) dualImage231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<box>\<^sub>2\<^sub>3\<^sub>1")
-  where "\<box>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightDualImage\<^sub>2"     \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close>\<close>
+  where "\<box>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightDualImage\<^sub>2"     \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close>\<close>
 abbreviation(input) dualImage312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<box>\<^sub>3\<^sub>1\<^sub>2")
-  where "\<box>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightDualImage\<^sub>2"     \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close>\<close>
+  where "\<box>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightDualImage\<^sub>2"     \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close>\<close>
 abbreviation(input) dualImage321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<box>\<^sub>3\<^sub>2\<^sub>1")
-  where "\<box>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightDualImage\<^sub>2"     \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1\<close> is its own inverse\<close>
+  where "\<box>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightDualImage\<^sub>2"     \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1/\<^bold>C\<^sub>3\<close> is its own inverse\<close>
 
 notation(input) dualImage123 ("_-\<box>\<^sub>1\<^sub>2\<^sub>3") and dualImage132 ("_-\<box>\<^sub>1\<^sub>3\<^sub>2") and 
                 dualImage213 ("_-\<box>\<^sub>2\<^sub>1\<^sub>3") and dualImage231 ("_-\<box>\<^sub>2\<^sub>3\<^sub>1") and
@@ -376,11 +376,11 @@ abbreviation(input) dualBound132::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('a) \
 abbreviation(input) dualBound213::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('a) \<Rightarrow> Set('c)" ("\<ominus>\<^sub>2\<^sub>1\<^sub>3")
   where "\<ominus>\<^sub>2\<^sub>1\<^sub>3 \<equiv> \<^bold>C\<^sub>2\<^sub>1\<^sub>3 \<ggreater> rightDualBound\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>1\<^sub>3\<close> is its own inverse\<close>
 abbreviation(input) dualBound231::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('b) \<Rightarrow> Set('c) \<Rightarrow> Set('a)" ("\<ominus>\<^sub>2\<^sub>3\<^sub>1")
-  where "\<ominus>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightDualBound\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close>\<close>
+  where "\<ominus>\<^sub>2\<^sub>3\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>1\<^sub>2 \<ggreater> rightDualBound\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close> is the inverse of \<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close>\<close>
 abbreviation(input) dualBound312::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('a) \<Rightarrow> Set('b)" ("\<ominus>\<^sub>3\<^sub>1\<^sub>2")
-  where "\<ominus>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightDualBound\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<close>\<close>
+  where "\<ominus>\<^sub>3\<^sub>1\<^sub>2 \<equiv> \<^bold>C\<^sub>2\<^sub>3\<^sub>1 \<ggreater> rightDualBound\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>2\<^sub>3\<^sub>1/\<^bold>R\<^sub>3\<close> is the inverse of \<open>\<^bold>C\<^sub>3\<^sub>1\<^sub>2/\<^bold>L\<^sub>3\<close>\<close>
 abbreviation(input) dualBound321::"Rel\<^sub>3('a,'b,'c) \<Rightarrow> Set('c) \<Rightarrow> Set('b) \<Rightarrow> Set('a)" ("\<ominus>\<^sub>3\<^sub>2\<^sub>1")
-  where "\<ominus>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightDualBound\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1\<close> is its own inverse\<close>
+  where "\<ominus>\<^sub>3\<^sub>2\<^sub>1 \<equiv> \<^bold>C\<^sub>3\<^sub>2\<^sub>1 \<ggreater> rightDualBound\<^sub>2" \<comment> \<open>\<open>\<^bold>C\<^sub>3\<^sub>2\<^sub>1/\<^bold>C\<^sub>3\<close> is its own inverse\<close>
 
 notation(input) dualBound123 ("_-\<ominus>\<^sub>1\<^sub>2\<^sub>3") and dualBound132 ("_-\<ominus>\<^sub>1\<^sub>3\<^sub>2") and
                 dualBound213 ("_-\<ominus>\<^sub>2\<^sub>1\<^sub>3") and dualBound231 ("_-\<ominus>\<^sub>2\<^sub>3\<^sub>1") and 
