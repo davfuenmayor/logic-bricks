@@ -30,15 +30,15 @@ type_synonym ('v,'a)Val = "'a \<Rightarrow> 'v" ("_-Val'(_')" [1000])
 
 subsubsection \<open>Pairs and Sets\<close>
 
-text \<open>Starting with the boolean type, we immediately obtain endopairs resp. sets via indexation resp. valuation.\<close>
-type_synonym ('a)EPair = "o-Env('a)" ("EPair'(_')")  \<comment> \<open>an endopair is encoded as a boolean-index\<close>
+text \<open>Starting with the boolean type, we immediately obtain (endo) pairs resp. sets via indexation resp. valuation.\<close>
+type_synonym ('a)Pair = "o-Env('a)" ("Pair'(_')")  \<comment> \<open>a pair is encoded as a boolean-index\<close>
 type_synonym ('a)Set = "o-Val('a)" ("Set'(_')")  \<comment> \<open>a set is encoded as a boolean-valuation (boolean classifier)\<close>
 
-term "((P :: EPair('a)):: 'a-Val(o)) :: o \<Rightarrow> 'a"
+term "((P :: Pair('a)):: 'a-Val(o)) :: o \<Rightarrow> 'a"
 term "((S :: Set('a)):: 'a-Env(o)) :: 'a \<Rightarrow> o"
 
-text \<open>Sets of endopairs correspond to (directed) graphs (which are isomorphic to relations via currying).\<close>
-type_synonym ('a)Graph = "Set(EPair('a))" ("Graph'(_')")
+text \<open>Sets of pairs correspond to (directed) graphs (which are isomorphic to relations via currying).\<close>
+type_synonym ('a)Graph = "Set(Pair('a))" ("Graph'(_')")
 term "(G :: Graph('a)) :: (o \<Rightarrow> 'a) \<Rightarrow> o"
 
 text \<open>Spaces (sets of sets) are the playground of mathematicians, so they deserve a special type notation.\<close>
@@ -109,25 +109,25 @@ type_synonym ('a)SetEOp2 = "SetOp\<^sub>2('a,'a)" ("SetEOp\<^sub>2'(_')") \<comm
 subsubsection \<open>Products of Boolean Types\<close>
 
 text \<open>Now consider the following sets of equivalent type notations.\<close>
-term "((S :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o"
+term "((S :: Set(o)) :: Pair(o)) :: o \<Rightarrow> o"
 term "((R :: ERel(o)) :: EOp\<^sub>2(o)) :: o \<Rightarrow> (o \<Rightarrow> o)"
 term "(((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: (o \<Rightarrow> o) \<Rightarrow> o"
 
 text \<open>We can make good sense of them by considering a new type having four inhabitants.\<close>
 type_synonym four = "o \<Rightarrow> o" ("oo")
 
-term "(((P :: Set(o)) :: EPair(o)) :: o \<Rightarrow> o) :: oo"
+term "(((P :: Set(o)) :: Pair(o)) :: o \<Rightarrow> o) :: oo"
 
-text \<open>Using the new type we can seamlessly define types for (endo)quadruples and 4-valued "sets".\<close>
-type_synonym ('a)EQuad = "oo \<Rightarrow> 'a" ("EQuad'(_')")
+text \<open>Using the new type we can seamlessly define types for (endo) quadruples and 4-valued "sets".\<close>
+type_synonym ('a)Quad = "oo \<Rightarrow> 'a" ("Quad'(_')")
 type_synonym ('a)Set4 = "'a \<Rightarrow> oo" ("Set4'(_')")
 
 text \<open>In the same spirit, we have two types with 16 elements (being "isomorphic" in a sense):\<close>
 type_synonym sixteen  = "o \<Rightarrow> oo" ("ooo")   \<comment> \<open>\<open>16  = 4^2 = (2^2)^2\<close>\<close>
 type_synonym sixteen' = "oo \<Rightarrow> o" ("ooo''") \<comment> \<open>\<open>16' = 2^4 = 2^(2^2)\<close>\<close>
 
-term "(((((R :: ERel(o)) :: EOp\<^sub>2(o)) :: EPair(oo)) :: Set4(o)) :: o \<Rightarrow> o \<Rightarrow> o) :: ooo"
-term "((((((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: EQuad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
+term "(((((R :: ERel(o)) :: EOp\<^sub>2(o)) :: Pair(oo)) :: Set4(o)) :: o \<Rightarrow> o \<Rightarrow> o) :: ooo"
+term "((((((S :: Space(o)) :: Graph(o)) :: EOp\<^sub>G(o)) :: Set(oo)) :: Quad(o)) :: (o \<Rightarrow> o) \<Rightarrow> o) :: ooo'"
 
 text \<open>Analogously, we can seamlessly define types for 16-sized arrays and 16-valued "sets.\<close>
 term "array16  :: ooo \<Rightarrow> 'a"
@@ -140,9 +140,9 @@ type_synonym n256  = "o \<Rightarrow> ooo" ("oooo")    \<comment> \<open>\<open>
 type_synonym n256' = "o \<Rightarrow> ooo'" ("oooo''") \<comment> \<open>\<open>256' = 16'^2 = (2^4)^2 = (2^(2^2))^2\<close>\<close>
 type_synonym n256s = "oo \<Rightarrow> oo" ("oooo\<^sup>s")   \<comment> \<open>\<open>256\<^sup>s = 4^4 = (2^2)^(2^2)\<close>\<close>
 
-term "((((R :: ERel\<^sub>3(o))) :: EPair(ooo)) :: o \<Rightarrow> o \<Rightarrow> o \<Rightarrow> o) :: oooo"
-term "(((R :: Rel(o,oo)) :: EPair(ooo')) :: o \<Rightarrow> (o\<Rightarrow>o) \<Rightarrow> o) :: oooo'"
-term "(((R :: Rel(oo,o)) :: EQuad(oo))   :: (o\<Rightarrow>o) \<Rightarrow> (o\<Rightarrow>o)) :: oooo\<^sup>s"
+term "((((R :: ERel\<^sub>3(o))) :: Pair(ooo)) :: o \<Rightarrow> o \<Rightarrow> o \<Rightarrow> o) :: oooo"
+term "(((R :: Rel(o,oo)) :: Pair(ooo')) :: o \<Rightarrow> (o\<Rightarrow>o) \<Rightarrow> o) :: oooo'"
+term "(((R :: Rel(oo,o)) :: Quad(oo))   :: (o\<Rightarrow>o) \<Rightarrow> (o\<Rightarrow>o)) :: oooo\<^sup>s"
 
 text \<open>We can continue producing ("isomorphic" families of) types in analogous ways.\<close>
 type_synonym n65536  = "o \<Rightarrow> oooo" \<comment> \<open>\<open>65536 = 256^2 = (((2^2)^2)^2)^2\<close>\<close>

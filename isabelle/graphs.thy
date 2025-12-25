@@ -3,8 +3,8 @@ section \<open>Graphs\<close>
 text \<open>Graphs are sets of endopairs and end up being isomorphic to endorelations (via currying).
  We replicate some of the theory of endorelations for illustration (exploiting currying).\<close>
 
-theory graphs (* A basic theory of graphs (as sets of endopairs and isomorphic to endorelations) *)
-imports endopairs endorelations
+theory graphs (* A basic theory of graphs (as sets of pairs and isomorphic to endorelations) *)
+imports pairs endorelations
 begin
 
 subsection \<open>Intervals and Powers\<close>
@@ -30,7 +30,7 @@ abbreviation irreflexive::"Set(Graph('a))"
   where \<open>irreflexive G \<equiv> endorelations.irreflexive \<lfloor>G\<rfloor>\<close>
 
 lemma "reflexive G = (\<forall>x. G <x,x>)"
-  by (simp add: B1_comb_def B2_comb_def C21_comb_def W21_comb_def endopairs.curry_def reflexive_def2)
+  by (simp add: B1_comb_def B2_comb_def C21_comb_def W21_comb_def curry_def reflexive_def2)
 
 text \<open>...and so on\<close>
 
@@ -43,9 +43,9 @@ abbreviation connected::"Set(Graph('a))"
   where \<open>connected G \<equiv> endorelations.connected \<lfloor>G\<rfloor>\<close>
 
 lemma "symmetric G = (\<forall>a b. G <a,b> \<rightarrow> G <b,a>)" 
-  unfolding endorel_defs rel_defs func_defs comb_defs unfolding endopair_defs comb_defs by metis
+  unfolding endorel_defs rel_defs func_defs comb_defs unfolding pair_defs comb_defs by metis
 lemma "connected G = (\<forall>a b. G <a,b> \<or> G <b,a>)" 
- unfolding endorel_defs rel_defs func_defs comb_defs unfolding endopair_defs comb_defs by metis
+ unfolding endorel_defs rel_defs func_defs comb_defs unfolding pair_defs comb_defs by metis
 
 text \<open>...and so on\<close>
 
@@ -60,11 +60,11 @@ abbreviation dense::"Set(Graph('a))"
   where \<open>dense G \<equiv> endorelations.dense \<lfloor>G\<rfloor>\<close>
 
 lemma \<open>transitive G = (\<forall>a b c. G <a,c> \<and> G <c,b> \<rightarrow> G <a,b>)\<close>
-  by (simp add: B2_comb_def C21_comb_def endopairs.curry_def transitive_def2)
+  by (simp add: B2_comb_def C21_comb_def curry_def transitive_def2)
 lemma \<open>antitransitive G = (\<forall>a b c. G <a,c> \<and> G <c,b> \<rightarrow> \<not>G <a,b>)\<close>
-  by (simp add: B2_comb_def C21_comb_def antitransitive_def2 endopairs.curry_def)
+  by (simp add: B2_comb_def C21_comb_def antitransitive_def2 curry_def)
 lemma \<open>dense G = (\<forall>a b. G <a,b> \<rightarrow> (\<exists>c. G <a,c> \<and> G <c,b>))\<close> 
-  unfolding endorel_defs rel_defs func_defs comb_defs unfolding endopair_defs comb_defs by auto
+  unfolding endorel_defs rel_defs func_defs comb_defs unfolding pair_defs comb_defs by auto
 
 text \<open>...and so on\<close>
 
@@ -77,9 +77,9 @@ abbreviation leftEuclidean::"Set(Graph('a))"
   where \<open>leftEuclidean G \<equiv> endorelations.leftEuclidean \<lfloor>G\<rfloor>\<close>
 
 lemma \<open>rightEuclidean G = (\<forall>a b c. G <a,b> \<and> G <a,c> \<rightarrow> G <b,c>)\<close>
-  unfolding endorel_defs rel_defs func_defs comb_defs unfolding endopair_defs comb_defs by auto
+  unfolding endorel_defs rel_defs func_defs comb_defs unfolding pair_defs comb_defs by auto
 lemma \<open>leftEuclidean G = (\<forall>a b c. G <a,b> \<and> G <c,b> \<rightarrow> G <a,c>)\<close>
-  unfolding endorel_defs rel_defs func_defs comb_defs unfolding endopair_defs comb_defs by auto
+  unfolding endorel_defs rel_defs func_defs comb_defs unfolding pair_defs comb_defs by auto
 
 text \<open>...and so on\<close>
 
