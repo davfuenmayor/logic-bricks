@@ -11,7 +11,7 @@ named_theorems rel_defs and rel_simps
 subsection \<open>Constructing Relations\<close>
 
 subsubsection \<open>Product and Sum\<close>
-text \<open>Relations can also be constructed out of pairs of sets, via (cartesian) product and (disjoint) sum.\<close>
+text \<open>Relations can also be constructed out of tuples of sets, via (cartesian) product and (disjoint) sum.\<close>
 
 definition product::"Set('a) \<Rightarrow> Set('b) \<Rightarrow> Rel('a,'b)" (infixl "\<times>" 90)
   where "(\<times>) \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<and>)"
@@ -24,15 +24,15 @@ lemma "A \<times> B = (\<lambda>x y. A x \<and> B y)" unfolding rel_defs comb_de
 lemma "A \<uplus> B = (\<lambda>x y. A x \<or> B y)" unfolding rel_defs comb_defs ..
 
 
-subsubsection \<open>Pairs and Copairs\<close>
-text \<open>A (co)atomic-like relation can be constructed out of two elements.\<close>
+subsubsection \<open>Tuples and Cotuples\<close>
+text \<open>A (co)atomic-like binary relation can be constructed out of two elements.\<close>
 
-definition pair::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<langle>_,_\<rangle>")
-  where \<open>pair \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<and>) \<Q> \<Q>\<close> \<comment> \<open>relational counterpart of 'singleton'\<close>
-definition copair::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<lblot>_,_\<rblot>")
-  where \<open>copair \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<or>) \<D> \<D>\<close> \<comment> \<open>relational counterpart of 'cosingleton'\<close>
+definition tuple::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<langle>_,_\<rangle>")
+  where \<open>tuple \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<and>) \<Q> \<Q>\<close> \<comment> \<open>relational counterpart of 'singleton' (for the binary case)\<close>
+definition cotuple::"'a \<Rightarrow> 'b \<Rightarrow> Rel('a,'b)" ("\<lblot>_,_\<rblot>")
+  where \<open>cotuple \<equiv> \<^bold>B\<^sub>2\<^sub>2 (\<or>) \<D> \<D>\<close> \<comment> \<open>relational counterpart of 'cosingleton' (for the binary case)\<close>
 
-declare pair_def[rel_defs] copair_def[rel_defs]
+declare tuple_def[rel_defs] cotuple_def[rel_defs]
 
 lemma "\<langle>a,b\<rangle> = (\<lambda>x y. a = x \<and> b = y)" unfolding rel_defs comb_defs ..
 lemma "\<lblot>a,b\<rblot> = (\<lambda>x y. a \<noteq> x \<or> b \<noteq> y)" unfolding rel_defs comb_defs ..
@@ -40,17 +40,17 @@ lemma "\<lblot>a,b\<rblot> = (\<lambda>x y. a \<noteq> x \<or> b \<noteq> y)" un
 text\<open>Recalling that\<close>
 lemma "\<^bold>B\<^sub>2\<^sub>2 = \<^bold>B\<^sub>1\<^sub>1 \<ggreater> \<^bold>B\<^sub>1\<^sub>1" unfolding comb_defs ..
 
-text \<open>We have that pair and copair can be defined in terms of \<open>(\<times>)\<close> and \<open>(\<uplus>)\<close> directly.\<close>
-lemma "pair   = \<^bold>B\<^sub>1\<^sub>1 (\<times>) \<Q> \<Q>" unfolding rel_defs comb_defs ..
-lemma "copair = \<^bold>B\<^sub>1\<^sub>1 (\<uplus>) \<D> \<D>" unfolding rel_defs comb_defs ..
+text \<open>We have that tuples and cotuples can be defined in terms of \<open>(\<times>)\<close> and \<open>(\<uplus>)\<close> directly.\<close>
+lemma "tuple   = \<^bold>B\<^sub>1\<^sub>1 (\<times>) \<Q> \<Q>" unfolding rel_defs comb_defs ..
+lemma "cotuple = \<^bold>B\<^sub>1\<^sub>1 (\<uplus>) \<D> \<D>" unfolding rel_defs comb_defs ..
 lemma "\<langle>a,b\<rangle> = {a} \<times> {b}" unfolding rel_defs comb_defs ..
 lemma "\<lblot>a,b\<rblot> = \<lbrace>a\<rbrace> \<uplus> \<lbrace>b\<rbrace>" unfolding rel_defs comb_defs ..
 
 
 text \<open>We conveniently extrapolate the definitions of unique/singleton from sets to relations.\<close>
-definition uniqueR::"Set(Rel('a,'b))" ("unique\<^sup>2") \<comment> \<open>R holds of at most one pair of elements (R may hold of none)\<close>
+definition uniqueR::"Set(Rel('a,'b))" ("unique\<^sup>2") \<comment> \<open>R holds of at most one tuple of elements (R may hold of none)\<close>
   where \<open>unique\<^sup>2 R \<equiv> \<forall>a b x y. (R a b \<and> R x y) \<rightarrow> (a = x \<and> b = y)\<close>
-definition singletonR::"Set(Rel('a,'b))" ("\<exists>!\<^sup>2") \<comment> \<open>R holds of exactly one pair of elements, i.e. R is a 'singleton relation'\<close>
+definition singletonR::"Set(Rel('a,'b))" ("\<exists>!\<^sup>2") \<comment> \<open>R holds of exactly one tuple of elements, i.e. R is a 'singleton relation'\<close>
   where \<open>\<exists>!\<^sup>2 R \<equiv> \<exists>x y. R x y \<and> (\<forall>a b. R a b \<rightarrow> (a = x \<and> b = y))\<close>
 
 declare uniqueR_def[rel_defs] singletonR_def[rel_defs]
@@ -58,8 +58,8 @@ declare uniqueR_def[rel_defs] singletonR_def[rel_defs]
 lemma uniqueR_def2: "unique\<^sup>2 = \<nexists>\<^sup>2 \<union> \<exists>!\<^sup>2" unfolding rel_defs func_defs comb_defs by blast
 lemma singletonR_def2: "\<exists>!\<^sup>2 = \<exists>\<^sup>2 \<inter> unique\<^sup>2" unfolding rel_defs func_defs comb_defs apply (rule ext) by blast
 
-(*Clearly, pairs correspond one-to-one to "singleton relations" *)
-lemma pair_singletonR: "\<exists>!\<^sup>2 \<langle>a,b\<rangle>" unfolding rel_defs comb_defs by simp
+(*Clearly, tupless correspond one-to-one to "singleton relations" *)
+lemma tuple_singletonR: "\<exists>!\<^sup>2 \<langle>a,b\<rangle>" unfolding rel_defs comb_defs by simp
 lemma singletonR_def3: "\<exists>!\<^sup>2 R = (\<exists>a b. R = \<langle>a,b\<rangle>)" unfolding rel_defs comb_defs by metis
 
 
@@ -124,8 +124,8 @@ lemma prodSum_simp1': "\<midarrow>\<^sup>2((\<midarrow>A) \<times> (\<midarrow>B
 lemma prodSum_simp2': "\<midarrow>\<^sup>2((\<midarrow>A) \<uplus> (\<midarrow>B)) = A \<times> B" 
   unfolding rel_defs func_defs comb_defs by simp
 
-text \<open>Pairs and copairs are related via relation-complement as expected.\<close>
-lemma copair_simp: "\<midarrow>\<^sup>2\<lblot>a,b\<rblot> = \<langle>a,b\<rangle>" 
+text \<open>Tuples and cotuples are related via relation-complement as expected.\<close>
+lemma cotuple_simp: "\<midarrow>\<^sup>2\<lblot>a,b\<rblot> = \<langle>a,b\<rangle>" 
   unfolding rel_defs func_defs comb_defs by simp
 
 declare prodSum_simp1 [rel_simps] prodSum_simp2 [rel_simps] 
@@ -183,7 +183,7 @@ lemma subrel_antisym: "R \<subseteq>\<^sup>2 T \<Longrightarrow> R \<supseteq>\<
 text \<open>Two relations are said to "overlap" (or "intersect") if their intersection is non-empty\<close>
 definition overlapR::"ERel(Rel('a,'b))" (infix "\<sqinter>\<^sup>2" 52)
   where "(\<sqinter>\<^sup>2) \<equiv> \<^bold>\<Phi>\<^sub>\<exists> (\<sqinter>)"
-text \<open>Dually, two relations form a "cover" if every pair belongs to one or the other.\<close>
+text \<open>Dually, two relations may form a "cover".\<close>
 definition coverR::"ERel(Rel('a,'b))" (infix "\<squnion>\<^sup>2" 53)
   where "(\<squnion>\<^sup>2) \<equiv> \<^bold>\<Phi>\<^sub>\<forall> (\<squnion>)"
 
@@ -220,10 +220,10 @@ lemma bigunionR_def2: "\<Union>\<^sup>2S = (\<lambda>a b. \<exists>R. S R \<and>
   unfolding rel_defs func_defs comb_defs by metis
 
 
-text \<open>We say of a set of relations that it "overlaps" (or "intersects") if there exists a shared pair.\<close>
+text \<open>We can also say of a set of relations that it "overlaps" (or "intersects").\<close>
 abbreviation(input) bigoverlapR::"Set(Set(Rel('a,'b)))" ("\<Sqinter>\<^sup>r")
   where "\<Sqinter>\<^sup>r \<equiv> \<Inter>\<^sup>2 \<ggreater> \<exists>\<^sup>2"
-text \<open>Dually, a set of relations forms a "cover" if every pair is contained in at least one of the relations.\<close>
+text \<open>Dually, a set of relations can form a "cover".\<close>
 abbreviation(input) bigcoverR::"Set(Set(Rel('a,'b)))" ("\<Squnion>\<^sup>r")
   where "\<Squnion>\<^sup>r \<equiv> \<Union>\<^sup>2 \<ggreater> \<forall>\<^sup>2"
 
@@ -347,7 +347,7 @@ abbreviation(input)  "one_to_many R \<equiv>  leftUnique R \<and> \<not>rightUni
 abbreviation(input) " many_to_one R \<equiv> \<not>leftUnique R \<and>  rightUnique R" \<comment> \<open>functional and not injective\<close>
 abbreviation(input) "many_to_many R \<equiv> \<not>leftUnique R \<and> \<not>rightUnique R" \<comment> \<open>neither injective nor functional\<close>
 
-text \<open>Pairs are both right-unique and left-unique, i.e. one-to-one.\<close>
+text \<open>Tuples are both right-unique and left-unique, i.e. one-to-one.\<close>
 lemma "singletonR \<subseteq> one_to_one" unfolding rel_defs func_defs comb_defs by auto
 proposition "one_to_one \<subseteq> singletonR" nitpick \<comment> \<open>counterexample: e.g. empty relation\<close> oops 
 
@@ -710,10 +710,10 @@ lemma "relKernel (asRel f) = kernel f" unfolding rel_defs func_defs comb_defs by
 lemma "totalFunction R \<Longrightarrow> kernel (asFun R) = relKernel R" unfolding rel_defs func_defs comb_defs by (metis (mono_tags))
 
 (*TODO: right-pullback & right-equalizer (add right dual-equalizer)*)
-subsubsection \<open>Pullback and Equalizer of a Pair of Relations\<close>
+subsubsection \<open>Pullback and Equalizer of two Relations\<close>
 
 text \<open>The pullback (aka. fiber product) of two relations R and T (sharing the same target), 
- relates those pairs of elements that get assigned some same value by R and T respectively.\<close>
+ relates those tuples of elements that get assigned some same value by R and T respectively.\<close>
 definition relPullback :: "Rel('a,'c) \<Rightarrow> Rel('b,'c) \<Rightarrow> Rel('a,'b)"
   where "relPullback \<equiv> \<^bold>B\<^sub>1\<^sub>1 (\<sqinter>)"
 
@@ -760,10 +760,10 @@ lemma "totalFunction R \<Longrightarrow> totalFunction T \<Longrightarrow> equal
   unfolding rel_defs comb_defs func_defs by (metis (mono_tags))
 
 (*TODO: left-pullback & equalizer (add left dual-equalizer)*)
-subsubsection \<open>Pushout and Coequalizer of a Pair of Relations\<close>
+subsubsection \<open>Pushout and Coequalizer of two Relations\<close>
 
 text \<open>The pushout (aka. fiber coproduct) of two relations R and T (sharing the same source), relates
- pairs of elements (in their targets) whose preimages under R resp. T intersect.\<close>
+ tuples of elements (in their targets) whose preimages under R resp. T intersect.\<close>
 abbreviation relPushout :: "Rel('a,'b) \<Rightarrow> Rel('a,'c) \<Rightarrow> Rel('b,'c)"
   where "relPushout R T \<equiv> relPullback R\<^sup>\<smile> T\<^sup>\<smile>"
 
